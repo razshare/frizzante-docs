@@ -2,4 +2,4 @@ dev:
 	mkdocs serve
 
 publish:
-	mkdocs deploy
+	mkdocs gh-deploy
