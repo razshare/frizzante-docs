@@ -1,6 +1,4 @@
-After the [preparation phase](./prepare.md), your program will start, one way or another, be it plainly with `make start` or executing it after `make build`.
-
-Starting the server is as easy as creating one with `frz.CreateServer()` 
+Create a server with `frz.CreateServer()` 
 and starting it with `frz.ServerStart()`.
 
 ```go

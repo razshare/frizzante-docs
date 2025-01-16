@@ -27,9 +27,9 @@ frz.ServerWithRequestHandler(
 )
 ```
 
-!!! danger
+!!! note
     Status codes must be sent out before sending any header fields.<br/>
-    Failing to do so will result in s server error.
+    Failing to do so will result in a server error.
 
 ## Headers
 
@@ -55,9 +55,9 @@ frz.ServerWithRequestHandler(
 )
 ```
 
-!!! danger
+!!! note
     Header fields must be sent out before sending a body.<br/>
-    Failing to do so will result in s server error.
+    Failing to do so will result in a server error.
 
 ## Parameters
 
