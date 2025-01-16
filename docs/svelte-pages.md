@@ -13,9 +13,13 @@ frz.ServerWithSveltePage(server, "GET /welcome", "welcome", configure)
 As you can see, routing a page requires a pattern (`GET /welcome`), the id of the page (`welcome`) and a `configure` function, which look like this
 
 ```go
-func configure(_ *frz.Request, config *frz.SveltePageConfiguration) {
-	config.Render = frz.ModeFull
-	config.Props["name"] = "world"
+func configure(_ *frz.Request) *frz.SveltePageConfiguration {
+	return &frz.SveltePageConfiguration{
+		Render: frz.ModeFull,
+		Props: map[string]interface{}{
+			"name": "world",
+		},
+	}
 }
 ```
 
