@@ -1,5 +1,5 @@
 dev:
 	mkdocs serve
 
-build:
-	mkdocs build
+publish:
+	mkdocs deploy
