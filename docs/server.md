@@ -1,5 +1,4 @@
-Create a server with `frz.CreateServer()` 
-and starting it with `frz.ServerStart()`.
+You can create a server with `frz.CreateServer()` and start it with `frz.ServerStart()`.
 
 ```go
 import frz "github.com/razshare/frizzante"
@@ -10,10 +9,10 @@ func main() {
 }
 ```
 
-However, this is not any type of server, we want to bundle our resources into the final executable.
-
-For that reason you'll need to create an embedded file system with `go:embed`, include the `www/dist/*/**` pattern and pass 
+You'll need to create an embedded file system with `go:embed`, including the `www/dist/*/**` pattern and pass 
 said embedded file system to the server.
+
+This will make it so that your svelte assets get embedded directly into the final executable.
 
 ```go
 import "embed"
