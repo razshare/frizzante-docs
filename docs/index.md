@@ -28,7 +28,7 @@ Your application will truly be a traditional web site, loading documents from sc
 
 Not only that, search engines will have an easy time rendering your document, and thus indexing it correctly.
 
-Most of your interactivity will have to come through either forms or css.
+Most of your interactivity will have to come through either forms or Css.
 
 I say `most` because you can still inject external JavaScripts through svelte's special `<svelte:head>` tag.
 
