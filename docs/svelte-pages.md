@@ -36,7 +36,7 @@ and an optional `Data` property, which can be retrieved by any of your component
 
 
 !!! note
-	See [overview page](./index.md) for more details on rendering modes.
+	See [overview page](./overview.md) for more details on rendering modes.
 
 ```html
 <script>
