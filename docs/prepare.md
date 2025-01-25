@@ -1,8 +1,6 @@
-Whenever you start the server, enter dev mode or build your program, a make file task called `www-prepare` is executed.
+Whenever you launch `make dev` or `make build`, a makefile task called `www-prepare` is executed.
 
-This task is necessary, as it prepares all files needed for the project to function properly.
-
-This "preparation" phase is handled by the `prepare/main.go` program, which usually looks like this
+This "preparation" phase is handled by your `prepare/main.go`, which usually looks like this
 
 ```go
 package main
@@ -16,21 +14,23 @@ func main() {
 }
 ```
 
-Unlike other solutions, there is no special syntax or naming convention that marks your files as "pages", instead you define your pages in this preparation phase by invoking
+For lack of better words, `prepare/main.go` is a code generation program, in the example above, it generates a svelte page by the name of `welcome`.
+
+!!! note
+    You can find the server code for this automatically generated page in `www/dist/server/render.server.js` and the client code in `www/dist/client/assets/welcome-{some-uuid}.js`.
+
+Unlike other solutions, there is no special syntax or naming convention that marks your `.svelte` files as "pages", instead you generate your pages in this preparation phase by invoking
 
 ```go
 frz.SveltePreparePage("page-id", "./path/to/my/component.svelte")
 ```
 
-Once you've done so, the `./path/to/my/component.svelte` will be considered a page and you will refer to this page as `page-id` throughout the rest of your code.
+This will take the contents of the svelte file `./path/to/my/component.svelte` and create a page, which you can identify throughout the rest of your code with `page-id`.
 
 !!! note
-    Obviously `page-id` and `./path/to/my/component.svelte` are placeholder names.
-
-!!! warning
-    The path to the svelte file is relative your [cwd](https://en.wikipedia.org/wiki/Working_directory), not to the `prepare/` directory!
+    Obviously `page-id` and `./path/to/my/component.svelte` are placeholder names int his example.
 
 !!! note
-    In the future, there will be available more types of preparation methods
-    that generate code for your, like automatic type hints conversion from Go structs to Js types.<br/>
-    That's the most obvious one.
+    The path to the svelte file, `./path/to/my/component.svelte` in this example, is relative your [cwd](https://en.wikipedia.org/wiki/Working_directory), not to the `prepare/` directory.
+
+Once you're done generating your pages, you can proceed and [map each svelte page to a web path](./svelte-pages.md).

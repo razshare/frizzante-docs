@@ -40,7 +40,8 @@ theme:
 nav:
   - Overview: index.md
   - Get started: get-started.md
-  - Prepare: prepare.md
   - Server: server.md
-  - Request handlers: request-handlers.md
+  - Prepare: prepare.md
   - Svelte pages: svelte-pages.md
+  - Request handlers: request-handlers.md
+  - Web socket handlers: web-socket-handlers.md

@@ -10,7 +10,7 @@ frz.ServerWithRequestHandler(
 )
 ```
 
-This code will listen for requests on `GET /` and send the `hello` in response.
+The above example listens for requests at `GET /` and responds with `hello` as `text/plain`.
 
 ## Status
 
@@ -28,12 +28,11 @@ frz.ServerWithRequestHandler(
 ```
 
 !!! note
-    Status codes must be sent out before sending any header fields.<br/>
-    Failing to do so will result in a server error.
+    Status codes must be sent out before sending any header fields.
 
-## Headers
+## Header fields
 
-You can retrieve header fields with `frz.ReceiveHeader()` and send out header fields wit `frz.SendHeader()`.
+You can retrieve header fields with `frz.ReceiveHeader()` and send out header fields with `frz.SendHeader()`.
 
 ```go
 frz.ServerWithRequestHandler(
@@ -56,21 +55,20 @@ frz.ServerWithRequestHandler(
 ```
 
 !!! note
-    Header fields must be sent out before sending a body.<br/>
-    Failing to do so will result in a server error.
+    Header fields must be sent out before sending a body.
 
-## Parameters
+## Path fields
 
-You can define parameters in your path via the `{parameter}` syntax, the name of the parameter wrapped in curly braces.
+You can define path fields via the `{parameter}` syntax, the name of the parameter wrapped in curly braces.
 
-You can then retrieve the value of the parameter with `frz.ReceiveParameter()`
+You can then retrieve the value of the path field with `frz.ReceivePath()`
 
 ```go
 frz.ServerWithRequestHandler(
     server,
     "GET /about/{name}", 
     func(server *frz.Server, request *frz.Request, response *frz.Response) {
-        name := frz.ReceiveParameter(request, "name")
+        name := frz.ReceivePath(request, "name")
         frz.SendEcho(response, "hello ")
         frz.SendEcho(response, name)
     },
@@ -79,7 +77,7 @@ frz.ServerWithRequestHandler(
 
 ## Query
 
-Similarly, you can retrieve values of query fields with `frz.ReceiveQuery()`
+You can retrieve values of query fields with `frz.ReceiveQuery()`
 
 ```go
 frz.ServerWithRequestHandler(
@@ -113,14 +111,14 @@ frz.ServerWithRequestHandler(
 ```
 
 !!! note
-    Forms must be passed through the body of the request, so verbs without body, like `GET` and `DELETE`, will fail reading the form.
+    Forms must be passed through the body of the request, so verbs without body, like `GET` and `DELETE`, will fail to read the form.
 
 ## Json
 
-Json bodies can be easily read and decoded with `frz.ReceiveJson()`.
+Json bodies can be read and decoded with `frz.ReceiveJson()`.
 
 This method is a bit different that the others because it doesn't return a value,
-instead it takes in an objects and projects the contents of the json onto said object.
+instead it takes in an object and projects the contents of the json onto said object.
 
 ```go
 type Person struct {
