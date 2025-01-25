@@ -489,7 +489,7 @@ In the example above, exiting the <code>for</code> loop will automatically close
 <p>However, many other functions that <code>send data to the client</code> have little compatibility with web sockets because of the nature of the protocol itself.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For example, you won't be able to send a status code to the client in your websocket loop because because by the time your callback function is executed, the underlying web socket handshake has already terminated and the status code has already been set.</p>
+<p>For example, you won't be able to send a status code to the client in your websocket loop because because by the time your callback function is executed, the underlying web socket handshake has already terminated and the status code has already been sent.</p>
 </div>
 <p>The following is a compatibility table between web socket and request handlers.</p>
 <table>
