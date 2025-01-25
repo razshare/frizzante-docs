@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../overview/">
+        <link rel="prev" href="../server/">
       
       
-        <link rel="next" href="../certificates/">
+        <link rel="next" href="../prepare/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Server - Frizzante</title>
+        <title>Certificates - Frizzante</title>
       
     
     
@@ -144,7 +144,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Server
+              Certificates
             
           </span>
         </div>
@@ -310,6 +310,26 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -324,32 +344,12 @@
         
   
   <span class="md-ellipsis">
-    Server
-  </span>
-  
-
-      </a>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../certificates/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
     Certificates
   </span>
   
 
       </a>
+      
     </li>
   
 
@@ -465,47 +465,15 @@
                   
 
 
-  <h1>Server</h1>
+  <h1>Certificates</h1>
 
-<p>You can create a server with <code>frz.CreateServer()</code> and start it with <code>frz.ServerStart()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nx">frz</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
-<span class="p">}</span>
+<p>You can assign a certificate and a key for said certificate with <code>frz.ServerWithCertificateAndKey()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithCertificateAndKey</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cert.pem&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cert.key&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>You'll need to create an embedded file system with <code>go:embed</code>, including the <code>www/dist/*/**</code> pattern and pass 
-said embedded file system to the server.</p>
-<p>This will make it so that your svelte assets get embedded directly into the final executable.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="s">&quot;embed&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nx">frz</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-
-<span class="c1">//go:embed www/dist/*/**</span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">efs</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
-
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithEmbeddedFileSystem</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">efs</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>By default, your server will be listening for requests at <a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a>.</p>
-<p>You can customize both your host name and port number with <code>frz.ServerWithHostname()</code> and <code>frz.ServerWithPortNumber()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="s">&quot;embed&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nx">frz</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-
-<span class="c1">//go:embed www/dist/*/**</span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">efs</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
-
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPort</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="mi">8989</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithHostName</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;192.168.0.123&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithEmbeddedFileSystem</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">efs</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can create a self-signed certificate for local development with <code>make certificate</code>, or interactively fill in the details of your certificate with <code>make certificate-interactive</code>.</p>
+</div>
 
 
 
