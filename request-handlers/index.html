@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../server/">
+        <link rel="prev" href="../svelte-pages/">
       
       
-        <link rel="next" href="../svelte-pages/">
+        <link rel="next" href="../web-socket-handlers/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -318,6 +318,26 @@
   
   
     <li class="md-nav__item">
+      <a href="../server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../prepare/" class="md-nav__link">
         
   
@@ -338,11 +358,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../server/" class="md-nav__link">
+      <a href="../svelte-pages/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Server
+    Svelte pages
   </span>
   
 
@@ -409,18 +429,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#headers" class="md-nav__link">
+  <a href="#header-fields" class="md-nav__link">
     <span class="md-ellipsis">
-      Headers
+      Header fields
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
+  <a href="#path-fields" class="md-nav__link">
     <span class="md-ellipsis">
-      Parameters
+      Path fields
     </span>
   </a>
   
@@ -468,11 +488,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../svelte-pages/" class="md-nav__link">
+      <a href="../web-socket-handlers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Svelte pages
+    Web socket handlers
   </span>
   
 
@@ -515,18 +535,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#headers" class="md-nav__link">
+  <a href="#header-fields" class="md-nav__link">
     <span class="md-ellipsis">
-      Headers
+      Header fields
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
+  <a href="#path-fields" class="md-nav__link">
     <span class="md-ellipsis">
-      Parameters
+      Path fields
     </span>
   </a>
   
@@ -585,7 +605,7 @@
 <span class="w">    </span><span class="p">},</span>
 <span class="p">)</span>
 </code></pre></div>
-<p>This code will listen for requests on <code>GET /</code> and send the <code>hello</code> in response.</p>
+<p>The above example listens for requests at <code>GET /</code> and responds with <code>hello</code> as <code>text/plain</code>.</p>
 <h2 id="status">Status</h2>
 <p>You can send out a status code with <code>frz.SendStatus()</code></p>
 <div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRequestHandler</span><span class="p">(</span>
@@ -599,11 +619,10 @@
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Status codes must be sent out before sending any header fields.<br/>
-Failing to do so will result in a server error.</p>
+<p>Status codes must be sent out before sending any header fields.</p>
 </div>
-<h2 id="headers">Headers</h2>
-<p>You can retrieve header fields with <code>frz.ReceiveHeader()</code> and send out header fields wit <code>frz.SendHeader()</code>.</p>
+<h2 id="header-fields">Header fields</h2>
+<p>You can retrieve header fields with <code>frz.ReceiveHeader()</code> and send out header fields with <code>frz.SendHeader()</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRequestHandler</span><span class="p">(</span>
 <span class="w">    </span><span class="nx">server</span><span class="p">,</span>
 <span class="w">    </span><span class="s">&quot;GET /&quot;</span><span class="p">,</span><span class="w"> </span>
@@ -624,24 +643,23 @@ Failing to do so will result in a server error.</p>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Header fields must be sent out before sending a body.<br/>
-Failing to do so will result in a server error.</p>
+<p>Header fields must be sent out before sending a body.</p>
 </div>
-<h2 id="parameters">Parameters</h2>
-<p>You can define parameters in your path via the <code>{parameter}</code> syntax, the name of the parameter wrapped in curly braces.</p>
-<p>You can then retrieve the value of the parameter with <code>frz.ReceiveParameter()</code></p>
+<h2 id="path-fields">Path fields</h2>
+<p>You can define path fields via the <code>{parameter}</code> syntax, the name of the parameter wrapped in curly braces.</p>
+<p>You can then retrieve the value of the path field with <code>frz.ReceivePath()</code></p>
 <div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRequestHandler</span><span class="p">(</span>
 <span class="w">    </span><span class="nx">server</span><span class="p">,</span>
 <span class="w">    </span><span class="s">&quot;GET /about/{name}&quot;</span><span class="p">,</span><span class="w"> </span>
 <span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">server</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceiveParameter</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceivePath</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">)</span>
 <span class="w">        </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello &quot;</span><span class="p">)</span>
 <span class="w">        </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="p">)</span>
 </code></pre></div>
 <h2 id="query">Query</h2>
-<p>Similarly, you can retrieve values of query fields with <code>frz.ReceiveQuery()</code></p>
+<p>You can retrieve values of query fields with <code>frz.ReceiveQuery()</code></p>
 <div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRequestHandler</span><span class="p">(</span>
 <span class="w">    </span><span class="nx">server</span><span class="p">,</span>
 <span class="w">    </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span>
@@ -668,12 +686,12 @@ Failing to do so will result in a server error.</p>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Forms must be passed through the body of the request, so verbs without body, like <code>GET</code> and <code>DELETE</code>, will fail reading the form.</p>
+<p>Forms must be passed through the body of the request, so verbs without body, like <code>GET</code> and <code>DELETE</code>, will fail to read the form.</p>
 </div>
 <h2 id="json">Json</h2>
-<p>Json bodies can be easily read and decoded with <code>frz.ReceiveJson()</code>.</p>
+<p>Json bodies can be read and decoded with <code>frz.ReceiveJson()</code>.</p>
 <p>This method is a bit different that the others because it doesn't return a value,
-instead it takes in an objects and projects the contents of the json onto said object.</p>
+instead it takes in an object and projects the contents of the json onto said object.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">Person</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Name</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
 <span class="p">}</span>

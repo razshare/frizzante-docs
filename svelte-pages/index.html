@@ -9,8 +9,10 @@
       
       
       
-        <link rel="prev" href="../request-handlers/">
+        <link rel="prev" href="../prepare/">
       
+      
+        <link rel="next" href="../request-handlers/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -109,6 +111,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#query-fields" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -311,6 +318,26 @@
   
   
     <li class="md-nav__item">
+      <a href="../server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../prepare/" class="md-nav__link">
         
   
@@ -328,18 +355,81 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../server/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Svelte pages
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    Server
+    Svelte pages
   </span>
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#query-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Query fields
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Path fields
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#form-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Form fields
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -368,26 +458,18 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../web-socket-handlers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Svelte pages
+    Web socket handlers
   </span>
   
 
       </a>
-      
     </li>
   
 
@@ -410,6 +492,41 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#query-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Query fields
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Path fields
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#form-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Form fields
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -425,24 +542,84 @@
 
   <h1>Svelte pages</h1>
 
-<p>As previously mentioned in the <a href="../prepare/">prepare</a> section, pages are defined beforehand in the prepare phase.</p>
-<p>However, defining a page doesn't mean it's being routed.</p>
-<p>You must route pages yourself through the server api.</p>
-<p>You can route a page with <code>frz.ServerWithSveltePage()</code>.</p>
+<p>As previously mentioned in the <a href="../prepare/">prepare</a> section, pages are generated beforehand in the prepare phase.</p>
+<p>However, preparing a page doesn't mean it's being mapped to a web path, 
+it just means the page files have been generated in your <code>www/dist</code> directory.</p>
+<p>You must map pages yourself through the server api.</p>
+<p>You can map a page to a web path with <code>frz.ServerWithSveltePage()</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSveltePage</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">configure</span><span class="p">)</span>
 </code></pre></div>
-<p>As you can see, routing a page requires a pattern (<code>GET /welcome</code>), the id of the page (<code>welcome</code>) and a <code>configure</code> function, which look like this</p>
+<p>Mapping a page requires </p>
+<ul>
+<li>a pattern, <code>GET /welcome</code> in this case, </li>
+<li>a page, <code>welcome</code> in this case</li>
+<li>and a <code>configure</code> function, which configures how the page should be rendered.</li>
+</ul>
+<p>This configure function must take in a request and return a configuration</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">configure</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePageConfiguration</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePageConfiguration</span><span class="p">{</span>
 <span class="w">        </span><span class="nx">Render</span><span class="p">:</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeFull</span><span class="p">,</span>
-<span class="w">        </span><span class="nx">Props</span><span class="p">:</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span>
+<span class="w">        </span><span class="nx">Data</span><span class="p">:</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span>
 <span class="w">            </span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">,</span>
 <span class="w">        </span><span class="p">},</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>The <code>Render</code> property is the rendering mode, which can be <code>frz.ModeServer</code>, <code>frz.ModeClient</code> or <code>frz.ModeFull</code>.</p>
-<p>The <code>Props</code> property are the properties of the page.</p>
+<p>The resulting configuration defines a required <code>Render</code> property, indicating the rendering mode, 
+which can be <code>frz.ModeServer</code>, <code>frz.ModeClient</code> or <code>frz.ModeFull</code>
+and an optional <code>Data</code> property, which can be retrieved by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a href="../">overview page</a> for more details on rendering modes.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Context <code>data</code> is created with <a href="https://svelte.dev/docs/svelte/$state">$state()</a>, hence it is reactive.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Context keys <code>query</code>, <code>path</code>, and <code>form</code> are reserved.<br/>
+See next sections.</p>
+</div>
+<h2 id="query-fields">Query fields</h2>
+<p>Query fields are automatically injected in the context of the svelte page that's being rendered.</p>
+<p>Say, for example, that you've map your svelte page to <code>GET /about</code> and some client requests <code>GET/about?name=world</code>.</p>
+<p>You can retrieve the <code>name</code> query field with <code>getContext("data").query.name</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.query.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</code></pre></div>
+<h2 id="path-fields">Path fields</h2>
+<p>Path fields are automatically injected in the context of the svelte page that's being rendered.</p>
+<p>Say, for example, that you've map your svelte page to <code>GET /about/{name}</code>.</p>
+<p>You can retrieve the <code>{name}</code> path field with <code>getContext("data").path.name</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.path.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</code></pre></div>
+<h2 id="form-fields">Form fields</h2>
+<p>Form fields are automatically injected in the context of the svelte page that's being rendered.</p>
+<p>All incoming form fields are mapped into <code>getContext("data").form</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.form.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
 
