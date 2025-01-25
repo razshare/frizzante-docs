@@ -1,4 +1,4 @@
-Whenever you launch `make dev` or `make build`, a makefile task called `www-prepare` is executed.
+Whenever you launch `make dev`, `make start`, or `make build`, a makefile task called `www-prepare` is executed.
 
 This "preparation" phase is handled by your `prepare/main.go`, which usually looks like this
 
