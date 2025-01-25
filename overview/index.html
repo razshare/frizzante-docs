@@ -20,7 +20,7 @@
     
     
       
-        <title>Get started - Frizzante</title>
+        <title>Overview - Frizzante</title>
       
     
     
@@ -112,6 +112,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#server-mode" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -144,7 +149,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Get started
+              Overview
             
           </span>
         </div>
@@ -277,7 +282,7 @@
         
   
   <span class="md-ellipsis">
-    Overview
+    Get started
   </span>
   
 
@@ -300,15 +305,70 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    Get started
+    Overview
   </span>
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#server-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Client mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Full mode
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -432,6 +492,41 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#server-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Client mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Full mode
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -445,29 +540,42 @@
                   
 
 
-  <h1>Get started</h1>
+  <h1>Overview</h1>
 
-<p>Make sure you have <a href="https://go.dev/doc/install">Go</a> and <a href="https://bun.sh/">Bun</a> installed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you'd rather use a different runtime than Bun to update your javascript dependencies, see <a href="https://github.com/razshare/frizzante-starter">makefile</a> and change all occurrences of <code>bun</code> and <code>bunx</code> with the equivalent of whatever runtime you'd like to use.</p>
+<p>This project is aimed mainly at linux distributions.</p>
 </div>
-<p>Create a new project using the starter template.</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/razshare/frizzante-starter
+<p>Frizzante is a procedural, minimalistic and opinionated web server that uses Svelte to render web pages.</p>
+<p>Web pages can be rendered in one of 3 modes</p>
+<ul>
+<li>Server mode<br/>
+    Pages are rendered only on the server, resulting in a fully rendered html document from the server.</li>
+<li>Client mode<br/>
+    Pages are rendered only on the client, which means the client receives a basic html document which then renders the document by loading a JavaScript application asynchronously.</li>
+<li>Full mode<br/>
+    A combination of both "Server mode" and "Client mode".</li>
+</ul>
+<p>Each mode has its advantages and disadvantages.</p>
+<h2 id="server-mode">Server mode</h2>
+<p>In this mode no actual JavaScript is executed on the client's browser, you will have to deal away with <code>fetch</code> or any similar apis.</p>
+<p>Your new best friend is instead <code>&lt;form&gt;</code>.</p>
+<p>Your application will be a traditional web site, loading documents from scratch with almost every interaction, 
+making it easier to reason about state changes.</p>
+<p>On top of that, search engines will have an easy time rendering your document, and thus indexing it correctly.</p>
+<p>Most of the interactivity will have to come through either forms or Css.</p>
+<p>That being said, I say <code>most</code> because you can still inject external 
+JavaScript files through svelte's special <code>&lt;svelte:head&gt;</code> tag.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;svelte:head&gt;</span>
+<span class="w">    </span><span class="nt">&lt;script</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;/some.js&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;script</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;/some-other.js&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/svelte:head&gt;</span>
 </code></pre></div>
-<p>Update your dependencies </p>
-<div class="highlight"><pre><span></span><code>make<span class="w"> </span>update
-</code></pre></div>
-<p>Then you can start the server with</p>
-<div class="highlight"><pre><span></span><code>make<span class="w"> </span>start
-</code></pre></div>
-<p>You can enter dev mode with</p>
-<div class="highlight"><pre><span></span><code>make dev
-</code></pre></div>
-<p>Or you can build the whole project with</p>
-<div class="highlight"><pre><span></span><code>make<span class="w"> </span>build
-</code></pre></div>
-<p>This will create a single, standalone, executable <code>out/app</code> file.</p>
+<h2 id="client-mode">Client mode</h2>
+<p>In this mode you can build <a href="https://it.wikipedia.org/wiki/Single-page_application">SPA</a>s.</p>
+<p>Your server will serve a shell html template, which in turn will asynchronously load your JavaScript bundle and render your client application.</p>
+<h2 id="full-mode">Full mode</h2>
+<p>It's just as it sounds, in this mode the the server both fully renders an html document and also serves a javaScript bundle, which once loaded, takes over the <a href="https://en.wikipedia.org/wiki/Document_Object_Model">Dom</a>.</p>
 
 
 
