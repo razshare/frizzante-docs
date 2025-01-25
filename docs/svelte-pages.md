@@ -197,5 +197,5 @@ frz.ServerWithSveltePage(server, "POST /about", "about",
 ```
 
 <video controls width="100%">
-  <source src="/Video_2025-01-25_20-59-54.mp4" type="video/mp4" />
+  <source src="https://github.com/razshare/frizzante-docs/raw/refs/heads/main/docs/Video_2025-01-25_20-59-54.mp4" type="video/mp4" />
 </video>
