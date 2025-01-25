@@ -28,9 +28,6 @@ frz.SveltePreparePage("page-id", "./path/to/my/component.svelte")
 This will take the contents of the svelte file `./path/to/my/component.svelte` and create a page, which you can identify throughout the rest of your code with `page-id`.
 
 !!! note
-    Obviously `page-id` and `./path/to/my/component.svelte` are placeholder names int his example.
-
-!!! note
     The path to the svelte file, `./path/to/my/component.svelte` in this example, is relative your [cwd](https://en.wikipedia.org/wiki/Working_directory), not to the `prepare/` directory.
 
 Once you're done generating your pages, you can proceed and [map each svelte page to a web path](./svelte-pages.md).
