@@ -573,9 +573,9 @@ it just means the page files have been generated in your <code>www/dist</code> d
 <ul>
 <li>a pattern, <code>GET /welcome</code> in this case, </li>
 <li>a page id, <code>welcome</code> in this case</li>
-<li>and a <code>configure</code> function, which configures how the page should be rendered.</li>
+<li>and a configuration provider function, called <code>configure</code> in this case.</li>
 </ul>
-<p>This configure function must take in a request and return a configuration</p>
+<p>This configuration provider must take in a request and return a configuration</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">configure</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePageConfiguration</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePageConfiguration</span><span class="p">{</span>
 <span class="w">        </span><span class="nx">Render</span><span class="p">:</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeFull</span><span class="p">,</span>
@@ -612,7 +612,14 @@ See next sections.</p>
 <p>Query fields are automatically injected in the context of the svelte page that's being rendered.</p>
 <p>Say, for example, that you've mapped your svelte page to <code>GET /about</code> and some client requests <code>GET/about?name=world</code>.</p>
 <p>You can retrieve the <code>name</code> query field with <code>getContext("data").query.name</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// prepare/main.go</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/about.svelte&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSveltePage</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">configure</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--www/lib/pages/about.svelte--&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
@@ -623,7 +630,14 @@ See next sections.</p>
 <p>Path fields are automatically injected in the context of the svelte page that's being rendered.</p>
 <p>Say, for example, that you've mapped your svelte page to <code>GET /about/{name}</code>.</p>
 <p>You can retrieve the <code>{name}</code> path field with <code>getContext("data").path.name</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// prepare/main.go</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/about.svelte&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSveltePage</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about/{name}&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">configure</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--www/lib/pages/about.svelte--&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
@@ -640,6 +654,72 @@ See next sections.</p>
 
 <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.form.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
 </code></pre></div>
+<p>However, when dealing with forms, you will most likely want to update your state in-place, 
+so for that reason it is best to configure each page individually.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you're coming from the <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a> world, 
+you can think of configuration providers as Controllers.</p>
+</div>
+<p>The following is a more in-depth example using form fields.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// prepare/main.go</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/about.svelte&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
+
+<span class="c1">// GET /about</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSveltePage</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePageConfiguration</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePageConfiguration</span><span class="p">{</span><span class="nx">Render</span><span class="p">:</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeFull</span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="c1">// POST /about</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSveltePage</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;POST /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePageConfiguration</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">form</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceiveForm</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">form</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePageConfiguration</span><span class="p">{</span>
+<span class="w">                </span><span class="nx">Render</span><span class="p">:</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeFull</span><span class="p">,</span>
+<span class="w">                </span><span class="nx">Data</span><span class="p">:</span><span class="w">   </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Name must be at least 2 characters long.&quot;</span><span class="p">},</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePageConfiguration</span><span class="p">{</span>
+<span class="w">            </span><span class="nx">Render</span><span class="p">:</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeFull</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">Data</span><span class="p">:</span><span class="w">   </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">name</span><span class="p">},</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--www/lib/pages/about.svelte--&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+{#if data.error}
+    <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Error<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>{data.error}<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+{:else if data.name}
+    <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Welcome, {data.name}!<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+{:else}
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;?&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;name&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>Name<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;name&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;name&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">br</span><span class="p">/&gt;</span>
+
+        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">&gt;</span>Submit<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+{/if}
+</code></pre></div>
+<video controls width="100%">
+  <source src="/Video_2025-01-25_20-59-54.mp4" type="video/mp4" />
+</video>
 
 
 
