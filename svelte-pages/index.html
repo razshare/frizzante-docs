@@ -610,7 +610,7 @@ See next sections.</p>
 </div>
 <h2 id="query-fields">Query fields</h2>
 <p>Query fields are automatically injected in the context of the svelte page that's being rendered.</p>
-<p>Say, for example, that you've map your svelte page to <code>GET /about</code> and some client requests <code>GET/about?name=world</code>.</p>
+<p>Say, for example, that you've mapped your svelte page to <code>GET /about</code> and some client requests <code>GET/about?name=world</code>.</p>
 <p>You can retrieve the <code>name</code> query field with <code>getContext("data").query.name</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
@@ -621,7 +621,7 @@ See next sections.</p>
 </code></pre></div>
 <h2 id="path-fields">Path fields</h2>
 <p>Path fields are automatically injected in the context of the svelte page that's being rendered.</p>
-<p>Say, for example, that you've map your svelte page to <code>GET /about/{name}</code>.</p>
+<p>Say, for example, that you've mapped your svelte page to <code>GET /about/{name}</code>.</p>
 <p>You can retrieve the <code>{name}</code> path field with <code>getContext("data").path.name</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
