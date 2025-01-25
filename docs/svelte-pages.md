@@ -58,7 +58,7 @@ and an optional `Data` property, which can be retrieved by any of your component
 
 Query fields are automatically injected in the context of the svelte page that's being rendered.
 
-Say, for example, that you've map your svelte page to `GET /about` and some client requests `GET/about?name=world`.
+Say, for example, that you've mapped your svelte page to `GET /about` and some client requests `GET/about?name=world`.
 
 You can retrieve the `name` query field with `getContext("data").query.name`.
 
@@ -76,7 +76,7 @@ You can retrieve the `name` query field with `getContext("data").query.name`.
 
 Path fields are automatically injected in the context of the svelte page that's being rendered.
 
-Say, for example, that you've map your svelte page to `GET /about/{name}`.
+Say, for example, that you've mapped your svelte page to `GET /about/{name}`.
 
 You can retrieve the `{name}` path field with `getContext("data").path.name`.
 
