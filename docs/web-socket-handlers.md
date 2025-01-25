@@ -24,7 +24,7 @@ All web socket handlers are compatible with many of the same functions used by t
 However, many other functions that `send data to the client` have little compatibility with web sockets because of the nature of the protocol itself.
 
 !!! note
-    For example, you won't be able to send a status code to the client in your websocket loop because because by the time your callback function is executed, the underlying web socket handshake has already terminated and the status code has already been set.
+    For example, you won't be able to send a status code to the client in your websocket loop because because by the time your callback function is executed, the underlying web socket handshake has already terminated and the status code has already been sent.
 
 The following is a compatibility table between web socket and request handlers.
 
