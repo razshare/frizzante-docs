@@ -14,7 +14,7 @@ frz.ServerWithSveltePage(server, "GET /welcome", "welcome", configure)
 Mapping a page requires 
 
 - a pattern, `GET /welcome` in this case, 
-- a page, `welcome` in this case
+- a page id, `welcome` in this case
 - and a `configure` function, which configures how the page should be rendered.
 
 This configure function must take in a request and return a configuration
