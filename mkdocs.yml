@@ -41,6 +41,7 @@ nav:
   - Get started: index.md
   - Overview: overview.md
   - Server: server.md
+  - Certificates: certificates.md
   - Prepare: prepare.md
   - Svelte pages: svelte-pages.md
   - Request handlers: request-handlers.md
