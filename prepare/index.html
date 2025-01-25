@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../get-started/">
+        <link rel="prev" href="../server/">
       
       
-        <link rel="next" href="../server/">
+        <link rel="next" href="../svelte-pages/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -310,6 +310,26 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -341,11 +361,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../server/" class="md-nav__link">
+      <a href="../svelte-pages/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Server
+    Svelte pages
   </span>
   
 
@@ -381,11 +401,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../svelte-pages/" class="md-nav__link">
+      <a href="../web-socket-handlers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Svelte pages
+    Web socket handlers
   </span>
   
 
@@ -427,9 +447,8 @@
 
   <h1>Prepare</h1>
 
-<p>Whenever you start the server, enter dev mode or build your program, a make file task called <code>www-prepare</code> is executed.</p>
-<p>This task is necessary, as it prepares all files needed for the project to function properly.</p>
-<p>This "preparation" phase is handled by the <code>prepare/main.go</code> program, which usually looks like this</p>
+<p>Whenever you launch <code>make dev</code> or <code>make build</code>, a makefile task called <code>www-prepare</code> is executed.</p>
+<p>This "preparation" phase is handled by your <code>prepare/main.go</code>, which usually looks like this</p>
 <div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nx">frz</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
@@ -440,24 +459,24 @@
 <span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePrepareEnd</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Unlike other solutions, there is no special syntax or naming convention that marks your files as "pages", instead you define your pages in this preparation phase by invoking</p>
+<p>For lack of better words, <code>prepare/main.go</code> is a code generation program, in the example above, it generates a svelte page by the name of <code>welcome</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can find the server code for this automatically generated page in <code>www/dist/server/render.server.js</code> and the client code in <code>www/dist/client/assets/welcome-{some-uuid}.js</code>.</p>
+</div>
+<p>Unlike other solutions, there is no special syntax or naming convention that marks your <code>.svelte</code> files as "pages", instead you generate your pages in this preparation phase by invoking</p>
 <div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;page-id&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;./path/to/my/component.svelte&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Once you've done so, the <code>./path/to/my/component.svelte</code> will be considered a page and you will refer to this page as <code>page-id</code> throughout the rest of your code.</p>
+<p>This will take the contents of the svelte file <code>./path/to/my/component.svelte</code> and create a page, which you can identify throughout the rest of your code with <code>page-id</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Obviously <code>page-id</code> and <code>./path/to/my/component.svelte</code> are placeholder names.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The path to the svelte file is relative your <a href="https://en.wikipedia.org/wiki/Working_directory">cwd</a>, not to the <code>prepare/</code> directory!</p>
+<p>Obviously <code>page-id</code> and <code>./path/to/my/component.svelte</code> are placeholder names int his example.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In the future, there will be available more types of preparation methods
-that generate code for your, like automatic type hints conversion from Go structs to Js types.<br/>
-That's the most obvious one.</p>
+<p>The path to the svelte file, <code>./path/to/my/component.svelte</code> in this example, is relative your <a href="https://en.wikipedia.org/wiki/Working_directory">cwd</a>, not to the <code>prepare/</code> directory.</p>
 </div>
+<p>Once you're done generating your pages, you can proceed and <a href="../svelte-pages/">map each svelte page to a web path</a>.</p>
 
 
 
