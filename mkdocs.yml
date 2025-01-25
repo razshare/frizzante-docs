@@ -38,8 +38,8 @@ theme:
       example: octicons/beaker-16
       quote: octicons/quote-16
 nav:
-  - Overview: index.md
-  - Get started: get-started.md
+  - Get started: index.md
+  - Overview: overview.md
   - Server: server.md
   - Prepare: prepare.md
   - Svelte pages: svelte-pages.md

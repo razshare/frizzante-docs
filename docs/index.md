@@ -1,54 +1,38 @@
+Make sure you have [Go](https://go.dev/doc/install) and [Bun](https://bun.sh/) installed.
+
 !!! note
-    This project is aimed mainly at linux distributions.
-
-Frizzante is a procedural, minimalistic and opinionated web server that uses Svelte to render web pages.
-
-Web pages can be rendered in one of 3 modes
-
-- Server mode<br/>
-    Pages are rendered only on the server, resulting in a fully rendered html document from the server.
-- Client mode<br/>
-    Pages are rendered only on the client, which means the client receives a basic html document which then renders the document by loading a JavaScript application asynchronously.
-- Full mode<br/>
-    A combination of both "Server mode" and "Client mode".
+    If you'd rather use a different runtime than Bun to update your javascript dependencies, see [makefile](https://github.com/razshare/frizzante-starter) and change all occurrences of `bun` and `bunx` with the equivalent of whatever runtime you'd like to use.
 
 
-Each mode has its advantages and disadvantages.
+Create a new project using the starter template.
 
-
-## Server mode
-
-This mode is how the web was intended to work as a whole.
-
-In this mode no actual JavaScript is executed on the client's browser, you will have to deal away with `fetch` or any similar apis.
-
-Your new best friend is instead `<form>`.
-
-Your application will truly be a traditional web site, loading documents from scratch with each interaction you engage with the server.
-
-Not only that, search engines will have an easy time rendering your document, and thus indexing it correctly.
-
-Most of your interactivity will have to come through either forms or Css.
-
-I say `most` because you can still inject external JavaScripts through svelte's special `<svelte:head>` tag.
-
-```xml
-<svelte:head>
-    <script type="text/javascript" src="/some.js" />
-    <script type="text/javascript" src="/some-other.js" />
-</svelte:head>
+```bash
+git clone https://github.com/razshare/frizzante-starter
 ```
 
-## Client mode
+Update your dependencies 
 
-This is how you basically build SPAs.
+```bash
+make update
+```
 
-Your whole application consists in 1 JavaScript file, 1 Css file and 1 Html file, that's it.
+Then you can start the server with
 
-In this mode, building interactive experiences is easier than in server mode.
+```bash
+make start
+```
 
-Since the server simply renders a generic html document before the actual application loads, in this mode, search engines have a harder time indexing you web site.
 
-## Full mode
+You can enter dev mode with
 
-It's just as it sounds, the the server both fully renders an html document and also serves a javaScript bundle, which once loaded, takes of the [Dom](https://en.wikipedia.org/wiki/Document_Object_Model).
+```dev
+make dev
+```
+
+Or you can build the whole project with
+
+```bash
+make build
+```
+
+This will create a single, standalone, executable `out/app` file.
