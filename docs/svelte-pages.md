@@ -64,7 +64,7 @@ You can retrieve the `name` query field with `getContext("data").query.name`.
 
 ```go
 // prepare/main.go
-frz.SveltePreparePage("about", "www/lib/pages/about.svelte")
+frz.PrepareSveltePage("about", "www/lib/pages/about.svelte")
 ```
 
 ```go
@@ -93,7 +93,7 @@ You can retrieve the `{name}` path field with `getContext("data").path.name`.
 
 ```go
 // prepare/main.go
-frz.SveltePreparePage("about", "www/lib/pages/about.svelte")
+frz.PrepareSveltePage("about", "www/lib/pages/about.svelte")
 ```
 
 ```go
@@ -137,7 +137,7 @@ The following is a more in-depth example using form fields.
 
 ```go
 // prepare/main.go
-frz.SveltePreparePage("about", "www/lib/pages/about.svelte")
+frz.PrepareSveltePage("about", "www/lib/pages/about.svelte")
 ```
 
 ```go

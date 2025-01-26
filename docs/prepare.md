@@ -22,7 +22,7 @@ For lack of better words, `prepare/main.go` is a code generation program, in the
 Unlike other solutions, there is no special syntax or naming convention that marks your `.svelte` files as "pages", instead you generate your pages in this preparation phase by invoking
 
 ```go
-frz.SveltePreparePage("page-id", "path/to/my/component.svelte")
+frz.PrepareSveltePage("page-id", "path/to/my/component.svelte")
 ```
 
 This will take the contents of the svelte file `path/to/my/component.svelte` and create a page, which you can identify throughout the rest of your code with `page-id`.
