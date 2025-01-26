@@ -8,9 +8,9 @@ package main
 import frz "github.com/razshare/frizzante"
 
 func main() {
-	frz.SveltePrepareStart()
-	frz.SveltePreparePage("welcome", "./www/lib/pages/welcome.svelte")
-	frz.SveltePrepareEnd()
+	frz.PrepareStart()
+	frz.PrepareSveltePage("welcome", "www/lib/pages/welcome.svelte")
+	frz.PrepareEnd()
 }
 ```
 
@@ -22,12 +22,12 @@ For lack of better words, `prepare/main.go` is a code generation program, in the
 Unlike other solutions, there is no special syntax or naming convention that marks your `.svelte` files as "pages", instead you generate your pages in this preparation phase by invoking
 
 ```go
-frz.SveltePreparePage("page-id", "./path/to/my/component.svelte")
+frz.SveltePreparePage("page-id", "path/to/my/component.svelte")
 ```
 
-This will take the contents of the svelte file `./path/to/my/component.svelte` and create a page, which you can identify throughout the rest of your code with `page-id`.
+This will take the contents of the svelte file `path/to/my/component.svelte` and create a page, which you can identify throughout the rest of your code with `page-id`.
 
 !!! note
-    The path to the svelte file, `./path/to/my/component.svelte` in this example, is relative your [cwd](https://en.wikipedia.org/wiki/Working_directory), not to the `prepare/` directory.
+    The path to the svelte file, `path/to/my/component.svelte` in this example, is relative your [cwd](https://en.wikipedia.org/wiki/Working_directory), not to the `prepare/` directory.
 
 Once you're done generating your pages, you can proceed and [map each svelte page to a web path](./svelte-pages.md).
