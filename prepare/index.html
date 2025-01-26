@@ -474,9 +474,9 @@
 <span class="kn">import</span><span class="w"> </span><span class="nx">frz</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePrepareStart</span><span class="p">()</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;./www/lib/pages/welcome.svelte&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePrepareEnd</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PrepareStart</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PrepareSveltePage</span><span class="p">(</span><span class="s">&quot;welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/welcome.svelte&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PrepareEnd</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>For lack of better words, <code>prepare/main.go</code> is a code generation program, in the example above, it generates a svelte page by the name of <code>welcome</code>.</p>
@@ -485,12 +485,12 @@
 <p>You can find the server code for this automatically generated page in <code>www/dist/server/render.server.js</code> and the client code in <code>www/dist/client/assets/welcome-{some-uuid}.js</code>.</p>
 </div>
 <p>Unlike other solutions, there is no special syntax or naming convention that marks your <code>.svelte</code> files as "pages", instead you generate your pages in this preparation phase by invoking</p>
-<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;page-id&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;./path/to/my/component.svelte&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;page-id&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/my/component.svelte&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>This will take the contents of the svelte file <code>./path/to/my/component.svelte</code> and create a page, which you can identify throughout the rest of your code with <code>page-id</code>.</p>
+<p>This will take the contents of the svelte file <code>path/to/my/component.svelte</code> and create a page, which you can identify throughout the rest of your code with <code>page-id</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The path to the svelte file, <code>./path/to/my/component.svelte</code> in this example, is relative your <a href="https://en.wikipedia.org/wiki/Working_directory">cwd</a>, not to the <code>prepare/</code> directory.</p>
+<p>The path to the svelte file, <code>path/to/my/component.svelte</code> in this example, is relative your <a href="https://en.wikipedia.org/wiki/Working_directory">cwd</a>, not to the <code>prepare/</code> directory.</p>
 </div>
 <p>Once you're done generating your pages, you can proceed and <a href="../svelte-pages/">map each svelte page to a web path</a>.</p>
 
