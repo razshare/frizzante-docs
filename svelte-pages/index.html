@@ -613,7 +613,7 @@ See next sections.</p>
 <p>Say, for example, that you've mapped your svelte page to <code>GET /about</code> and some client requests <code>GET/about?name=world</code>.</p>
 <p>You can retrieve the <code>name</code> query field with <code>getContext("data").query.name</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// prepare/main.go</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/about.svelte&quot;</span><span class="p">)</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">PrepareSveltePage</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/about.svelte&quot;</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
 <span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSveltePage</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">configure</span><span class="p">)</span>
@@ -631,7 +631,7 @@ See next sections.</p>
 <p>Say, for example, that you've mapped your svelte page to <code>GET /about/{name}</code>.</p>
 <p>You can retrieve the <code>{name}</code> path field with <code>getContext("data").path.name</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// prepare/main.go</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/about.svelte&quot;</span><span class="p">)</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">PrepareSveltePage</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/about.svelte&quot;</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
 <span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSveltePage</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about/{name}&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">configure</span><span class="p">)</span>
@@ -663,7 +663,7 @@ you can think of configuration providers as Controllers.</p>
 </div>
 <p>The following is a more in-depth example using form fields.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// prepare/main.go</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">SveltePreparePage</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/about.svelte&quot;</span><span class="p">)</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">PrepareSveltePage</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;www/lib/pages/about.svelte&quot;</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
 
