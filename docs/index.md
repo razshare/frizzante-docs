@@ -7,7 +7,7 @@ Make sure you have [Go](https://go.dev/doc/install) and [Bun](https://bun.sh/) i
 Create a new project using the starter template.
 
 ```bash
-git clone https://github.com/razshare/frizzante-starter
+git clone https://github.com/razshare/frizzante-starter && cd frizzante-starter
 ```
 
 Update your dependencies 
