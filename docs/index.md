@@ -35,4 +35,4 @@ Or you can build the whole project with
 make build
 ```
 
-This will create a single, standalone, executable `out/app` file.
+This will create a single, standalone, executable `bin/app` file.
