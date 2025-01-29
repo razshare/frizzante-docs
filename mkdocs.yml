@@ -42,7 +42,6 @@ nav:
   - Overview: overview.md
   - Server: server.md
   - Certificates: certificates.md
-  - Prepare: prepare.md
   - Svelte pages: svelte-pages.md
   - Request handlers: request-handlers.md
   - Web socket handlers: web-socket-handlers.md

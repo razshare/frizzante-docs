@@ -1,11 +1,22 @@
-As previously mentioned in the [prepare](./prepare.md) section, pages are generated beforehand in the prepare phase.
+Pages are just svelte components located at `www/pages`.
 
-However, preparing a page doesn't mean it's being mapped to a web path, 
-it just means the page files have been generated in your `www/dist` directory.
+You can refer to these pages by their relative file names.
 
-You must map pages yourself through the server api.
+!!! note
+	The `.svelte` extension is optional.
 
-You can map a page to a web path with `frz.ServerWithSveltePage()`.
+!!! example
+	A page located at `www/page/welcome.svelte` will be identified by `welcome`.
+
+Subdirectories are joined by `::` instead of `/` or `\`.
+
+!!! example
+	A page located at `www/page/about/user.svelte` will be identified by `about::user`.
+
+
+## Mapping a page
+
+You can map pages with `frz.ServerWithSveltePage()`
 
 ```go
 frz.ServerWithSveltePage(server, "GET /welcome", "welcome", configure)
@@ -14,10 +25,10 @@ frz.ServerWithSveltePage(server, "GET /welcome", "welcome", configure)
 Mapping a page requires 
 
 - a pattern, `GET /welcome` in this case, 
-- a page id, `welcome` in this case
-- and a configuration provider function, called `configure` in this case.
+- a page id, `welcome` in this case,
+- a configuration provider, called `configure` in this case.
 
-This configuration provider must take in a request and return a configuration
+This configuration provider is a function that must take in a request and return a configuration
 
 ```go
 func configure(_ *frz.Request) *frz.SveltePageConfiguration {
