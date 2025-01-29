@@ -117,7 +117,7 @@ frz.ServerWithRequestHandler(
 
 Json bodies can be read and decoded with `frz.ReceiveJson()`.
 
-This method is a bit different that the others because it doesn't return a value,
+This function is a bit different that the others because it doesn't return a value,
 instead it takes in an object and projects the contents of the json onto said object.
 
 ```go
