@@ -690,7 +690,7 @@
 </div>
 <h2 id="json">Json</h2>
 <p>Json bodies can be read and decoded with <code>frz.ReceiveJson()</code>.</p>
-<p>This method is a bit different that the others because it doesn't return a value,
+<p>This function is a bit different that the others because it doesn't return a value,
 instead it takes in an object and projects the contents of the json onto said object.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">Person</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Name</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
