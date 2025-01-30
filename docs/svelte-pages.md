@@ -74,11 +74,6 @@ Say, for example, that you've mapped your svelte page to `GET /about` and some c
 You can retrieve the `name` query field with `getContext("data").query.name`.
 
 ```go
-// prepare/main.go
-frz.PrepareSveltePage("about", "www/lib/pages/about.svelte")
-```
-
-```go
 // main.go
 frz.ServerWithSveltePage(server, "GET /about", "about", configure)
 ```
@@ -101,11 +96,6 @@ Path fields are automatically injected in the context of the svelte page that's 
 Say, for example, that you've mapped your svelte page to `GET /about/{name}`.
 
 You can retrieve the `{name}` path field with `getContext("data").path.name`.
-
-```go
-// prepare/main.go
-frz.PrepareSveltePage("about", "www/lib/pages/about.svelte")
-```
 
 ```go
 // main.go
@@ -145,11 +135,6 @@ so for that reason it is best to configure each page individually.
 	you can think of configuration providers as Controllers.
 
 The following is a more in-depth example using form fields.
-
-```go
-// prepare/main.go
-frz.PrepareSveltePage("about", "www/lib/pages/about.svelte")
-```
 
 ```go
 // main.go
