@@ -1,4 +1,4 @@
-Pages are just svelte components located at `pages`.
+Pages are just svelte components located in the `pages` directory.
 
 You can refer to these pages by their relative file names.
 
