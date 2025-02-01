@@ -455,13 +455,13 @@
 <span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>You'll need to create an embedded file system with <code>go:embed</code>, including the <code>www/dist/*/**</code> pattern and pass 
+<p>You'll need to create an embedded file system with <code>go:embed</code>, including the <code>.dist/*/**</code> pattern and pass 
 said embedded file system to the server.</p>
 <p>This will make it so that your svelte assets get embedded directly into the final executable.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="s">&quot;embed&quot;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nx">frz</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
 
-<span class="c1">//go:embed www/dist/*/**</span>
+<span class="c1">//go:embed .dist/*/**</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">efs</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -475,7 +475,7 @@ said embedded file system to the server.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="s">&quot;embed&quot;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nx">frz</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
 
-<span class="c1">//go:embed www/dist/*/**</span>
+<span class="c1">//go:embed .dist/*/**</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">efs</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
