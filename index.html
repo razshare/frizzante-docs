@@ -453,9 +453,14 @@
 <p>Create a new project using the starter template.</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/razshare/frizzante-starter<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>frizzante-starter
 </code></pre></div>
-<p>Update your dependencies </p>
-<div class="highlight"><pre><span></span><code>make<span class="w"> </span>update
+<p>Configure the project</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>configure
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Configuring the project will also update dependencies.<br/>
+Use <code>make update</code> to only update dependencies.</p>
+</div>
 <p>Then you can start the server with</p>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>start
 </code></pre></div>
