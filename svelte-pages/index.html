@@ -560,7 +560,7 @@
 
   <h1>Svelte pages</h1>
 
-<p>Pages are just svelte components located at <code>www/pages</code>.</p>
+<p>Pages are just svelte components located at <code>pages</code>.</p>
 <p>You can refer to these pages by their relative file names.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -568,12 +568,12 @@
 </div>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>A page located at <code>www/page/welcome.svelte</code> will be identified by <code>welcome</code>.</p>
+<p>A page located at <code>pages/welcome.svelte</code> will be identified by <code>welcome</code>.</p>
 </div>
 <p>Subdirectories are joined by <code>::</code> instead of <code>/</code> or <code>\</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>A page located at <code>www/page/about/user.svelte</code> will be identified by <code>about::user</code>.</p>
+<p>A page located at <code>pages/about/user.svelte</code> will be identified by <code>about::user</code>.</p>
 </div>
 <h2 id="mapping-a-page">Mapping a page</h2>
 <p>You can map pages with <code>frz.ServerWithSveltePage()</code></p>
@@ -625,7 +625,7 @@ See next sections.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
 <span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSveltePage</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">configure</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--www/lib/pages/about.svelte--&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--pages/about.svelte--&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
@@ -640,7 +640,7 @@ See next sections.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
 <span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSveltePage</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about/{name}&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">configure</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--www/lib/pages/about.svelte--&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--pages/about.svelte--&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
@@ -695,7 +695,7 @@ you can think of configuration providers as Controllers.</p>
 <span class="w">    </span><span class="p">},</span>
 <span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--www/lib/pages/about.svelte--&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--pages/about.svelte--&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
