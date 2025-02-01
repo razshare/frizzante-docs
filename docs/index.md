@@ -10,16 +10,6 @@ Create a new project using the starter template.
 git clone https://github.com/razshare/frizzante-starter && cd frizzante-starter
 ```
 
-Configure the project
-
-```bash
-make configure
-```
-
-!!! note
-    Configuring the project will also update dependencies.<br/>
-    Use `make update` to only update dependencies.
-
 
 Then you can start the server with
 
