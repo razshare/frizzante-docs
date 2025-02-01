@@ -33,6 +33,7 @@ The following is a compatibility table between web socket and request handlers.
 | [ReceivePath](https://pkg.go.dev/github.com/razshare/frizzante#ReceivePath) | Yes | Yes |
 | [ReceiveQuery](https://pkg.go.dev/github.com/razshare/frizzante#ReceiveQuery) | Yes | Yes |
 | [ReceiveHeader](https://pkg.go.dev/github.com/razshare/frizzante#ReceiveHeader) | Yes | Yes |
+| [ReceiveCookie](https://pkg.go.dev/github.com/razshare/frizzante#ReceiveCookie) | Yes | Yes |
 | [ReceiveContentType](https://pkg.go.dev/github.com/razshare/frizzante#ReceiveContentType) | Yes | Yes |
 | [ReceiveMessage](https://pkg.go.dev/github.com/razshare/frizzante#ReceiveMessage) | Yes | Yes |
 | [ReceiveJson](https://pkg.go.dev/github.com/razshare/frizzante#ReceiveJson) | Yes | Yes |
@@ -42,6 +43,7 @@ The following is a compatibility table between web socket and request handlers.
 | [SendRedirectToSecure](https://pkg.go.dev/github.com/razshare/frizzante#SendRedirectToSecure) | Yes | No |
 | [SendStatus](https://pkg.go.dev/github.com/razshare/frizzante#SendStatus) | Yes | No |
 | [SendHeader](https://pkg.go.dev/github.com/razshare/frizzante#SendHeader) | Yes | No |
+| [SendCookie](https://pkg.go.dev/github.com/razshare/frizzante#SendCookie) | Yes | No |
 | [SendContent](https://pkg.go.dev/github.com/razshare/frizzante#SendContent) | Yes | Yes |
 | [SendEcho](https://pkg.go.dev/github.com/razshare/frizzante#SendEcho) | Yes | Yes |
 | [SendEmbeddedFileOrIndexOrElse](https://pkg.go.dev/github.com/razshare/frizzante#SendEmbeddedFileOrIndexOrElse) | Yes | No |
