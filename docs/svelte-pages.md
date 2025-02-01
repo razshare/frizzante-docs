@@ -1,4 +1,4 @@
-Pages are just svelte components located at `www/pages`.
+Pages are just svelte components located at `pages`.
 
 You can refer to these pages by their relative file names.
 
@@ -6,12 +6,12 @@ You can refer to these pages by their relative file names.
 	The `.svelte` extension is optional.
 
 !!! example
-	A page located at `www/page/welcome.svelte` will be identified by `welcome`.
+	A page located at `pages/welcome.svelte` will be identified by `welcome`.
 
 Subdirectories are joined by `::` instead of `/` or `\`.
 
 !!! example
-	A page located at `www/page/about/user.svelte` will be identified by `about::user`.
+	A page located at `pages/about/user.svelte` will be identified by `about::user`.
 
 
 ## Mapping a page
@@ -79,7 +79,7 @@ frz.ServerWithSveltePage(server, "GET /about", "about", configure)
 ```
 
 ```html
-<!--www/lib/pages/about.svelte-->
+<!--pages/about.svelte-->
 <script>
     import { getContext } from "svelte";
     const data = getContext("data")
@@ -103,7 +103,7 @@ frz.ServerWithSveltePage(server, "GET /about/{name}", "about", configure)
 ```
 
 ```html
-<!--www/lib/pages/about.svelte-->
+<!--pages/about.svelte-->
 <script>
     import { getContext } from "svelte";
     const data = getContext("data")
@@ -168,7 +168,7 @@ frz.ServerWithSveltePage(server, "POST /about", "about",
 ```
 
 ```html
-<!--www/lib/pages/about.svelte-->
+<!--pages/about.svelte-->
 <script>
     import { getContext } from "svelte";
     const data = getContext("data")
