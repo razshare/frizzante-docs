@@ -9,7 +9,7 @@ func main() {
 }
 ```
 
-You'll need to create an embedded file system with `go:embed`, including the `www/dist/*/**` pattern and pass 
+You'll need to create an embedded file system with `go:embed`, including the `.dist/*/**` pattern and pass 
 said embedded file system to the server.
 
 This will make it so that your svelte assets get embedded directly into the final executable.
@@ -18,7 +18,7 @@ This will make it so that your svelte assets get embedded directly into the fina
 import "embed"
 import frz "github.com/razshare/frizzante"
 
-//go:embed www/dist/*/**
+//go:embed .dist/*/**
 var efs embed.FS
 
 func main() {
@@ -36,7 +36,7 @@ You can customize both your host name and port number with `frz.ServerWithHostna
 import "embed"
 import frz "github.com/razshare/frizzante"
 
-//go:embed www/dist/*/**
+//go:embed .dist/*/**
 var efs embed.FS
 
 func main() {
