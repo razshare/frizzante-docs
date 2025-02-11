@@ -4,8 +4,8 @@ You can create a server with `frz.CreateServer()` and start it with `frz.ServerS
 import frz "github.com/razshare/frizzante"
 
 func main() {
-	server := frz.ServerCreate()
-	frz.ServerStart(server)
+	srv := frz.ServerCreate()
+	frz.ServerStart(srv)
 }
 ```
 
@@ -22,9 +22,9 @@ import frz "github.com/razshare/frizzante"
 var efs embed.FS
 
 func main() {
-	server := frz.ServerCreate()
-	frz.ServerWithEmbeddedFileSystem(server, efs)
-	frz.ServerStart(server)
+	srv := frz.ServerCreate()
+	frz.ServerWithEmbeddedFileSystem(srv, efs)
+	frz.ServerStart(srv)
 }
 ```
 
@@ -40,10 +40,10 @@ import frz "github.com/razshare/frizzante"
 var efs embed.FS
 
 func main() {
-	server := frz.ServerCreate()
-	frz.ServerWithPort(server, 8989)
-	frz.ServerWithHostName(server, "192.168.0.123")
-	frz.ServerWithEmbeddedFileSystem(server, efs)
-	frz.ServerStart(server)
+	srv := frz.ServerCreate()
+	frz.ServerWithPort(srv, 8989)
+	frz.ServerWithHostName(srv, "192.168.0.123")
+	frz.ServerWithEmbeddedFileSystem(srv, efs)
+	frz.ServerStart(srv)
 }
 ```
