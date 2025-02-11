@@ -1,12 +1,12 @@
 You can automatically upgrade http requests to web sockets with `frz.ServerWithWebSocketHandler()`.
 
 ```go
-frz.ServerWithWebSocketHandler(server, "GET /", 
-    func(request *frz.Request, response *frz.Response) {
+frz.ServerWithWebSocketHandler(srv, "GET /", 
+    func(req *frz.Request, res *frz.Response) {
         for {
-            frz.SendEcho(response, "hello")
-            message := frz.ReceiveMessage(request)
-            fmt.Printf("Received message `%s`.\n", message)
+            frz.SendEcho(res, "hello")
+            msg := frz.ReceiveMessage(req)
+            fmt.Printf("Received message `%s`.\n", msg)
         }
     },
 )

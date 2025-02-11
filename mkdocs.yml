@@ -44,4 +44,4 @@ nav:
   - Certificates: certificates.md
   - Routes: routes.md
   - Pages: pages.md
-  - Web socket handlers: web-socket-handlers.md
+  - Web sockets: web-sockets.md
