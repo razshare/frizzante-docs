@@ -18,7 +18,7 @@
     
     
       
-        <title>Web socket handlers - Frizzante</title>
+        <title>Web sockets - Frizzante</title>
       
     
     
@@ -142,7 +142,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Web socket handlers
+              Web sockets
             
           </span>
         </div>
@@ -402,7 +402,7 @@
         
   
   <span class="md-ellipsis">
-    Web socket handlers
+    Web sockets
   </span>
   
 
@@ -443,15 +443,15 @@
                   
 
 
-  <h1>Web socket handlers</h1>
+  <h1>Web sockets</h1>
 
 <p>You can automatically upgrade http requests to web sockets with <code>frz.ServerWithWebSocketHandler()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithWebSocketHandler</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /&quot;</span><span class="p">,</span><span class="w"> </span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithWebSocketHandler</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="nx">message</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceiveMessage</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
-<span class="w">            </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Received message `%s`.\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">msg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceiveMessage</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Received message `%s`.\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">msg</span><span class="p">)</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="p">)</span>
