@@ -601,7 +601,7 @@ which can be <code>frz.ModeServer</code>, <code>frz.ModeClient</code> or <code>f
 <p class="admonition-title">Note</p>
 <p>Default rendering mode is <code>frz.ModeFull</code>.</p>
 </div>
-<p>The page handler also uses <code>frz.PageWithData()</code> in order to set a data key, which can be retrieved 
+<p>The page handler can also use <code>frz.PageWithData()</code> in order to set a data key, which can be retrieved 
 by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
