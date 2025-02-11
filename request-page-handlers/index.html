@@ -583,21 +583,26 @@
 <ul>
 <li>a pattern, <code>GET /welcome</code> in this case, </li>
 <li>a page id, <code>welcome</code> in this case,</li>
-<li>a configuration provider, called <code>configure</code> in this case.</li>
+<li>a request page handler, called <code>configure</code> in this case.</li>
 </ul>
-<p>This configuration provider is a function that must take in a request and return a configuration</p>
+<p>This page handler is a function that must take in a server, request, response and a page</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">configure</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithRenderMode</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeFull</span><span class="p">)</span>
 <span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>The page handler uses <code>frz.PageWithRenderMode()</code> in order to configure the rendering mode, 
+<p>The page handler can use <code>frz.PageWithRenderMode()</code> in order to configure the rendering mode, 
 which can be <code>frz.ModeServer</code>, <code>frz.ModeClient</code> or <code>frz.ModeFull</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>See <a href="../overview/">overview page</a> for more details on rendering modes.</p>
 </div>
-<p>The page handler also uses <code>frz.PageWithData()</code> in order to set a <code>name</code> data key, which can be retrieved by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data").name</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Default rendering mode is <code>frz.ModeFull</code>.</p>
+</div>
+<p>The page handler also uses <code>frz.PageWithData()</code> in order to set a data key, which can be retrieved 
+by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
