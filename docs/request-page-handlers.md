@@ -26,9 +26,9 @@ Mapping a page requires
 
 - a pattern, `GET /welcome` in this case, 
 - a page id, `welcome` in this case,
-- a configuration provider, called `configure` in this case.
+- a request page handler, called `configure` in this case.
 
-This configuration provider is a function that must take in a request and return a configuration
+This page handler is a function that must take in a server, request, response and a page
 
 ```go
 func configure(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
@@ -37,13 +37,17 @@ func configure(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
 }
 ```
 
-The page handler uses `frz.PageWithRenderMode()` in order to configure the rendering mode, 
+The page handler can use `frz.PageWithRenderMode()` in order to configure the rendering mode, 
 which can be `frz.ModeServer`, `frz.ModeClient` or `frz.ModeFull`.
 
 !!! note
 	See [overview page](./overview.md) for more details on rendering modes.
 
-The page handler also uses `frz.PageWithData()` in order to set a `name` data key, which can be retrieved by any of your components with [getContext("data").name](https://svelte.dev/docs/svelte/svelte#getContext).
+!!! note
+	Default rendering mode is `frz.ModeFull`.
+
+The page handler also uses `frz.PageWithData()` in order to set a data key, which can be retrieved 
+by any of your components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
 
 ```html
 <script>
