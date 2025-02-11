@@ -10,6 +10,11 @@ Create a new project using the starter template.
 git clone https://github.com/razshare/frizzante-starter && cd frizzante-starter && rm .git -fr
 ```
 
+Update dependencies
+
+```bash
+make update
+```
 
 Then you can start the server with
 
