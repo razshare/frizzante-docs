@@ -46,7 +46,7 @@ which can be `frz.ModeServer`, `frz.ModeClient` or `frz.ModeFull`.
 !!! note
 	Default rendering mode is `frz.ModeFull`.
 
-The page handler also uses `frz.PageWithData()` in order to set a data key, which can be retrieved 
+The page handler can also use `frz.PageWithData()` in order to set a data key, which can be retrieved 
 by any of your components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
 
 ```html
