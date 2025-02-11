@@ -42,6 +42,6 @@ nav:
   - Overview: overview.md
   - Server: server.md
   - Certificates: certificates.md
-  - Request handlers: request-handlers.md
-  - Request page handlers: request-page-handlers.md
+  - Routes: routes.md
+  - Pages: pages.md
   - Web socket handlers: web-socket-handlers.md

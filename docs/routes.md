@@ -1,9 +1,7 @@
 You can listen for requests with `frz.ServerWithRoute()`.
 
 ```go
-frz.ServerWithRoute(
-    server,
-    "GET /", 
+frz.ServerWithRoute(server, "GET /",
     func(_ *frz.Server, _ *frz.Request, res *frz.Response) {
         frz.SendEcho(res, "hello")
     },
@@ -17,9 +15,7 @@ The above example listens for requests at `GET /` and responds with `hello` as `
 You can send out a status code with `frz.SendStatus()`
 
 ```go
-frz.ServerWithRoute(
-    server,
-    "GET /", 
+frz.ServerWithRoute(server, "GET /",
     func(_ *frz.Server, _ *frz.Request, res *frz.Response) {
         frz.SendStatus(res, 404)
         frz.SendEcho(res, "Resource not found, sorry.")
@@ -35,9 +31,7 @@ frz.ServerWithRoute(
 You can retrieve header fields with `frz.ReceiveHeader()` and send out header fields with `frz.SendHeader()`.
 
 ```go
-frz.ServerWithRoute(
-    server,
-    "GET /", 
+frz.ServerWithRoute(server, "GET /",
     func(_ *frz.Server, req *frz.Request, res *frz.Response) {
         contentType := frz.ReceiveHeader(req, "Content-Type")
         if "application/xml" != contentType {
@@ -64,9 +58,7 @@ You can define path fields via the `{parameter}` syntax, the name of the paramet
 You can then retrieve the value of the path field with `frz.ReceivePath()`
 
 ```go
-frz.ServerWithRoute(
-    server,
-    "GET /about/{name}", 
+frz.ServerWithRoute(server, "GET /about/{name}",
     func(_ *frz.Server, req *frz.Request, res *frz.Response) {
         name := frz.ReceivePath(req, "name")
         frz.SendEcho(res, "hello ")
@@ -80,9 +72,7 @@ frz.ServerWithRoute(
 You can retrieve values of query fields with `frz.ReceiveQuery()`
 
 ```go
-frz.ServerWithRoute(
-    server,
-    "GET /about", 
+frz.ServerWithRoute(server, "GET /about",
     func(server *frz.Server, request *frz.Request, response *frz.Response) {
         name := frz.ReceiveQuery(request, "name")
         frz.SendEcho(response, "hello ")
@@ -98,9 +88,7 @@ Forms can be retrieved with `frz.ReceiveForm()`.
 You can use the `url.Values` api in order to retrieve specific form fields.
 
 ```go
-frz.ServerWithRoute(
-    server,
-    "POST /about", 
+frz.ServerWithRoute(server, "POST /about",
     func(server *frz.Server, request *frz.Request, response *frz.Response) {
         form := frz.ReceiveForm(request)
         name := form.Get("name")
@@ -125,9 +113,7 @@ type Person struct {
 	Name string `json:"name"`
 }
 
-frz.ServerWithRoute(
-    server,
-    "POST /about", 
+frz.ServerWithRoute(server, "POST /about",
     func(server *frz.Server, request *frz.Request, response *frz.Response) {
         person := &Person{}
         form := frz.ReceiveJson(request, person)
