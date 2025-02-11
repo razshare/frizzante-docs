@@ -16,10 +16,10 @@ Subdirectories are joined by `::` instead of `/` or `\`.
 
 ## Mapping a page
 
-You can map pages with `frz.ServerWithSveltePage()`
+You can map pages with `frz.ServerWithRequestPageHandler()`
 
 ```go
-frz.ServerWithSveltePage(server, "GET /welcome", "welcome", configure)
+frz.ServerWithRequestPageHandler(server, "GET /welcome", "welcome", configure)
 ```
 
 Mapping a page requires 
@@ -31,23 +31,19 @@ Mapping a page requires
 This configuration provider is a function that must take in a request and return a configuration
 
 ```go
-func configure(_ *frz.Request) *frz.SveltePageConfiguration {
-	return &frz.SveltePageConfiguration{
-		Render: frz.ModeFull,
-		Data: map[string]interface{}{
-			"name": "world",
-		},
-	}
+func configure(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
+	frz.PageWithRenderMode(p, frz.ModeFull)
+	frz.PageWithData(p, "name", "world")
 }
 ```
 
-The resulting configuration defines a required `Render` property, indicating the rendering mode, 
-which can be `frz.ModeServer`, `frz.ModeClient` or `frz.ModeFull`
-and an optional `Data` property, which can be retrieved by any of your components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
-
+The page handler uses `frz.PageWithRenderMode()` in order to configure the rendering mode, 
+which can be `frz.ModeServer`, `frz.ModeClient` or `frz.ModeFull`.
 
 !!! note
 	See [overview page](./overview.md) for more details on rendering modes.
+
+The page handler also uses `frz.PageWithData()` in order to set a `name` data key, which can be retrieved by any of your components with [getContext("data").name](https://svelte.dev/docs/svelte/svelte#getContext).
 
 ```html
 <script>
@@ -75,7 +71,7 @@ You can retrieve the `name` query field with `getContext("data").query.name`.
 
 ```go
 // main.go
-frz.ServerWithSveltePage(server, "GET /about", "about", configure)
+frz.ServerWithRequestPageHandler(server, "GET /about", "about", configure)
 ```
 
 ```html
@@ -99,7 +95,7 @@ You can retrieve the `{name}` path field with `getContext("data").path.name`.
 
 ```go
 // main.go
-frz.ServerWithSveltePage(server, "GET /about/{name}", "about", configure)
+frz.ServerWithRequestPageHandler(server, "GET /about/{name}", "about", configure)
 ```
 
 ```html
@@ -140,29 +136,26 @@ The following is a more in-depth example using form fields.
 // main.go
 
 // GET /about
-frz.ServerWithSveltePage(server, "GET /about", "about",
-	func(_ *frz.Request) *frz.SveltePageConfiguration {
-		return &frz.SveltePageConfiguration{Render: frz.ModeFull}
+frz.ServerWithRequestPageHandler(server, "GET /about", "about",
+	func(_ *frz.Server, req *frz.Request, _ *frz.Response, p *frz.Page) {
+		frz.PageWithRenderMode(p, frz.ModeFull)
 	},
 )
 
 // POST /about
-frz.ServerWithSveltePage(server, "POST /about", "about",
-	func(request *frz.Request) *frz.SveltePageConfiguration {
-		form := frz.ReceiveForm(request)
+frz.ServerWithRequestPageHandler(server, "POST /about", "about",
+	func(_ *frz.Server, req *frz.Request, _ *frz.Response, p *frz.Page) {
+		frz.PageWithRenderMode(p, frz.ModeFull)
+		
+		form := frz.ReceiveForm(req)
 		name := form.Get("name")
 
 		if len(name) < 2 {
-			return &frz.SveltePageConfiguration{
-				Render: frz.ModeFull,
-				Data:   map[string]interface{}{"error": "Name must be at least 2 characters long."},
-			}
+			frz.PageWithData(p, "error", "Name must be at least 2 characters long.")
+			return
 		}
 
-		return &frz.SveltePageConfiguration{
-			Render: frz.ModeFull,
-			Data:   map[string]interface{}{"name": name},
-		}
+		frz.PageWithData(p, "name", name)
 	},
 )
 ```
