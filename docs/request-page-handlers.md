@@ -16,22 +16,22 @@ Subdirectories are joined by `::` instead of `/` or `\`.
 
 ## Mapping a page
 
-You can map pages with `frz.ServerWithRequestPageHandler()`
+You can map pages with `frz.ServerWithPage()`
 
 ```go
-frz.ServerWithRequestPageHandler(server, "GET /welcome", "welcome", configure)
+frz.ServerWithPage(srv, "GET /welcome", "welcome", cnf)
 ```
 
 Mapping a page requires 
 
 - a pattern, `GET /welcome` in this case, 
 - a page id, `welcome` in this case,
-- a request page handler, called `configure` in this case.
+- a request page handler, called `cnf` in this case.
 
 This page handler is a function that must take in a server, request, response and a page
 
 ```go
-func configure(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
+func cnf(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
 	frz.PageWithRenderMode(p, frz.ModeFull)
 	frz.PageWithData(p, "name", "world")
 }
@@ -75,7 +75,7 @@ You can retrieve the `name` query field with `getContext("data").query.name`.
 
 ```go
 // main.go
-frz.ServerWithRequestPageHandler(server, "GET /about", "about", configure)
+frz.ServerWithPage(srv, "GET /about", "about", cnf)
 ```
 
 ```html
@@ -99,7 +99,7 @@ You can retrieve the `{name}` path field with `getContext("data").path.name`.
 
 ```go
 // main.go
-frz.ServerWithRequestPageHandler(server, "GET /about/{name}", "about", configure)
+frz.ServerWithPage(srv, "GET /about/{name}", "about", cnf)
 ```
 
 ```html
@@ -140,14 +140,14 @@ The following is a more in-depth example using form fields.
 // main.go
 
 // GET /about
-frz.ServerWithRequestPageHandler(server, "GET /about", "about",
-	func(_ *frz.Server, req *frz.Request, _ *frz.Response, p *frz.Page) {
+frz.ServerWithPage(srv, "GET /about", "about",
+	func(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
 		frz.PageWithRenderMode(p, frz.ModeFull)
 	},
 )
 
 // POST /about
-frz.ServerWithRequestPageHandler(server, "POST /about", "about",
+frz.ServerWithPage(srv, "POST /about", "about",
 	func(_ *frz.Server, req *frz.Request, _ *frz.Response, p *frz.Page) {
 		frz.PageWithRenderMode(p, frz.ModeFull)
 		
