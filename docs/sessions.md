@@ -72,6 +72,9 @@ frz.ServerWithSessionOperator(src, func(id string) (
 })
 ```
 
+!!! note
+    `Destroy` is a function which is internally used by the server ro destroy sessions.
+
 ## Lifetime
 
 The `frz.SessionStart()` func does not set any expiration date, domain or path on the session cookie sent to the browser.
