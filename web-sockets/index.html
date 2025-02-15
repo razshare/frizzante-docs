@@ -465,154 +465,25 @@
 
   <h1>Web sockets</h1>
 
-<p>You can automatically upgrade http requests to web sockets with <code>frz.ServerWithWebSocketHandler()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithWebSocketHandler</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /&quot;</span><span class="p">,</span><span class="w"> </span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="nx">msg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceiveMessage</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
-<span class="w">            </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Received message `%s`.\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">msg</span><span class="p">)</span>
-<span class="w">        </span><span class="p">}</span>
+<p>You can automatically upgrade http requests to web sockets with <code>frz.SendWebSocketUpgrade()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRoute</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SendWebSocketUpgrade</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
+<span class="w">                </span><span class="nx">msg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceiveMessage</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+<span class="w">                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Received message `%s`.\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">msg</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">})</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="p">)</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Web socket patterns must always use the <code>GET</code> verb.</p>
+<p>Once the callback function returns, 
+for example by exiting the <code>for</code> loop, 
+the web socket connection ends.</p>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Returning from the callback function will automatically close the web socket connection.<br/>
-In the example above, exiting the <code>for</code> loop will automatically close the web socket connection.</p>
-</div>
-<p>All web socket handlers are compatible with many of the same functions used by traditional request handlers.</p>
-<p>However, many other functions that <code>send data to the client</code> have little compatibility with web sockets because of the nature of the protocol itself.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For example, you won't be able to send a status code to the client in your websocket loop because because by the time your callback function is executed, the underlying web socket handshake has already terminated and the status code has already been sent.</p>
-</div>
-<p>The following is a compatibility table between web socket and request handlers.</p>
-<table>
-<thead>
-<tr>
-<th>Function</th>
-<th>Compatible with request handlers</th>
-<th>Compatible with web socket handlers</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#ReceivePath">ReceivePath</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#ReceiveQuery">ReceiveQuery</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#ReceiveHeader">ReceiveHeader</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#ReceiveCookie">ReceiveCookie</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#ReceiveContentType">ReceiveContentType</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#ReceiveMessage">ReceiveMessage</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#ReceiveJson">ReceiveJson</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#ReceiveForm">ReceiveForm</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#VerifyContentType">VerifyContentType</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendRedirect">SendRedirect</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendRedirectToSecure">SendRedirectToSecure</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendStatus">SendStatus</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendHeader">SendHeader</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendCookie">SendCookie</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendContent">SendContent</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendEcho">SendEcho</a></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendEmbeddedFileOrIndexOrElse">SendEmbeddedFileOrIndexOrElse</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendEmbeddedFileOrElse">SendEmbeddedFileOrElse</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendFileOrIndexOrElse">SendFileOrIndexOrElse</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendFileOrElse">SendFileOrElse</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendWebSocketUpgrade">SendWebSocketUpgrade</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr>
-<td><a href="https://pkg.go.dev/github.com/razshare/frizzante#SendSveltePage">SendSveltePage</a></td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-</tbody>
-</table>
 
 
 
