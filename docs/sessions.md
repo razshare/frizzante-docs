@@ -8,7 +8,7 @@ frz.ServerWithRoute(server, "GET /",
 )
 ```
 
-Function `frz.SessionStart()` always succeeds and it always returns three functions, get, set and unset.
+`frz.SessionStart()` always succeeds and it always returns three functions, get, set and unset.
 
 !!! note
     The reason `frz.SessionStart()` always succeeds is because it will automatically create a new session if none is found. The new session does **not** retain any data from the previous session.
