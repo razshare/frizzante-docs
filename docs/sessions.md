@@ -73,7 +73,7 @@ frz.ServerWithSessionOperator(src, func(id string) (
 ```
 
 !!! note
-    `Destroy` is a function which is internally used by the server ro destroy sessions.
+    `Destroy` is a function which is internally used by the server to destroy sessions.
 
 ## Lifetime
 
