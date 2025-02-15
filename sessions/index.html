@@ -653,6 +653,10 @@ with <code>frz.ServerWithSessionOperator()</code>.</p>
 <span class="w">    </span><span class="k">return</span>
 <span class="p">})</span>
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>Destroy</code> is a function which is internally used by the server ro destroy sessions.</p>
+</div>
 <h2 id="lifetime">Lifetime</h2>
 <p>The <code>frz.SessionStart()</code> func does not set any expiration date, domain or path on the session cookie sent to the browser.</p>
 <p>Instead, <code>frz.ServerWithSessionOperator()</code> has complete control over the lifetime of any session.</p>
