@@ -43,14 +43,16 @@ unset("username")
 ## Session operator
 
 You can overwrite the default in-memory session operator and provide 
-your own `get`, `set`, `unset` and a fourth `destroy` functions 
-with `frz.ServerWithSessionOperator()`.
+your own `get`, `set`, `unset`, `validate` and `destroy` functions.
+
+Use `frz.ServerWithSessionOperator()` to overwrite the default session operator
 
 ```go
 frz.ServerWithSessionOperator(src, func(id string) (
     get func(key string, defaultValue any) (value any),
     set func(key string, value any),
     unset func(key string),
+    validate func() bool,
     destroy func(),
 ) {
     get = func(key string, defaultValue any) (value any) {
@@ -65,6 +67,10 @@ frz.ServerWithSessionOperator(src, func(id string) (
         // ...
     }
 
+    validate = func() {
+        // ...
+    }
+
     destroy = func() {
         // ...
     }
@@ -73,7 +79,8 @@ frz.ServerWithSessionOperator(src, func(id string) (
 ```
 
 !!! note
-    `Destroy` is a function which is internally used by the server to destroy sessions.
+    `Validate` and `destroy` are used by the server internally 
+    to manage and destroy session that are no longer valid.
 
 ## Lifetime
 
