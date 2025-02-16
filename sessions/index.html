@@ -627,12 +627,13 @@
 </code></pre></div>
 <h2 id="session-operator">Session operator</h2>
 <p>You can overwrite the default in-memory session operator and provide 
-your own <code>get</code>, <code>set</code>, <code>unset</code> and a fourth <code>destroy</code> functions 
-with <code>frz.ServerWithSessionOperator()</code>.</p>
+your own <code>get</code>, <code>set</code>, <code>unset</code>, <code>validate</code> and <code>destroy</code> functions.</p>
+<p>Use <code>frz.ServerWithSessionOperator()</code> to overwrite the default session operator</p>
 <div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSessionOperator</span><span class="p">(</span><span class="nx">src</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="nx">get</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">defaultValue</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">),</span>
 <span class="w">    </span><span class="nx">set</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">),</span>
 <span class="w">    </span><span class="nx">unset</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">validate</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">destroy</span><span class="w"> </span><span class="kd">func</span><span class="p">(),</span>
 <span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">get</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">defaultValue</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -647,6 +648,10 @@ with <code>frz.ServerWithSessionOperator()</code>.</p>
 <span class="w">        </span><span class="c1">// ...</span>
 <span class="w">    </span><span class="p">}</span>
 
+<span class="w">    </span><span class="nx">validate</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span>
+
 <span class="w">    </span><span class="nx">destroy</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// ...</span>
 <span class="w">    </span><span class="p">}</span>
@@ -655,7 +660,8 @@ with <code>frz.ServerWithSessionOperator()</code>.</p>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code>Destroy</code> is a function which is internally used by the server to destroy sessions.</p>
+<p><code>Validate</code> and <code>destroy</code> are used by the server internally 
+to manage and destroy session that are no longer valid.</p>
 </div>
 <h2 id="lifetime">Lifetime</h2>
 <p>The <code>frz.SessionStart()</code> func does not set any expiration date, domain or path on the session cookie sent to the browser.</p>
