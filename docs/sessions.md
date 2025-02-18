@@ -80,7 +80,7 @@ frz.ServerWithSessionOperator(srv, func(id string) (
 
 !!! note
     `Validate` and `destroy` are used by the server internally 
-    to manage and destroy session that are no longer valid.
+    to manage and destroy sessions that are no longer valid.
 
 ## Lifetime
 
