@@ -1,4 +1,4 @@
-You can create a server with `frz.CreateServer()` and start it with `frz.ServerStart()`.
+You can create a server with `frz.ServerCreate()` and start it with `frz.ServerStart()`.
 
 ```go
 import frz "github.com/razshare/frizzante"
