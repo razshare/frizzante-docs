@@ -84,6 +84,6 @@ frz.ServerWithSessionOperator(srv, func(id string) (
 
 ## Lifetime
 
-The `frz.SessionStart()` func does not set any expiration date, domain or path on the session cookie sent to the browser.
+The `frz.SessionStart()` function does not set any expiration date, domain or path on the session cookie sent to the browser.
 
 Instead, `frz.ServerWithSessionOperator()` has complete control over the lifetime of any session.
