@@ -48,7 +48,7 @@ your own `get`, `set`, `unset`, `validate` and `destroy` functions.
 Use `frz.ServerWithSessionOperator()` to overwrite the default session operator
 
 ```go
-frz.ServerWithSessionOperator(src, func(id string) (
+frz.ServerWithSessionOperator(srv, func(id string) (
     get func(key string, defaultValue any) (value any),
     set func(key string, value any),
     unset func(key string),
