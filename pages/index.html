@@ -596,32 +596,26 @@
 <p>A page located at <code>pages/about/user.svelte</code> will be identified by <code>about::user</code>.</p>
 </div>
 <h2 id="mapping-a-page">Mapping a page</h2>
-<p>You can map pages with <code>frz.ServerWithPage()</code></p>
-<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">cnf</span><span class="p">)</span>
+<p>You can map pages with <code>frz.ServerWithRoute()</code> and <code>frz.Page()</code></p>
+<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRoute</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">(</span><span class="s">&quot;welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">hn</span><span class="p">))</span>
 </code></pre></div>
 <p>Mapping a page requires </p>
 <ul>
 <li>a pattern, <code>GET /welcome</code> in this case, </li>
 <li>a page id, <code>welcome</code> in this case,</li>
-<li>a request page handler, called <code>cnf</code> in this case.</li>
+<li>a page handler, called <code>hn</code> in this case.</li>
 </ul>
 <p>This page handler is a function that must take in a server, request, response and a page</p>
-<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">cnf</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithRenderMode</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeFull</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">hn</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageConfiguration</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">Render</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeServer</span>
+<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">Data</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;world&quot;</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>The page handler can use <code>frz.PageWithRenderMode()</code> in order to configure the rendering mode, 
-which can be <code>frz.ModeServer</code>, <code>frz.ModeClient</code> or <code>frz.ModeFull</code>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>See <a href="../overview/">overview page</a> for more details on rendering modes.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Default rendering mode is <code>frz.ModeFull</code>.</p>
-</div>
-<p>The page handler can also use <code>frz.PageWithData()</code> in order to set a data key, which can be retrieved 
+<p>In this example, the page handler is setting <code>fr.Render</code> 
+in order to configure the rendering mode, 
+which can be <code>frz.ModeServer</code>, <code>frz.ModeClient</code> or <code>frz.ModeFull</code>,
+and it's passing a <code>name</code> property with the value of <code>world</code> to the 
+underlying <code>welcome</code> page which can be retrieved 
 by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
@@ -630,6 +624,14 @@ by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#ge
 
 <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a href="../overview/">overview page</a> for more details on rendering modes.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Default rendering mode is <code>frz.ModeFull</code>.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Context <code>data</code> is created with <a href="https://svelte.dev/docs/svelte/$state">$state()</a>, hence it is reactive.</p>
@@ -644,7 +646,7 @@ See next sections.</p>
 <p>Say, for example, that you've mapped your svelte page to <code>GET /about</code> and some client requests <code>GET/about?name=world</code>.</p>
 <p>You can retrieve the <code>name</code> query field with <code>getContext("data").query.name</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">cnf</span><span class="p">)</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRoute</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">hn</span><span class="p">))</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="cm">&lt;!--pages/about.svelte--&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
@@ -659,7 +661,7 @@ See next sections.</p>
 <p>Say, for example, that you've mapped your svelte page to <code>GET /about/{name}</code>.</p>
 <p>You can retrieve the <code>{name}</code> path field with <code>getContext("data").path.name</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about/{name}&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">cnf</span><span class="p">)</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRoute</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about/{name}&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">hn</span><span class="p">))</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="cm">&lt;!--pages/about.svelte--&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
@@ -684,33 +686,35 @@ so for that reason it is best to configure each page individually.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you're coming from the <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a> world, 
-you can think of configuration providers as Controllers.</p>
+you can think of page handlers as Controllers.</p>
 </div>
 <p>The following is a more in-depth example using form fields.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
 
 <span class="c1">// GET /about</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithRenderMode</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeFull</span><span class="p">)</span>
-<span class="w">    </span><span class="p">},</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRoute</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">cnf</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageConfiguration</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Noop.</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">    </span><span class="p">),</span>
 <span class="p">)</span>
 
 <span class="c1">// POST /about</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;POST /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithRenderMode</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ModeFull</span><span class="p">)</span>
+<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithRoute</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;POST /about&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">cnf</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageConfiguration</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">form</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceiveForm</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">form</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span>
 
-<span class="w">        </span><span class="nx">form</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceiveForm</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
-<span class="w">        </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">form</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">cnf</span><span class="p">.</span><span class="nx">Data</span><span class="p">[</span><span class="s">&quot;error&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Name must be at least 2 characters long.&quot;</span>
+<span class="w">                </span><span class="k">return</span>
+<span class="w">            </span><span class="p">}</span>
 
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Name must be at least 2 characters long.&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="k">return</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span>
-<span class="w">    </span><span class="p">},</span>
+<span class="w">            </span><span class="nx">cnf</span><span class="p">.</span><span class="nx">Data</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">name</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">    </span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="cm">&lt;!--pages/about.svelte--&gt;</span>
