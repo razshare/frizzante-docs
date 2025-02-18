@@ -16,38 +16,34 @@ Subdirectories are joined by `::` instead of `/` or `\`.
 
 ## Mapping a page
 
-You can map pages with `frz.ServerWithPage()`
+You can map pages with `frz.ServerWithRoute()` and `frz.Page()`
 
 ```go
-frz.ServerWithPage(srv, "GET /welcome", "welcome", cnf)
+frz.ServerWithRoute(srv, "GET /welcome", frz.Page("welcome", hn))
 ```
 
 Mapping a page requires 
 
 - a pattern, `GET /welcome` in this case, 
 - a page id, `welcome` in this case,
-- a request page handler, called `cnf` in this case.
+- a page handler, called `hn` in this case.
 
 This page handler is a function that must take in a server, request, response and a page
 
 ```go
-func cnf(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
-	frz.PageWithRenderMode(p, frz.ModeFull)
-	frz.PageWithData(p, "name", "world")
+func hn(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.PageConfiguration) {
+	frz.Render = frz.ModeServer
+	frz.Data["name"] = "world"
 }
 ```
 
-The page handler can use `frz.PageWithRenderMode()` in order to configure the rendering mode, 
-which can be `frz.ModeServer`, `frz.ModeClient` or `frz.ModeFull`.
-
-!!! note
-	See [overview page](./overview.md) for more details on rendering modes.
-
-!!! note
-	Default rendering mode is `frz.ModeFull`.
-
-The page handler can also use `frz.PageWithData()` in order to set a data key, which can be retrieved 
+In this example, the page handler is setting `fr.Render` 
+in order to configure the rendering mode, 
+which can be `frz.ModeServer`, `frz.ModeClient` or `frz.ModeFull`,
+and it's passing a `name` property with the value of `world` to the 
+underlying `welcome` page which can be retrieved 
 by any of your components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
+
 
 ```html
 <script>
@@ -57,6 +53,12 @@ by any of your components with [getContext("data")](https://svelte.dev/docs/svel
 
 <h1>Hello {data.name}</h1>
 ```
+
+!!! note
+	See [overview page](./overview.md) for more details on rendering modes.
+
+!!! note
+	Default rendering mode is `frz.ModeFull`.
 
 !!! note
 	Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
@@ -75,7 +77,7 @@ You can retrieve the `name` query field with `getContext("data").query.name`.
 
 ```go
 // main.go
-frz.ServerWithPage(srv, "GET /about", "about", cnf)
+frz.ServerWithRoute(srv, "GET /about", frz.Page("about", hn))
 ```
 
 ```html
@@ -99,7 +101,7 @@ You can retrieve the `{name}` path field with `getContext("data").path.name`.
 
 ```go
 // main.go
-frz.ServerWithPage(srv, "GET /about/{name}", "about", cnf)
+frz.ServerWithRoute(srv, "GET /about/{name}", frz.Page("about", hn))
 ```
 
 ```html
@@ -132,7 +134,7 @@ so for that reason it is best to configure each page individually.
 
 !!! note
 	If you're coming from the [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) world, 
-	you can think of configuration providers as Controllers.
+	you can think of page handlers as Controllers.
 
 The following is a more in-depth example using form fields.
 
@@ -140,27 +142,29 @@ The following is a more in-depth example using form fields.
 // main.go
 
 // GET /about
-frz.ServerWithPage(srv, "GET /about", "about",
-	func(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
-		frz.PageWithRenderMode(p, frz.ModeFull)
-	},
+frz.ServerWithRoute(srv, "GET /about", 
+	frz.Page("about",
+		func(_ *frz.Server, req *frz.Request, _ *frz.Response, cnf *frz.PageConfiguration) {
+			// Noop.
+		},
+	),
 )
 
 // POST /about
-frz.ServerWithPage(srv, "POST /about", "about",
-	func(_ *frz.Server, req *frz.Request, _ *frz.Response, p *frz.Page) {
-		frz.PageWithRenderMode(p, frz.ModeFull)
-		
-		form := frz.ReceiveForm(req)
-		name := form.Get("name")
+frz.ServerWithRoute(srv, "POST /about", 
+	frz.Page("about", 
+		func(_ *frz.Server, req *frz.Request, _ *frz.Response, cnf *frz.PageConfiguration) {
+			form := frz.ReceiveForm(req)
+			name := form.Get("name")
 
-		if len(name) < 2 {
-			frz.PageWithData(p, "error", "Name must be at least 2 characters long.")
-			return
-		}
+			if len(name) < 2 {
+				cnf.Data["error"] = "Name must be at least 2 characters long."
+				return
+			}
 
-		frz.PageWithData(p, "name", name)
-	},
+			cnf.Data["name"] = name
+		},
+	),
 )
 ```
 

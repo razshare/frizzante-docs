@@ -2,9 +2,9 @@ You can listen for requests with `frz.ServerWithRoute()`.
 
 ```go
 frz.ServerWithRoute(server, "GET /",
-    func(_ *frz.Server, _ *frz.Request, res *frz.Response) {
+    frz.Route(func(_ *frz.Server, _ *frz.Request, res *frz.Response) {
         frz.SendEcho(res, "hello")
-    },
+    }),
 )
 ```
 
@@ -16,10 +16,10 @@ You can send out a status code with `frz.SendStatus()`
 
 ```go
 frz.ServerWithRoute(server, "GET /",
-    func(_ *frz.Server, _ *frz.Request, res *frz.Response) {
+    frz.Route(func(_ *frz.Server, _ *frz.Request, res *frz.Response) {
         frz.SendStatus(res, 404)
         frz.SendEcho(res, "Resource not found, sorry.")
-    },
+    }),
 )
 ```
 
@@ -32,7 +32,7 @@ You can retrieve header fields with `frz.ReceiveHeader()` and send out header fi
 
 ```go
 frz.ServerWithRoute(server, "GET /",
-    func(_ *frz.Server, req *frz.Request, res *frz.Response) {
+    frz.Route(func(_ *frz.Server, req *frz.Request, res *frz.Response) {
         contentType := frz.ReceiveHeader(req, "Content-Type")
         if "application/xml" != contentType {
             frz.SendStatus(res, 400)
@@ -44,7 +44,7 @@ frz.ServerWithRoute(server, "GET /",
         frz.SendStatus(res, 404)
         frz.SendHeader(res, "Content-Length", "26")
         frz.SendEcho(res, "Resource not found, sorry.")
-    },
+    }),
 )
 ```
 
@@ -59,11 +59,11 @@ You can then retrieve the value of the path field with `frz.ReceivePath()`
 
 ```go
 frz.ServerWithRoute(server, "GET /about/{name}",
-    func(_ *frz.Server, req *frz.Request, res *frz.Response) {
+    frz.Route(func(_ *frz.Server, req *frz.Request, res *frz.Response) {
         name := frz.ReceivePath(req, "name")
         frz.SendEcho(res, "hello ")
         frz.SendEcho(res, name)
-    },
+    }),
 )
 ```
 
@@ -73,11 +73,11 @@ You can retrieve values of query fields with `frz.ReceiveQuery()`
 
 ```go
 frz.ServerWithRoute(server, "GET /about",
-    func(server *frz.Server, request *frz.Request, response *frz.Response) {
+    frz.Route(func(server *frz.Server, request *frz.Request, response *frz.Response) {
         name := frz.ReceiveQuery(request, "name")
         frz.SendEcho(response, "hello ")
         frz.SendEcho(response, name)
-    },
+    }),
 )
 ```
 
@@ -89,12 +89,12 @@ You can use the `url.Values` api in order to retrieve specific form fields.
 
 ```go
 frz.ServerWithRoute(server, "POST /about",
-    func(server *frz.Server, request *frz.Request, response *frz.Response) {
+    frz.Route(func(server *frz.Server, request *frz.Request, response *frz.Response) {
         form := frz.ReceiveForm(request)
         name := form.Get("name")
         frz.SendEcho(response, "hello ")
         frz.SendEcho(response, name)
-    },
+    }),
 )
 ```
 
@@ -114,11 +114,11 @@ type Person struct {
 }
 
 frz.ServerWithRoute(server, "POST /about",
-    func(server *frz.Server, request *frz.Request, response *frz.Response) {
+    frz.Route(func(server *frz.Server, request *frz.Request, response *frz.Response) {
         person := &Person{}
         form := frz.ReceiveJson(request, person)
         frz.SendEcho(response, "hello ")
         frz.SendEcho(response, person.Name)
-    },
+    }),
 )
 ```
