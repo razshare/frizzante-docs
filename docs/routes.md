@@ -1,4 +1,4 @@
-You can listen for requests with `frz.ServerWithRoute()`.
+You can listen for requests with `frz.ServerWithRoute()` and `frz.Route()`.
 
 ```go
 frz.ServerWithRoute(server, "GET /",
