@@ -16,30 +16,30 @@ Subdirectories are joined by `::` instead of `/` or `\`.
 
 ## Mapping a page
 
-You can map pages with `frz.ServerWithRoute()` and `frz.Page()`
+You can map pages with `frz.ServerWithPage()`
 
 ```go
-frz.ServerWithRoute(srv, "GET /welcome", frz.Page("welcome", hn))
+frz.ServerWithPage(srv, "GET /welcome", "welcome", wlc)
 ```
 
 Mapping a page requires 
 
 - a pattern, `GET /welcome` in this case, 
 - a page id, `welcome` in this case,
-- a page handler, called `hn` in this case.
+- a page handler, called `wlc` in this case.
 
 This page handler is a function that must take in a server, request, response and a page
 
 ```go
-func hn(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.PageConfiguration) {
-	frz.Render = frz.ModeServer
-	frz.Data["name"] = "world"
+func wlc(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
+	frz.PageWithRenderMode(frz.RenderModeServer)
+	frz.PageWithData(p, "name", "world")
 }
 ```
 
-In this example, the page handler is setting `fr.Render` 
-in order to configure the rendering mode, 
-which can be `frz.ModeServer`, `frz.ModeClient` or `frz.ModeFull`,
+In this example, the page handler is using `frz.PageWithRenderMode()` 
+to configure the rendering mode, 
+which can be `frz.RenderModeServer`, `frz.RenderModeClient` or `frz.RenderModeFull`,
 and it's passing a `name` property with the value of `world` to the 
 underlying `welcome` page which can be retrieved 
 by any of your components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
@@ -77,7 +77,7 @@ You can retrieve the `name` query field with `getContext("data").query.name`.
 
 ```go
 // main.go
-frz.ServerWithRoute(srv, "GET /about", frz.Page("about", hn))
+frz.ServerWithPage(srv, "GET /about", frz.Page("about", hn))
 ```
 
 ```html
@@ -101,7 +101,7 @@ You can retrieve the `{name}` path field with `getContext("data").path.name`.
 
 ```go
 // main.go
-frz.ServerWithRoute(srv, "GET /about/{name}", frz.Page("about", hn))
+frz.ServerWithPage(srv, "GET /about/{name}", "about", abt)
 ```
 
 ```html
@@ -142,29 +142,25 @@ The following is a more in-depth example using form fields.
 // main.go
 
 // GET /about
-frz.ServerWithRoute(srv, "GET /about", 
-	frz.Page("about",
-		func(_ *frz.Server, req *frz.Request, _ *frz.Response, cnf *frz.PageConfiguration) {
-			// Noop.
-		},
-	),
+frz.ServerWithPage(srv, "GET /about", "about",
+	func(_ *frz.Server, req *frz.Request, _ *frz.Response, p *frz.Page) {
+		// Noop.
+	},
 )
 
 // POST /about
-frz.ServerWithRoute(srv, "POST /about", 
-	frz.Page("about", 
-		func(_ *frz.Server, req *frz.Request, _ *frz.Response, cnf *frz.PageConfiguration) {
-			form := frz.ReceiveForm(req)
-			name := form.Get("name")
+frz.ServerWithPage(srv, "POST /about", "about", 
+	func(_ *frz.Server, req *frz.Request, _ *frz.Response, p *frz.Page) {
+		form := frz.ReceiveForm(req)
+		name := form.Get("name")
 
-			if len(name) < 2 {
-				cnf.Data["error"] = "Name must be at least 2 characters long."
-				return
-			}
+		if len(name) < 2 {
+			frz.PageWithData(p, "error", "Name must be at least 2 characters long.")
+			return
+		}
 
-			cnf.Data["name"] = name
-		},
-	),
+		frz.PageWithData(p, "name", name)
+	},
 )
 ```
 

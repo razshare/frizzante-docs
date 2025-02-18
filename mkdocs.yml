@@ -42,7 +42,7 @@ nav:
   - Overview: overview.md
   - Server: server.md
   - Certificates: certificates.md
-  - Routes: routes.md
+  - Api: api.md
   - Pages: pages.md
   - Sessions: sessions.md
   - Web sockets: web-sockets.md
