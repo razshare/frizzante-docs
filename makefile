@@ -1,7 +1,7 @@
 configure:
-	pip install mkdocs --break-system-packages
-	pip install mkdocs-video --break-system-packages
-	pip install mkdocs-material --break-system-packages
+	pip install mkdocs
+	pip install mkdocs-video
+	pip install mkdocs-material
 
 dev:
 	mkdocs serve
