@@ -16,6 +16,12 @@ Update dependencies
 make update
 ```
 
+!!! note
+    Make sure you have build-essential installed
+    ```bash
+    sudo apt install build-essential
+    ```
+
 Then you can start the server with
 
 ```bash
