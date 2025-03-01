@@ -1,4 +1,4 @@
-You can listen for requests with `frz.ServerRouteApi()`
+You can route apis with `frz.ServerRouteApi()`
 
 ```go
 frz.ServerRouteApi(server, "GET /",
