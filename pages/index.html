@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.6">
     
     
       
@@ -435,33 +435,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#query-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Query fields
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#path-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Path fields
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#form-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Form fields
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -545,33 +518,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#query-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Query fields
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#path-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Path fields
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#form-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Form fields
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -646,109 +592,6 @@ by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#ge
 <p class="admonition-title">Note</p>
 <p>Context <code>data</code> is created with <a href="https://svelte.dev/docs/svelte/$state">$state()</a>, hence it is reactive.</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Context keys <code>query</code>, <code>path</code>, and <code>form</code> are reserved.<br/>
-See next sections.</p>
-</div>
-<h2 id="query-fields">Query fields</h2>
-<p>Query fields are automatically injected in the context of the svelte page that's being rendered.</p>
-<p>Say, for example, that you've mapped your svelte page to <code>GET /about</code> and some client requests <code>GET/about?name=world</code>.</p>
-<p>You can retrieve the <code>name</code> query field with <code>getContext("data").query.name</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">(</span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">hn</span><span class="p">))</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--pages/about.svelte--&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.query.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-</code></pre></div>
-<h2 id="path-fields">Path fields</h2>
-<p>Path fields are automatically injected in the context of the svelte page that's being rendered.</p>
-<p>Say, for example, that you've mapped your svelte page to <code>GET /about/{name}</code>.</p>
-<p>You can retrieve the <code>{name}</code> path field with <code>getContext("data").path.name</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about/{name}&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">abt</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--pages/about.svelte--&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.path.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-</code></pre></div>
-<h2 id="form-fields">Form fields</h2>
-<p>Form fields are automatically injected in the context of the svelte page that's being rendered.</p>
-<p>All incoming form fields are mapped into <code>getContext("data").form</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.form.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-</code></pre></div>
-<p>However, when dealing with forms, you will most likely want to update your state in-place, 
-so for that reason it is best to configure each page individually.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you're coming from the <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a> world, 
-you can think of page handlers as Controllers.</p>
-</div>
-<p>The following is a more in-depth example using form fields.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// main.go</span>
-
-<span class="c1">// GET /about</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Noop.</span>
-<span class="w">    </span><span class="p">},</span>
-<span class="p">)</span>
-
-<span class="c1">// POST /about</span>
-<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;POST /about&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;about&quot;</span><span class="p">,</span><span class="w"> </span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">form</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">ReceiveForm</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
-<span class="w">        </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">form</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span>
-
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Name must be at least 2 characters long.&quot;</span><span class="p">)</span>
-<span class="w">            </span><span class="k">return</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span>
-<span class="w">    </span><span class="p">},</span>
-<span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cm">&lt;!--pages/about.svelte--&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-{#if data.error}
-    <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Error<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>{data.error}<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-{:else if data.name}
-    <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Welcome, {data.name}!<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-{:else}
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;?&quot;</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;name&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>Name<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;name&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;name&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="p">/&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">br</span><span class="p">/&gt;</span>
-
-        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">&gt;</span>Submit<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-{/if}
-</code></pre></div>
-<video controls width="100%">
-  <source src="https://github.com/razshare/frizzante-docs/raw/refs/heads/main/docs/Video_2025-01-25_20-59-54.mp4" type="video/mp4" />
-</video>
 
 
 
@@ -798,7 +641,7 @@ you can think of page handlers as Controllers.</p>
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   </body>
