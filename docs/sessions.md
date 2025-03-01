@@ -1,7 +1,7 @@
 Use `frz.SessionStart()` to start a session.
 
 ```go
-frz.ServerWithApi(server, "GET /",
+frz.ServerRouteApi(server, "GET /",
     func(_ *frz.Server, req *frz.Request, res *frz.Response) {
         get, set, unset := frz.SessionStart(req, res)
     },

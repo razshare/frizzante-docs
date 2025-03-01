@@ -16,10 +16,10 @@ Subdirectories are joined by `::` instead of `/` or `\`.
 
 ## Mapping a page
 
-You can map pages with `frz.ServerWithPage()`
+You can map pages with `frz.ServerRoutePage()`
 
 ```go
-frz.ServerWithPage(srv, "GET /welcome", "welcome", wlc)
+frz.ServerRoutePage(srv, "GET /welcome", "welcome", wlc)
 ```
 
 Mapping a page requires 

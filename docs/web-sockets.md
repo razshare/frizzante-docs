@@ -1,7 +1,7 @@
 You can automatically upgrade http requests to web sockets with `frz.SendWebSocketUpgrade()`.
 
 ```go
-frz.ServerWithApi(srv, "GET /",
+frz.ServerRouteApi(srv, "GET /",
     func(_ *frz.Server, req *frz.Request, res *frz.Response) {
         frz.SendWebSocketUpgrade(res, func() {
             for {
