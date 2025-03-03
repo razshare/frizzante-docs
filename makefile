@@ -1,10 +1,14 @@
 configure:
-	pip install mkdocs
-	pip install mkdocs-video
+	python3 -m venv venv
+	. venv/bin/activate && \
+	pip install mkdocs && \
+	pip install mkdocs-video && \
 	pip install mkdocs-material
 
 dev:
+	. venv/bin/activate && \
 	mkdocs serve
 
 publish:
+	. venv/bin/activate && \
 	mkdocs gh-deploy
