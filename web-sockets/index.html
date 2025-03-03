@@ -474,7 +474,7 @@
 
   <h1>Web sockets</h1>
 
-<p>You can automatically upgrade http requests to web sockets with <code>frz.SendWebSocketUpgrade()</code>.</p>
+<p>You can upgrade http requests to web sockets with <code>frz.SendWebSocketUpgrade()</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerRouteApi</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SendWebSocketUpgrade</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
