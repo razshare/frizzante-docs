@@ -58,7 +58,7 @@ by any of your components with [getContext("data")](https://svelte.dev/docs/svel
 	See [overview page](./overview.md) for more details on rendering modes.
 
 !!! note
-	Default rendering mode is `frz.ModeFull`.
+	Default rendering mode is `frz.RenderModeFull`.
 
 !!! note
 	Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
