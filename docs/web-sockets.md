@@ -1,4 +1,4 @@
-You can automatically upgrade http requests to web sockets with `frz.SendWebSocketUpgrade()`.
+You can upgrade http requests to web sockets with `frz.SendWebSocketUpgrade()`.
 
 ```go
 frz.ServerRouteApi(srv, "GET /",
