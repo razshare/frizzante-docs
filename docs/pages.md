@@ -1,4 +1,4 @@
-Pages are just svelte components located in the `pages` directory.
+Pages are just svelte components located in the `lib/pages` directory.
 
 You can refer to these pages by their relative file names.
 
@@ -6,12 +6,12 @@ You can refer to these pages by their relative file names.
 	The `.svelte` extension is optional.
 
 !!! example
-	A page located at `pages/welcome.svelte` will be identified by `welcome`.
+	A page located at `lib/pages/welcome.svelte` will be identified by `welcome`.
 
 Subdirectories are joined by `::` instead of `/` or `\`.
 
 !!! example
-	A page located at `pages/about/user.svelte` will be identified by `about::user`.
+	A page located at `lib/pages/about/user.svelte` will be identified by `about::user`.
 
 
 ## Mapping a page
