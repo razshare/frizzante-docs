@@ -584,10 +584,10 @@ to configure the rendering mode,
 which can be <code>frz.RenderModeServer</code>, <code>frz.RenderModeClient</code> or <code>frz.RenderModeFull</code>,
 and it's passing a <code>name</code> property with the value of <code>world</code> to the 
 underlying <code>welcome</code> page which can be retrieved 
-by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
+by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("Data")</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;Data&quot;</span><span class="p">)</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 
 <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
@@ -602,7 +602,7 @@ by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#ge
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Context <code>data</code> is created with <a href="https://svelte.dev/docs/svelte/$state">$state()</a>, hence it is reactive.</p>
+<p>Context <code>Data</code> is created with <a href="https://svelte.dev/docs/svelte/$state">$state()</a>, hence it is reactive.</p>
 </div>
 
 
