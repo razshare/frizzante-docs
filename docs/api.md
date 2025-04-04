@@ -58,9 +58,9 @@ You can define path fields via the `{parameter}` syntax, the name of the paramet
 You can then retrieve the value of the path field with `frz.ReceivePath()`
 
 ```go
-frz.ServerRouteApi(server, "GET /about/{name}",
+frz.ServerRouteApi(server, "GET /About/{Name}",
     func(_ *frz.Server, req *frz.Request, res *frz.Response) {
-        name := frz.ReceivePath(req, "name")
+        name := frz.ReceivePath(req, "Name")
         frz.SendEcho(res, "hello ")
         frz.SendEcho(res, name)
     },
@@ -72,9 +72,9 @@ frz.ServerRouteApi(server, "GET /about/{name}",
 You can retrieve values of query fields with `frz.ReceiveQuery()`
 
 ```go
-frz.ServerRouteApi(server, "GET /about",
+frz.ServerRouteApi(server, "GET /About",
     func(server *frz.Server, request *frz.Request, response *frz.Response) {
-        name := frz.ReceiveQuery(request, "name")
+        name := frz.ReceiveQuery(request, "Name")
         frz.SendEcho(response, "hello ")
         frz.SendEcho(response, name)
     },
@@ -88,10 +88,10 @@ Forms can be retrieved with `frz.ReceiveForm()`.
 You can use the `url.Values` api in order to retrieve specific form fields.
 
 ```go
-frz.ServerRouteApi(server, "POST /about",
+frz.ServerRouteApi(server, "POST /About",
     func(server *frz.Server, request *frz.Request, response *frz.Response) {
         form := frz.ReceiveForm(request)
-        name := form.Get("name")
+        name := form.Get("Name")
         frz.SendEcho(response, "hello ")
         frz.SendEcho(response, name)
     },
@@ -110,10 +110,10 @@ instead it takes in an object and projects the contents of the json onto said ob
 
 ```go
 type Person struct {
-	Name string `json:"name"`
+	Name string
 }
 
-frz.ServerRouteApi(server, "POST /about",
+frz.ServerRouteApi(server, "POST /About",
     func(server *frz.Server, request *frz.Request, response *frz.Response) {
         person := &Person{}
         form := frz.ReceiveJson(request, person)

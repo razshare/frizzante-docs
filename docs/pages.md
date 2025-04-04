@@ -6,12 +6,12 @@ You can refer to these pages by their relative file names.
 	The `.svelte` extension is optional.
 
 !!! example
-	A page located at `lib/pages/welcome.svelte` will be identified by `welcome`.
+	A page located at `lib/pages/Welcome.svelte` will be identified by `Welcome`.
 
 Subdirectories are joined by `::` instead of `/` or `\`.
 
 !!! example
-	A page located at `lib/pages/about/user.svelte` will be identified by `about::user`.
+	A page located at `lib/pages/About/User.svelte` will be identified by `About::User`.
 
 
 ## Mapping a page
@@ -19,25 +19,25 @@ Subdirectories are joined by `::` instead of `/` or `\`.
 You can route pages with `frz.ServerRoutePage()`
 
 ```go
-frz.ServerRoutePage(srv, "GET /welcome", "welcome", wlc)
+frz.ServerRoutePage(srv, "GET /Welcome", "Welcome", Welcome)
 ```
 
 Mapping a page requires 
 
-- a pattern, `GET /welcome` in this case, 
-- a page id, `welcome` in this case,
-- a page handler, called `wlc` in this case.
+- a pattern, `GET /Welcome` in this case, 
+- a page id, `Welcome` in this case,
+- a page function, also called `Welcome` in this case.
 
-This page handler is a function that must take in a server, request, response and a page
+This page function must take in a server, request, response and a page
 
 ```go
-func wlc(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
+func Welcome(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
 	frz.PageWithRenderMode(frz.RenderModeServer)
-	frz.PageWithData(p, "name", "world")
+	frz.PageWithData(p, "Name", "world")
 }
 ```
 
-In this example, the page handler is using `frz.PageWithRenderMode()` 
+In this example, the page function is using `frz.PageWithRenderMode()` 
 to configure the rendering mode, 
 which can be `frz.RenderModeServer`, `frz.RenderModeClient` or `frz.RenderModeFull`,
 and it's passing a `name` property with the value of `world` to the 

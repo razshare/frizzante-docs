@@ -19,7 +19,7 @@ Use `get()` to retrieve a session property.
 
 ```go
 get, _, _ := frz.SessionStart(req, res)
-username := get("username", "guest").(string)
+username := get("Username", "guest").(string)
 ```
 
 ## Set
@@ -28,7 +28,7 @@ Use `set()` to create or update a session property.
 
 ```go
 _, set, _ := frz.SessionStart(req, res)
-set("username", "frizzante")
+set("Username", "frizzante")
 ```
 
 ## Unset
@@ -37,7 +37,7 @@ Use `unset()` to remove a session property.
 
 ```go
 _, _, unset := frz.SessionStart(req, res)
-unset("username")
+unset("Username")
 ```
 
 ## Session operator
