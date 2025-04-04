@@ -11,7 +11,7 @@ You can refer to these pages by their relative file names.
 Subdirectories are joined by `::` instead of `/` or `\`.
 
 !!! example
-	A page located at `lib/pages/About/user.svelte` will be identified by `About::User`.
+	A page located at `lib/pages/about/User.svelte` will be identified by `about::User`.
 
 
 ## Mapping a page
