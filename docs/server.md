@@ -19,11 +19,11 @@ import "embed"
 import frz "github.com/razshare/frizzante"
 
 //go:embed .dist/*/**
-var efs embed.FS
+var dist embed.FS
 
 func main() {
 	srv := frz.ServerCreate()
-	frz.ServerWithEmbeddedFileSystem(srv, efs)
+	frz.ServerWithEmbeddedFileSystem(srv, dist)
 	frz.ServerStart(srv)
 }
 ```
@@ -37,13 +37,13 @@ import "embed"
 import frz "github.com/razshare/frizzante"
 
 //go:embed .dist/*/**
-var efs embed.FS
+var dist embed.FS
 
 func main() {
 	srv := frz.ServerCreate()
 	frz.ServerWithPort(srv, 8989)
 	frz.ServerWithHostName(srv, "192.168.0.123")
-	frz.ServerWithEmbeddedFileSystem(srv, efs)
+	frz.ServerWithEmbeddedFileSystem(srv, dist)
 	frz.ServerStart(srv)
 }
 ```
