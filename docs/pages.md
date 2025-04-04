@@ -42,13 +42,13 @@ to configure the rendering mode,
 which can be `frz.RenderModeServer`, `frz.RenderModeClient` or `frz.RenderModeFull`,
 and it's passing a `name` property with the value of `world` to the 
 underlying `welcome` page which can be retrieved 
-by any of your components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
+by any of your components with [getContext("Data")](https://svelte.dev/docs/svelte/svelte#getContext).
 
 
 ```html
 <script>
     import { getContext } from "svelte";
-    const data = getContext("data")
+    const data = getContext("Data")
 </script>
 
 <h1>Hello {data.name}</h1>
@@ -61,4 +61,4 @@ by any of your components with [getContext("data")](https://svelte.dev/docs/svel
 	Default rendering mode is `frz.RenderModeFull`.
 
 !!! note
-	Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
+	Context `Data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
