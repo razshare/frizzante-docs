@@ -1,6 +1,7 @@
 You can create a server with `frz.ServerCreate()` and start it with `frz.ServerStart()`.
 
 ```go
+package main
 import frz "github.com/razshare/frizzante"
 
 func main() {
@@ -15,6 +16,7 @@ said embedded file system to the server.
 This will make it so that your svelte assets get embedded directly into the final executable.
 
 ```go
+package main
 import "embed"
 import frz "github.com/razshare/frizzante"
 
@@ -33,6 +35,7 @@ By default, your server will be listening for requests at [http://127.0.0.1:8080
 You can customize both your host name and port number with `frz.ServerWithHostname()` and `frz.ServerWithPortNumber()`.
 
 ```go
+package main
 import "embed"
 import frz "github.com/razshare/frizzante"
 
