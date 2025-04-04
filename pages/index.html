@@ -561,23 +561,20 @@
 <p>Subdirectories are joined by <code>::</code> instead of <code>/</code> or <code>\</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>A page located at <code>lib/pages/welcome/View.svelte</code> will be identified by <code>welcome::View</code>.</p>
+<p>A page located at <code>lib/pages/About/user.svelte</code> will be identified by <code>About::User</code>.</p>
 </div>
 <h2 id="mapping-a-page">Mapping a page</h2>
 <p>You can route pages with <code>frz.ServerRoutePage()</code></p>
-<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerRoutePage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;welcome::View&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">welcome</span><span class="p">.</span><span class="nx">Function</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerRoutePage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/Welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Welcome</span><span class="p">)</span>
 </code></pre></div>
 <p>Mapping a page requires </p>
 <ul>
-<li>a path, <code>/welcome</code> in this case, </li>
-<li>a page id, <code>welcome::View</code> in this case,</li>
-<li>a page function, called <code>welcome.Function</code> in this case.</li>
+<li>a path, <code>/Welcome</code> in this case, </li>
+<li>a page id, <code>Welcome</code> in this case,</li>
+<li>a page function, also called <code>Welcome</code> in this case.</li>
 </ul>
 <p>This page function must take in a server, request, response and a page</p>
-<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">welcome</span>
-<span class="kn">import</span><span class="w"> </span><span class="nx">frz</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-
-<span class="kd">func</span><span class="w"> </span><span class="nx">Function</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">Welcome</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithRenderMode</span><span class="p">(</span><span class="nx">frz</span><span class="p">.</span><span class="nx">RenderModeServer</span><span class="p">)</span>
 <span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)</span>
 <span class="p">}</span>
@@ -586,7 +583,7 @@
 to configure the rendering mode, 
 which can be <code>frz.RenderModeServer</code>, <code>frz.RenderModeClient</code> or <code>frz.RenderModeFull</code>,
 and it's passing a <code>Name</code> property with the value of <code>world</code> to the 
-underlying <code>welcome::View</code> page which can be retrieved 
+underlying <code>Welcome</code> page which can be retrieved 
 by any of your components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("Data")</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
