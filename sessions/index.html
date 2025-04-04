@@ -635,17 +635,17 @@
 <h2 id="get">Get</h2>
 <p>Use <code>get()</code> to retrieve a session property.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">get</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
-<span class="nx">username</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">get</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">).(</span><span class="kt">string</span><span class="p">)</span>
+<span class="nx">username</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">get</span><span class="p">(</span><span class="s">&quot;Username&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">).(</span><span class="kt">string</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="set">Set</h2>
 <p>Use <code>set()</code> to create or update a session property.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">set</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
-<span class="nx">set</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;frizzante&quot;</span><span class="p">)</span>
+<span class="nx">set</span><span class="p">(</span><span class="s">&quot;Username&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;frizzante&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="unset">Unset</h2>
 <p>Use <code>unset()</code> to remove a session property.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">unset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
-<span class="nx">unset</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">)</span>
+<span class="nx">unset</span><span class="p">(</span><span class="s">&quot;Username&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="session-operator">Session operator</h2>
 <p>You can overwrite the default in-memory session operator and provide 
