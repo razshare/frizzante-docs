@@ -556,30 +556,30 @@
 </div>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>A page located at <code>lib/pages/welcome.svelte</code> will be identified by <code>welcome</code>.</p>
+<p>A page located at <code>lib/pages/Welcome.svelte</code> will be identified by <code>Welcome</code>.</p>
 </div>
 <p>Subdirectories are joined by <code>::</code> instead of <code>/</code> or <code>\</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>A page located at <code>lib/pages/about/user.svelte</code> will be identified by <code>about::user</code>.</p>
+<p>A page located at <code>lib/pages/About/User.svelte</code> will be identified by <code>About::User</code>.</p>
 </div>
 <h2 id="mapping-a-page">Mapping a page</h2>
 <p>You can route pages with <code>frz.ServerRoutePage()</code></p>
-<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerRoutePage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">wlc</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerRoutePage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /Welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Welcome</span><span class="p">)</span>
 </code></pre></div>
 <p>Mapping a page requires </p>
 <ul>
-<li>a pattern, <code>GET /welcome</code> in this case, </li>
-<li>a page id, <code>welcome</code> in this case,</li>
-<li>a page handler, called <code>wlc</code> in this case.</li>
+<li>a pattern, <code>GET /Welcome</code> in this case, </li>
+<li>a page id, <code>Welcome</code> in this case,</li>
+<li>a page function, also called <code>Welcome</code> in this case.</li>
 </ul>
-<p>This page handler is a function that must take in a server, request, response and a page</p>
-<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">wlc</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<p>This page function must take in a server, request, response and a page</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">Welcome</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Server</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithRenderMode</span><span class="p">(</span><span class="nx">frz</span><span class="p">.</span><span class="nx">RenderModeServer</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">frz</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>In this example, the page handler is using <code>frz.PageWithRenderMode()</code> 
+<p>In this example, the page function is using <code>frz.PageWithRenderMode()</code> 
 to configure the rendering mode, 
 which can be <code>frz.RenderModeServer</code>, <code>frz.RenderModeClient</code> or <code>frz.RenderModeFull</code>,
 and it's passing a <code>name</code> property with the value of <code>world</code> to the 
