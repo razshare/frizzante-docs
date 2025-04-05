@@ -6,49 +6,55 @@ You can refer to these pages by their relative file names.
 	The `.svelte` extension is optional.
 
 !!! example
-	A page located at `lib/pages/Welcome.svelte` will be identified by `Welcome`.
+	A page located at `lib/pages/welcome.svelte` will be identified by `welcome`.
 
 Subdirectories are joined by `::` instead of `/` or `\`.
 
 !!! example
-	A page located at `lib/pages/about/User.svelte` will be identified by `about::User`.
+	A page located at `lib/pages/about/user.svelte` will be identified by `about::user`.
 
 
 ## Mapping a page
 
-You can route pages with `frz.ServerRoutePage()`
+You can route pages with `frz.ServerWithPage()`
 
 ```go
-frz.ServerRoutePage(srv, "/Welcome", "Welcome", Welcome)
+frz.ServerRoutePage(srv, "/welcome", "welcome", WelcomeIndex)
 ```
 
 Mapping a page requires 
 
-- a path, `/Welcome` in this case, 
-- a page id, `Welcome` in this case,
-- a page function, also called `Welcome` in this case.
+- a path, `/welcome` in this case, 
+- a page id, `welcome` in this case,
+- a page function, also called `welcome` in this case.
 
 This page function must take in a server, request, response and a page
 
 ```go
-func Welcome(_ *frz.Server, _ *frz.Request, _ *frz.Response, p *frz.Page) {
-	frz.PageWithRenderMode(frz.RenderModeServer)
-	frz.PageWithData(p, "Name", "world")
+func WelcomeIndex() (
+	show frz.PageFunction,
+	action frz.PageFunction,
+){
+	show = func (_ *frz.Request, _ *frz.Response, p *frz.Page) {
+		frz.PageWithRender(frz.RenderServer)
+		frz.PageWithData(p, "name", "world")
+	}
+	return
 }
 ```
 
-In this example, the page function is using `frz.PageWithRenderMode()` 
+In this example, the page function is using `frz.PageWithRender()` 
 to configure the rendering mode, 
-which can be `frz.RenderModeServer`, `frz.RenderModeClient` or `frz.RenderModeFull`,
-and it's passing a `Name` property with the value of `world` to the 
-underlying `Welcome` page which can be retrieved 
-by any of your components with [getContext("Data")](https://svelte.dev/docs/svelte/svelte#getContext).
+which can be `frz.RenderServer`, `frz.RenderClient` or `frz.RenderFull`,
+and it's passing a `name` property with the value of `world` to the 
+underlying `welcome` page which can be retrieved 
+by any of your components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
 
 
 ```html
 <script>
     import { getContext } from "svelte";
-    const data = getContext("Data")
+    const data = getContext("data")
 </script>
 
 <h1>Hello {data.name}</h1>
@@ -58,7 +64,7 @@ by any of your components with [getContext("Data")](https://svelte.dev/docs/svel
 	See [overview page](./overview.md) for more details on rendering modes.
 
 !!! note
-	Default rendering mode is `frz.RenderModeFull`.
+	Default rendering mode is `frz.RenderFull`.
 
 !!! note
-	Context `Data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
+	Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.

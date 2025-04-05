@@ -58,9 +58,9 @@ You can define path fields via the `{parameter}` syntax, the name of the paramet
 You can then retrieve the value of the path field with `frz.ReceivePath()`
 
 ```go
-frz.ServerRouteApi(server, "GET /About/{Name}",
+frz.ServerRouteApi(server, "GET /about/{name}",
     func(_ *frz.Server, req *frz.Request, res *frz.Response) {
-        name := frz.ReceivePath(req, "Name")
+        name := frz.ReceivePath(req, "name")
         frz.SendEcho(res, "hello ")
         frz.SendEcho(res, name)
     },
@@ -72,9 +72,9 @@ frz.ServerRouteApi(server, "GET /About/{Name}",
 You can retrieve values of query fields with `frz.ReceiveQuery()`
 
 ```go
-frz.ServerRouteApi(server, "GET /About",
+frz.ServerRouteApi(server, "GET /about",
     func(server *frz.Server, request *frz.Request, response *frz.Response) {
-        name := frz.ReceiveQuery(request, "Name")
+        name := frz.ReceiveQuery(request, "name")
         frz.SendEcho(response, "hello ")
         frz.SendEcho(response, name)
     },
@@ -88,10 +88,10 @@ Forms can be retrieved with `frz.ReceiveForm()`.
 You can use the `url.Values` api in order to retrieve specific form fields.
 
 ```go
-frz.ServerRouteApi(server, "POST /About",
+frz.ServerRouteApi(server, "POST /about",
     func(server *frz.Server, request *frz.Request, response *frz.Response) {
         form := frz.ReceiveForm(request)
-        name := form.Get("Name")
+        name := form.Get("name")
         frz.SendEcho(response, "hello ")
         frz.SendEcho(response, name)
     },
@@ -103,20 +103,16 @@ frz.ServerRouteApi(server, "POST /About",
 
 ## Json
 
-Json bodies can be read and decoded with `frz.ReceiveJson()`.
-
-This function is a bit different that the others because it doesn't return a value,
-instead it takes in an object and projects the contents of the json onto said object.
+Json bodies can be read and decoded with `frz.ReceiveJson[T]()`.
 
 ```go
 type Person struct {
 	Name string
 }
 
-frz.ServerRouteApi(server, "POST /About",
-    func(server *frz.Server, request *frz.Request, response *frz.Response) {
-        person := &Person{}
-        form := frz.ReceiveJson(request, person)
+frz.ServerWithApi(server, "POST /about",
+    func(request *frz.Request, response *frz.Response) {
+        person, _ := frz.ReceiveJson[Person](request)
         frz.SendEcho(response, "hello ")
         frz.SendEcho(response, person.Name)
     },
