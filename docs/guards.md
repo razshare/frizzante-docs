@@ -1,4 +1,4 @@
-You can guard your page and api by injecting arbitrary functions to execute before said pages and/or api serve the client.
+You can guard your pages and api by injecting arbitrary functions to execute before said pages and/or api serve the client.
 
 You can guard your pages with `frz.ServerWithPageGuard()`
 
@@ -9,7 +9,11 @@ frz.ServerWithPageGuard(srv,
 	    pass()
     }
 )
+```
 
+You can guard your api with `frz.ServerWithApiGuard()`
+
+```go
 frz.ServerWithApiGuard(srv,
     func(req *frz.Request, res *frz.Response, _ *frz.Page, pass func()) {
         frz.SessionStart(req, res)
