@@ -1,8 +1,8 @@
-You can route apis with `frz.ServerRouteApi()`
+You can route apis with `frz.ServerWithApi()`
 
 ```go
-frz.ServerRouteApi(server, "GET /",
-    func(_ *frz.Server, _ *frz.Request, res *frz.Response) {
+frz.ServerWithApi(srv, "GET /",
+    func(_ *frz.Request, res *frz.Response) {
         frz.SendEcho(res, "hello")
     },
 )
@@ -15,8 +15,8 @@ The above example listens for requests at `GET /` and responds with `hello` as `
 You can send out a status code with `frz.SendStatus()`
 
 ```go
-frz.ServerRouteApi(server, "GET /",
-    func(_ *frz.Server, _ *frz.Request, res *frz.Response) {
+frz.ServerWithApi(srv, "GET /",
+    func(_ *frz.Request, res *frz.Response) {
         frz.SendStatus(res, 404)
         frz.SendEcho(res, "Resource not found, sorry.")
     },
@@ -31,8 +31,8 @@ frz.ServerRouteApi(server, "GET /",
 You can retrieve header fields with `frz.ReceiveHeader()` and send out header fields with `frz.SendHeader()`.
 
 ```go
-frz.ServerRouteApi(server, "GET /",
-    func(_ *frz.Server, req *frz.Request, res *frz.Response) {
+frz.ServerWithApi(srv, "GET /",
+    func(req *frz.Request, res *frz.Response) {
         contentType := frz.ReceiveHeader(req, "Content-Type")
         if "application/xml" != contentType {
             frz.SendStatus(res, 400)
@@ -58,8 +58,8 @@ You can define path fields via the `{parameter}` syntax, the name of the paramet
 You can then retrieve the value of the path field with `frz.ReceivePath()`
 
 ```go
-frz.ServerRouteApi(server, "GET /about/{name}",
-    func(_ *frz.Server, req *frz.Request, res *frz.Response) {
+frz.ServerWithApi(srv, "GET /about/{name}",
+    func(req *frz.Request, res *frz.Response) {
         name := frz.ReceivePath(req, "name")
         frz.SendEcho(res, "hello ")
         frz.SendEcho(res, name)
@@ -72,11 +72,11 @@ frz.ServerRouteApi(server, "GET /about/{name}",
 You can retrieve values of query fields with `frz.ReceiveQuery()`
 
 ```go
-frz.ServerRouteApi(server, "GET /about",
-    func(server *frz.Server, request *frz.Request, response *frz.Response) {
-        name := frz.ReceiveQuery(request, "name")
-        frz.SendEcho(response, "hello ")
-        frz.SendEcho(response, name)
+frz.ServerWithApi(srv, "GET /about",
+    func(req *frz.Request, res *frz.Response) {
+        name := frz.ReceiveQuery(req, "name")
+        frz.SendEcho(res, "hello ")
+        frz.SendEcho(res, name)
     },
 )
 ```
@@ -88,12 +88,12 @@ Forms can be retrieved with `frz.ReceiveForm()`.
 You can use the `url.Values` api in order to retrieve specific form fields.
 
 ```go
-frz.ServerRouteApi(server, "POST /about",
-    func(server *frz.Server, request *frz.Request, response *frz.Response) {
-        form := frz.ReceiveForm(request)
+frz.ServerWithApi(srv, "POST /about",
+    func(req *frz.Request, res *frz.Response) {
+        form := frz.ReceiveForm(req)
         name := form.Get("name")
-        frz.SendEcho(response, "hello ")
-        frz.SendEcho(response, name)
+        frz.SendEcho(res, "hello ")
+        frz.SendEcho(res, name)
     },
 )
 ```
@@ -110,11 +110,11 @@ type Person struct {
 	Name string
 }
 
-frz.ServerWithApi(server, "POST /about",
-    func(request *frz.Request, response *frz.Response) {
-        person, _ := frz.ReceiveJson[Person](request)
-        frz.SendEcho(response, "hello ")
-        frz.SendEcho(response, person.Name)
+frz.ServerWithApi(srv, "POST /about",
+    func(req *frz.Request, res *frz.Response) {
+        person, _ := frz.ReceiveJson[Person](req)
+        frz.SendEcho(res, "hello ")
+        frz.SendEcho(res, person.Name)
     },
 )
 ```

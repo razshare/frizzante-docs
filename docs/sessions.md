@@ -1,8 +1,8 @@
 Use `frz.SessionStart()` to start a session.
 
 ```go
-frz.ServerRouteApi(server, "GET /",
-    func(_ *frz.Server, req *frz.Request, res *frz.Response) {
+frz.ServerWithApi(srv, "GET /",
+    func(req *frz.Request, res *frz.Response) {
         get, set, unset := frz.SessionStart(req, res)
     },
 )
@@ -19,7 +19,7 @@ Use `get()` to retrieve a session property.
 
 ```go
 get, _, _ := frz.SessionStart(req, res)
-username := get("Username", "guest").(string)
+username := get("username", "guest").(string)
 ```
 
 ## Set
@@ -28,7 +28,7 @@ Use `set()` to create or update a session property.
 
 ```go
 _, set, _ := frz.SessionStart(req, res)
-set("Username", "frizzante")
+set("username", "frizzante")
 ```
 
 ## Unset
@@ -37,7 +37,7 @@ Use `unset()` to remove a session property.
 
 ```go
 _, _, unset := frz.SessionStart(req, res)
-unset("Username")
+unset("username")
 ```
 
 ## Session operator
