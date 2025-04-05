@@ -509,7 +509,7 @@
 
   <h1>Guards</h1>
 
-<p>You can guard your page and api by injecting arbitrary functions to execute before said pages and/or api serve the client.</p>
+<p>You can guard your pages and api by injecting arbitrary functions to execute before said pages and/or api serve the client.</p>
 <p>You can guard your pages with <code>frz.ServerWithPageGuard()</code></p>
 <div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithPageGuard</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span>
 <span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
@@ -517,8 +517,9 @@
 <span class="w">        </span><span class="nx">pass</span><span class="p">()</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">)</span>
-
-<span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithApiGuard</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span>
+</code></pre></div>
+<p>You can guard your api with <code>frz.ServerWithApiGuard()</code></p>
+<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithApiGuard</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span>
 <span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Page</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
 <span class="w">        </span><span class="nx">pass</span><span class="p">()</span>
