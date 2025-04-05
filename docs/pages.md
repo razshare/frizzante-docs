@@ -26,7 +26,7 @@ Mapping a page requires
 
 - a path, `/welcome` in this case, 
 - a page id, `welcome` in this case,
-- a page function, also called `welcome` in this case.
+- a page function, called `WelcomeIndex` in this case.
 
 This page function must take in a server, request, response and a page
 
