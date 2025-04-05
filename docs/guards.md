@@ -22,4 +22,4 @@ frz.ServerWithApiGuard(srv,
 )
 ```
 
-Invoking `pass()` will let the request pass through to the next guard or the actual page handler.
+Invoking `pass()` will let the request pass through.
