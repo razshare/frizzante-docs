@@ -642,38 +642,38 @@
 
   <h1>Sessions</h1>
 
-<p>Use <code>frz.SessionStart()</code> to start a session.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithApi</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">frz</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">get</span><span class="p">,</span><span class="w"> </span><span class="nx">set</span><span class="p">,</span><span class="w"> </span><span class="nx">unset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
+<p>Use <code>f.SessionStart()</code> to start a session.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithApi</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">get</span><span class="p">,</span><span class="w"> </span><span class="nx">set</span><span class="p">,</span><span class="w"> </span><span class="nx">unset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="p">)</span>
 </code></pre></div>
-<p><code>frz.SessionStart()</code> always succeeds and it always returns three functions, get, set and unset.</p>
+<p><code>f.SessionStart()</code> always succeeds and it always returns three functions, get, set and unset.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The reason <code>frz.SessionStart()</code> always succeeds is because it will automatically create a new session if none is found. The new session does <strong>not</strong> retain any data from the previous session.</p>
+<p>The reason <code>f.SessionStart()</code> always succeeds is because it will automatically create a new session if none is found. The new session does <strong>not</strong> retain any data from the previous session.</p>
 </div>
 <h2 id="get">Get</h2>
 <p>Use <code>get()</code> to retrieve a session property.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">get</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">get</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
 <span class="nx">username</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">get</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">).(</span><span class="kt">string</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="set">Set</h2>
 <p>Use <code>set()</code> to create or update a session property.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">set</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">set</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
 <span class="nx">set</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;frizzante&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="unset">Unset</h2>
 <p>Use <code>unset()</code> to remove a session property.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">unset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">frz</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">unset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
 <span class="nx">unset</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="session-operator">Session operator</h2>
 <p>You can overwrite the default in-memory session operator and provide 
 your own <code>get</code>, <code>set</code>, <code>unset</code>, <code>validate</code> and <code>destroy</code> functions.</p>
-<p>Use <code>frz.ServerWithSessionOperator()</code> to overwrite the default session operator</p>
-<div class="highlight"><pre><span></span><code><span class="nx">frz</span><span class="p">.</span><span class="nx">ServerWithSessionOperator</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<p>Use <code>f.ServerWithSessionOperator()</code> to overwrite the default session operator</p>
+<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithSessionOperator</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="nx">get</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">defaultValue</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">),</span>
 <span class="w">    </span><span class="nx">set</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">),</span>
 <span class="w">    </span><span class="nx">unset</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">),</span>
@@ -708,8 +708,8 @@ your own <code>get</code>, <code>set</code>, <code>unset</code>, <code>validate<
 to manage and destroy sessions that are no longer valid.</p>
 </div>
 <h2 id="lifetime">Lifetime</h2>
-<p>The <code>frz.SessionStart()</code> function does not set any expiration date, domain or path on the session cookie sent to the browser.</p>
-<p>Instead, <code>frz.ServerWithSessionOperator()</code> has complete control over the lifetime of any session.</p>
+<p>The <code>f.SessionStart()</code> function does not set any expiration date, domain or path on the session cookie sent to the browser.</p>
+<p>Instead, <code>f.ServerWithSessionOperator()</code> has complete control over the lifetime of any session.</p>
 
 
 
