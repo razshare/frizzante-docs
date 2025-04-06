@@ -1,12 +1,12 @@
-You can upgrade http requests to web sockets with `frz.SendWebSocketUpgrade()`.
+You can upgrade http requests to web sockets with `f.SendWebSocketUpgrade()`.
 
 ```go
-frz.ServerWithApi(srv, "GET /",
-    func(_ *frz.Server, req *frz.Request, res *frz.Response) {
-        frz.SendWebSocketUpgrade(res, func() {
+f.ServerWithApi(srv, "GET /",
+    func(_ *f.Server, req *f.Request, res *f.Response) {
+        f.SendWebSocketUpgrade(res, func() {
             for {
-                frz.SendEcho(res, "hello")
-                msg := frz.ReceiveMessage(req)
+                f.SendEcho(res, "hello")
+                msg := f.ReceiveMessage(req)
                 fmt.Printf("Received message `%s`.\n", msg)
             }
         })

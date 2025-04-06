@@ -1,7 +1,7 @@
-You can assign a certificate and a key for said certificate with `frz.ServerWithCertificateAndKey()`.
+You can assign a certificate and a key for said certificate with `f.ServerWithCertificateAndKey()`.
 
 ```go
-frz.ServerWithCertificateAndKey(srv, "cert.pem", "key.pem")
+f.ServerWithCertificateAndKey(srv, "cert.pem", "key.pem")
 ```
 
 !!! note

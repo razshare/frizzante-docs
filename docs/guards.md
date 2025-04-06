@@ -1,22 +1,22 @@
 You can guard your pages and api by injecting arbitrary functions to execute before said pages and/or api serve the client.
 
-You can guard your pages with `frz.ServerWithPageGuard()`
+You can guard your pages with `f.ServerWithPageGuard()`
 
 ```go
-frz.ServerWithPageGuard(srv,
-    func(req *frz.Request, res *frz.Response, _ *frz.Page, pass func()) {
-        frz.SessionStart(req, res)
+f.ServerWithPageGuard(srv,
+    func(req *f.Request, res *f.Response, _ *f.Page, pass func()) {
+        f.SessionStart(req, res)
 	    pass()
     }
 )
 ```
 
-You can guard your api with `frz.ServerWithApiGuard()`
+You can guard your api with `f.ServerWithApiGuard()`
 
 ```go
-frz.ServerWithApiGuard(srv,
-    func(req *frz.Request, res *frz.Response, _ *frz.Page, pass func()) {
-        frz.SessionStart(req, res)
+f.ServerWithApiGuard(srv,
+    func(req *f.Request, res *f.Response, _ *f.Page, pass func()) {
+        f.SessionStart(req, res)
 	    pass()
     }
 )

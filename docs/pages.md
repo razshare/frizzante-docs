@@ -16,10 +16,10 @@ Subdirectories are joined by `::` instead of `/` or `\`.
 
 ## Mapping a page
 
-You can route pages with `frz.ServerWithPage()`
+You can route pages with `f.ServerWithPage()`
 
 ```go
-frz.ServerRoutePage(srv, "/welcome", "welcome", WelcomeIndex)
+f.ServerRoutePage(srv, "/welcome", "welcome", WelcomeIndex)
 ```
 
 Mapping a page requires 
@@ -32,20 +32,20 @@ This page function must take in a server, request, response and a page
 
 ```go
 func WelcomeIndex() (
-	show frz.PageFunction,
-	action frz.PageFunction,
+	show f.PageFunction,
+	action f.PageFunction,
 ){
-	show = func (_ *frz.Request, _ *frz.Response, p *frz.Page) {
-		frz.PageWithRender(frz.RenderServer)
-		frz.PageWithData(p, "name", "world")
+	show = func (_ *f.Request, _ *f.Response, p *f.Page) {
+		f.PageWithRender(f.RenderServer)
+		f.PageWithData(p, "name", "world")
 	}
 	return
 }
 ```
 
-In this example, the page function is using `frz.PageWithRender()` 
+In this example, the page function is using `f.PageWithRender()` 
 to configure the rendering mode, 
-which can be `frz.RenderServer`, `frz.RenderClient` or `frz.RenderFull`,
+which can be `f.RenderServer`, `f.RenderClient` or `f.RenderFull`,
 and it's passing a `name` property with the value of `world` to the 
 underlying `welcome` page which can be retrieved 
 by any of your components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
@@ -64,7 +64,7 @@ by any of your components with [getContext("data")](https://svelte.dev/docs/svel
 	See [overview page](./overview.md) for more details on rendering modes.
 
 !!! note
-	Default rendering mode is `frz.RenderFull`.
+	Default rendering mode is `f.RenderFull`.
 
 !!! note
 	Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.

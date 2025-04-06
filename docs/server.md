@@ -1,12 +1,13 @@
-You can create a server with `frz.ServerCreate()` and start it with `frz.ServerStart()`.
+You can create a server with `f.ServerCreate()` and start it with `f.ServerStart()`.
 
 ```go
 package main
-import frz "github.com/razshare/frizzante"
+
+import f "github.com/razshare/frizzante"
 
 func main() {
-	srv := frz.ServerCreate()
-	frz.ServerStart(srv)
+	srv := f.ServerCreate()
+	f.ServerStart(srv)
 }
 ```
 
@@ -17,36 +18,42 @@ This will make it so that your svelte assets get embedded directly into the fina
 
 ```go
 package main
-import "embed"
-import frz "github.com/razshare/frizzante"
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
 
 //go:embed .dist/*/**
 var dist embed.FS
 
 func main() {
-	srv := frz.ServerCreate()
-	frz.ServerWithEmbeddedFileSystem(srv, dist)
-	frz.ServerStart(srv)
+	srv := f.ServerCreate()
+	f.ServerWithEmbeddedFileSystem(srv, dist)
+	f.ServerStart(srv)
 }
 ```
 
 By default, your server will be listening for requests at [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
-You can customize both your host name and port number with `frz.ServerWithHostname()` and `frz.ServerWithPortNumber()`.
+You can customize both your host name and port number with `f.ServerWithHostname()` and `f.ServerWithPortNumber()`.
 
 ```go
 package main
-import "embed"
-import frz "github.com/razshare/frizzante"
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
 
 //go:embed .dist/*/**
 var dist embed.FS
 
 func main() {
-	srv := frz.ServerCreate()
-	frz.ServerWithPort(srv, 8989)
-	frz.ServerWithHostName(srv, "192.168.0.123")
-	frz.ServerWithEmbeddedFileSystem(srv, dist)
-	frz.ServerStart(srv)
+	srv := f.ServerCreate()
+	f.ServerWithPort(srv, 8989)
+	f.ServerWithHostName(srv, "192.168.0.123")
+	f.ServerWithEmbeddedFileSystem(srv, dist)
+	f.ServerStart(srv)
 }
 ```
