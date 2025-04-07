@@ -445,6 +445,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#data-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data fields
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -552,6 +561,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#data-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data fields
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -568,8 +586,6 @@
 
 
 
-  <h1>Pages</h1>
-
 <p>Pages are just svelte components located in the <code>lib/pages</code> directory.</p>
 <p>You can refer to these pages by their relative file names.</p>
 <div class="admonition note">
@@ -580,10 +596,10 @@
 <p class="admonition-title">Example</p>
 <p>A page located at <code>lib/pages/welcome.svelte</code> will be identified by <code>welcome</code>.</p>
 </div>
-<p>Subdirectories are joined by <code>::</code> instead of <code>/</code> or <code>\</code>.</p>
+<p>Subdirectories are joined by <code>.</code> instead of <code>/</code> or <code>\</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>A page located at <code>lib/pages/about/welcome.svelte</code> will be identified by <code>about::welcome</code>.</p>
+<p>A page located at <code>lib/pages/about/welcome.svelte</code> will be identified by <code>about.welcome</code>.</p>
 </div>
 <h2 id="mapping-a-page">Mapping a page</h2>
 <p>You can map pages with <code>f.ServerWithIndex()</code></p>
@@ -601,35 +617,25 @@
 <span class="p">){</span>
 <span class="w">    </span><span class="nx">page</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;welcome&quot;</span>
 <span class="w">    </span><span class="nx">show</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithRender</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">RenderServer</span><span class="p">)</span>
-<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Cat&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="nx">action</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendNotFound</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">action</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceiveForm</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendNavigate</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cats&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">return</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>This index defines </p>
-<ol>
-<li>the name of the <code>page</code> to use</li>
-<li>what to do when the page is <code>show</code>n</li>
-<li>what to do then an <code>action</code> is sent to the page</li>
-</ol>
+<p>This index sets the <code>page</code> to <code>welcome</code> indicating it will render the <code>lib/pages/welcome.svelte</code> file.</p>
+<p>Whenever the <code>welcome</code> page is requested using the <code>GET</code> http verb, the index will execute the <code>show</code> function.</p>
+<p>Whenever the <code>welcome</code> page is requested using the <code>POST</code> http verb, the index will execute the <code>action</code> function.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An <code>action</code> is any form sent to the page.</p>
+<p>Invoking <code>f.SendNavigate(res, "cats")</code> hints to the client it should navigate to the <code>cats</code> page.</p>
 </div>
-<p>In this example the index uses a page by the name of <code>welcome</code>, which is nothing more than the file <code>lib/pages/welcome.svelte</code>.</p>
-<p>When the index shows the page, or rather when a <code>GET</code> request comes in, 
-it will set the rendering mode to <code>ssr</code> (Server Side Rendering) and set a
-data field called <code>name</code> with a value of <code>world</code>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>These <code>data fields</code> can be retrieved in your svelte components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>, see example bellow.</p>
-</div>
-<p>On the other hand, when an action comes in, or rather when a <code>POST</code> request comes in,
-the index responds with <code>404 not found</code>.</p>
+<h1 id="data-fields">Data fields</h1>
+<p>In the example above, the <code>f.PageWithData()</code> function is used, which sets a data field using a <code>key</code> and a <code>value</code>.</p>
+<p>Data fields can be retrieved from your svelte components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
@@ -637,14 +643,6 @@ the index responds with <code>404 not found</code>.</p>
 
 <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>See <a href="../overview/">overview page</a> for more details on rendering modes.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Default rendering mode is <code>f.RenderFull</code>.</p>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Context <code>data</code> is created with <a href="https://svelte.dev/docs/svelte/$state">$state()</a>, hence it is reactive.</p>
