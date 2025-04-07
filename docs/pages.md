@@ -25,7 +25,7 @@ You can map pages with `f.ServerWithIndex()`, which takes an index function.
 		UpdateStuff()
 	}
 
-	func Index() (
+	func index() (
 		page string,
 		show f.PageFunction,
 		action f.PageFunction,
@@ -35,6 +35,10 @@ You can map pages with `f.ServerWithIndex()`, which takes an index function.
 		action = indexAction
 		return
 	}
+	```
+
+	```go
+	f.ServerWithIndex(srv, index)
 	```
 
 	This index sets the `page` to `welcome` indicating it will render the `lib/pages/welcome.svelte` file.
