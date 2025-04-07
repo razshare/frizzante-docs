@@ -24,8 +24,6 @@ f.ServerWithIndex(srv, WelcomeIndex)
 
 The `WelcomeIndex` function is called an `index function`.
 
-An index function maps a path to a page and handles (often indirectly) the logic behind said page.
-
 !!! note
 	In other patterns you would call this a [controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller).
 
@@ -63,7 +61,7 @@ it will set the rendering mode to `ssr` (Server Side Rendering) and set a
 data field called `name` with a value of `world`.
 
 !!! note
-	These `data fields` can be retrieves in your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext), see example bellow.
+	These `data fields` can be retrieved in your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext), see example bellow.
 
 On the other hand, when an action comes in, or rather when a `POST` request comes in,
 the index responds with `404 not found`.
