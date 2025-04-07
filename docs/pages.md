@@ -2,9 +2,6 @@ Pages are just svelte components located in the `lib/pages` directory.
 
 You can refer to these pages by their relative file names.
 
-!!! note
-	The `.svelte` extension is optional.
-
 !!! example
 	A page located at `lib/pages/welcome.svelte` will be identified by `welcome`.
 
