@@ -13,47 +13,42 @@ Subdirectories are joined by `.` instead of `/` or `\`.
 
 ## Mapping a page
 
-You can map pages with `f.ServerWithIndex()`
+You can map pages with `f.ServerWithIndex()`, which takes an index function.
 
-```go
-f.ServerWithIndex(srv, WelcomeIndex)
-```
-
-The `WelcomeIndex` function is called an `index function`.
-
-!!! note
-	In other patterns you would call this a [controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller).
-
-```go
-func WelcomeIndex() (
-	page string,
-	show f.PageFunction,
-	action f.PageFunction,
-){
-	page = "welcome"
-	show = func (_ *f.Request, _ *f.Response, p *f.Page) {
+!!! example
+	```go
+	func indexShow(_ *f.Request, _ *f.Response, p *f.Page) {
 		f.PageWithData(p, "name", "Cat")
 	}
-	action = func (req *f.Request, res *f.Response, _ *f.Page) {
+
+	func indexAction(req *f.Request, res *f.Response, _ *f.Page) {
 		f.ReceiveForm(req)
 		f.SendNavigate(res, "cats")
 	}
-	return
-}
-```
 
-This index sets the `page` to `welcome` indicating it will render the `lib/pages/welcome.svelte` file.
+	func Index() (
+		page string,
+		show f.PageFunction,
+		action f.PageFunction,
+	){
+		page = "welcome"
+		show = indexShow
+		action = indexAction
+		return
+	}
+	```
 
+	This index sets the `page` to `welcome` indicating it will render the `lib/pages/welcome.svelte` file.
 
-Whenever the `welcome` page is requested using the `GET` http verb, the index will execute the `show` function.
+	Whenever the `welcome` page is requested using the `GET` http verb, the index will execute the `show` function.
 
-Whenever the `welcome` page is requested using the `POST` http verb, the index will execute the `action` function.
+	Whenever the `welcome` page is requested using the `POST` http verb, the index will execute the `action` function.
 
-!!! note
-	Invoking `f.SendNavigate(res, "cats")` hints to the client it should navigate to the `cats` page.
+	!!! note
+		Invoking `f.SendNavigate(res, "cats")` hints to the client it should navigate to the `cats` page.
 
-!!! warning
-	Multiple indexes cannot use the same page.
+	!!! warning
+		Multiple indexes cannot use the same page.
 
 ## Data fields
 
