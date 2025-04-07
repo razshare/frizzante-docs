@@ -8,10 +8,10 @@ You can refer to these pages by their relative file names.
 !!! example
 	A page located at `lib/pages/welcome.svelte` will be identified by `welcome`.
 
-Subdirectories are joined by `::` instead of `/` or `\`.
+Subdirectories are joined by `.` instead of `/` or `\`.
 
 !!! example
-	A page located at `lib/pages/about/welcome.svelte` will be identified by `about::welcome`.
+	A page located at `lib/pages/about/welcome.svelte` will be identified by `about.welcome`.
 
 
 ## Mapping a page
@@ -35,38 +35,31 @@ func WelcomeIndex() (
 ){
 	page = "welcome"
 	show = func (_ *f.Request, _ *f.Response, p *f.Page) {
-		f.PageWithRender(f.RenderServer)
-		f.PageWithData(p, "name", "world")
+		f.PageWithData(p, "name", "Cat")
 	}
-	action = func (_ *f.Request, res *f.Response, _ *f.Page) {
-		f.SendNotFound(res)
+	action = func (req *f.Request, res *f.Response, _ *f.Page) {
+		f.ReceiveForm(req)
+		f.SendNavigate(res, "cats")
 	}
 	return
 }
 ```
 
-This index defines 
+This index sets the `page` to `welcome` indicating it will render the `lib/pages/welcome.svelte` file.
 
-1. the name of the `page` to use
-2. what to do when the page is `show`n
-3. what to do then an `action` is sent to the page
 
-!!! note
-	An `action` is any form sent to the page.
+Whenever the `welcome` page is requested using the `GET` http verb, the index will execute the `show` function.
 
-In this example the index uses a page by the name of `welcome`, which is nothing more than the file `lib/pages/welcome.svelte`.
-
-When the index shows the page, or rather when a `GET` request comes in, 
-it will set the rendering mode to `ssr` (Server Side Rendering) and set a
-data field called `name` with a value of `world`.
+Whenever the `welcome` page is requested using the `POST` http verb, the index will execute the `action` function.
 
 !!! note
-	These `data fields` can be retrieved in your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext), see example bellow.
+	Invoking `f.SendNavigate(res, "cats")` hints to the client it should navigate to the `cats` page.
 
-On the other hand, when an action comes in, or rather when a `POST` request comes in,
-the index responds with `404 not found`.
+# Data fields
 
+In the example above, the `f.PageWithData()` function is used, which sets a data field using a `key` and a `value`.
 
+Data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
 
 ```html
 <script>
@@ -76,12 +69,6 @@ the index responds with `404 not found`.
 
 <h1>Hello {data.name}</h1>
 ```
-
-!!! note
-	See [overview page](./overview.md) for more details on rendering modes.
-
-!!! note
-	Default rendering mode is `f.RenderFull`.
 
 !!! note
 	Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
