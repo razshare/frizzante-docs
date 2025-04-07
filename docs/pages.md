@@ -22,8 +22,7 @@ You can map pages with `f.ServerWithIndex()`, which takes an index function.
 	}
 
 	func indexAction(req *f.Request, res *f.Response, _ *f.Page) {
-		f.ReceiveForm(req)
-		f.SendNavigate(res, "cats")
+		UpdateStuff()
 	}
 
 	func Index() (
@@ -43,10 +42,7 @@ You can map pages with `f.ServerWithIndex()`, which takes an index function.
 	Whenever the `welcome` page is requested using the `GET` http verb, the index will execute the `show` function.
 
 	Whenever the `welcome` page is requested using the `POST` http verb, the index will execute the `action` function.
-
-	!!! note
-		Invoking `f.SendNavigate(res, "cats")` hints to the client it should navigate to the `cats` page.
-
+	
 	!!! warning
 		Multiple indexes cannot use the same page.
 
