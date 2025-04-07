@@ -590,7 +590,6 @@
 <div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithIndex</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="nx">WelcomeIndex</span><span class="p">)</span>
 </code></pre></div>
 <p>The <code>WelcomeIndex</code> function is called an <code>index function</code>.</p>
-<p>An index function maps a path to a page and handles (often indirectly) the logic behind said page.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>In other patterns you would call this a <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">controller</a>.</p>
@@ -627,7 +626,7 @@ it will set the rendering mode to <code>ssr</code> (Server Side Rendering) and s
 data field called <code>name</code> with a value of <code>world</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These <code>data fields</code> can be retrieves in your svelte components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>, see example bellow.</p>
+<p>These <code>data fields</code> can be retrieved in your svelte components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>, see example bellow.</p>
 </div>
 <p>On the other hand, when an action comes in, or rather when a <code>POST</code> request comes in,
 the index responds with <code>404 not found</code>.</p>
