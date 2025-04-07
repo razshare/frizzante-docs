@@ -578,22 +578,22 @@
 </div>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>A page located at <code>lib/pages/welcome.svelte</code> will be identified by <code>welcome</code>.</p>
+<p>A page located at <code>lib/pages/welcome.svelte</code> will be identified by <code>Welcome</code>.</p>
 </div>
 <p>Subdirectories are joined by <code>::</code> instead of <code>/</code> or <code>\</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>A page located at <code>lib/pages/about/user.svelte</code> will be identified by <code>about::user</code>.</p>
+<p>A page located at <code>lib/pages/about/User.svelte</code> will be identified by <code>about::User</code>.</p>
 </div>
 <h2 id="mapping-a-page">Mapping a page</h2>
 <p>You can route pages with <code>f.ServerWithPage()</code></p>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerRoutePage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">WelcomeIndex</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerRoutePage</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">WelcomeIndex</span><span class="p">)</span>
 </code></pre></div>
 <p>Mapping a page requires </p>
 <ul>
-<li>a path, <code>/welcome</code> in this case, </li>
-<li>a page id, <code>welcome</code> in this case,</li>
-<li>a page function, called <code>WelcomeIndex</code> in this case.</li>
+<li>a path, <code>/welcome</code>, </li>
+<li>a page id, <code>Welcome</code>, which points to the <code>lib/pages/Welcome.svelte</code> file,</li>
+<li>a page function called <code>WelcomeIndex</code>.</li>
 </ul>
 <p>This page function must take in a server, request, response and a page</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">WelcomeIndex</span><span class="p">()</span><span class="w"> </span><span class="p">(</span>
