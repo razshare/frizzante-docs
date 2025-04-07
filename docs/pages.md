@@ -17,23 +17,22 @@ You can map pages with `f.ServerWithIndex()`, which takes an index function.
 
 !!! example
 	```go
-	func indexShow(_ *f.Request, _ *f.Response, p *f.Page) {
+	func indexShowFunction(_ *f.Request, _ *f.Response, p *f.Page) {
 		f.PageWithData(p, "name", "Cat")
 	}
 
-	func indexAction(req *f.Request, res *f.Response, _ *f.Page) {
-		UpdateStuff()
+	func indexActionFunction(_req_ *f.Request, _res_ *f.Response, _ *f.Page) {
+		updateStuff()
 	}
 
-	func index() (
-		page string,
-		show f.PageFunction,
-		action f.PageFunction,
+	func index(
+		route func(path string, page string),
+		show func(showFunction f.PageFunction),
+		action func(actionFunction f.PageFunction),
 	){
-		page = "welcome"
-		show = indexShow
-		action = indexAction
-		return
+		route("/welcome", "welcome")
+		show(indexShowFunction)
+		action(indexActionFunction)	
 	}
 	```
 
@@ -41,14 +40,11 @@ You can map pages with `f.ServerWithIndex()`, which takes an index function.
 	f.ServerWithIndex(srv, index)
 	```
 
-	This index sets the `page` to `welcome` indicating it will render the `lib/pages/welcome.svelte` file.
+	This index routes the page `welcome` to the path `/welcome`, indicating it will render the `lib/pages/welcome.svelte` file.
 
-	Whenever the `welcome` page is requested using the `GET` http verb, the index will execute the `show` function.
+	Whenever the user opens the `welcome` page, the index will execute the `indexShowFunction` function.
 
-	Whenever the `welcome` page is requested using the `POST` http verb, the index will execute the `action` function.
-	
-	!!! warning
-		Multiple indexes cannot use the same page.
+	Whenever the user sends a POST form to the `welcome` page, the index will execute the `indexActionFunction` function.
 
 ## Data fields
 
