@@ -6,12 +6,12 @@ You can refer to these pages by their relative file names.
 	The `.svelte` extension is optional.
 
 !!! example
-	A page located at `lib/pages/welcome.svelte` will be identified by `welcome`.
+	A page located at `lib/pages/welcome.svelte` will be identified by `Welcome`.
 
 Subdirectories are joined by `::` instead of `/` or `\`.
 
 !!! example
-	A page located at `lib/pages/about/user.svelte` will be identified by `about::user`.
+	A page located at `lib/pages/about/User.svelte` will be identified by `about::User`.
 
 
 ## Mapping a page
@@ -19,14 +19,14 @@ Subdirectories are joined by `::` instead of `/` or `\`.
 You can route pages with `f.ServerWithPage()`
 
 ```go
-f.ServerRoutePage(srv, "/welcome", "welcome", WelcomeIndex)
+f.ServerRoutePage(srv, "/welcome", "Welcome", WelcomeIndex)
 ```
 
 Mapping a page requires 
 
-- a path, `/welcome` in this case, 
-- a page id, `welcome` in this case,
-- a page function, called `WelcomeIndex` in this case.
+- a path, `/welcome`, 
+- a page id, `Welcome`, which points to the `lib/pages/Welcome.svelte` file,
+- a page function called `WelcomeIndex`.
 
 This page function must take in a server, request, response and a page
 
