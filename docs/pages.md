@@ -16,7 +16,7 @@ Subdirectories are joined by `::` instead of `/` or `\`.
 
 ## Mapping a page
 
-You can route pages with `f.ServerWithIndex()`
+You can map pages with `f.ServerWithIndex()`
 
 ```go
 f.ServerWithIndex(srv, WelcomeIndex)
