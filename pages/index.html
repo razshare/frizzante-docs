@@ -608,8 +608,7 @@
 <span class="p">}</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">indexAction</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceiveForm</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendNavigate</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cats&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">UpdateStuff</span><span class="p">()</span>
 <span class="p">}</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">Index</span><span class="p">()</span><span class="w"> </span><span class="p">(</span>
@@ -626,10 +625,6 @@
 <p>This index sets the <code>page</code> to <code>welcome</code> indicating it will render the <code>lib/pages/welcome.svelte</code> file.</p>
 <p>Whenever the <code>welcome</code> page is requested using the <code>GET</code> http verb, the index will execute the <code>show</code> function.</p>
 <p>Whenever the <code>welcome</code> page is requested using the <code>POST</code> http verb, the index will execute the <code>action</code> function.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Invoking <code>f.SendNavigate(res, "cats")</code> hints to the client it should navigate to the <code>cats</code> page.</p>
-</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Multiple indexes cannot use the same page.</p>
