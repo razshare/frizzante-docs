@@ -55,6 +55,9 @@ Whenever the `welcome` page is requested using the `POST` http verb, the index w
 !!! note
 	Invoking `f.SendNavigate(res, "cats")` hints to the client it should navigate to the `cats` page.
 
+!!! warning
+	Multiple indexes cannot use the same page.
+
 ## Data fields
 
 In the example above, the `f.PageWithData()` function is used, which sets a data field using a `key` and a `value`.
