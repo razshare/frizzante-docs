@@ -611,7 +611,7 @@
 <span class="w">    </span><span class="nx">UpdateStuff</span><span class="p">()</span>
 <span class="p">}</span>
 
-<span class="kd">func</span><span class="w"> </span><span class="nx">Index</span><span class="p">()</span><span class="w"> </span><span class="p">(</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">index</span><span class="p">()</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="nx">page</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">show</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageFunction</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">action</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageFunction</span><span class="p">,</span>
@@ -621,6 +621,8 @@
 <span class="w">    </span><span class="nx">action</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">indexAction</span>
 <span class="w">    </span><span class="k">return</span>
 <span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithIndex</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="nx">index</span><span class="p">)</span>
 </code></pre></div>
 <p>This index sets the <code>page</code> to <code>welcome</code> indicating it will render the <code>lib/pages/welcome.svelte</code> file.</p>
 <p>Whenever the <code>welcome</code> page is requested using the <code>GET</code> http verb, the index will execute the <code>show</code> function.</p>
