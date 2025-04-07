@@ -586,6 +586,8 @@
 
 
 
+  <h1>Pages</h1>
+
 <p>Pages are just svelte components located in the <code>lib/pages</code> directory.</p>
 <p>You can refer to these pages by their relative file names.</p>
 <div class="admonition note">
@@ -633,7 +635,11 @@
 <p class="admonition-title">Note</p>
 <p>Invoking <code>f.SendNavigate(res, "cats")</code> hints to the client it should navigate to the <code>cats</code> page.</p>
 </div>
-<h1 id="data-fields">Data fields</h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Multiple indexes cannot use the same page.</p>
+</div>
+<h2 id="data-fields">Data fields</h2>
 <p>In the example above, the <code>f.PageWithData()</code> function is used, which sets a data field using a <code>key</code> and a <code>value</code>.</p>
 <p>Data fields can be retrieved from your svelte components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
