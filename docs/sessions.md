@@ -50,11 +50,11 @@ Use `f.ServerWithSessionOperator()` to overwrite the default session operator
 ```go
 f.ServerWithSessionOperator(srv, func(
     sessionId string,
-    withGetter func(get func(key string, defaultValue any) (value any)),
-    withSetter func(func(key string, value any)),
-    withUnsetter func(func(key string)),
-    withValidator func(func() (valid bool)),
-    withDestroyer func(func()),
+    withGetter func(get SessionGetter),
+    withSetter func(set SessionSetter),
+    withUnsetter func(unset SessionUnsetter),
+    withValidator func(validate SessionValidator),
+    withDestroyer func(destroy SessionDestroyer),
 ) {
     withGetter(func(key string, defaultValue any) (value any) {
         // Get `key` from the session store.
