@@ -48,39 +48,41 @@ your own `get`, `set`, `unset`, `validate` and `destroy` functions.
 Use `f.ServerWithSessionOperator()` to overwrite the default session operator
 
 ```go
-f.ServerWithSessionOperator(srv, func(id string) (
-    get func(key string, defaultValue any) (value any),
-    set func(key string, value any),
-    unset func(key string),
-    validate func() bool,
-    destroy func(),
+f.ServerWithSessionOperator(srv, func(
+    sessionId string,
+    withGetter func(get func(key string, defaultValue any) (value any)),
+    withSetter func(func(key string, value any)),
+    withUnsetter func(func(key string)),
+    withValidator func(func() (valid bool)),
+    withDestroyer func(func()),
 ) {
-    get = func(key string, defaultValue any) (value any) {
-        // ...
-    }
+    withGetter(func(key string, defaultValue any) (value any) {
+        // Get `key` from the session store.
+        // If `key` doesn't exist, create it with value `defaultValue`.
+    })
 
-    set = func(key string, value any) {
-        // ...
-    }
+    withSetter(func(key string, value any) {
+        // Set `key` to the session store.
+    })
 
-    unset = func(key string) {
-        // ...
-    }
+    withUnsetter(func(key string) {
+        // Unset `key` from the session store.
+    })
 
-    validate = func() {
-        // ...
-    }
+    withValidator(func() (valid bool) {
+        // Validate `sessionId`.
+    })
 
-    destroy = func() {
-        // ...
-    }
-    return
+    withDestroyer(func() {
+        // Destroy the session `sessionId` and its store.
+    })
 })
 ```
 
 !!! note
-    `Validate` and `destroy` are used by the server internally 
-    to manage and destroy sessions that are no longer valid.
+    The `withValidator()` function is used by Frizzante to validate sessions whenever you invoke `f.SessionStart()`.
+    <br/>
+    The `withDestroyer()` function is used by Frizzante to destroy a sessions whenever validation fails.
 
 ## Lifetime
 
