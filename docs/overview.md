@@ -49,4 +49,4 @@ Your server will serve a shell html template, which in turn will asynchronously 
 
 It's just as it sounds, in this mode the the server both fully renders an html document and also serves a javaScript bundle, which once loaded, takes over the [Dom](https://en.wikipedia.org/wiki/Document_Object_Model).
 
-Although more powerful and versatile, this modes adds some complexity to your application.
+Although more powerful and versatile, this mode adds some complexity to your application.
