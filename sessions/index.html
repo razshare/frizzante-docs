@@ -673,39 +673,41 @@
 <p>You can overwrite the default in-memory session operator and provide 
 your own <code>get</code>, <code>set</code>, <code>unset</code>, <code>validate</code> and <code>destroy</code> functions.</p>
 <p>Use <code>f.ServerWithSessionOperator()</code> to overwrite the default session operator</p>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithSessionOperator</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="nx">get</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">defaultValue</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">),</span>
-<span class="w">    </span><span class="nx">set</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">),</span>
-<span class="w">    </span><span class="nx">unset</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">),</span>
-<span class="w">    </span><span class="nx">validate</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span>
-<span class="w">    </span><span class="nx">destroy</span><span class="w"> </span><span class="kd">func</span><span class="p">(),</span>
+<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithSessionOperator</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">sessionId</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">withGetter</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">get</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">defaultValue</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">)),</span>
+<span class="w">    </span><span class="nx">withSetter</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">)),</span>
+<span class="w">    </span><span class="nx">withUnsetter</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">)),</span>
+<span class="w">    </span><span class="nx">withValidator</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="nx">valid</span><span class="w"> </span><span class="kt">bool</span><span class="p">)),</span>
+<span class="w">    </span><span class="nx">withDestroyer</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="kd">func</span><span class="p">()),</span>
 <span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">get</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">defaultValue</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// ...</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">withGetter</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">defaultValue</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Get `key` from the session store.</span>
+<span class="w">        </span><span class="c1">// If `key` doesn&#39;t exist, create it with value `defaultValue`.</span>
+<span class="w">    </span><span class="p">})</span>
 
-<span class="w">    </span><span class="nx">set</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// ...</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">withSetter</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Set `key` to the session store.</span>
+<span class="w">    </span><span class="p">})</span>
 
-<span class="w">    </span><span class="nx">unset</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// ...</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">withUnsetter</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Unset `key` from the session store.</span>
+<span class="w">    </span><span class="p">})</span>
 
-<span class="w">    </span><span class="nx">validate</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// ...</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">withValidator</span><span class="p">(</span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="nx">valid</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Validate `sessionId`.</span>
+<span class="w">    </span><span class="p">})</span>
 
-<span class="w">    </span><span class="nx">destroy</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// ...</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="k">return</span>
+<span class="w">    </span><span class="nx">withDestroyer</span><span class="p">(</span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Destroy the session `sessionId` and its store.</span>
+<span class="w">    </span><span class="p">})</span>
 <span class="p">})</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code>Validate</code> and <code>destroy</code> are used by the server internally 
-to manage and destroy sessions that are no longer valid.</p>
+<p>The <code>withValidator()</code> function is used by Frizzante to validate sessions whenever you invoke <code>f.SessionStart()</code>.
+<br/>
+The <code>withDestroyer()</code> function is used by Frizzante to destroy a sessions whenever validation fails.</p>
 </div>
 <h2 id="lifetime">Lifetime</h2>
 <p>The <code>f.SessionStart()</code> function does not set any expiration date, domain or path on the session cookie sent to the browser.</p>
