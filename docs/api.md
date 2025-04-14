@@ -25,20 +25,20 @@ The `route` function is used for routing the api through a pattern `{verb} /path
 The `serve` function is used to respond to incoming requests.
 
 !!! note
-   You can route the same api through multiple patterns, for example
-   
-   ```go
-   func api(
-       route f.RouteApiFunction,
-       serve f.ServeApiFunction,
-   ) {
-       route("GET /")
-       route("POST /")
-       route("GET /api")
-       route("POST /api")
-       serve(run)
-   }
-   ```
+    You can route the same api through multiple patterns, for example
+    
+    ```go
+    func api(
+        route f.RouteApiFunction,
+        serve f.ServeApiFunction,
+    ) {
+        route("GET /")
+        route("POST /")
+        route("GET /api")
+        route("POST /api")
+        serve(run)
+    }
+    ```
 
 The above example listens for requests at `GET /` and responds with `hello` as `text/plain`.
 
