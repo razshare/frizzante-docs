@@ -113,7 +113,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#status" class="md-skip">
+        <a href="#echo" class="md-skip">
           Skip to content
         </a>
       
@@ -415,6 +415,24 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#echo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Echo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path" class="md-nav__link">
+    <span class="md-ellipsis">
+      Path
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#status" class="md-nav__link">
     <span class="md-ellipsis">
       Status
@@ -424,18 +442,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#header-fields" class="md-nav__link">
+  <a href="#header" class="md-nav__link">
     <span class="md-ellipsis">
-      Header fields
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#path-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Path fields
+      Header
     </span>
   </a>
   
@@ -589,6 +598,24 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#echo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Echo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path" class="md-nav__link">
+    <span class="md-ellipsis">
+      Path
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#status" class="md-nav__link">
     <span class="md-ellipsis">
       Status
@@ -598,18 +625,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#header-fields" class="md-nav__link">
+  <a href="#header" class="md-nav__link">
     <span class="md-ellipsis">
-      Header fields
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#path-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Path fields
+      Header
     </span>
   </a>
   
@@ -663,37 +681,45 @@
 <p>You can route apis with <code>f.ServerWithApi()</code></p>
 <div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithApi</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="nx">api</span><span class="p">)</span>
 </code></pre></div>
-<p>Where <code>api</code> is a setup function.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">run</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-
-<span class="kd">func</span><span class="w"> </span><span class="nx">api</span><span class="p">(</span>
-<span class="w">    </span><span class="nx">route</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">RouteApiFunction</span><span class="p">,</span>
-<span class="w">    </span><span class="nx">serve</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServeApiFunction</span><span class="p">,</span>
-<span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">route</span><span class="p">(</span><span class="s">&quot;GET /&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">serve</span><span class="p">(</span><span class="nx">run</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>The <code>route</code> function is used for routing the api through a pattern <code>{verb} /path</code>, where <code>{verb}</code> is an http verb, like <code>GET</code>, <code>POST</code> and so on.</p>
-<p>The <code>serve</code> function is used to respond to incoming requests.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>You can route the same api through multiple patterns, for example</p>
+<p>Where <code>api</code> is a setup function</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">api</span><span class="p">(</span>
 <span class="w">    </span><span class="nx">route</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">RouteApiFunction</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">serve</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServeApiFunction</span><span class="p">,</span>
 <span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">route</span><span class="p">(</span><span class="s">&quot;GET /&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">route</span><span class="p">(</span><span class="s">&quot;POST /&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">route</span><span class="p">(</span><span class="s">&quot;GET /api&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">route</span><span class="p">(</span><span class="s">&quot;POST /api&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nx">serve</span><span class="p">(</span><span class="nx">run</span><span class="p">)</span>
 <span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">run</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Handle request.</span>
+<span class="p">}</span>
 </code></pre></div>
+<p>The <code>route()</code> function is used to routing the api using a <code>{verb} /path</code> pattern, where <code>{verb}</code> is an http verb, like <code>GET</code>, <code>POST</code> and so on.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can route the same api to multiple patterns
+<div class="highlight"><pre><span></span><code><span class="nx">route</span><span class="p">(</span><span class="s">&quot;GET /&quot;</span><span class="p">)</span>
+<span class="nx">route</span><span class="p">(</span><span class="s">&quot;GET /api/greeting&quot;</span><span class="p">)</span>
+<span class="nx">serve</span><span class="p">(</span><span class="nx">run</span><span class="p">)</span>
+</code></pre></div></p>
 </div>
-<p>The above example listens for requests at <code>GET /</code> and responds with <code>hello</code> as <code>text/plain</code>.</p>
+<p>The <code>serve()</code> function is used to set the handler function (<code>run()</code>).</p>
+<h2 id="echo">Echo</h2>
+<p>You can send out text with <code>f.SendEcho()</code></p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">run</span><span class="p">(</span><span class="nx">req</span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="path">Path</h2>
+<p>You can define path fields in your pattern using the curly braces format <code>{}</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">route</span><span class="p">(</span><span class="s">&quot;GET /{name}&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>You can then retrieve the value of the path field with <code>f.ReceivePath()</code></p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceivePath</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello &quot;</span><span class="o">+</span><span class="nx">name</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
 <h2 id="status">Status</h2>
 <p>You can send out a status code with <code>f.SendStatus()</code></p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">run</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -705,7 +731,7 @@
 <p class="admonition-title">Note</p>
 <p>Status codes must be sent out before sending any header fields.</p>
 </div>
-<h2 id="header-fields">Header fields</h2>
+<h2 id="header">Header</h2>
 <p>You can retrieve header fields with <code>f.ReceiveHeader()</code> and send out header fields with <code>f.SendHeader()</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">run</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">contentType</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceiveHeader</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Content-Type&quot;</span><span class="p">)</span>
@@ -725,21 +751,11 @@
 <p class="admonition-title">Note</p>
 <p>Header fields must be sent out before sending a body.</p>
 </div>
-<h2 id="path-fields">Path fields</h2>
-<p>You can define path fields via the <code>{parameter}</code> syntax, the name of the parameter wrapped in curly braces.</p>
-<p>You can then retrieve the value of the path field with <code>f.ReceivePath()</code></p>
-<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">run</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceivePath</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello &quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
 <h2 id="query">Query</h2>
 <p>You can retrieve values of query fields with <code>f.ReceiveQuery()</code></p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">run</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceiveQuery</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello &quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello &quot;</span><span class="o">+</span><span class="nx">name</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 <h2 id="forms">Forms</h2>
@@ -748,8 +764,7 @@
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">run</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">form</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceiveForm</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
 <span class="w">    </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">form</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello &quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello &quot;</span><span class="o">+</span><span class="nx">name</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 <div class="admonition note">
@@ -764,8 +779,7 @@
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">run</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">person</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceiveJson</span><span class="p">[</span><span class="nx">Person</span><span class="p">](</span><span class="nx">req</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello &quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">person</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello &quot;</span><span class="o">+</span><span class="nx">person</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 
