@@ -680,7 +680,6 @@
 <p>The <code>serve</code> function is used to respond to incoming requests.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-</div>
 <p>You can route the same api through multiple patterns, for example</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">api</span><span class="p">(</span>
 <span class="w">    </span><span class="nx">route</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">RouteApiFunction</span><span class="p">,</span>
@@ -693,6 +692,7 @@
 <span class="w">    </span><span class="nx">serve</span><span class="p">(</span><span class="nx">run</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
+</div>
 <p>The above example listens for requests at <code>GET /</code> and responds with <code>hello</code> as <code>text/plain</code>.</p>
 <h2 id="status">Status</h2>
 <p>You can send out a status code with <code>f.SendStatus()</code></p>
