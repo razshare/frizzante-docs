@@ -15,36 +15,35 @@ Subdirectories are joined by `.` instead of `/` or `\`.
 
 You can rout pages with `f.ServerWithIndex()`, which takes an index function.
 
-!!! example
-	```go
-	func indexShowFunction(_ *f.Request, _ *f.Response, p *f.Page) {
-		f.PageWithData(p, "name", "Cat")
-	}
+```go
+func indexShowFunction(_ *f.Request, _ *f.Response, p *f.Page) {
+	f.PageWithData(p, "name", "Cat")
+}
 
-	func indexActionFunction(_req_ *f.Request, _res_ *f.Response, _ *f.Page) {
-		updateStuff()
-	}
+func indexActionFunction(_req_ *f.Request, _res_ *f.Response, _ *f.Page) {
+	updateStuff()
+}
 
-	func index(
-		route func(path string, page string),
-		show func(showFunction f.PageFunction),
-		action func(actionFunction f.PageFunction),
-	){
-		route("/welcome", "welcome")
-		show(indexShowFunction)
-		action(indexActionFunction)	
-	}
-	```
+func index(
+	route func(path string, page string),
+	show func(showFunction f.PageFunction),
+	action func(actionFunction f.PageFunction),
+){
+	route("/welcome", "welcome")
+	show(indexShowFunction)
+	action(indexActionFunction)	
+}
+```
 
-	```go
-	f.ServerWithIndex(srv, index)
-	```
+```go
+f.ServerWithIndex(srv, index)
+```
 
-	This index routes the page `welcome` to the path `/welcome`, indicating it will render the `lib/pages/welcome.svelte` file.
+This index routes the page `welcome` to the path `/welcome`, indicating it will render the `lib/pages/welcome.svelte` file.
 
-	Whenever the user opens the `welcome` page, the index will execute the `indexShowFunction` function.
+Whenever the user opens the `welcome` page, the index will execute the `indexShowFunction` function.
 
-	Whenever the user sends a POST form to the `welcome` page, the index will execute the `indexActionFunction` function.
+Whenever the user sends a POST form to the `welcome` page, the index will execute the `indexActionFunction` function.
 
 ## Data fields
 
