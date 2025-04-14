@@ -11,9 +11,9 @@ Subdirectories are joined by `.` instead of `/` or `\`.
 	A page located at `lib/pages/about/welcome.svelte` will be identified by `about.welcome`.
 
 
-## Mapping pages
+## Routing pages
 
-You can map pages with `f.ServerWithIndex()`, which takes an index function.
+You can rout pages with `f.ServerWithIndex()`, which takes an index function.
 
 !!! example
 	```go
