@@ -47,7 +47,7 @@ The above example listens for requests at `GET /` and responds with `hello` as `
 You can send out a status code with `f.SendStatus()`
 
 ```go
-func serverFunction(_ *f.Request, res *f.Response) {
+func run(_ *f.Request, res *f.Response) {
     f.SendStatus(res, 404)
     f.SendEcho(res, "Resource not found, sorry.")
 }
@@ -61,7 +61,7 @@ func serverFunction(_ *f.Request, res *f.Response) {
 You can retrieve header fields with `f.ReceiveHeader()` and send out header fields with `f.SendHeader()`.
 
 ```go
-func serverFunction(req *f.Request, res *f.Response) {
+func run(req *f.Request, res *f.Response) {
     contentType := f.ReceiveHeader(req, "Content-Type")
     if "application/xml" != contentType {
         f.SendStatus(res, 400)
@@ -86,7 +86,7 @@ You can define path fields via the `{parameter}` syntax, the name of the paramet
 You can then retrieve the value of the path field with `f.ReceivePath()`
 
 ```go
-func serverFunction(req *f.Request, res *f.Response) {
+func run(req *f.Request, res *f.Response) {
     name := f.ReceivePath(req, "name")
     f.SendEcho(res, "hello ")
     f.SendEcho(res, name)
@@ -98,7 +98,7 @@ func serverFunction(req *f.Request, res *f.Response) {
 You can retrieve values of query fields with `f.ReceiveQuery()`
 
 ```go
-func serverFunction(req *f.Request, res *f.Response) {
+func run(req *f.Request, res *f.Response) {
     name := f.ReceiveQuery(req, "name")
     f.SendEcho(res, "hello ")
     f.SendEcho(res, name)
@@ -112,7 +112,7 @@ Forms can be retrieved with `f.ReceiveForm()`.
 You can use the `url.Values` api in order to retrieve specific form fields.
 
 ```go
-func serverFunction(req *f.Request, res *f.Response) {
+func run(req *f.Request, res *f.Response) {
     form := f.ReceiveForm(req)
     name := form.Get("name")
     f.SendEcho(res, "hello ")
