@@ -8,8 +8,8 @@ Where `api` is a setup function
 
 ```go
 func api(
-	route f.RouteApiFunction,
-	serve f.ServeApiFunction,
+	route func(pattern string),
+	serve func(serveFunction func(req *f.Request, res *f.Response)),
 ) {
     route("GET /")
     serve(run)
