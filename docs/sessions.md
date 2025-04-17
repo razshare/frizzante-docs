@@ -19,7 +19,7 @@ Use `get()` to retrieve a session property.
 
 ```go
 get, _, _ := f.SessionStart(req, res)
-username := get("username", "guest").(string)
+username := get("username", "default").(string)
 ```
 
 ## Set
