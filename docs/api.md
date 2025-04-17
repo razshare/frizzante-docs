@@ -20,7 +20,7 @@ func run(req *f.Request, res *f.Response) {
 }
 ```
 
-The `route()` function is used to routing the api using a `{verb} /path` pattern, where `{verb}` is an http verb, like `GET`, `POST` and so on.
+The `route()` function is used to route the api using a `{verb} /path` pattern, where `{verb}` is an http verb, like `GET`, `POST` and so on.
 
 !!! note
     You can route the same api to multiple patterns
