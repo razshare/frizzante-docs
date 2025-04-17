@@ -683,8 +683,8 @@
 </code></pre></div>
 <p>Where <code>api</code> is a setup function</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">api</span><span class="p">(</span>
-<span class="w">    </span><span class="nx">route</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">RouteApiFunction</span><span class="p">,</span>
-<span class="w">    </span><span class="nx">serve</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServeApiFunction</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">route</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">pattern</span><span class="w"> </span><span class="kt">string</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">serve</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">serveFunction</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)),</span>
 <span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">route</span><span class="p">(</span><span class="s">&quot;GET /&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nx">serve</span><span class="p">(</span><span class="nx">run</span><span class="p">)</span>
