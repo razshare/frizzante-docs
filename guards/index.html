@@ -465,7 +465,7 @@
   
   
   <span class="md-ellipsis">
-    Server Sent Events
+    Server sent events
     
   </span>
   
@@ -488,6 +488,28 @@
   
   <span class="md-ellipsis">
     Web sockets
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cancellation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cancellation
     
   </span>
   
@@ -531,25 +553,38 @@
 
   <h1>Guards</h1>
 
-<p>You can guard your pages and api by injecting arbitrary functions to execute before said pages and/or api serve the client.</p>
-<p>You can guard your pages with <code>f.ServerWithPageGuard()</code></p>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithPageGuard</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithRender</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">RenderServer</span><span class="p">)</span>
-<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
-<span class="w">        </span><span class="nx">pass</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">)</span>
+<p>Use <code>f.ServerWithGuard()</code> to add a new guard.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A guard is a setup function that can inject arbitrary request handlers
+to handle incoming request before they reach any of your api and page handlers.<br/>
+Guards can decide which requests should pass through and which request should be rejected.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithGuard</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="nx">guard</span><span class="p">)</span>
 </code></pre></div>
-<p>You can guard your api with <code>f.ServerWithApiGuard()</code></p>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithApiGuard</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">SessionStart</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span>
-<span class="w">        </span><span class="nx">pass</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">)</span>
+<p>Where <code>guard</code> is a setup function</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">Guard</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">withGuardHandler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span>
+<span class="w">        </span><span class="nx">guardHandler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span>
+<span class="w">            </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">(),</span>
+<span class="w">        </span><span class="p">),</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">withGuardHandler</span><span class="p">(</span><span class="nx">guardHandler</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">guardHandler</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Guard.</span>
+<span class="w">    </span><span class="nx">pass</span><span class="p">()</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>Invoking <code>pass()</code> will let the request pass through.</p>
+<p>Use <code>pass()</code> to let the current request pass through.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Failing to invoke <code>pass()</code> means the current request will be rejected.</p>
+</div>
 
 
 

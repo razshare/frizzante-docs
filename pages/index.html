@@ -113,7 +113,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#routing-pages" class="md-skip">
+        <a href="#index" class="md-skip">
           Skip to content
         </a>
       
@@ -437,18 +437,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#routing-pages" class="md-nav__link">
+  <a href="#index" class="md-nav__link">
     <span class="md-ellipsis">
-      Routing pages
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#data-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Data fields
+      Index
     </span>
   </a>
   
@@ -518,7 +509,7 @@
   
   
   <span class="md-ellipsis">
-    Server Sent Events
+    Server sent events
     
   </span>
   
@@ -541,6 +532,28 @@
   
   <span class="md-ellipsis">
     Web sockets
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cancellation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cancellation
     
   </span>
   
@@ -575,18 +588,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#routing-pages" class="md-nav__link">
+  <a href="#index" class="md-nav__link">
     <span class="md-ellipsis">
-      Routing pages
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#data-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      Data fields
+      Index
     </span>
   </a>
   
@@ -621,33 +625,69 @@
 <p class="admonition-title">Example</p>
 <p>A page located at <code>lib/pages/about/welcome.svelte</code> will be identified by <code>about.welcome</code>.</p>
 </div>
-<h2 id="routing-pages">Routing pages</h2>
-<p>You can rout pages with <code>f.ServerWithIndex()</code>, which takes an index function.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">indexShowFunction</span><span class="p">(</span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<h2 id="index">Index</h2>
+<p>An index is a function that routes one or more paths to a page.</p>
+<p>Use  <code>f.ServerWithIndex()</code> to create an index.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithIndex</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="nx">index</span><span class="p">)</span>
+</code></pre></div>
+<p>Where <code>index</code> is a setup function.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">index</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">withPage</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">page</span><span class="w"> </span><span class="kt">string</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">withPath</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">path</span><span class="w"> </span><span class="kt">string</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">withBaseHandler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">baseHandler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)),</span>
+<span class="w">    </span><span class="nx">withActionHandler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">actionFunction</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)),</span>
+<span class="p">){</span>
+<span class="w">    </span><span class="nx">withPage</span><span class="p">(</span><span class="s">&quot;welcome&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">withPath</span><span class="p">(</span><span class="s">&quot;/welcome&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">withBaseHandler</span><span class="p">(</span><span class="nx">baseHandler</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">withActionHandler</span><span class="p">(</span><span class="nx">actionHandler</span><span class="p">)</span><span class="w">    </span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">baseHandler</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithData</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Cat&quot;</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="kd">func</span><span class="w"> </span><span class="nx">indexActionFunction</span><span class="p">(</span><span class="nx">_req_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">_res_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">updateStuff</span><span class="p">()</span>
-<span class="p">}</span>
-
-<span class="kd">func</span><span class="w"> </span><span class="nx">index</span><span class="p">(</span>
-<span class="w">    </span><span class="nx">route</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">path</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="kt">string</span><span class="p">),</span>
-<span class="w">    </span><span class="nx">show</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">showFunction</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)),</span>
-<span class="w">    </span><span class="nx">action</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">actionFunction</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)),</span>
-<span class="p">){</span>
-<span class="w">    </span><span class="nx">route</span><span class="p">(</span><span class="s">&quot;/welcome&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;welcome&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">show</span><span class="p">(</span><span class="nx">indexShowFunction</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">action</span><span class="p">(</span><span class="nx">indexActionFunction</span><span class="p">)</span><span class="w"> </span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">actionHandler</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">modifyState</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithIndex</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="nx">index</span><span class="p">)</span>
-</code></pre></div>
-<p>This index routes the page <code>welcome</code> to the path <code>/welcome</code>, indicating it will render the <code>lib/pages/welcome.svelte</code> file.</p>
-<p>Whenever the user opens the <code>welcome</code> page, the index will execute the <code>indexShowFunction</code> function.</p>
-<p>Whenever the user sends a POST form to the <code>welcome</code> page, the index will execute the <code>indexActionFunction</code> function.</p>
-<h2 id="data-fields">Data fields</h2>
-<p>In the example above, the <code>f.PageWithData()</code> function is used, which sets a data field using a <code>key</code> and a <code>value</code>.</p>
+<p>Use <code>withPage()</code> to specify which page should render.</p>
+<p>Use <code>withPath()</code> to specify which path to route.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can route multiple paths to the same page.
+<div class="highlight"><pre><span></span><code><span class="nx">withPage</span><span class="p">(</span><span class="s">&quot;welcome&quot;</span><span class="p">)</span>
+<span class="nx">withPath</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+<span class="nx">withPath</span><span class="p">(</span><span class="s">&quot;/api/greeting&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You cannot route one path to multiple pages.
+<div class="highlight"><pre><span></span><code><span class="nx">withPage</span><span class="p">(</span><span class="s">&quot;welcome&quot;</span><span class="p">)</span>
+<span class="nx">withPage</span><span class="p">(</span><span class="s">&quot;login&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// This is now allowed.</span>
+<span class="nx">withPath</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+</div>
+<p>Use <code>withBaseHandler()</code> to set the base page handler.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A base page handler is a function that 
+handles requests to the <code>GET</code> http verb.<br/>
+This function usually does not modify the state, 
+it just renders information to the screen.</p>
+</div>
+<p>Use <code>withActionHandler()</code> to set the action page handler.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An action page handler is a function that 
+handles requests to the <code>POST</code> http verb.<br/>
+This function usually modifies the state and 
+sometimes redirects to some other page.</p>
+</div>
+<p>Use <code>f.PageWithData()</code> to set data fields for the page.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Data fields can be retrieved from your svelte components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
@@ -659,6 +699,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Context <code>data</code> is created with <a href="https://svelte.dev/docs/svelte/$state">$state()</a>, hence it is reactive.</p>
+</div>
 </div>
 
 
