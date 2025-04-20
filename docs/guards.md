@@ -1,26 +1,36 @@
-You can guard your pages and api by injecting arbitrary functions to execute before said pages and/or api serve the client.
+Use `f.ServerWithGuard()` to add a new guard.
 
-You can guard your pages with `f.ServerWithPageGuard()`
-
-```go
-f.ServerWithPageGuard(srv,
-    func(req *f.Request, res *f.Response, p *f.Page, pass func()) {
-        f.PageWithRender(f.RenderServer)
-        f.SessionStart(req, res)
-	    pass()
-    }
-)
-```
-
-You can guard your api with `f.ServerWithApiGuard()`
+!!! note
+	A guard is a setup function that can inject arbitrary request handlers
+	to handle incoming request before they reach any of your api and page handlers.<br/>
+	Guards can decide which requests should pass through and which request should be rejected.
 
 ```go
-f.ServerWithApiGuard(srv,
-    func(req *f.Request, res *f.Response, pass func()) {
-        f.SessionStart(req, res)
-	    pass()
-    }
-)
+f.ServerWithGuard(srv, guard)
 ```
 
-Invoking `pass()` will let the request pass through.
+Where `guard` is a setup function
+
+```go
+func Guard(
+	withGuardHandler func(
+		guardHandler func(
+			req *f.Request,
+			res *f.Response,
+			pass func(),
+		),
+	),
+) {
+	withGuardHandler(guardHandler)
+}
+
+func guardHandler(req *f.Request, res *f.Response, pass func()) {
+    // Guard.
+	pass()
+}
+```
+
+Use `pass()` to let the current request pass through.
+
+!!! warning
+	Failing to invoke `pass()` means the current request will be rejected.

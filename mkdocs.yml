@@ -46,5 +46,6 @@ nav:
   - Pages: pages.md
   - Sessions: sessions.md
   - Guards: guards.md
-  - Server Sent Events: server-sent-events.md
+  - Server sent events: server-sent-events.md
   - Web sockets: web-sockets.md
+  - Cancellation: cancellation.md

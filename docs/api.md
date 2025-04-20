@@ -8,36 +8,37 @@ Where `api` is a setup function
 
 ```go
 func api(
-	route func(pattern string),
-	serve func(serveFunction func(req *f.Request, res *f.Response)),
+	withPattern func(pattern string),
+	withHandler func(handler func(req *f.Request, res *f.Response)),
 ) {
-    route("GET /")
-    serve(serveFunction)
+    withPattern("GET /")
+    withHandler(handler)
 }
 
-func serveFunction(req *f.Request, res *f.Response) {
+func handler(req *f.Request, res *f.Response) {
     // Handle request.
 }
 ```
 
-The `route()` function is used to route the api using a `{verb} /path` pattern, where `{verb}` is an http verb, like `GET`, `POST` and so on.
+Use `withPattern()` to route the api using a pattern.
+
+Use `withHandler()` to set the request handler.
 
 !!! note
     You can route the same api to multiple patterns
     ```go
-    route("GET /")
-    route("GET /api/greeting")
-    serve(serveFunction)
+    withPattern("GET /")
+    withPattern("GET /api/greeting")
+    withHandler(handler)
     ```
 
-The `serve()` function is used to set the request handling function.
 
 ## Echo
 
 You can send out text with `f.SendEcho()`
 
 ```go
-func serveFunction(req*f.Request, res *f.Response) {
+func handler(req*f.Request, res *f.Response) {
     f.SendEcho(res, "hello")
 }
 ```
@@ -47,13 +48,13 @@ func serveFunction(req*f.Request, res *f.Response) {
 You can define path fields in your pattern using the curly braces format `{}`.
 
 ```go
-route("GET /{name}")
+withPattern("GET /{name}")
 ```
 
 You can then retrieve the value of the path field with `f.ReceivePath()`
 
 ```go
-func serveFunction(req *f.Request, _ *f.Response) {
+func handler(req *f.Request, _ *f.Response) {
     name := f.ReceivePath(req, "name")
     f.SendEcho(res, "hello "+name)
 }
@@ -64,7 +65,7 @@ func serveFunction(req *f.Request, _ *f.Response) {
 You can send out a status code with `f.SendStatus()`
 
 ```go
-func serveFunction(_ *f.Request, res *f.Response) {
+func handler(_ *f.Request, res *f.Response) {
     f.SendStatus(res, 404)
     f.SendEcho(res, "Resource not found, sorry.")
 }
@@ -78,7 +79,7 @@ func serveFunction(_ *f.Request, res *f.Response) {
 You can retrieve header fields with `f.ReceiveHeader()` and send out header fields with `f.SendHeader()`.
 
 ```go
-func serveFunction(req *f.Request, res *f.Response) {
+func handler(req *f.Request, res *f.Response) {
     contentType := f.ReceiveHeader(req, "Content-Type")
     if "application/xml" != contentType {
         f.SendStatus(res, 400)
@@ -101,7 +102,7 @@ func serveFunction(req *f.Request, res *f.Response) {
 You can retrieve values of query fields with `f.ReceiveQuery()`
 
 ```go
-func serveFunction(req *f.Request, res *f.Response) {
+func handler(req *f.Request, res *f.Response) {
     name := f.ReceiveQuery(req, "name")
     f.SendEcho(res, "hello "+name)
 }
@@ -114,7 +115,7 @@ Forms can be retrieved with `f.ReceiveForm()`.
 You can use the `url.Values` api in order to retrieve specific form fields.
 
 ```go
-func serveFunction(req *f.Request, res *f.Response) {
+func handler(req *f.Request, res *f.Response) {
     form := f.ReceiveForm(req)
     name := form.Get("name")
     f.SendEcho(res, "hello "+name)
@@ -133,7 +134,7 @@ type Person struct {
     Name string
 }
 
-func serveFunction(req *f.Request, res *f.Response) {
+func handler(req *f.Request, res *f.Response) {
     person, _ := f.ReceiveJson[Person](req)
     f.SendEcho(res, "hello "+person.name)
 }

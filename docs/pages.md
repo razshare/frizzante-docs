@@ -11,54 +11,89 @@ Subdirectories are joined by `.` instead of `/` or `\`.
 	A page located at `lib/pages/about/welcome.svelte` will be identified by `about.welcome`.
 
 
-## Routing pages
+## Index
 
-You can rout pages with `f.ServerWithIndex()`, which takes an index function.
+An index is a function that routes one or more paths to a page.
 
-```go
-func indexShowFunction(_ *f.Request, _ *f.Response, p *f.Page) {
-	f.PageWithData(p, "name", "Cat")
-}
-
-func indexActionFunction(_req_ *f.Request, _res_ *f.Response, _ *f.Page) {
-	updateStuff()
-}
-
-func index(
-	route func(path string, page string),
-	show func(showFunction func(req *f.Request, res *f.Response, p *f.Page)),
-	action func(actionFunction func(req *f.Request, res *f.Response, p *f.Page)),
-){
-	route("/welcome", "welcome")
-	show(indexShowFunction)
-	action(indexActionFunction)	
-}
-```
+Use  `f.ServerWithIndex()` to create an index.
 
 ```go
 f.ServerWithIndex(srv, index)
 ```
 
-This index routes the page `welcome` to the path `/welcome`, indicating it will render the `lib/pages/welcome.svelte` file.
+Where `index` is a setup function.
 
-Whenever the user opens the `welcome` page, the index will execute the `indexShowFunction` function.
+```go
+func index(
+	withPage func(page string),
+	withPath func(path string),
+	withBaseHandler func(baseHandler func(req *f.Request, res *f.Response, page *f.Page)),
+	withActionHandler func(actionFunction func(req *f.Request, res *f.Response, page *f.Page)),
+){
+	withPage("welcome")
+	withPath("/welcome")
+	withBaseHandler(baseHandler)
+	withActionHandler(actionHandler)	
+}
 
-Whenever the user sends a POST form to the `welcome` page, the index will execute the `indexActionFunction` function.
+func baseHandler(req *f.Request, res *f.Response, page *f.Page) {
+	f.PageWithData(p, "name", "Cat")
+}
 
-## Data fields
-
-In the example above, the `f.PageWithData()` function is used, which sets a data field using a `key` and a `value`.
-
-Data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
-
-```html
-<script>
-    import { getContext } from "svelte";
-    const data = getContext("data")
-</script>
-
-<h1>Hello {data.name}</h1>
+func actionHandler(req *f.Request, res *f.Response, page *f.Page) {
+	modifyState()
+}
 ```
 
+Use `withPage()` to specify which page should render.
+
+Use `withPath()` to specify which path to route.
+
 !!! note
-	Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
+    You can route multiple paths to the same page.
+    ```go
+	withPage("welcome")
+    withPath("/")
+    withPath("/api/greeting")
+    ```
+	
+!!! warning
+	You cannot route one path to multiple pages.
+    ```go
+	withPage("welcome")
+	withPage("login") // This is now allowed.
+    withPath("/")
+    ```
+
+Use `withBaseHandler()` to set the base page handler.
+
+!!! note
+	A base page handler is a function that 
+	handles requests to the `GET` http verb.<br/>
+	This function usually does not modify the state, 
+	it just renders information to the screen.
+
+Use `withActionHandler()` to set the action page handler.
+
+!!! note
+	An action page handler is a function that 
+	handles requests to the `POST` http verb.<br/>
+	This function usually modifies the state and 
+	sometimes redirects to some other page.
+
+Use `f.PageWithData()` to set data fields for the page.
+
+!!! note
+	Data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
+
+	```html
+	<script>
+		import { getContext } from "svelte";
+		const data = getContext("data")
+	</script>
+
+	<h1>Hello {data.name}</h1>
+	```
+
+	!!! note
+		Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.

@@ -1,11 +1,9 @@
 Use `f.SessionStart()` to start a session.
 
 ```go
-f.ServerWithApi(srv, "GET /",
-    func(req *f.Request, res *f.Response) {
-        get, set, unset := f.SessionStart(req, res)
-    },
-)
+func handler(req *f.Request, res *f.Response) {
+    get, set, unset := f.SessionStart(req, res)
+}
 ```
 
 `f.SessionStart()` always succeeds and it always returns three functions, get, set and unset.
