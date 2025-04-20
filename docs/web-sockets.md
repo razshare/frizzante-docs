@@ -3,8 +3,9 @@ You can upgrade http requests to web sockets with `f.SendWebSocketUpgrade()`.
 ```go
 f.ServerWithApi(srv, "GET /",
     func(req *f.Request, res *f.Response) {
+	    canc := f.ReceiveCancellationReadable(req)
         f.SendWebSocketUpgrade(res, func() {
-            for {
+            for !f.ReadableGet(canc) {
                 f.SendEcho(res, "hello")
                 msg := f.ReceiveMessage(req)
                 fmt.Printf("Received message `%s`.\n", msg)
