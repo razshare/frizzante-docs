@@ -9,10 +9,8 @@
       
       
       
-        <link rel="prev" href="../server/">
+        <link rel="prev" href="../web-sockets/">
       
-      
-        <link rel="next" href="../api/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +18,7 @@
     
     
       
-        <title>Certificates - Frizzante</title>
+        <title>Cancellation - Frizzante</title>
       
     
     
@@ -144,7 +142,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Certificates
+              Cancellation
             
           </span>
         </div>
@@ -339,17 +337,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../certificates/" class="md-nav__link">
         
   
   
@@ -360,7 +351,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -501,10 +491,17 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../cancellation/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -515,6 +512,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -551,15 +549,42 @@
 
 
 
-  <h1>Certificates</h1>
+  <h1>Cancellation</h1>
 
-<p>You can assign a certificate and a key for said certificate with <code>f.ServerWithCertificateAndKey()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithCertificateAndKey</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cert.pem&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;key.pem&quot;</span><span class="p">)</span>
+<p>Always track cancelled requests while streaming events, web sockets or executing long running tasks.</p>
+<p>You can detect cancelled requests with <code>f.ReceiveCancellation()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">RequestIsAlive</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">&lt;-</span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceiveCancellation</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">value</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">}()</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">value</span>
+<span class="p">}</span>
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>You can create a self-signed certificate for local development with <code>make certificate</code>, or interactively fill in the details of your certificate with <code>make certificate-interactive</code>.</p>
-</div>
+<p>For example using sse</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">handler</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">alive</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">RequestIsAlive</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">setEventName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendSseUpgrade</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">setEventName</span><span class="p">(</span><span class="s">&quot;server-time&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="o">*</span><span class="nx">alive</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;Server time is %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">()))</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>or using web sockets</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">handler</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">alive</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">RequestIsAlive</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendWsUpgrade</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="o">*</span><span class="nx">alive</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">msg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceiveMessage</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Received message `%s`.\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">msg</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 
 
 

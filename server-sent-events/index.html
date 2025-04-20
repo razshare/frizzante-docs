@@ -20,7 +20,7 @@
     
     
       
-        <title>Server Sent Events - Frizzante</title>
+        <title>Server sent events - Frizzante</title>
       
     
     
@@ -144,7 +144,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Server Sent Events
+              Server sent events
             
           </span>
         </div>
@@ -464,7 +464,7 @@
   
   
   <span class="md-ellipsis">
-    Server Sent Events
+    Server sent events
     
   </span>
   
@@ -488,6 +488,28 @@
   
   <span class="md-ellipsis">
     Web sockets
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cancellation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cancellation
     
   </span>
   
@@ -529,26 +551,35 @@
 
 
 
-  <h1>Server Sent Events</h1>
+  <h1>Server sent events</h1>
 
-<p>You can upgrade http requests to server sent events with <code>f.SendServerSentEventsUpgrade()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithApi</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET /&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">canc</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ReceiveCancellationReadable</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
-<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendServerSentEventsUpgrade</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">event</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="kt">string</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">!</span><span class="nx">f</span><span class="p">.</span><span class="nx">ReadableGet</span><span class="p">(</span><span class="nx">canc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;Server time is %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">()))</span>
-<span class="w">                </span><span class="nx">time</span><span class="p">.</span><span class="nx">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">})</span>
-<span class="w">    </span><span class="p">},</span>
-<span class="p">)</span>
+<p>You can upgrade http requests to server sent events with <code>f.SendSseUpgrade()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">handler</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">setEventName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendSseUpgrade</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">setEventName</span><span class="p">(</span><span class="s">&quot;server-time&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;Server time is %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">()))</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
+<p>Set the name of the current event with <code>setEventName</code>, 
+then start sending content to the client with the usual <code>f.SendEcho()</code> and <code>f.SendJson()</code>.</p>
+<p>Once the request handler returns, 
+for example by exiting the <code>for</code> loop, 
+the event stream ends.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Always track cancelled requests while streaming events.<br/>
+Read more about cancellation <a href="../cancellation/">here</a>.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Once the callback function returns, 
-for example by exiting the <code>for</code> loop, 
-the server sent events connection ends.</p>
+<p>The default event name is <code>message</code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Read more about <code>serve()</code> <a href="../api/">here</a>.</p>
 </div>
 
 
