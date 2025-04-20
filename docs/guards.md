@@ -2,7 +2,7 @@ Use `f.ServerWithGuard()` to add a new guard.
 
 !!! note
 	A guard is a setup function that can inject arbitrary request handlers
-	to handle incoming request before they reach any of your api and page handlers.<br/>
+	to handle incoming requests before they reach any of your api and page handlers.<br/>
 	Guards can decide which requests should pass through and which request should be rejected.
 
 ```go
