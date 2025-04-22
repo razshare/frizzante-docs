@@ -118,7 +118,7 @@ func main() {
 		Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
 
 
-!!! danger
+!!! note
 	A page is treated like and [api](./api.md) under the hood, which means it 
 	has access to the same features.<br/>
 	<br/>
@@ -126,14 +126,17 @@ func main() {
 	queries with `f.ReceiveQuery()`,
 	forms with `f.ReceiveForm()`,
 	json objects with `f.ReceiveJson[T]()` and so on.<br/>
-	<br/>
-	While rendering a page, although you could, you shouldn't send text to the client directly 
-	using `f.Send*` functions, 
-	like `f.SendEcho()`, `f.SendJson()`.<br/>
-	<br/>
-	There are some use cases where this feature is useful, like debugging, but generally speaking,
-	sending text directly to the client will break the HTML document structure by prepending whatever
-	text you're sending to the actual view.
+	!!! danger
+		While rendering a page, you shouldn't send content to the client directly 
+		using `f.Send*` functions, 
+		like `f.SendEcho()`, `f.SendJson()`.<br/>
+		<br/>
+		Sending content directly to the client will break the HTML document structure by prepending 
+		the content to the actual view.<br/>
+		<br/>
+		There are some use cases where sending content directly is useful, like debugging.<br/>
+		!!! note
+			Functions that send the status and header fields, like `f.SendStatus()`, `f.SendHeader()`, are safe to use.
 
 ## Other details
 
