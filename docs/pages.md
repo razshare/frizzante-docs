@@ -70,10 +70,11 @@ func main() {
 }
 ```
 
-In your setup function, use `withPath()` to set the path of your page and `withView()`
+In your setup function, use `withPath()` to set the path of your page 
+and `withView()` to set the view of your page.
 
 !!! note
-    You can route multiple paths to the same page.
+    You can map many paths to one view.
     ```go
     withPath("/")
     withPath("/api/greeting")
@@ -81,7 +82,7 @@ In your setup function, use `withPath()` to set the path of your page and `withV
     ```
 	
 !!! danger
-	You cannot route one path to multiple pages.
+    You cannot map many views to one path.
     ```go
     withPath("/")
 	withView(f.ViewReference("Welcome"))
