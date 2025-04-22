@@ -43,11 +43,14 @@ func api(
 		request *f.Request, 
 		response *f.Response,
 	) {
+		// Get a pointer to the connection status.
 		alive := requestIsAlive(request)
+
+		// Upgrade to server sent events.
 		setEventName := f.SendSseUpgrade(response)
 		setEventName("server-time")
 
-		// Continuously check if connection is alive.
+		// Continuously check if connection is still alive.
 		for *alive {
 			f.SendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
 		}
@@ -114,10 +117,13 @@ func api(
 		request *f.Request,
 		response *f.Response,
 	) {
+		// Get a pointer to the connection status.
 		alive := RequestIsAlive(request)
+
+		// Upgrade to web sockets.
 		f.SendWsUpgrade(response)
 
-		// Continuously check if connection is alive.
+		// Continuously check if connection is still alive.
 		for *alive {
 			f.SendEcho(response, "hello")
 			msg := f.ReceiveMessage(request)
