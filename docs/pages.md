@@ -124,7 +124,7 @@ and `withView()` sets the view of your page.
 
 
 !!! note
-	A page is treated like and [api](./api.md) under the hood, which means it 
+	A page is treated like an [api](./api.md) under the hood, which means it 
 	has access to the same features.<br/>
 	<br/>
 	You can receives path fields with `f.ReceivePath()`, 
