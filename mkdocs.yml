@@ -43,6 +43,7 @@ nav:
   - Server: server.md
   - Certificates: certificates.md
   - Api: api.md
+  - Views: views.md
   - Pages: pages.md
   - Sessions: sessions.md
   - Guards: guards.md

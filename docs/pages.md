@@ -1,14 +1,17 @@
-Before creating a page, you need to create a view, a `.svelte` component under `lib/components/views`.
+Before creating a page, you need to create a view.
 
-You can later refer to this component by its file name relative to `lib/components/views`.
+!!! note
+	See the [views section](./views.md) for more details.
+
+Views can be referred to by your Go code using their name relative to `lib/components/views`.
 
 !!! example
-	A page located at `lib/components/views/Welcome.svelte` will be identified by `Welcome`.
+	A view located at `lib/components/views/Welcome.svelte` will be identified by `Welcome`.
 
 Subdirectories are joined by `.` instead of `/` or `\`.
 
 !!! example
-	A page located at `lib/components/views/about/Me.svelte` will be identified by `about.Me`.
+	A view located at `lib/components/views/about/Me.svelte` will be identified by `about.Me`.
 
 After you've created your view, you can create a page with `f.ServerWithPage()`
 
@@ -31,13 +34,13 @@ var dist embed.FS
 
 func page(
 	withPath func(path string),
-	withDocument func(document *f.Document),
-	withBaseHandler func(baseHandler func(request *f.Request, response *f.Response, document *f.Document)),
-	withActionHandler func(actionFunction func(request *f.Request, response *f.Response, document *f.Document)),
+	withView func(view *f.View),
+	withBaseHandler func(baseHandler func(request *f.Request, response *f.Response, view *f.View)),
+	withActionHandler func(actionFunction func(request *f.Request, response *f.Response, view *f.View)),
 ){
 	withPath("/welcome")
-	withDocument(f.DocumentCreate("Welcome"))  	// This is a reference 
-												// to "lib/components/views/Welcome.svelte"
+	withView(f.ViewReference("Welcome"))  	// This references the
+										    // file "lib/components/views/Welcome.svelte"
 
 	withBaseHandler(func(req *f.Request, res *f.Response, page *f.Page) {
 		// Show page.
@@ -67,21 +70,22 @@ func main() {
 }
 ```
 
+In your setup function, use `withPath()` to set the path of your page and `withView()`
 
 !!! note
     You can route multiple paths to the same page.
     ```go
     withPath("/")
     withPath("/api/greeting")
-	withDocument(f.DocumentCreate("Welcome"))
+	withView(f.ViewReference("Welcome"))
     ```
 	
 !!! danger
 	You cannot route one path to multiple pages.
     ```go
     withPath("/")
-	withDocument(f.DocumentCreate("Welcome"))
-	withDocument(f.DocumentCreate("Login"))    // <-- This is now allowed.
+	withView(f.ViewReference("Welcome"))
+	withView(f.ViewReference("Login"))    // <-- This is now allowed.
     ```
 
 `withBaseHandler()` sets the page base handler
