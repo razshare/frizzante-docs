@@ -21,9 +21,9 @@ Here's an example of a view located under `lib/components/views/Welcome`
 Hello {data.name}!
 ```
 
-This view expects a data property called `name` from the Go.
+This view expects a data property called `name` from the Go server.
 
-Say for example that Go provides the value `world` for the property `name`, 
+Say for example that Go server provides the value `world` for the property `name`, 
 then the view would render the text `Hello world!`.
 
 !!! note
