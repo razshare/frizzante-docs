@@ -11,11 +11,10 @@ import (
 //go:embed .dist/*/**
 var dist embed.FS
 
-func guard(
+func api(
 	withHandler func(handler func(
 		request *f.Request,
 		response *f.Response,
-		pass func(),
 	)),
 ) {
     withPattern("GET /")
@@ -40,7 +39,7 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Guards.
-	f.ServerWithGuard(server, guard)
+	f.ServerWithApi(server, api)
 
 	// Start.
 	f.ServerStart(server)

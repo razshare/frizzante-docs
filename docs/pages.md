@@ -53,12 +53,16 @@ func page(
 	withBaseHandler(func(
 		request *f.Request,
 		response *f.Response,
-		page *f.Page,
+		view *f.View,
 	) {
 		// Show page.
-		f.PageWithData(p, "name", "Cat")
+		view.Data["name"] = "Cat"
 	})
-	withActionHandler(func(request *f.Request, response *f.Response, page *f.Page) {
+	withActionHandler(func(
+		request *f.Request,
+		response *f.Response,
+		view *f.View,
+	) {
 		// Modify state.
 	})	
 }

@@ -69,9 +69,9 @@ func main() {
 	f.ServerWithHostName(server, "127.0.0.1")
 	f.ServerWithEmbeddedFileSystem(server, dist)
 	f.ServerWithNotifier(server, notifier)
-
-	// Guards.
-	f.ServerWithGuard(server, guard)
+	
+	// Apis.
+	f.ServerWithApi(server, api)
 
 	// Start.
 	f.ServerStart(server)
@@ -142,8 +142,8 @@ func main() {
 	f.ServerWithEmbeddedFileSystem(server, dist)
 	f.ServerWithNotifier(server, notifier)
 
-	// Guards.
-	f.ServerWithGuard(server, guard)
+	// Apis.
+	f.ServerWithApi(server, api)
 
 	// Start.
 	f.ServerStart(server)
