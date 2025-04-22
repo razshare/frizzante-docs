@@ -1,12 +1,12 @@
 You can upgrade http requests to web sockets with `f.SendWsUpgrade()`.
 
 ```go
-func handler(req *f.Request, res *f.Response) {
-    f.SendWsUpgrade(res)
+func handler(request *f.Request, response *f.Response) {
+    f.SendWsUpgrade(response)
 
 	for {
-        f.SendEcho(res, "hello")
-        msg := f.ReceiveMessage(req)
+        f.SendEcho(response, "hello")
+        msg := f.ReceiveMessage(request)
         fmt.Printf("Received message `%s`.\n", msg)
 	}
 }

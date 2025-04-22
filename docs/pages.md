@@ -42,11 +42,11 @@ func page(
 	withView(f.ViewReference("Welcome"))  	// This references the
 										    // file "lib/components/views/Welcome.svelte"
 
-	withBaseHandler(func(req *f.Request, res *f.Response, page *f.Page) {
+	withBaseHandler(func(request *f.Request, response *f.Response, page *f.Page) {
 		// Show page.
 		f.PageWithData(p, "name", "Cat")
 	})
-	withActionHandler(func(req *f.Request, res *f.Response, page *f.Page) {
+	withActionHandler(func(request *f.Request, response *f.Response, page *f.Page) {
 		// Modify state.
 	})	
 }

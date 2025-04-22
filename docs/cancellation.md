@@ -4,10 +4,10 @@ Always track cancelled requests while streaming events, web sockets or executing
 You can detect cancelled requests with `f.ReceiveCancellation()`.
 
 ```go
-func RequestIsAlive(req *f.Request) *bool {
+func RequestIsAlive(request *f.Request) *bool {
 	value := true
 	go func() {
-		<-f.ReceiveCancellation(req)
+		<-f.ReceiveCancellation(request)
 		value = false
 	}()
 	return &value
@@ -17,13 +17,13 @@ func RequestIsAlive(req *f.Request) *bool {
 For example using sse
 
 ```go
-func handler(req *f.Request, res *f.Response) {
-	alive := RequestIsAlive(req)
-    setEventName := f.SendSseUpgrade(res)
+func handler(request *f.Request, response *f.Response) {
+	alive := RequestIsAlive(request)
+    setEventName := f.SendSseUpgrade(response)
     setEventName("server-time")
 
 	for *alive {
-		f.SendEcho(res, fmt.Sprintf("Server time is %s", time.Now()))
+		f.SendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
 	}
 }
 ```
@@ -31,13 +31,13 @@ func handler(req *f.Request, res *f.Response) {
 or using web sockets
 
 ```go
-func handler(req *f.Request, res *f.Response) {
-	alive := RequestIsAlive(req)
-    f.SendWsUpgrade(res)
+func handler(request *f.Request, response *f.Response) {
+	alive := RequestIsAlive(request)
+    f.SendWsUpgrade(response)
 
 	for *alive {
-        f.SendEcho(res, "hello")
-        msg := f.ReceiveMessage(req)
+        f.SendEcho(response, "hello")
+        msg := f.ReceiveMessage(request)
         fmt.Printf("Received message `%s`.\n", msg)
 	}
 }

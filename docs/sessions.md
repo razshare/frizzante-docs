@@ -1,8 +1,8 @@
 Use `f.SessionStart()` to start a session.
 
 ```go
-func handler(req *f.Request, res *f.Response) {
-    get, set, unset := f.SessionStart(req, res)
+func handler(request *f.Request, response *f.Response) {
+    get, set, unset := f.SessionStart(request, response)
 }
 ```
 
@@ -16,7 +16,7 @@ func handler(req *f.Request, res *f.Response) {
 Use `get()` to retrieve a session property.
 
 ```go
-get, _, _ := f.SessionStart(req, res)
+get, _, _ := f.SessionStart(request, response)
 username := get("username", "default").(string)
 ```
 
@@ -25,7 +25,7 @@ username := get("username", "default").(string)
 Use `set()` to create or update a session property.
 
 ```go
-_, set, _ := f.SessionStart(req, res)
+_, set, _ := f.SessionStart(request, response)
 set("username", "frizzante")
 ```
 
@@ -34,7 +34,7 @@ set("username", "frizzante")
 Use `unset()` to remove a session property.
 
 ```go
-_, _, unset := f.SessionStart(req, res)
+_, _, unset := f.SessionStart(request, response)
 unset("username")
 ```
 

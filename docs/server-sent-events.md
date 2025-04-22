@@ -1,12 +1,12 @@
 You can upgrade http requests to server sent events with `f.SendSseUpgrade()`.
 
 ```go
-func handler(req *f.Request, res *f.Response) {
-    setEventName := f.SendSseUpgrade(res)
+func handler(request *f.Request, response *f.Response) {
+    setEventName := f.SendSseUpgrade(response)
     setEventName("server-time")
 
 	for {
-		f.SendEcho(res, fmt.Sprintf("Server time is %s", time.Now()))
+		f.SendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
 	}
 }
 ```
