@@ -70,8 +70,8 @@ func main() {
 }
 ```
 
-In your setup function, use `withPath()` to set the path of your page 
-and `withView()` to set the view of your page.
+In your setup function, `withPath()` sets the path of your page 
+and `withView()` sets the view of your page.
 
 !!! note
     You can map many paths to one view.
