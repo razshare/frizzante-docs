@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../guards/">
+        <link rel="prev" href="../api/">
       
       
-        <link rel="next" href="../web-sockets/">
+        <link rel="next" href="../pages/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Server sent events - Frizzante</title>
+        <title>Views - Frizzante</title>
       
     
     
@@ -144,7 +144,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Server sent events
+              Views
             
           </span>
         </div>
@@ -383,10 +383,17 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../views/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -397,6 +404,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -471,17 +479,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../server-sent-events/" class="md-nav__link">
         
   
   
@@ -492,7 +493,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -595,35 +595,32 @@
 
 
 
-  <h1>Server sent events</h1>
+  <h1>Views</h1>
 
-<p>You can upgrade http requests to server sent events with <code>f.SendSseUpgrade()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">handler</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">setEventName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendSseUpgrade</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">setEventName</span><span class="p">(</span><span class="s">&quot;server-time&quot;</span><span class="p">)</span>
+<p>Views are <code>.svelte</code> components located under <code>lib/components/views</code>.</p>
+<p>Views are used by Go pages to render content.</p>
+<p>Here's an example of a view located under <code>lib/components/views/Welcome</code></p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="nx">getContext</span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
 
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;Server time is %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">()))</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * Server data.</span>
+<span class="cm">     * @typedef Data</span>
+<span class="cm">     * @property {string} name</span>
+<span class="cm">     */</span>
+
+<span class="w">    </span><span class="cm">/** @type {Data} */</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+Hello {data.name}!
 </code></pre></div>
-<p>Set the name of the current event with <code>setEventName</code>, 
-then start sending content to the client with the usual <code>f.SendEcho()</code> and <code>f.SendJson()</code>.</p>
-<p>Once the request handler returns, 
-for example by exiting the <code>for</code> loop, 
-the event stream ends.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Always track cancelled requests while streaming events.<br/>
-Read more about cancellation <a href="../cancellation/">here</a>.</p>
-</div>
+<p>This view expects a data property called <code>name</code> from the server.</p>
+<p>Say for example the server provides the value <code>world</code> for the property <code>name</code>, 
+then the view would render the text <code>Hello world!</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The default event name is <code>message</code>.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Read more about <code>serve()</code> <a href="../api/">here</a>.</p>
+<p>Read more about Go pages in the <a href="../pages/">pages section</a>.</p>
 </div>
 
 
