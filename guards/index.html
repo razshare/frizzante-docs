@@ -112,6 +112,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#other-details" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -437,6 +442,19 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Guards
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -448,6 +466,32 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#other-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other details
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -537,6 +581,23 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#other-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other details
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -560,24 +621,42 @@
 to handle incoming requests before they reach any of your api and page handlers.<br/>
 Guards can decide which requests should pass through and which request should be rejected.</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithGuard</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="nx">guard</span><span class="p">)</span>
-</code></pre></div>
-<p>Where <code>guard</code> is a setup function</p>
-<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">Guard</span><span class="p">(</span>
-<span class="w">    </span><span class="nx">withGuardHandler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span>
-<span class="w">        </span><span class="nx">guardHandler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span>
-<span class="w">            </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span>
-<span class="w">            </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span>
-<span class="w">            </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">(),</span>
-<span class="w">        </span><span class="p">),</span>
-<span class="w">    </span><span class="p">),</span>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;embed&quot;</span>
+<span class="w">    </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">//go:embed .dist/*/**</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">dist</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">guard</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">withHandler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">handler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())),</span>
 <span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">withGuardHandler</span><span class="p">(</span><span class="nx">guardHandler</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">withPattern</span><span class="p">(</span><span class="s">&quot;GET /&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">withHandler</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Guard.</span>
+<span class="w">        </span><span class="nx">pass</span><span class="p">()</span>
+<span class="w">    </span><span class="p">})</span>
 <span class="p">}</span>
 
-<span class="kd">func</span><span class="w"> </span><span class="nx">guardHandler</span><span class="p">(</span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// Guard.</span>
-<span class="w">    </span><span class="nx">pass</span><span class="p">()</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Create.</span>
+<span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">notifier</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">NotifierCreate</span><span class="p">()</span>
+
+<span class="w">    </span><span class="c1">// Setup.</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithPort</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="mi">8080</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithHostName</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithEmbeddedFileSystem</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">dist</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithNotifier</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">notifier</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1">// Guards.</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithGuard</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">guard</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1">// Start.</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>Use <code>pass()</code> to let the current request pass through.</p>
@@ -585,6 +664,8 @@ Guards can decide which requests should pass through and which request should be
 <p class="admonition-title">Warning</p>
 <p>Failing to invoke <code>pass()</code> means the current request will be rejected.</p>
 </div>
+<h2 id="other-details">Other details</h2>
+<p>Guards should be created under <code>lib/guards/{name}.go</code>, where <code>{name}</code> is the name of the guard.</p>
 
 
 

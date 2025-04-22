@@ -551,27 +551,24 @@
 
   <h1>Get started</h1>
 
-<p>Make sure you have <a href="https://go.dev/doc/install">Go</a> and <a href="https://bun.sh/">Bun</a> installed.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you'd rather use a different runtime than Bun to update your javascript dependencies, see <a href="https://github.com/razshare/frizzante-starter/blob/main/makefile">makefile</a> and change all occurrences of <code>bun</code> and <code>bunx</code> with the equivalent of whatever runtime you'd like to use.</p>
-</div>
-<p>Create a new project using the starter template.</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/razshare/frizzante-starter<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>frizzante-starter<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>.git<span class="w"> </span>-fr
+<p>Create a new project by cloning the starter template</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/razshare/frizzante-starter
+</code></pre></div>
+<p>Then navigate to it</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>frizzante-starter
 </code></pre></div>
 <p>Update dependencies</p>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>update
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Make sure you have build-essential installed
-<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>build-essential
-</code></pre></div></p>
+<p>Make sure you have <a href="https://go.dev/doc/install">Go</a>, <a href="https://askubuntu.com/questions/398489/how-to-install-build-essential">build-essential</a> and <a href="https://bun.sh/">Bun</a> installed.<br/>
+If you'd rather use a different runtime than Bun to update your javascript dependencies, see <a href="https://github.com/razshare/frizzante-starter/blob/main/makefile">makefile</a> and change all occurrences of <code>bun</code> and <code>bunx</code> with the equivalent of whatever runtime you'd like to use.</p>
 </div>
 <p>Then you can start the server with</p>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>start
 </code></pre></div>
-<p>You can enter dev mode with</p>
+<p>Enter development mode with</p>
 <div class="highlight"><pre><span></span><code>make dev
 </code></pre></div>
 <p>Or you can build the whole project with</p>
