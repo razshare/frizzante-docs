@@ -1,7 +1,33 @@
 You can assign a certificate and a key for said certificate with `f.ServerWithCertificateAndKey()`.
 
 ```go
-f.ServerWithCertificateAndKey(srv, "cert.pem", "key.pem")
+package main
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func main() {
+	// Create.
+	server := f.ServerCreate()
+	notifier := f.NotifierCreate()
+
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerWithNotifier(server, notifier)
+
+    // Setup certificate.
+    f.ServerWithCertificateAndKey(srv, "cert.pem", "key.pem")
+
+	// Start.
+	f.ServerStart(server)
+}
 ```
 
 !!! note
