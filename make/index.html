@@ -9,10 +9,8 @@
       
       
       
-        <link rel="prev" href="../overview/">
+        <link rel="prev" href="../cancellation/">
       
-      
-        <link rel="next" href="../certificates/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +18,7 @@
     
     
       
-        <title>Server - Frizzante</title>
+        <title>Make - Frizzante</title>
       
     
     
@@ -112,6 +110,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#api" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -144,7 +147,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Server
+              Make
             
           </span>
         </div>
@@ -317,17 +320,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../server/" class="md-nav__link">
         
   
   
@@ -338,7 +334,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -523,10 +518,30 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../make/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Make
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -537,6 +552,51 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Api
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guards
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pages
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -559,6 +619,41 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Api
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guards
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pages
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -573,57 +668,33 @@
 
 
 
-  <h1>Server</h1>
+  <h1>Make</h1>
 
-<p>You can create a server with <code>f.ServerCreate()</code> and start it with <code>f.ServerStart()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">srv</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">srv</span><span class="p">)</span>
-<span class="p">}</span>
+<p>You can use <code>go run lib/make/main.go</code> to create apis, guards and pages from your terminal.</p>
+<h2 id="api">Api</h2>
+<p>Use <code>go run lib/make/main.go -api -name="{name}"</code> to create an api, where <code>{name}</code> is the human readable name of the api.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><div class="highlight"><pre><span></span><code>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-api<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;login&quot;</span>
 </code></pre></div>
-<p>You'll need to create an embedded file system with <code>go:embed</code>, including the <code>.dist/*/**</code> pattern and pass 
-said embedded file system to the server.</p>
-<p>This will make it so that your svelte assets get embedded directly into the final executable.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;embed&quot;</span>
-<span class="w">    </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-<span class="p">)</span>
-
-<span class="c1">//go:embed .dist/*/**</span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">dist</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
-
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">srv</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithEmbeddedFileSystem</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="nx">dist</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">srv</span><span class="p">)</span>
-<span class="p">}</span>
+This will create a <code>lib/api/login.go</code> file.</p>
+</div>
+<h2 id="guards">Guards</h2>
+<p>Use <code>go run lib/make/main.go -guard -name="{name}"</code> to create a guard, where <code>{name}</code> is the human readable name of the guard.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><div class="highlight"><pre><span></span><code>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-guard<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;session&quot;</span>
 </code></pre></div>
-<p>By default, your server will be listening for requests at <a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a>.</p>
-<p>You can customize both your host name and port number with <code>f.ServerWithHostname()</code> and <code>f.ServerWithPortNumber()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;embed&quot;</span>
-<span class="w">    </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-<span class="p">)</span>
-
-<span class="c1">//go:embed .dist/*/**</span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">dist</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
-
-<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">srv</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithPort</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="mi">8989</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithHostName</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;192.168.0.123&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithEmbeddedFileSystem</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="nx">dist</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">srv</span><span class="p">)</span>
-<span class="p">}</span>
+This will create a <code>lib/guards/session.go</code> file.</p>
+</div>
+<h2 id="pages">Pages</h2>
+<p>Use <code>go run lib/make/main.go -page -name="{name}"</code> to create a page, where <code>{name}</code> is the human readable name of the page.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><div class="highlight"><pre><span></span><code>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-page<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;welcome&quot;</span>
 </code></pre></div>
+This will create files <code>lib/page/welcome.go</code> and <code>lib/components/views/Welcome.svelte</code>.</p>
+</div>
 
 
 
