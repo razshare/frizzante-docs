@@ -1,14 +1,58 @@
 You can upgrade http requests to web sockets with `f.SendWsUpgrade()`.
 
 ```go
-func handler(request *f.Request, response *f.Response) {
-    f.SendWsUpgrade(response)
+package main
 
-	for {
-        f.SendEcho(response, "hello")
-        msg := f.ReceiveMessage(request)
-        fmt.Printf("Received message `%s`.\n", msg)
-	}
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func api(
+	withPattern func(pattern string),
+	withHandler func(handler func(
+        request *f.Request,
+        response *f.Response,
+    )),
+) {
+    withPattern("GET /")
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
+        f.SendWsUpgrade(response)
+
+        for {
+            // Send message.
+            f.SendEcho(response, "hello")
+
+            // Wait for incoming message.
+            msg := f.ReceiveMessage(request)
+            
+            fmt.Printf("Received message `%s`.\n", msg)
+        }
+    })
+}
+
+func main() {
+	// Create.
+	server := f.ServerCreate()
+	notifier := f.NotifierCreate()
+
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerWithNotifier(server, notifier)
+
+	// Api.
+	f.ServerWithApi(server, api)
+
+	// Start.
+	f.ServerStart(server)
 }
 ```
 

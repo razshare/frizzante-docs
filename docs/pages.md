@@ -35,14 +35,26 @@ var dist embed.FS
 func page(
 	withPath func(path string),
 	withView func(view *f.View),
-	withBaseHandler func(baseHandler func(request *f.Request, response *f.Response, view *f.View)),
-	withActionHandler func(actionFunction func(request *f.Request, response *f.Response, view *f.View)),
+	withBaseHandler func(baseHandler func(
+		request *f.Request,
+		response *f.Response,
+		view *f.View,
+	)),
+	withActionHandler func(actionFunction func(
+		request *f.Request,
+		response *f.Response,
+		view *f.View,
+	)),
 ){
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome"))  	// This references the
 										    // file "lib/components/views/Welcome.svelte"
 
-	withBaseHandler(func(request *f.Request, response *f.Response, page *f.Page) {
+	withBaseHandler(func(
+		request *f.Request,
+		response *f.Response,
+		page *f.Page,
+	) {
 		// Show page.
 		f.PageWithData(p, "name", "Cat")
 	})

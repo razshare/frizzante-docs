@@ -19,10 +19,16 @@ var dist embed.FS
 
 func api(
 	withPattern func(pattern string),
-	withHandler func(handler func(request *f.Request, response *f.Response)),
+	withHandler func(handler func(
+        request *f.Request,
+        response *f.Response,
+    )),
 ) {
     withPattern("GET /")
-    withHandler(func(request *f.Request, response *f.Response) {
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
         // Handle request.
     })
 }
@@ -66,10 +72,16 @@ You can send out text with `f.SendEcho()`
 ```go
 func api(
 	withPattern func(pattern string),
-	withHandler func(handler func(request *f.Request, response *f.Response)),
+	withHandler func(handler func(
+        request *f.Request,
+        response *f.Response,
+    )),
 ) {
     withPattern("GET /")
-    withHandler(func(request *f.Request, response *f.Response) {
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
         f.SendEcho(response, "hello")
     })
 }
@@ -83,10 +95,16 @@ braces format `{}` and retrieve fields with `f.ReceivePath()`.
 ```go
 func api(
 	withPattern func(pattern string),
-	withHandler func(handler func(request *f.Request, response *f.Response)),
+	withHandler func(handler func(
+        request *f.Request,
+        response *f.Response,
+    )),
 ) {
     withPattern("GET /{name}")
-    withHandler(func(request *f.Request, response *f.Response) {
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
         name := f.ReceivePath(request, "name")
         f.SendEcho(response, "hello "+name)
     })
@@ -100,10 +118,16 @@ You can send out a status code with `f.SendStatus()`
 ```go
 func api(
 	withPattern func(pattern string),
-	withHandler func(handler func(request *f.Request, response *f.Response)),
+	withHandler func(handler func(
+        request *f.Request,
+        response *f.Response,
+    )),
 ) {
     withPattern("GET /")
-    withHandler(func(request *f.Request, response *f.Response) {
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
         f.SendStatus(response, 404)
         f.SendEcho(response, "Resource not found, sorry.")
     })
@@ -120,10 +144,16 @@ You can retrieve header fields with `f.ReceiveHeader()` and send out header fiel
 ```go
 func api(
 	withPattern func(pattern string),
-	withHandler func(handler func(request *f.Request, response *f.Response)),
+	withHandler func(handler func(
+        request *f.Request,
+        response *f.Response,
+    )),
 ) {
     withPattern("GET /")
-    withHandler(func(request *f.Request, response *f.Response) {
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
         contentType := f.ReceiveHeader(request, "Content-Type")
         if "application/xml" != contentType {
             f.SendStatus(response, 400)
@@ -149,10 +179,16 @@ You can retrieve values of query fields with `f.ReceiveQuery()`
 ```go
 func api(
 	withPattern func(pattern string),
-	withHandler func(handler func(request *f.Request, response *f.Response)),
+	withHandler func(handler func(
+        request *f.Request,
+        response *f.Response,
+    )),
 ) {
     withPattern("GET /")
-    withHandler(func(request *f.Request, response *f.Response) {
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
         name := f.ReceiveQuery(request, "name")
         f.SendEcho(response, "hello "+name)
     })
@@ -168,10 +204,16 @@ You can use the `url.Values` api in order to retrieve specific form fields.
 ```go
 func api(
 	withPattern func(pattern string),
-	withHandler func(handler func(request *f.Request, response *f.Response)),
+	withHandler func(handler func(
+        request *f.Request,
+        response *f.Response,
+    )),
 ) {
     withPattern("GET /")
-    withHandler(func(request *f.Request, response *f.Response) {
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
         form := f.ReceiveForm(request)
         name := form.Get("name")
         f.SendEcho(response, "hello "+name)
@@ -193,10 +235,16 @@ type Person struct {
 
 func api(
 	withPattern func(pattern string),
-	withHandler func(handler func(request *f.Request, response *f.Response)),
+	withHandler func(handler func(
+        request *f.Request,
+        response *f.Response,
+    )),
 ) {
     withPattern("GET /")
-    withHandler(func(request *f.Request, response *f.Response) {
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
         person, _ := f.ReceiveJson[Person](request)
         f.SendEcho(response, "hello "+person.name)
     })

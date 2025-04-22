@@ -17,10 +17,18 @@ import (
 var dist embed.FS
 
 func guard(
-	withHandler func(handler func(request *f.Request, response *f.Response, pass func())),
+	withHandler func(handler func(
+		request *f.Request,
+		response *f.Response,
+		pass func(),
+	)),
 ) {
     withPattern("GET /")
-    withHandler(func(request *f.Request, response *f.Response, pass func()) {
+    withHandler(func(
+		request *f.Request,
+		response *f.Response,
+		pass func(),
+	) {
 		// Guard.
 		pass()
 	})

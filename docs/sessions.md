@@ -1,8 +1,49 @@
 Use `f.SessionStart()` to start a session.
 
 ```go
-func handler(request *f.Request, response *f.Response) {
-    get, set, unset := f.SessionStart(request, response)
+package main
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func guard(
+	withHandler func(handler func(
+		request *f.Request,
+		response *f.Response,
+		pass func(),
+	)),
+) {
+    withPattern("GET /")
+    withHandler(func(
+        request *f.Request,
+        response *f.Response,
+    ) {
+        // Start session.
+        get, set, unset := f.SessionStart(request, response)
+    })
+}
+
+func main() {
+	// Create.
+	server := f.ServerCreate()
+	notifier := f.NotifierCreate()
+
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerWithNotifier(server, notifier)
+
+	// Guards.
+	f.ServerWithGuard(server, guard)
+
+	// Start.
+	f.ServerStart(server)
 }
 ```
 
