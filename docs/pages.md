@@ -117,6 +117,24 @@ func main() {
 	!!! note
 		Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
 
+
+!!! danger
+	A page is treated like and [api](./api.md) under the hood, which means it 
+	has access to the same features.<br/>
+	<br/>
+	You can receives path fields with `f.ReceivePath()`, 
+	queries with `f.ReceiveQuery()`,
+	forms with `f.ReceiveForm()`,
+	json objects with `f.ReceiveJson[T]()` and so on.<br/>
+	<br/>
+	While rendering a page, although you could, you shouldn't send text to the client directly 
+	using `f.Send*` functions, 
+	like `f.SendEcho()`, `f.SendJson()`.<br/>
+	<br/>
+	There are some use cases where this feature is useful, like debugging, but generally speaking,
+	sending text directly to the client will break the HTML document structure by prepending whatever
+	text you're sending to the actual view.
+
 ## Other details
 
 Pages should be created under `lib/pages/{name}.go`, where `{name}` is the name of the page.
