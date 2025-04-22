@@ -724,10 +724,11 @@
 <span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>In your setup function, use <code>withPath()</code> to set the path of your page and <code>withView()</code></p>
+<p>In your setup function, use <code>withPath()</code> to set the path of your page 
+and <code>withView()</code> to set the view of your page.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You can route multiple paths to the same page.
+<p>You can map many paths to one view.
 <div class="highlight"><pre><span></span><code><span class="nx">withPath</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
 <span class="nx">withPath</span><span class="p">(</span><span class="s">&quot;/api/greeting&quot;</span><span class="p">)</span>
 <span class="nx">withView</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Welcome&quot;</span><span class="p">))</span>
@@ -735,7 +736,7 @@
 </div>
 <div class="admonition danger">
 <p class="admonition-title">Danger</p>
-<p>You cannot route one path to multiple pages.
+<p>You cannot map many views to one path.
 <div class="highlight"><pre><span></span><code><span class="nx">withPath</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
 <span class="nx">withView</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Welcome&quot;</span><span class="p">))</span>
 <span class="nx">withView</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Login&quot;</span><span class="p">))</span><span class="w">    </span><span class="c1">// &lt;-- This is now allowed.</span>
