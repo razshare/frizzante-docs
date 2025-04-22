@@ -49,3 +49,4 @@ nav:
   - Server sent events: server-sent-events.md
   - Web sockets: web-sockets.md
   - Cancellation: cancellation.md
+  - Make: make.md
