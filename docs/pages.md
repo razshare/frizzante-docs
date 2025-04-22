@@ -1,71 +1,90 @@
-Pages are just svelte components located in the `lib/pages` directory.
+Before creating a page, you need to create a view, a `.svelte` component under `lib/components/views`.
 
-You can refer to these pages by their relative file names.
+You can later refer to this component by its file name relative to `lib/components/views`.
 
 !!! example
-	A page located at `lib/pages/welcome.svelte` will be identified by `welcome`.
+	A page located at `lib/components/views/Welcome.svelte` will be identified by `Welcome`.
 
 Subdirectories are joined by `.` instead of `/` or `\`.
 
 !!! example
-	A page located at `lib/pages/about/welcome.svelte` will be identified by `about.welcome`.
+	A page located at `lib/components/views/about/Me.svelte` will be identified by `about.Me`.
 
-
-## Index
-
-An index is a function that routes one or more paths to a page.
-
-Use  `f.ServerWithIndex()` to create an index.
+After you've created your view, you can create a page with `f.ServerWithPage()`
 
 ```go
-f.ServerWithIndex(srv, index)
+f.ServerWithPage(srv, page)
 ```
 
-Where `index` is a setup function.
+Where `page` is a setup function
 
 ```go
-func index(
-	withPage func(page string),
+package main
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func page(
 	withPath func(path string),
-	withBaseHandler func(baseHandler func(req *f.Request, res *f.Response, page *f.Page)),
-	withActionHandler func(actionFunction func(req *f.Request, res *f.Response, page *f.Page)),
+	withDocument func(document *f.Document),
+	withBaseHandler func(baseHandler func(request *f.Request, response *f.Response, document *f.Document)),
+	withActionHandler func(actionFunction func(request *f.Request, response *f.Response, document *f.Document)),
 ){
-	withPage("welcome")
 	withPath("/welcome")
-	withBaseHandler(baseHandler)
-	withActionHandler(actionHandler)	
+	withDocument(f.DocumentCreate("Welcome"))  	// This is a reference 
+												// to "lib/components/views/Welcome.svelte"
+
+	withBaseHandler(func(req *f.Request, res *f.Response, page *f.Page) {
+		// Show page.
+		f.PageWithData(p, "name", "Cat")
+	})
+	withActionHandler(func(req *f.Request, res *f.Response, page *f.Page) {
+		// Modify state.
+	})	
 }
 
-func baseHandler(req *f.Request, res *f.Response, page *f.Page) {
-	f.PageWithData(p, "name", "Cat")
-}
+func main() {
+	// Create.
+	server := f.ServerCreate()
+	notifier := f.NotifierCreate()
 
-func actionHandler(req *f.Request, res *f.Response, page *f.Page) {
-	modifyState()
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerWithNotifier(server, notifier)
+
+	// Pages.
+	f.ServerWithPage(server, page)
+
+	// Start.
+	f.ServerStart(server)
 }
 ```
 
-Use `withPage()` to specify which page should render.
-
-Use `withPath()` to specify which path to route.
 
 !!! note
     You can route multiple paths to the same page.
     ```go
-	withPage("welcome")
     withPath("/")
     withPath("/api/greeting")
+	withDocument(f.DocumentCreate("Welcome"))
     ```
 	
-!!! warning
+!!! danger
 	You cannot route one path to multiple pages.
     ```go
-	withPage("welcome")
-	withPage("login") // This is now allowed.
     withPath("/")
+	withDocument(f.DocumentCreate("Welcome"))
+	withDocument(f.DocumentCreate("Login"))    // <-- This is now allowed.
     ```
 
-Use `withBaseHandler()` to set the base page handler.
+`withBaseHandler()` sets the page base handler
 
 !!! note
 	A base page handler is a function that 
@@ -73,7 +92,7 @@ Use `withBaseHandler()` to set the base page handler.
 	This function usually does not modify the state, 
 	it just renders information to the screen.
 
-Use `withActionHandler()` to set the action page handler.
+`withActionHandler()` sets the page action handler
 
 !!! note
 	An action page handler is a function that 
@@ -81,7 +100,7 @@ Use `withActionHandler()` to set the action page handler.
 	This function usually modifies the state and 
 	sometimes redirects to some other page.
 
-Use `f.PageWithData()` to set data fields for the page.
+`f.PageWithData()` sets data fields for the page
 
 !!! note
 	Data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
@@ -97,3 +116,9 @@ Use `f.PageWithData()` to set data fields for the page.
 
 	!!! note
 		Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
+
+## Other details
+
+Pages should be created under `lib/pages/{name}.go`, where `{name}` is the name of the page.
+
+Views *must* be created under `lib/components/views/{name}.svelte`, where `{name}` is the name of the page.

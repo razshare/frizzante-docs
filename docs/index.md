@@ -1,13 +1,13 @@
-Make sure you have [Go](https://go.dev/doc/install) and [Bun](https://bun.sh/) installed.
-
-!!! note
-    If you'd rather use a different runtime than Bun to update your javascript dependencies, see [makefile](https://github.com/razshare/frizzante-starter/blob/main/makefile) and change all occurrences of `bun` and `bunx` with the equivalent of whatever runtime you'd like to use.
-
-
-Create a new project using the starter template.
+Create a new project by cloning the starter template
 
 ```bash
-git clone https://github.com/razshare/frizzante-starter && cd frizzante-starter && rm .git -fr
+git clone https://github.com/razshare/frizzante-starter
+```
+
+Then navigate to it
+
+```bash
+cd frizzante-starter
 ```
 
 Update dependencies
@@ -17,10 +17,8 @@ make update
 ```
 
 !!! note
-    Make sure you have build-essential installed
-    ```bash
-    sudo apt install build-essential
-    ```
+    Make sure you have [Go](https://go.dev/doc/install), [build-essential](https://askubuntu.com/questions/398489/how-to-install-build-essential) and [Bun](https://bun.sh/) installed.<br/>
+    If you'd rather use a different runtime than Bun to update your javascript dependencies, see [makefile](https://github.com/razshare/frizzante-starter/blob/main/makefile) and change all occurrences of `bun` and `bunx` with the equivalent of whatever runtime you'd like to use.
 
 Then you can start the server with
 
@@ -29,7 +27,7 @@ make start
 ```
 
 
-You can enter dev mode with
+Enter development mode with
 
 ```dev
 make dev
