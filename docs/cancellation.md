@@ -1,11 +1,6 @@
 Always track cancelled requests while streaming events, web sockets or executing long running tasks.
 
-
 You can detect cancelled requests with `f.ReceiveCancellation()`.
-
-```go
-
-```
 
 For example using sse
 
@@ -69,7 +64,7 @@ func main() {
 	f.ServerWithHostName(server, "127.0.0.1")
 	f.ServerWithEmbeddedFileSystem(server, dist)
 	f.ServerWithNotifier(server, notifier)
-	
+
 	// Apis.
 	f.ServerWithApi(server, api)
 
