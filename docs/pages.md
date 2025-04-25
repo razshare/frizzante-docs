@@ -190,4 +190,4 @@ func page(
 
 Page functions should be created under `lib/pages/{name}.go`, where `{name}` is the name of the page.
 
-Views *must* be created under `lib/components/views/{name}.svelte`, where `{name}` is the name of the page.
+Views *must* be created under `lib/components/views/{name}.svelte`, where `{name}` is the name of the view.

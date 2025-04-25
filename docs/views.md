@@ -28,3 +28,7 @@ then the view would render the text `Hello world!`.
 
 !!! note
     Read more about Go pages in the [pages section](./pages.md).
+
+## Other details
+
+Views *must* be created under `lib/components/views/{name}.svelte`, where `{name}` is the name of the view.
