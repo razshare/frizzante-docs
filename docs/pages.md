@@ -47,8 +47,8 @@ func page(
 	)),
 ){
 	withPath("/welcome")
-	withView(f.ViewReference("Welcome"))  	// This references the
-										    // file "lib/components/views/Welcome.svelte"
+	withView(f.ViewReference("Welcome"))	// This references the file 
+											// "lib/components/views/Welcome.svelte"
 
 	withBaseHandler(func(
 		request *f.Request,
@@ -56,7 +56,6 @@ func page(
 		view *f.View,
 	) {
 		// Show page.
-		view.Data["name"] = "Cat"
 	})
 	withActionHandler(func(
 		request *f.Request,
@@ -101,8 +100,8 @@ and `withView()` sets the view of your page.
     You cannot map many views to one path.
     ```go
     withPath("/")
-	withView(f.ViewReference("Welcome"))
-	withView(f.ViewReference("Login"))    // <-- This is now allowed.
+	withView(f.ViewReference("Welcome"))  // <-- This is not allowed,
+	withView(f.ViewReference("Login"))    // <-- two views are exposed by the same path.
     ```
 
 `withBaseHandler()` sets the page base handler
@@ -121,10 +120,40 @@ and `withView()` sets the view of your page.
 	This function usually modifies the state and 
 	sometimes redirects to some other page.
 
-`f.PageWithData()` sets data fields for the page
+The view exposes a data property, which you can modify freely.
+
+```go
+
+func page(
+	withPath func(path string),
+	withView func(view *f.View),
+	withBaseHandler func(baseHandler func(
+		request *f.Request,
+		response *f.Response,
+		view *f.View,
+	)),
+	_ func(actionFunction func(
+		request *f.Request,
+		response *f.Response,
+		view *f.View,
+	)),
+){
+	withPath("/welcome")
+	withView(f.ViewReference("Welcome"))
+	withBaseHandler(func(
+		request *f.Request,
+		response *f.Response,
+		view *f.View,
+	) {
+		view.Data["name"] = "world"
+	})
+}
+```
+
+These data fields will be directly available in all your `.svelte` components.
 
 !!! note
-	Data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
+	These data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
 
 	```html
 	<script>
