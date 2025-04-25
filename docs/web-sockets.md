@@ -66,6 +66,3 @@ the web socket stream ends.
 !!! warning
     Always track cancelled requests while streaming web sockets.<br/>
     Read more about cancellation [here](./cancellation.md).
-
-!!! note
-    Read more about `serve()` [here](./api.md).
