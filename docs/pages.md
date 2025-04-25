@@ -47,8 +47,8 @@ func page(
 	)),
 ){
 	withPath("/welcome")
-	withView(f.ViewReference("Welcome"))	// This references the file 
-											// "lib/components/views/Welcome.svelte"
+	withView(f.ViewReference("Welcome")) // This references the file 
+										 // "lib/components/views/Welcome.svelte"
 
 	withBaseHandler(func(
 		request *f.Request,
