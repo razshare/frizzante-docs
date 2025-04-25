@@ -253,4 +253,4 @@ func api(
 
 ## Other details
 
-Apis should be created under `lib/api/{name}.go`, where `{name}` is the name of the api.
+Api functions should be created under `lib/api/{name}.go`, where `{name}` is the name of the api.
