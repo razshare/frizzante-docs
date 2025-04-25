@@ -1,7 +1,5 @@
 Views are `.svelte` components located under `lib/components/views`.
 
-Views are used by Go pages to render content.
-
 Here's an example of a view located under `lib/components/views/Welcome.svelte`
 
 ```html
@@ -11,3 +9,7 @@ Here's an example of a view located under `lib/components/views/Welcome.svelte`
 
 Hello {name}!
 ```
+
+!!! note
+    Views are used by Go pages to render content.<br/>
+    See the [pages section](./pages.md) for more details.
