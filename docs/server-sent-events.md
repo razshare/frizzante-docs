@@ -23,13 +23,18 @@ func api(
         request *f.Request,
         response *f.Response,
     ) {
+        // Upgrade to server sent events.
         setEventName := f.SendSseUpgrade(response)
-        setEventName("server-time")
 
-        for {
-            // Send events.
-            f.SendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
-        }
+        setEventName("channel-1")
+        f.SendEcho(response, "This is a message for channel-1")
+        
+        setEventName("channel-2")
+        f.SendEcho(response, "This is a message for channel-2")
+        f.SendEcho(response, "This is another message for channel-2")
+
+        setEventName("channel-1")
+        f.SendEcho(response, "Back to channel-1")
     })
 }
 
