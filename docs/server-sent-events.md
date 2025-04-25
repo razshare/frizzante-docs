@@ -79,6 +79,3 @@ the event stream ends.
 
 !!! note
     The default event name is `message`.
-
-!!! note
-    Read more about `serve()` [here](./api.md).
