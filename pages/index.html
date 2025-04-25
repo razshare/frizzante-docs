@@ -773,7 +773,7 @@ handles requests to the <code>POST</code> http verb.<br/>
 This function usually modifies the state and 
 sometimes redirects to some other page.</p>
 </div>
-<p>The view exposes a data property, which you can modify freely.</p>
+<p>The view exposes a <code>.Data</code> map, which you can use to inject data into your views.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">page</span><span class="p">(</span>
 <span class="w">    </span><span class="nx">withPath</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">path</span><span class="w"> </span><span class="kt">string</span><span class="p">),</span>
 <span class="w">    </span><span class="nx">withView</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">view</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">View</span><span class="p">),</span>
@@ -799,7 +799,6 @@ sometimes redirects to some other page.</p>
 <span class="w">    </span><span class="p">})</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>These data fields will be directly available in all your <code>.svelte</code> components.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>These data fields can be retrieved from your svelte components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
