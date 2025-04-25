@@ -120,7 +120,7 @@ and `withView()` sets the view of your page.
 	This function usually modifies the state and 
 	sometimes redirects to some other page.
 
-The view exposes a data property, which you can modify freely.
+The view exposes a `.Data` map, which you can use to inject data into your views.
 
 ```go
 
@@ -149,8 +149,6 @@ func page(
 	})
 }
 ```
-
-These data fields will be directly available in all your `.svelte` components.
 
 !!! note
 	These data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
