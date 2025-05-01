@@ -1,4 +1,4 @@
-Always track cancelled requests while streaming events, web sockets executing long running tasks or expensive tasks in your request handlers.
+Always track cancelled requests while streaming events, web sockets, executing long running tasks or expensive tasks in your request handlers.
 
 You can detect cancelled requests with `f.ReceiveCancellation()`.
 
