@@ -86,7 +86,7 @@ your own `get`, `set`, `unset`, `validate` and `destroy` functions.
 Use `f.ServerWithSessionOperator()` to overwrite the default session operator
 
 ```go
-f.ServerWithSessionOperator(srv, func(
+f.ServerWithSessionOperator(server, func(
     sessionId string,
     withGetter func(get SessionGetter),
     withSetter func(set SessionSetter),

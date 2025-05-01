@@ -23,7 +23,7 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
     // Setup certificate.
-    f.ServerWithCertificateAndKey(srv, "cert.pem", "key.pem")
+    f.ServerWithCertificateAndKey(server, "cert.pem", "key.pem")
 
 	// Start.
 	f.ServerStart(server)

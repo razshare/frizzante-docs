@@ -16,7 +16,7 @@ Subdirectories are joined by `.` instead of `/` or `\`.
 After you've created your view, you can create a page with `f.ServerWithPage()`
 
 ```go
-f.ServerWithPage(srv, page)
+f.ServerWithPage(server, page)
 ```
 
 Where `page` is a setup function

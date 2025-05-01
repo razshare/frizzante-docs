@@ -1,7 +1,7 @@
 You can create apis with `f.ServerWithApi()`
 
 ```go
-f.ServerWithApi(srv, api)
+f.ServerWithApi(server, api)
 ```
 
 Where `api` is a setup function

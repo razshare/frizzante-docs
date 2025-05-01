@@ -6,8 +6,8 @@ package main
 import f "github.com/razshare/frizzante"
 
 func main() {
-	srv := f.ServerCreate()
-	f.ServerStart(srv)
+	server := f.ServerCreate()
+	f.ServerStart(server)
 }
 ```
 
@@ -28,9 +28,9 @@ import (
 var dist embed.FS
 
 func main() {
-	srv := f.ServerCreate()
-	f.ServerWithEmbeddedFileSystem(srv, dist)
-	f.ServerStart(srv)
+	server := f.ServerCreate()
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerStart(server)
 }
 ```
 
@@ -50,10 +50,10 @@ import (
 var dist embed.FS
 
 func main() {
-	srv := f.ServerCreate()
-	f.ServerWithPort(srv, 8989)
-	f.ServerWithHostName(srv, "192.168.0.123")
-	f.ServerWithEmbeddedFileSystem(srv, dist)
-	f.ServerStart(srv)
+	server := f.ServerCreate()
+	f.ServerWithPort(server, 8989)
+	f.ServerWithHostName(server, "192.168.0.123")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerStart(server)
 }
 ```
