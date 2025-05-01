@@ -799,7 +799,7 @@
 <p>You can overwrite the default in-memory session operator and provide 
 your own <code>get</code>, <code>set</code>, <code>unset</code>, <code>validate</code> and <code>destroy</code> functions.</p>
 <p>Use <code>f.ServerWithSessionOperator()</code> to overwrite the default session operator</p>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithSessionOperator</span><span class="p">(</span><span class="nx">srv</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithSessionOperator</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span>
 <span class="w">    </span><span class="nx">sessionId</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">withGetter</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">get</span><span class="w"> </span><span class="nx">SessionGetter</span><span class="p">),</span>
 <span class="w">    </span><span class="nx">withSetter</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">set</span><span class="w"> </span><span class="nx">SessionSetter</span><span class="p">),</span>
