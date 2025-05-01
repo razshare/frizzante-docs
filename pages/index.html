@@ -773,7 +773,7 @@ handles requests to the <code>POST</code> http verb.<br/>
 This function usually modifies the state and 
 sometimes redirects to some other page.</p>
 </div>
-<p>The view exposes a <code>.Data</code> map, which you can use to inject data into your views.</p>
+<p>While handling the page, you can inject data into the view with <code>f.ViewWithData()</code></p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">page</span><span class="p">(</span>
 <span class="w">    </span><span class="nx">withPath</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">path</span><span class="w"> </span><span class="kt">string</span><span class="p">),</span>
 <span class="w">    </span><span class="nx">withView</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">view</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">View</span><span class="p">),</span>
@@ -795,7 +795,7 @@ sometimes redirects to some other page.</p>
 <span class="w">        </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span>
 <span class="w">        </span><span class="nx">view</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">View</span><span class="p">,</span>
 <span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">view</span><span class="p">.</span><span class="nx">Data</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;world&quot;</span>
+<span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewWithData</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="p">})</span>
 <span class="p">}</span>
 </code></pre></div>
