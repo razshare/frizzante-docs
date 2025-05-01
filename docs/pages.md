@@ -120,10 +120,9 @@ and `withView()` sets the view of your page.
 	This function usually modifies the state and 
 	sometimes redirects to some other page.
 
-The view exposes a `.Data` map, which you can use to inject data into your views.
+While handling the page, you can inject data into the view with `f.ViewWithData()`
 
 ```go
-
 func page(
 	withPath func(path string),
 	withView func(view *f.View),
@@ -145,7 +144,7 @@ func page(
 		response *f.Response,
 		view *f.View,
 	) {
-		view.Data["name"] = "world"
+		f.ViewWithData(view, "name", "world")
 	})
 }
 ```
