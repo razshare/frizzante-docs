@@ -27,7 +27,7 @@ func requestIsAlive(request *f.Request) *bool {
 		value = false
 	}()
 
-	// Return to state pointer.
+	// Return state pointer.
 	return &value
 }
 
