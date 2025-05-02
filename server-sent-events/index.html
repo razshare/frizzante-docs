@@ -621,20 +621,20 @@
 <span class="w">        </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span>
 <span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// Upgrade to server sent events.</span>
-<span class="w">        </span><span class="nx">setEventName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendSseUpgrade</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">withEventName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendSseUpgrade</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
 
 <span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="c1">// Send to channel-1.</span>
-<span class="w">            </span><span class="nx">setEventName</span><span class="p">(</span><span class="s">&quot;channel-1&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">withEventName</span><span class="p">(</span><span class="s">&quot;channel-1&quot;</span><span class="p">)</span>
 <span class="w">            </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;This is a message for channel-1&quot;</span><span class="p">)</span>
 
 <span class="w">            </span><span class="c1">// Send to channel-2.</span>
-<span class="w">            </span><span class="nx">setEventName</span><span class="p">(</span><span class="s">&quot;channel-2&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">withEventName</span><span class="p">(</span><span class="s">&quot;channel-2&quot;</span><span class="p">)</span>
 <span class="w">            </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;This is a message for channel-2&quot;</span><span class="p">)</span>
 <span class="w">            </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;This is another message for channel-2&quot;</span><span class="p">)</span>
 
 <span class="w">            </span><span class="c1">// Send to channel-1.</span>
-<span class="w">            </span><span class="nx">setEventName</span><span class="p">(</span><span class="s">&quot;channel-1&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="nx">withEventName</span><span class="p">(</span><span class="s">&quot;channel-1&quot;</span><span class="p">)</span>
 <span class="w">            </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendEcho</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Back to channel-1&quot;</span><span class="p">)</span>
 
 <span class="w">            </span><span class="c1">// Sleep for a bit.</span>
@@ -661,7 +661,7 @@
 <span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Set the name of the current event with <code>setEventName</code>, 
+<p>Set the name of the current event with <code>withEventName</code>, 
 then start sending content to the client with the usual <code>f.SendEcho()</code> and <code>f.SendJson()</code>.</p>
 <p>Once the request handler returns, 
 for example by exiting the <code>for</code> loop, 
