@@ -24,20 +24,20 @@ func api(
         response *f.Response,
     ) {
         // Upgrade to server sent events.
-        setEventName := f.SendSseUpgrade(response)
+        withEventName := f.SendSseUpgrade(response)
 
         for {
             // Send to channel-1.
-            setEventName("channel-1")
+            withEventName("channel-1")
             f.SendEcho(response, "This is a message for channel-1")
             
             // Send to channel-2.
-            setEventName("channel-2")
+            withEventName("channel-2")
             f.SendEcho(response, "This is a message for channel-2")
             f.SendEcho(response, "This is another message for channel-2")
 
             // Send to channel-1.
-            setEventName("channel-1")
+            withEventName("channel-1")
             f.SendEcho(response, "Back to channel-1")
 
             // Sleep for a bit.
@@ -65,7 +65,7 @@ func main() {
 }
 ```
 
-Set the name of the current event with `setEventName`, 
+Set the name of the current event with `withEventName`, 
 then start sending content to the client with the usual `f.SendEcho()` and `f.SendJson()`.
 
 

@@ -47,8 +47,8 @@ func api(
 		alive := requestIsAlive(request)
 
 		// Upgrade to server sent events.
-		setEventName := f.SendSseUpgrade(response)
-		setEventName("server-time")
+		withEventName := f.SendSseUpgrade(response)
+		withEventName("server-time")
 
 		// Continuously check if connection is still alive.
 		for *alive {
