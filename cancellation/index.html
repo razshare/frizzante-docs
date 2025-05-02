@@ -642,8 +642,8 @@
 <span class="w">        </span><span class="nx">alive</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">requestIsAlive</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
 
 <span class="w">        </span><span class="c1">// Upgrade to server sent events.</span>
-<span class="w">        </span><span class="nx">setEventName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendSseUpgrade</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
-<span class="w">        </span><span class="nx">setEventName</span><span class="p">(</span><span class="s">&quot;server-time&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">withEventName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendSseUpgrade</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">withEventName</span><span class="p">(</span><span class="s">&quot;server-time&quot;</span><span class="p">)</span>
 
 <span class="w">        </span><span class="c1">// Continuously check if connection is still alive.</span>
 <span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="o">*</span><span class="nx">alive</span><span class="w"> </span><span class="p">{</span>
