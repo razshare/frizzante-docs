@@ -23,48 +23,36 @@ func requestIsAlive(request *f.Request) *bool {
 ```
 
 ```go
-f.ServerWithApi(server, func(
-    withPattern f.WithApiPattern,
-    withHandler f.WithApiHandler,
-) {
-	withPattern("GET /sse")
-	withHandler(func(request *f.Request, response *f.Response) {
-		// Get a pointer to the connection status.
-		alive := requestIsAlive(request)
+withHandler(func(request *f.Request, response *f.Response) {
+	// Get a pointer to the connection status.
+	alive := requestIsAlive(request)
 
-		// Upgrade to server sent events.
-		withEventName := f.SendSseUpgrade(response)
-		withEventName("server-time")
+	// Upgrade to server sent events.
+	withEventName := f.SendSseUpgrade(response)
+	withEventName("server-time")
 
-		// Continuously check if connection is still alive.
-		for *alive {
-			f.SendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
-		}
-	})
+	// Continuously check if connection is still alive.
+	for *alive {
+		f.SendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
+	}
 })
 ```
 
 or using web sockets
 
 ```go
-f.ServerWithApi(server, func(
-    withPattern f.WithApiPattern,
-    withHandler f.WithApiHandler,
-) {
-	withPattern("GET /ws")
-	withHandler(func(request *f.Request, response *f.Response) {
-		// Get a pointer to the connection status.
-		alive := RequestIsAlive(request)
+withHandler(func(request *f.Request, response *f.Response) {
+	// Get a pointer to the connection status.
+	alive := RequestIsAlive(request)
 
-		// Upgrade to web sockets.
-		f.SendWsUpgrade(response)
+	// Upgrade to web sockets.
+	f.SendWsUpgrade(response)
 
-		// Continuously check if connection is still alive.
-		for *alive {
-			f.SendEcho(response, "hello")
-			msg := f.ReceiveMessage(request)
-			fmt.Printf("Received message `%s`.\n", msg)
-		}
-	})
+	// Continuously check if connection is still alive.
+	for *alive {
+		f.SendEcho(response, "hello")
+		msg := f.ReceiveMessage(request)
+		fmt.Printf("Received message `%s`.\n", msg)
+	}
 })
 ```

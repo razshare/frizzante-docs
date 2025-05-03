@@ -1,27 +1,21 @@
 You can upgrade http requests to web sockets with `f.SendWsUpgrade()`.
 
 ```go
-f.ServerWithApi(server, func(
-    withPattern f.WithApiPattern,
-    withHandler f.WithApiHandler,
+withHandler(func(
+    request *f.Request,
+    response *f.Response,
 ) {
-    withPattern("GET /")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
-        f.SendWsUpgrade(response)
+    f.SendWsUpgrade(response)
 
-        for {
-            // Send message.
-            f.SendEcho(response, "hello")
+    for {
+        // Send message.
+        f.SendEcho(response, "hello")
 
-            // Wait for incoming message.
-            msg := f.ReceiveMessage(request)
-            
-            fmt.Printf("Received message `%s`.\n", msg)
-        }
-    })
+        // Wait for incoming message.
+        msg := f.ReceiveMessage(request)
+        
+        fmt.Printf("Received message `%s`.\n", msg)
+    }
 })
 ```
 

@@ -80,17 +80,8 @@ and `withView()` sets the view of your page.
 While handling the page, you can inject data into the view with `f.ViewWithData()`
 
 ```go
-f.ServerWithPage(server, func(
-	withPath f.WithPagePath,
-	withView f.WithPageView,
-	withBaseHandler f.WithPageBaseHandler,
-	withActionHandler f.WithPageActionHandler,
-){
-	withPath("/welcome")
-	withView(f.ViewReference("Welcome"))
-	withBaseHandler(func(request *f.Request, response *f.Response, view *f.View) {
-		f.ViewWithData(view, "name", "world")
-	})	
+withBaseHandler(func(request *f.Request, response *f.Response, view *f.View) {
+	f.ViewWithData(view, "name", "world")
 })
 ```
 

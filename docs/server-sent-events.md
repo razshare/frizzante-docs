@@ -1,36 +1,30 @@
 You can upgrade http requests to server sent events with `f.SendSseUpgrade()`.
 
 ```go
-f.ServerWithApi(server, func(
-    withPattern f.WithApiPattern,
-    withHandler f.WithApiHandler,
+withHandler(func(
+    request *f.Request,
+    response *f.Response,
 ) {
-    withPattern("GET /")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
-        // Upgrade to server sent events.
-        withEventName := f.SendSseUpgrade(response)
+    // Upgrade to server sent events.
+    withEventName := f.SendSseUpgrade(response)
 
-        for {
-            // Send to channel-1.
-            withEventName("channel-1")
-            f.SendEcho(response, "This is a message for channel-1")
-            
-            // Send to channel-2.
-            withEventName("channel-2")
-            f.SendEcho(response, "This is a message for channel-2")
-            f.SendEcho(response, "This is another message for channel-2")
+    for {
+        // Send to channel-1.
+        withEventName("channel-1")
+        f.SendEcho(response, "This is a message for channel-1")
+        
+        // Send to channel-2.
+        withEventName("channel-2")
+        f.SendEcho(response, "This is a message for channel-2")
+        f.SendEcho(response, "This is another message for channel-2")
 
-            // Send to channel-1.
-            withEventName("channel-1")
-            f.SendEcho(response, "Back to channel-1")
+        // Send to channel-1.
+        withEventName("channel-1")
+        f.SendEcho(response, "Back to channel-1")
 
-            // Sleep for a bit.
-			time.Sleep(time.Second)
-        }
-    })
+        // Sleep for a bit.
+        time.Sleep(time.Second)
+    }
 })
 ```
 
