@@ -23,7 +23,10 @@ func requestIsAlive(request *f.Request) *bool {
 ```
 
 ```go
-f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler)){
+f.ServerWithApi(server, func(
+    withPattern f.WithApiPattern,
+    withHandler f.WithApiHandler,
+) {
 	withPattern("GET /sse")
 	withHandler(func(request *f.Request, response *f.Response) {
 		// Get a pointer to the connection status.
@@ -44,7 +47,10 @@ f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApi
 or using web sockets
 
 ```go
-f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler)){
+f.ServerWithApi(server, func(
+    withPattern f.WithApiPattern,
+    withHandler f.WithApiHandler,
+) {
 	withPattern("GET /ws")
 	withHandler(func(request *f.Request, response *f.Response) {
 		// Get a pointer to the connection status.

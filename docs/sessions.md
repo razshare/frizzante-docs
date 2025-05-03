@@ -1,7 +1,10 @@
 Use `f.SessionStart()` to start a session.
 
 ```go
-f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
+f.ServerWithApi(server, func(
+    withPattern f.WithApiPattern,
+    withHandler f.WithApiHandler,
+) {
     withPattern("GET /")
     withHandler(func(
         request *f.Request,

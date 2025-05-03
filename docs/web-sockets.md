@@ -1,7 +1,10 @@
 You can upgrade http requests to web sockets with `f.SendWsUpgrade()`.
 
 ```go
-f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
+f.ServerWithApi(server, func(
+    withPattern f.WithApiPattern,
+    withHandler f.WithApiHandler,
+) {
     withPattern("GET /")
     withHandler(func(
         request *f.Request,
