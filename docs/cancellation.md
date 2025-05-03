@@ -77,7 +77,7 @@ or using web sockets
 ```go
 func handler(request *f.Request, response *f.Response) {
 	// Get a pointer to the connection status.
-	alive := RequestIsAlive(request)
+	alive := requestIsAlive(request)
 
 	// Upgrade to web sockets.
 	f.SendWsUpgrade(response)
