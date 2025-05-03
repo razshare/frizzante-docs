@@ -1,23 +1,7 @@
 You can upgrade http requests to web sockets with `f.SendWsUpgrade()`.
 
 ```go
-package main
-
-import (
-	"embed"
-	f "github.com/razshare/frizzante"
-)
-
-//go:embed .dist/*/**
-var dist embed.FS
-
-func api(
-	withPattern func(pattern string),
-	withHandler func(handler func(
-        request *f.Request,
-        response *f.Response,
-    )),
-) {
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
     withPattern("GET /")
     withHandler(func(
         request *f.Request,
@@ -35,25 +19,7 @@ func api(
             fmt.Printf("Received message `%s`.\n", msg)
         }
     })
-}
-
-func main() {
-	// Create.
-	server := f.ServerCreate()
-	notifier := f.NotifierCreate()
-
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-	f.ServerWithNotifier(server, notifier)
-
-	// Api.
-	f.ServerWithApi(server, api)
-
-	// Start.
-	f.ServerStart(server)
-}
+})
 ```
 
 Use the usual `f.SendEcho()` to send a raw text message and `f.SendJson()` to send a json message to the client.

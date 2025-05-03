@@ -5,16 +5,6 @@ You can detect cancelled requests with `f.ReceiveCancellation()`.
 For example using sse
 
 ```go
-package main
-
-import (
-	"embed"
-	f "github.com/razshare/frizzante"
-)
-
-//go:embed .dist/*/**
-var dist embed.FS
-
 func requestIsAlive(request *f.Request) *bool {
 	// Assuming the connection is alive when starting
 	// and initializing state.
@@ -30,19 +20,12 @@ func requestIsAlive(request *f.Request) *bool {
 	// Return state pointer.
 	return &value
 }
+```
 
-func api(
-	withHandler func(handler func(
-		request *f.Request,
-		response *f.Response,
-		pass func(),
-	)),
-) {
-    withPattern("GET /")
-    withHandler(func(
-		request *f.Request, 
-		response *f.Response,
-	) {
+```go
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler)){
+	withPattern("GET /sse")
+	withHandler(func(request *f.Request, response *f.Response) {
 		// Get a pointer to the connection status.
 		alive := requestIsAlive(request)
 
@@ -55,68 +38,15 @@ func api(
 			f.SendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
 		}
 	})
-}
-
-func main() {
-	// Create.
-	server := f.ServerCreate()
-	notifier := f.NotifierCreate()
-
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-	f.ServerWithNotifier(server, notifier)
-
-	// Apis.
-	f.ServerWithApi(server, api)
-
-	// Start.
-	f.ServerStart(server)
-}
+})
 ```
 
 or using web sockets
 
 ```go
-package main
-
-import (
-	"embed"
-	f "github.com/razshare/frizzante"
-)
-
-//go:embed .dist/*/**
-var dist embed.FS
-
-func requestIsAlive(request *f.Request) *bool {
-	// Assuming the connection is alive when starting
-	// and initializing state.
-	value := true
-	go func() {
-		// Wait for cancellation.
-		<-f.ReceiveCancellation(request)
-
-		// Update state after cancellation.
-		value = false
-	}()
-
-	// Return to state pointer.
-	return &value
-}
-
-func api(
-	withHandler func(handler func(
-		request *f.Request,
-		response *f.Response,
-		pass func(),
-	)),
-) {
-    withPattern("GET /")
-    withHandler(func(
-		request *f.Request,
-		response *f.Response,
-	) {
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler)){
+	withPattern("GET /ws")
+	withHandler(func(request *f.Request, response *f.Response) {
 		// Get a pointer to the connection status.
 		alive := RequestIsAlive(request)
 
@@ -130,23 +60,5 @@ func api(
 			fmt.Printf("Received message `%s`.\n", msg)
 		}
 	})
-}
-
-func main() {
-	// Create.
-	server := f.ServerCreate()
-	notifier := f.NotifierCreate()
-
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-	f.ServerWithNotifier(server, notifier)
-
-	// Apis.
-	f.ServerWithApi(server, api)
-
-	// Start.
-	f.ServerStart(server)
-}
+})
 ```

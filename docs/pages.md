@@ -22,67 +22,24 @@ f.ServerWithPage(server, page)
 Where `page` is a setup function
 
 ```go
-package main
-
-import (
-	"embed"
-	f "github.com/razshare/frizzante"
-)
-
-//go:embed .dist/*/**
-var dist embed.FS
-
-func page(
-	withPath func(path string),
-	withView func(view *f.View),
-	withBaseHandler func(baseHandler func(
-		request *f.Request,
-		response *f.Response,
-		view *f.View,
-	)),
-	withActionHandler func(actionFunction func(
-		request *f.Request,
-		response *f.Response,
-		view *f.View,
-	)),
+f.ServerWithPage(server, func(
+	withPath f.WithPagePath,
+	withView f.WithPageView,
+	withBaseHandler f.WithPageBaseHandler,
+	withActionHandler f.WithPageActionHandler,
 ){
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome")) // This references the file 
-										 // "lib/components/views/Welcome.svelte"
+										// "lib/components/views/Welcome.svelte"
 
-	withBaseHandler(func(
-		request *f.Request,
-		response *f.Response,
-		view *f.View,
-	) {
+	withBaseHandler(func(request *f.Request, response *f.Response, view *f.View) {
 		// Show page.
 	})
-	withActionHandler(func(
-		request *f.Request,
-		response *f.Response,
-		view *f.View,
-	) {
+	
+	withActionHandler(func(request *f.Request, response *f.Response, view *f.View) {
 		// Modify state.
 	})	
-}
-
-func main() {
-	// Create.
-	server := f.ServerCreate()
-	notifier := f.NotifierCreate()
-
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-	f.ServerWithNotifier(server, notifier)
-
-	// Pages.
-	f.ServerWithPage(server, page)
-
-	// Start.
-	f.ServerStart(server)
-}
+})
 ```
 
 In your setup function, `withPath()` sets the path of your page 
@@ -123,30 +80,18 @@ and `withView()` sets the view of your page.
 While handling the page, you can inject data into the view with `f.ViewWithData()`
 
 ```go
-func page(
-	withPath func(path string),
-	withView func(view *f.View),
-	withBaseHandler func(baseHandler func(
-		request *f.Request,
-		response *f.Response,
-		view *f.View,
-	)),
-	_ func(actionFunction func(
-		request *f.Request,
-		response *f.Response,
-		view *f.View,
-	)),
+f.ServerWithPage(server, func(
+	withPath f.WithPagePath,
+	withView f.WithPageView,
+	withBaseHandler f.WithPageBaseHandler,
+	withActionHandler f.WithPageActionHandler,
 ){
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome"))
-	withBaseHandler(func(
-		request *f.Request,
-		response *f.Response,
-		view *f.View,
-	) {
+	withBaseHandler(func(request *f.Request, response *f.Response, view *f.View) {
 		f.ViewWithData(view, "name", "world")
-	})
-}
+	})	
+})
 ```
 
 !!! note

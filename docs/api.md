@@ -1,12 +1,6 @@
 You can create apis with `f.ServerWithApi()`
 
 ```go
-f.ServerWithApi(server, api)
-```
-
-Where `api` is a setup function
-
-```go
 package main
 
 import (
@@ -16,22 +10,6 @@ import (
 
 //go:embed .dist/*/**
 var dist embed.FS
-
-func api(
-	withPattern func(pattern string),
-	withHandler func(handler func(
-        request *f.Request,
-        response *f.Response,
-    )),
-) {
-    withPattern("GET /")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
-        // Handle request.
-    })
-}
 
 func main() {
 	// Create.
@@ -45,16 +23,19 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApi(server, api)
+	f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
+        withPattern("GET /")
+        withHandler(func(request *f.Request, response *f.Response) {
+            // Handle request.
+        })
+    })
 
 	// Start.
 	f.ServerStart(server)
 }
 ```
 
-Use `withPattern()` to route the api using a pattern.
-
-Use `withHandler()` to set the request handler.
+Where `withPattern()` routes the api using a pattern and `withHandler()` sets the request handler.
 
 !!! note
     You can route the same api to multiple patterns
@@ -70,21 +51,12 @@ Use `withHandler()` to set the request handler.
 You can send out text with `f.SendEcho()`
 
 ```go
-func api(
-	withPattern func(pattern string),
-	withHandler func(handler func(
-        request *f.Request,
-        response *f.Response,
-    )),
-) {
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
     withPattern("GET /")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
+    withHandler(func(request *f.Request, response *f.Response) {
         f.SendEcho(response, "hello")
     })
-}
+})
 ```
 
 ## Path
@@ -93,22 +65,13 @@ You can define path fields in your pattern using the curly
 braces format `{}` and retrieve fields with `f.ReceivePath()`.
 
 ```go
-func api(
-	withPattern func(pattern string),
-	withHandler func(handler func(
-        request *f.Request,
-        response *f.Response,
-    )),
-) {
-    withPattern("GET /{name}")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
+    withPattern("GET /")
+    withHandler(func(request *f.Request, response *f.Response) {
         name := f.ReceivePath(request, "name")
         f.SendEcho(response, "hello "+name)
     })
-}
+})
 ```
 
 ## Status
@@ -116,22 +79,13 @@ func api(
 You can send out a status code with `f.SendStatus()`
 
 ```go
-func api(
-	withPattern func(pattern string),
-	withHandler func(handler func(
-        request *f.Request,
-        response *f.Response,
-    )),
-) {
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
     withPattern("GET /")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
+    withHandler(func(request *f.Request, response *f.Response) {
         f.SendStatus(response, 404)
         f.SendEcho(response, "Resource not found, sorry.")
     })
-}
+})
 ```
 
 !!! note
@@ -142,18 +96,9 @@ func api(
 You can retrieve header fields with `f.ReceiveHeader()` and send out header fields with `f.SendHeader()`.
 
 ```go
-func api(
-	withPattern func(pattern string),
-	withHandler func(handler func(
-        request *f.Request,
-        response *f.Response,
-    )),
-) {
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
     withPattern("GET /")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
+    withHandler(func(request *f.Request, response *f.Response) {
         contentType := f.ReceiveHeader(request, "Content-Type")
         if "application/xml" != contentType {
             f.SendStatus(response, 400)
@@ -166,7 +111,7 @@ func api(
         f.SendHeader(response, "Content-Length", "26")
         f.SendEcho(response, "Resource not found, sorry.")
     })
-}
+})
 ```
 
 !!! note
@@ -177,22 +122,13 @@ func api(
 You can retrieve values of query fields with `f.ReceiveQuery()`
 
 ```go
-func api(
-	withPattern func(pattern string),
-	withHandler func(handler func(
-        request *f.Request,
-        response *f.Response,
-    )),
-) {
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
     withPattern("GET /")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
+    withHandler(func(request *f.Request, response *f.Response) {
         name := f.ReceiveQuery(request, "name")
         f.SendEcho(response, "hello "+name)
     })
-}
+})
 ```
 
 ## Forms
@@ -202,23 +138,14 @@ Forms can be retrieved with `f.ReceiveForm()`.
 You can use the `url.Values` api in order to retrieve specific form fields.
 
 ```go
-func api(
-	withPattern func(pattern string),
-	withHandler func(handler func(
-        request *f.Request,
-        response *f.Response,
-    )),
-) {
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
     withPattern("GET /")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
+    withHandler(func(request *f.Request, response *f.Response) {
         form := f.ReceiveForm(request)
         name := form.Get("name")
         f.SendEcho(response, "hello "+name)
     })
-}
+})
 ```
 
 !!! note
@@ -229,28 +156,23 @@ func api(
 Json bodies can be read and decoded with `f.ReceiveJson[T]()`.
 
 ```go
-type Person struct {
-    Name string
-}
-
-func api(
-	withPattern func(pattern string),
-	withHandler func(handler func(
-        request *f.Request,
-        response *f.Response,
-    )),
-) {
+f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
     withPattern("GET /")
-    withHandler(func(
-        request *f.Request,
-        response *f.Response,
-    ) {
+    withHandler(func(request *f.Request, response *f.Response) {
         person, _ := f.ReceiveJson[Person](request)
         f.SendEcho(response, "hello "+person.name)
     })
+})
+```
+
+Where `Person` would be a struct
+
+```go
+type Person struct {
+    Name string
 }
 ```
 
-## Other details
+## Conventions
 
 Api functions should be created under `lib/api/{name}.go`, where `{name}` is the name of the api.
