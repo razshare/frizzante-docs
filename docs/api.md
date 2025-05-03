@@ -23,7 +23,10 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApi(server, func(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
+	f.ServerWithApi(server, func(
+        withPattern f.WithApiPattern, 
+        withHandler f.WithApiHandler,
+    ) {
         withPattern("GET /")
         withHandler(func(request *f.Request, response *f.Response) {
             // Handle request.
