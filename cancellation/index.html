@@ -669,7 +669,7 @@
 <p>or using web sockets</p>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">handler</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Get a pointer to the connection status.</span>
-<span class="w">    </span><span class="nx">alive</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">RequestIsAlive</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">alive</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">requestIsAlive</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
 
 <span class="w">    </span><span class="c1">// Upgrade to web sockets.</span>
 <span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendWsUpgrade</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
