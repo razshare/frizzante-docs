@@ -2,15 +2,9 @@ Create a new project by cloning the starter template
 
 
 ```bash
-git clone https://github.com/razshare/frizzante-starter
+git clone https://github.com/razshare/frizzante-starter && \
+rm frizzante-starter/.git -fr
 ```
-
-!!! note
-    You can also use the provided script.
-
-    ```bash
-    curl -fsSL https://raw.githubusercontent.com/razshare/frizzante/refs/heads/main/scripts/start.sh | bash
-    ```
 
 Then navigate to it
 
