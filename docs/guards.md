@@ -35,6 +35,7 @@ func main() {
 }
 
 func builder(withHandler f.WithGuardHandler) {
+    // Build guard.
     withHandler(handle)
 }
 

@@ -50,6 +50,7 @@ func builder(
 	withBaseHandler f.WithPageBaseHandler,
 	withActionHandler f.WithPageActionHandler,
 ){
+    // Build page.
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome")) // This references the file 
 										 // "lib/components/views/Welcome.svelte"

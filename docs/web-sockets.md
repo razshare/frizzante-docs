@@ -22,7 +22,7 @@ func main() {
 	f.ServerWithEmbeddedFileSystem(server, dist)
 	f.ServerWithNotifier(server, notifier)
 
-	// Guards.
+	// Api.
 	f.ServerWithApi(server, builder)
 
 	// Start.
@@ -30,6 +30,7 @@ func main() {
 }
 
 func builder(withPattern f.WithApiPattern, withHandler f.WithApiHandler){
+    // Build api.
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome")) // This references the file 
 										 // "lib/components/views/Welcome.svelte"

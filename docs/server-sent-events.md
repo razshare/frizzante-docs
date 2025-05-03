@@ -30,6 +30,7 @@ func main() {
 }
 
 func builder(withPattern f.WithApiPattern, withHandler f.WithApiHandler){
+    // Build api.
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome")) // This references the file 
 										 // "lib/components/views/Welcome.svelte"

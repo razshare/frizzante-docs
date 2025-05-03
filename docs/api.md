@@ -30,6 +30,7 @@ func main() {
 }
 
 func builder(withPattern f.WithApiPattern, withHandler f.WithApiHandler) {
+    // Build api.
     withPattern("GET /")
     withHandler(handler)
 }
