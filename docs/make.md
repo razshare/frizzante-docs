@@ -10,6 +10,12 @@ Use `go run lib/make/main.go -api -name="{name}"` to create an api, where `{name
     ```
     This will create a `lib/api/login.go` file.
 
+As an alternative, you can use a makefile command
+
+```sh
+make api
+```
+
 ## Guards
 
 Use `go run lib/make/main.go -guard -name="{name}"` to create a guard, where `{name}` is the human readable name of the guard.
@@ -20,6 +26,12 @@ Use `go run lib/make/main.go -guard -name="{name}"` to create a guard, where `{n
     ```
     This will create a `lib/guards/session.go` file.
 
+As an alternative, you can use a makefile command
+
+```sh
+make guard
+```
+
 ## Pages
 
 Use `go run lib/make/main.go -page -name="{name}"` to create a page, where `{name}` is the human readable name of the page.
@@ -29,3 +41,9 @@ Use `go run lib/make/main.go -page -name="{name}"` to create a page, where `{nam
     go run lib/make/main.go -page -name="welcome"
     ```
     This will create files `lib/page/welcome.go` and `lib/components/views/Welcome.svelte`.
+
+As an alternative, you can use a makefile command
+
+```sh
+make page
+```
