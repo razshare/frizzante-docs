@@ -621,7 +621,7 @@
 <span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithEmbeddedFileSystem</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">dist</span><span class="p">)</span>
 <span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithNotifier</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">notifier</span><span class="p">)</span>
 
-<span class="w">    </span><span class="c1">// Guards.</span>
+<span class="w">    </span><span class="c1">// Api.</span>
 <span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithApi</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">builder</span><span class="p">)</span>
 
 <span class="w">    </span><span class="c1">// Start.</span>
@@ -629,6 +629,7 @@
 <span class="p">}</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">builder</span><span class="p">(</span><span class="nx">withPattern</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">WithApiPattern</span><span class="p">,</span><span class="w"> </span><span class="nx">withHandler</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">WithApiHandler</span><span class="p">){</span>
+<span class="w">    </span><span class="c1">// Build api.</span>
 <span class="w">    </span><span class="nx">withPath</span><span class="p">(</span><span class="s">&quot;/welcome&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="nx">withView</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Welcome&quot;</span><span class="p">))</span><span class="w"> </span><span class="c1">// This references the file </span>
 <span class="w">                                         </span><span class="c1">// &quot;lib/components/views/Welcome.svelte&quot;</span>
