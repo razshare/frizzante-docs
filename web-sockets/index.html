@@ -598,7 +598,42 @@
   <h1>Web sockets</h1>
 
 <p>You can upgrade http requests to web sockets with <code>f.SendWsUpgrade()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">withHandler</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;embed&quot;</span>
+<span class="w">    </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">//go:embed .dist/*/**</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">dist</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Create.</span>
+<span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">notifier</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">NotifierCreate</span><span class="p">()</span>
+
+<span class="w">    </span><span class="c1">// Setup.</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithPort</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="mi">8080</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithHostName</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithEmbeddedFileSystem</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">dist</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithNotifier</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">notifier</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1">// Guards.</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithApi</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">builder</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1">// Start.</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">builder</span><span class="p">(</span><span class="nx">withPattern</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">WithApiPattern</span><span class="p">,</span><span class="w"> </span><span class="nx">withHandler</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">WithApiHandler</span><span class="p">){</span>
+<span class="w">    </span><span class="nx">withPath</span><span class="p">(</span><span class="s">&quot;/welcome&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">withView</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Welcome&quot;</span><span class="p">))</span><span class="w"> </span><span class="c1">// This references the file </span>
+<span class="w">                                         </span><span class="c1">// &quot;lib/components/views/Welcome.svelte&quot;</span>
+<span class="w">    </span><span class="nx">withHandler</span><span class="p">(</span><span class="nx">handler</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">handler</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">SendWsUpgrade</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
 
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">{</span>
@@ -610,7 +645,7 @@
 
 <span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Received message `%s`.\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">msg</span><span class="p">)</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="p">})</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>Use the usual <code>f.SendEcho()</code> to send a raw text message and <code>f.SendJson()</code> to send a json message to the client.</p>
 <p>Once the request handler returns, 
