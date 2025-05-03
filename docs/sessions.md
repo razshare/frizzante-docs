@@ -1,10 +1,7 @@
 Use `f.SessionStart()` to start a session.
 
 ```go
-withHandler(func(
-    request *f.Request,
-    response *f.Response,
-) {
+withHandler(func(request *f.Request, response *f.Response) {
     // Start session.
     _, _, _ := f.SessionStart(request, response)
 })
