@@ -1,10 +1,7 @@
 You can upgrade http requests to web sockets with `f.SendWsUpgrade()`.
 
 ```go
-withHandler(func(
-    request *f.Request,
-    response *f.Response,
-) {
+withHandler(func(request *f.Request, response *f.Response) {
     f.SendWsUpgrade(response)
 
     for {

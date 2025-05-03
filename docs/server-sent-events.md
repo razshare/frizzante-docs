@@ -1,10 +1,7 @@
 You can upgrade http requests to server sent events with `f.SendSseUpgrade()`.
 
 ```go
-withHandler(func(
-    request *f.Request,
-    response *f.Response,
-) {
+withHandler(func(request *f.Request, response *f.Response) {
     // Upgrade to server sent events.
     withEventName := f.SendSseUpgrade(response)
 
