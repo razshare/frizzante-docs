@@ -47,6 +47,7 @@ func handler(request *f.Request, response *f.Response) {
         // Wait for incoming message.
         msg := f.ReceiveMessage(request)
         
+		// Log.
         fmt.Printf("Received message `%s`.\n", msg)
     }
 }
