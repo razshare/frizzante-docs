@@ -1,10 +1,45 @@
 Use `f.SessionStart()` to start a session.
 
 ```go
-withHandler(func(request *f.Request, response *f.Response) {
+package main
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func main() {
+	// Create.
+	server := f.ServerCreate()
+	notifier := f.NotifierCreate()
+
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerWithNotifier(server, notifier)
+
+	// Guards.
+	f.ServerWithApi(server, builder)
+
+	// Start.
+	f.ServerStart(server)
+}
+
+func builder(withPattern f.WithApiPattern, withHandler f.WithApiHandler){
+	withPath("/welcome")
+	withView(f.ViewReference("Welcome")) // This references the file 
+										 // "lib/components/views/Welcome.svelte"
+	withHandler(handler)
+}
+
+func handler(request *f.Request, response *f.Response) {
     // Start session.
     _, _, _ := f.SessionStart(request, response)
-})
+}
 ```
 
 `f.SessionStart()` always succeeds and it always returns three functions, get, set and unset.
@@ -49,11 +84,11 @@ Use `f.ServerWithSessionOperator()` to overwrite the default session operator
 ```go
 f.ServerWithSessionOperator(server, func(
     sessionId string,
-    withGetter func(get SessionGetter),
-    withSetter func(set SessionSetter),
-    withUnsetter func(unset SessionUnsetter),
-    withValidator func(validate SessionValidator),
-    withDestroyer func(destroy SessionDestroyer),
+    withGetter f.SessionWithGetter,
+    withSetter f.SessionWithSetter,
+    withUnsetter f.SessionWithUnsetter,
+    withValidator f.SessionWithValidator,
+    withDestroyer f.SessionWithDestroyer,
 ) {
     withGetter(func(key string, defaultValue any) (value any) {
         // Get `key` from the session store.

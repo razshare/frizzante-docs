@@ -1,7 +1,42 @@
 You can upgrade http requests to server sent events with `f.SendSseUpgrade()`.
 
 ```go
-withHandler(func(request *f.Request, response *f.Response) {
+package main
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func main() {
+	// Create.
+	server := f.ServerCreate()
+	notifier := f.NotifierCreate()
+
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerWithNotifier(server, notifier)
+
+	// Guards.
+	f.ServerWithApi(server, builder)
+
+	// Start.
+	f.ServerStart(server)
+}
+
+func builder(withPattern f.WithApiPattern, withHandler f.WithApiHandler){
+	withPath("/welcome")
+	withView(f.ViewReference("Welcome")) // This references the file 
+										 // "lib/components/views/Welcome.svelte"
+	withHandler(handler)
+}
+
+func handler(request *f.Request, response *f.Response) {
     // Upgrade to server sent events.
     withEventName := f.SendSseUpgrade(response)
 
@@ -22,7 +57,7 @@ withHandler(func(request *f.Request, response *f.Response) {
         // Sleep for a bit.
         time.Sleep(time.Second)
     }
-})
+}
 ```
 
 Set the name of the current event with `withEventName`, 

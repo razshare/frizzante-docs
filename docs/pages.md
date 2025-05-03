@@ -16,13 +16,35 @@ Subdirectories are joined by `.` instead of `/` or `\`.
 After you've created your view, you can create a page with `f.ServerWithPage()`
 
 ```go
-f.ServerWithPage(server, page)
-```
+package main
 
-Where `page` is a setup function
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
 
-```go
-f.ServerWithPage(server, func(
+//go:embed .dist/*/**
+var dist embed.FS
+
+func main() {
+	// Create.
+	server := f.ServerCreate()
+	notifier := f.NotifierCreate()
+
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerWithNotifier(server, notifier)
+
+	// Pages.
+	f.ServerWithPage(server, builder)
+
+	// Start.
+	f.ServerStart(server)
+}
+
+func builder(
 	withPath f.WithPagePath,
 	withView f.WithPageView,
 	withBaseHandler f.WithPageBaseHandler,
@@ -30,16 +52,18 @@ f.ServerWithPage(server, func(
 ){
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome")) // This references the file 
-										// "lib/components/views/Welcome.svelte"
+										 // "lib/components/views/Welcome.svelte"
+	withBaseHandler(baseHandler)
+	withActionHandler(actionHandler)	
+}
 
-	withBaseHandler(func(request *f.Request, response *f.Response, view *f.View) {
-		// Show page.
-	})
-	
-	withActionHandler(func(request *f.Request, response *f.Response, view *f.View) {
-		// Modify state.
-	})	
-})
+func baseHandler(request *f.Request, response *f.Response, view *f.View) {
+	// Show page.
+}
+
+func actionHandler(request *f.Request, response *f.Response, view *f.View) {
+	// Modify state.
+}
 ```
 
 In your setup function, `withPath()` sets the path of your page 
@@ -80,9 +104,9 @@ and `withView()` sets the view of your page.
 While handling the page, you can inject data into the view with `f.ViewWithData()`
 
 ```go
-withBaseHandler(func(request *f.Request, response *f.Response, view *f.View) {
+func baseHandler(request *f.Request, response *f.Response, view *f.View) {
 	f.ViewWithData(view, "name", "world")
-})
+}
 ```
 
 !!! note

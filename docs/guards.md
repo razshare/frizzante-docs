@@ -6,12 +6,42 @@ Use `f.ServerWithGuard()` to add a new guard.
 	Guards can decide which requests should pass through and which request should be rejected.
 
 ```go
-f.ServerWithGuard(server, func(withHandler f.WithGuardHandler)){
-	withHandler(func(request *f.Request, response *f.Response, pass func()) {
-		// Guard.
-		pass()
-	})
-})
+package main
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func main() {
+	// Create.
+	server := f.ServerCreate()
+	notifier := f.NotifierCreate()
+
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerWithNotifier(server, notifier)
+
+	// Guards.
+	f.ServerWithGuard(server, builder)
+
+	// Start.
+	f.ServerStart(server)
+}
+
+func builder(withHandler f.WithGuardHandler) {
+    withHandler(handle)
+}
+
+func handle(request *f.Request, response *f.Response, pass func()) {
+	// Guard.
+	pass()
+}
 ```
 
 Use `pass()` to let the current request pass through.
