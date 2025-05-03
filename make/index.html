@@ -697,35 +697,35 @@
 <p>Use <code>go run lib/make/main.go -api -name="{name}"</code> to create an api, where <code>{name}</code> is the human readable name of the api.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p><div class="highlight"><pre><span></span><code>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-api<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;login&quot;</span>
-</code></pre></div>
+<p><div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-api<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;login&quot;</span>
+</span></code></pre></div>
 This will create a <code>lib/api/login.go</code> file.</p>
 </div>
 <p>As an alternative, you can use the provided makefile command</p>
-<div class="highlight"><pre><span></span><code>make<span class="w"> </span>api
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>make<span class="w"> </span>api
+</span></code></pre></div>
 <h2 id="guards">Guards</h2>
 <p>Use <code>go run lib/make/main.go -guard -name="{name}"</code> to create a guard, where <code>{name}</code> is the human readable name of the guard.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p><div class="highlight"><pre><span></span><code>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-guard<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;session&quot;</span>
-</code></pre></div>
+<p><div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-guard<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;session&quot;</span>
+</span></code></pre></div>
 This will create a <code>lib/guards/session.go</code> file.</p>
 </div>
 <p>As an alternative, you can use the provided makefile command</p>
-<div class="highlight"><pre><span></span><code>make<span class="w"> </span>guard
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>make<span class="w"> </span>guard
+</span></code></pre></div>
 <h2 id="pages">Pages</h2>
 <p>Use <code>go run lib/make/main.go -page -name="{name}"</code> to create a page, where <code>{name}</code> is the human readable name of the page.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p><div class="highlight"><pre><span></span><code>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-page<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;welcome&quot;</span>
-</code></pre></div>
+<p><div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-page<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;welcome&quot;</span>
+</span></code></pre></div>
 This will create files <code>lib/page/welcome.go</code> and <code>lib/components/views/Welcome.svelte</code>.</p>
 </div>
 <p>As an alternative, you can use the provided makefile command</p>
-<div class="highlight"><pre><span></span><code>make<span class="w"> </span>page
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>make<span class="w"> </span>page
+</span></code></pre></div>
 
 
 
@@ -774,7 +774,7 @@ This will create files <code>lib/page/welcome.go</code> and <code>lib/components
     
     
       
-      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
