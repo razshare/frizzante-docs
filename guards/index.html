@@ -665,12 +665,42 @@
 to handle incoming requests before they reach any of your api and page handlers.<br/>
 Guards can decide which requests should pass through and which request should be rejected.</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithGuard</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">withHandler</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">WithGuardHandler</span><span class="p">)){</span>
-<span class="w">    </span><span class="nx">withHandler</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Guard.</span>
-<span class="w">        </span><span class="nx">pass</span><span class="p">()</span>
-<span class="w">    </span><span class="p">})</span>
-<span class="p">})</span>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;embed&quot;</span>
+<span class="w">    </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">//go:embed .dist/*/**</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">dist</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Create.</span>
+<span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">notifier</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">NotifierCreate</span><span class="p">()</span>
+
+<span class="w">    </span><span class="c1">// Setup.</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithPort</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="mi">8080</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithHostName</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithEmbeddedFileSystem</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">dist</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithNotifier</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">notifier</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1">// Guards.</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithGuard</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">builder</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1">// Start.</span>
+<span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">builder</span><span class="p">(</span><span class="nx">withHandler</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">WithGuardHandler</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">withHandler</span><span class="p">(</span><span class="nx">handle</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">handle</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Guard.</span>
+<span class="w">    </span><span class="nx">pass</span><span class="p">()</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>Use <code>pass()</code> to let the current request pass through.</p>
 <div class="admonition warning">
