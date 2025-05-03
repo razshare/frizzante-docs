@@ -31,7 +31,7 @@ make start
 
 Enter development mode with
 
-```dev
+```bash
 make dev
 ```
 

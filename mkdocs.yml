@@ -1,14 +1,17 @@
 site_name: Frizzante
 markdown_extensions:
+  - pymdownx.superfences
   - admonition
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.highlight:
+      use_pygments: true
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
+      auto_title: true
 theme: 
   name: material
   custom_dir: overrides
