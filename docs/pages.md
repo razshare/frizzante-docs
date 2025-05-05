@@ -13,7 +13,7 @@ Subdirectories are joined by `.` instead of `/` or `\`.
 !!! example
 	A view located at `lib/components/views/about/Me.svelte` will be identified by `about.Me`.
 
-After you've created your view, you can create a page with `f.ServerWithPage()`
+After you've created your view, you can create a page with `f.ServerWithPageBuilder()`
 
 ```go
 package main
@@ -38,31 +38,28 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Pages.
-	f.ServerWithPage(server, builder)
+	f.ServerWithPageBuilder(server, build)
 
 	// Start.
 	f.ServerStart(server)
 }
 
-func builder(
-	withPath f.WithPagePath,
-	withView f.WithPageView,
-	withBaseHandler f.WithPageBaseHandler,
-	withActionHandler f.WithPageActionHandler,
-){
-    // Build page.
+
+func build(context f.PageContext) {
+	// Build guard.
+	withPath, withView, withBase, withAction := context()
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome")) // This references the file 
 										 // "lib/components/views/Welcome.svelte"
-	withBaseHandler(baseHandler)
-	withActionHandler(actionHandler)	
+	withBase(base)
+	withAction(action)	
 }
 
-func baseHandler(request *f.Request, response *f.Response, view *f.View) {
+func base(request *f.Request, response *f.Response, view *f.View) {
 	// Show page.
 }
 
-func actionHandler(request *f.Request, response *f.Response, view *f.View) {
+func action(request *f.Request, response *f.Response, view *f.View) {
 	// Modify state.
 }
 ```
@@ -105,7 +102,7 @@ and `withView()` sets the view of your page.
 While handling the page, you can inject data into the view with `f.ViewWithData()`
 
 ```go
-func baseHandler(request *f.Request, response *f.Response, view *f.View) {
+func base(request *f.Request, response *f.Response, view *f.View) {
 	f.ViewWithData(view, "name", "world")
 }
 ```

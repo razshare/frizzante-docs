@@ -22,22 +22,24 @@ func main() {
 	f.ServerWithEmbeddedFileSystem(server, dist)
 	f.ServerWithNotifier(server, notifier)
 
-	// Guards.
-	f.ServerWithApi(server, builder)
+	// Api.
+	f.ServerWithApiBuilder(server, build)
 
 	// Start.
 	f.ServerStart(server)
 }
 
-func builder(withPattern f.WithApiPattern, withHandler f.WithApiHandler){
+
+func build(context f.ApiContext) {
     // Build api.
+	withPath, withHandler := context()
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome")) // This references the file 
 										 // "lib/components/views/Welcome.svelte"
-	withHandler(handler)
+	withHandler(handle)
 }
 
-func handler(request *f.Request, response *f.Response) {
+func handle(request *f.Request, response *f.Response) {
     // Upgrade to server sent events.
     withEventName := f.SendSseUpgrade(response)
 

@@ -1,4 +1,4 @@
-Use `f.ServerWithGuard()` to add a new guard.
+Use `f.ServerWithGuardBuilder()` to add a new guard.
 
 !!! note
 	A guard is a setup function that can inject arbitrary request handlers
@@ -28,14 +28,15 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Guards.
-	f.ServerWithGuard(server, builder)
+	f.ServerWithGuardBuilder(server, build)
 
 	// Start.
 	f.ServerStart(server)
 }
 
-func builder(withHandler f.WithGuardHandler) {
-    // Build guard.
+func build(context f.GuardContext) {
+	// Build guard.
+	withHandler := context()
     withHandler(handle)
 }
 

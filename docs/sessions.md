@@ -23,21 +23,20 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApi(server, builder)
+	f.ServerWithApiBuilder(server, build)
 
 	// Start.
 	f.ServerStart(server)
 }
 
-func builder(withPattern f.WithApiPattern, withHandler f.WithApiHandler){
+func build(context f.ApiContext){
     // Build api.
+    withPath, withHandler := context()
 	withPath("/welcome")
-	withView(f.ViewReference("Welcome")) // This references the file 
-										 // "lib/components/views/Welcome.svelte"
-	withHandler(handler)
+	withHandler(handle)
 }
 
-func handler(request *f.Request, response *f.Response) {
+func handle(request *f.Request, response *f.Response) {
     // Start session.
     _, _, _ := f.SessionStart(request, response)
 }
@@ -80,17 +79,17 @@ unset("username")
 You can overwrite the default in-memory session operator and provide 
 your own `get`, `set`, `unset`, `validate` and `destroy` functions.
 
-Use `f.ServerWithSessionOperator()` to overwrite the default session operator
+Use `f.ServerWithSessionBuilder()` to overwrite the default session operator
 
 ```go
-f.ServerWithSessionOperator(server, func(
-    sessionId string,
-    withGetter f.SessionWithGetter,
-    withSetter f.SessionWithSetter,
-    withUnsetter f.SessionWithUnsetter,
-    withValidator f.SessionWithValidator,
-    withDestroyer f.SessionWithDestroyer,
-) {
+f.ServerWithSessionBuilder(server, func(context SessionContext) {
+    sessionId, 
+    withGetter, 
+    withSetter,
+    withUnsetter, 
+    withValidator, 
+    withDestroyer := context()
+
     withGetter(func(key string, defaultValue any) (value any) {
         // Get `key` from the session store.
         // If `key` doesn't exist, create it with value `defaultValue`.
@@ -123,4 +122,4 @@ f.ServerWithSessionOperator(server, func(
 
 The `f.SessionStart()` function does not set any expiration date, domain or path on the session cookie sent to the browser.
 
-Instead, `f.ServerWithSessionOperator()` has complete control over the lifetime of any session.
+Instead, `f.ServerWithSessionBuilder()` has complete control over the lifetime of any session.

@@ -27,21 +27,20 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApi(server, builder)
+	f.ServerWithApiBuilder(server, build)
 
 	// Start.
 	f.ServerStart(server)
 }
 
-func builder(withPattern f.WithApiPattern, withHandler f.WithApiHandler){
-    // Build api.
+func build(context f.ApiContext) {
+	// Build api.
+    withPattern, withHandler := context()
 	withPath("/welcome")
-	withView(f.ViewReference("Welcome")) // This references the file 
-										 // "lib/components/views/Welcome.svelte"
-	withHandler(handler)
+	withHandler(handle)
 }
 
-func handler(request *f.Request, response *f.Response) {
+func handle(request *f.Request, response *f.Response) {
 	// Get a pointer to the connection status.
 	alive := requestIsAlive(request)
 
@@ -75,7 +74,7 @@ func requestIsAlive(request *f.Request) *bool {
 or using web sockets
 
 ```go
-func handler(request *f.Request, response *f.Response) {
+func handle(request *f.Request, response *f.Response) {
 	// Get a pointer to the connection status.
 	alive := requestIsAlive(request)
 

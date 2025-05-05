@@ -23,21 +23,20 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApi(server, builder)
+	f.ServerWithApiBuilder(server, build)
 
 	// Start.
 	f.ServerStart(server)
 }
 
-func builder(withPattern f.WithApiPattern, withHandler f.WithApiHandler){
+func build(context f.ApiContext){
+	withPath, withHandler := context()
     // Build api.
 	withPath("/welcome")
-	withView(f.ViewReference("Welcome")) // This references the file 
-										 // "lib/components/views/Welcome.svelte"
-	withHandler(handler)
+	withHandler(handle)
 }
 
-func handler(request *f.Request, response *f.Response) {
+func handle(request *f.Request, response *f.Response) {
     f.SendWsUpgrade(response)
 
     for {
