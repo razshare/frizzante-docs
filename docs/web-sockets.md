@@ -30,8 +30,8 @@ func main() {
 }
 
 func build(context f.ApiContext) {
-	withPath, withHandler := context()
     // Build api.
+	withPath, withHandler := context()
 	withPath("/welcome")
 	withHandler(handle)
 }
