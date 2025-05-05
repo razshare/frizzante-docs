@@ -12,6 +12,12 @@ Then navigate to it
 cd frizzante-starter
 ```
 
+Configure project
+
+```bash
+make configure
+```
+
 Update dependencies
 
 ```bash
