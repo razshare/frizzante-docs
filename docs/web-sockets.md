@@ -29,7 +29,7 @@ func main() {
 	f.ServerStart(server)
 }
 
-func build(context f.ApiContext){
+func build(context f.ApiContext) {
 	withPath, withHandler := context()
     // Build api.
 	withPath("/welcome")
