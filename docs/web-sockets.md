@@ -37,6 +37,7 @@ func build(context f.ApiContext) {
 }
 
 func handle(request *f.Request, response *f.Response) {
+    // Upgrade to web sockets.
     f.SendWsUpgrade(response)
 
     for {
