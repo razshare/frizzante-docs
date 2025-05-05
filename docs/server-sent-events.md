@@ -29,7 +29,6 @@ func main() {
 	f.ServerStart(server)
 }
 
-
 func build(context f.ApiContext) {
     // Build api.
 	withPath, withHandler := context()
