@@ -46,7 +46,7 @@ func main() {
 
 
 func build(context f.PageContext) {
-	// Build guard.
+	// Build page.
 	withPath, withView, withBase, withAction := context()
 	withPath("/welcome")
 	withView(f.ViewReference("Welcome")) // This references the file 
