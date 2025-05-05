@@ -107,20 +107,20 @@ func base(request *f.Request, response *f.Response, view *f.View) {
 }
 ```
 
+
+These data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
+
+```html
+<script>
+	import { getContext } from "svelte";
+	const data = getContext("data")
+</script>
+
+<h1>Hello {data.name}</h1>
+```
+
 !!! note
-	These data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
-
-	```html
-	<script>
-		import { getContext } from "svelte";
-		const data = getContext("data")
-	</script>
-
-	<h1>Hello {data.name}</h1>
-	```
-
-	!!! note
-		Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
+	Context `data` is created with [$state()](https://svelte.dev/docs/svelte/$state), hence it is reactive.
 
 
 !!! note
