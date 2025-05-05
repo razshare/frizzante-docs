@@ -33,8 +33,6 @@ func build(context f.ApiContext) {
     // Build api.
 	withPath, withHandler := context()
 	withPath("/welcome")
-	withView(f.ViewReference("Welcome")) // This references the file 
-										 // "lib/components/views/Welcome.svelte"
 	withHandler(handle)
 }
 
