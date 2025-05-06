@@ -134,7 +134,7 @@ These data fields can be retrieved from your svelte components with [getContext(
 	!!! danger
 		While rendering a page, you shouldn't send content to the client directly 
 		using `f.ResponseSend*` functions, 
-		like `f.ResponseSendEcho()`, `f.ResponseSendJson()`.<br/>
+		like `f.ResponseSendMessage()`, `f.ResponseSendJson()`.<br/>
 		<br/>
 		ResponseSending content directly to the client will break the HTML document structure by prepending 
 		the content to the actual view.<br/>

@@ -42,7 +42,7 @@ func handle(request *f.Request, response *f.Response) {
 
     for {
         // ResponseSend message.
-        f.ResponseSendEcho(response, "hello")
+        f.ResponseSendMessage(response, "hello")
 
         // Wait for incoming message.
         msg := f.RequestReceiveMessage(request)
@@ -53,7 +53,7 @@ func handle(request *f.Request, response *f.Response) {
 }
 ```
 
-Use the usual `f.ResponseSendEcho()` to send a raw text message and `f.ResponseSendJson()` to send a json message to the client.
+Use the usual `f.ResponseSendMessage()` to send a raw text message and `f.ResponseSendJson()` to send a json message to the client.
 
 
 Once the request handler returns, 

@@ -43,16 +43,16 @@ func handle(request *f.Request, response *f.Response) {
     for {
         // ResponseSend to channel-1.
         withEventName("channel-1")
-        f.ResponseSendEcho(response, "This is a message for channel-1")
+        f.ResponseSendMessage(response, "This is a message for channel-1")
         
         // ResponseSend to channel-2.
         withEventName("channel-2")
-        f.ResponseSendEcho(response, "This is a message for channel-2")
-        f.ResponseSendEcho(response, "This is another message for channel-2")
+        f.ResponseSendMessage(response, "This is a message for channel-2")
+        f.ResponseSendMessage(response, "This is another message for channel-2")
 
         // ResponseSend to channel-1.
         withEventName("channel-1")
-        f.ResponseSendEcho(response, "Back to channel-1")
+        f.ResponseSendMessage(response, "Back to channel-1")
 
         // Sleep for a bit.
         time.Sleep(time.Second)
@@ -61,7 +61,7 @@ func handle(request *f.Request, response *f.Response) {
 ```
 
 Set the name of the current event with `withEventName`, 
-then start sending content to the client with the usual `f.ResponseSendEcho()` and `f.ResponseSendJson()`.
+then start sending content to the client with the usual `f.ResponseSendMessage()` and `f.ResponseSendJson()`.
 
 
 Once the request handler returns, 

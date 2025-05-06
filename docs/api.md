@@ -54,11 +54,11 @@ Where `withPattern()` routes the api using a pattern and `withHandler()` sets th
 
 ## Echo
 
-You can send out text with `f.ResponseSendEcho()`
+You can send out text with `f.ResponseSendMessage()`
 
 ```go
 func handle(request *f.Request, response *f.Response) {
-    f.ResponseSendEcho(response, "hello")
+    f.ResponseSendMessage(response, "hello")
 }
 ```
 
@@ -70,7 +70,7 @@ braces format `{}` and retrieve fields with `f.RequestReceivePath()`.
 ```go
 func handle(request *f.Request, response *f.Response) {
     name := f.RequestReceivePath(request, "name")
-    f.ResponseSendEcho(response, "hello "+name)
+    f.ResponseSendMessage(response, "hello "+name)
 }
 ```
 
@@ -81,7 +81,7 @@ You can send out a status code with `f.ResponseSendStatus()`
 ```go
 func handle(request *f.Request, response *f.Response) {
     f.ResponseSendStatus(response, 404)
-    f.ResponseSendEcho(response, "Resource not found, sorry.")
+    f.ResponseSendMessage(response, "Resource not found, sorry.")
 }
 ```
 
@@ -98,13 +98,13 @@ func handle(request *f.Request, response *f.Response) {
     if "application/xml" != contentType {
         f.ResponseSendStatus(response, 400)
         f.ResponseSendHeader(response, "Content-Length", "69")
-        f.ResponseSendEcho(response, "We don't serve your kind around here, better get an XML encoder, heh.")
+        f.ResponseSendMessage(response, "We don't serve your kind around here, better get an XML encoder, heh.")
         return
     }
 
     f.ResponseSendStatus(response, 404)
     f.ResponseSendHeader(response, "Content-Length", "26")
-    f.ResponseSendEcho(response, "Resource not found, sorry.")
+    f.ResponseSendMessage(response, "Resource not found, sorry.")
 }
 ```
 
@@ -118,7 +118,7 @@ You can retrieve values of query fields with `f.RequestReceiveQuery()`
 ```go
 func handle(request *f.Request, response *f.Response) {
     name := f.RequestReceiveQuery(request, "name")
-    f.ResponseSendEcho(response, "hello "+name)
+    f.ResponseSendMessage(response, "hello "+name)
 }
 ```
 
@@ -132,7 +132,7 @@ You can use the `url.Values` api in order to retrieve specific form fields.
 func handle(request *f.Request, response *f.Response) {
     form := f.RequestReceiveForm(request)
     name := form.Get("name")
-    f.ResponseSendEcho(response, "hello "+name)
+    f.ResponseSendMessage(response, "hello "+name)
 }
 ```
 
@@ -146,7 +146,7 @@ Json bodies can be read and decoded with `f.RequestReceiveJson[T]()`.
 ```go
 func handle(request *f.Request, response *f.Response) {
     person, _ := f.RequestReceiveJson[Person](request)
-    f.ResponseSendEcho(response, "hello "+person.name)
+    f.ResponseSendMessage(response, "hello "+person.name)
 }
 ```
 

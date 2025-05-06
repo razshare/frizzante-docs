@@ -50,7 +50,7 @@ func handle(request *f.Request, response *f.Response) {
 
 	// Continuously check if connection is still alive.
 	for *alive {
-		f.ResponseSendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
+		f.ResponseSendMessage(response, fmt.Sprintf("Server time is %s", time.Now()))
 	}
 }
 
@@ -83,7 +83,7 @@ func handle(request *f.Request, response *f.Response) {
 
 	// Continuously check if connection is still alive.
 	for *alive {
-		f.ResponseSendEcho(response, "hello")
+		f.ResponseSendMessage(response, "hello")
 		msg := f.RequestReceiveMessage(request)
 		fmt.Printf("RequestReceived message `%s`.\n", msg)
 	}
