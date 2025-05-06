@@ -36,7 +36,7 @@ func main() {
 
 By default, your server will be listening for requests at [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
-You can customize both your host name and port number with `f.ServerWithHostname()` and `f.ServerWithPortNumber()`.
+You can customize both your host name and port number with `f.ServerWithHostName()` and `f.ServerWithPortNumber()`.
 
 ```go
 package main
