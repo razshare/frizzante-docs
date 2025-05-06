@@ -1,4 +1,4 @@
-Views are `.svelte` components located under `lib/components/views`.
+Views are `.svelte` files located under `lib/components/views`.
 
 Here's an example of a view located under `lib/components/views/Welcome.svelte`
 
