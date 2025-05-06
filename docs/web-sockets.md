@@ -1,4 +1,4 @@
-You can upgrade http requests to web sockets with `f.SendWsUpgrade()`.
+You can upgrade http requests to web sockets with `f.ResponseSendWsUpgrade()`.
 
 ```go
 package main
@@ -38,22 +38,22 @@ func build(context f.ApiContext) {
 
 func handle(request *f.Request, response *f.Response) {
     // Upgrade to web sockets.
-    f.SendWsUpgrade(response)
+    f.ResponseSendWsUpgrade(response)
 
     for {
-        // Send message.
-        f.SendEcho(response, "hello")
+        // ResponseSend message.
+        f.ResponseSendEcho(response, "hello")
 
         // Wait for incoming message.
-        msg := f.ReceiveMessage(request)
+        msg := f.RequestReceiveMessage(request)
         
 		// Log.
-        fmt.Printf("Received message `%s`.\n", msg)
+        fmt.Printf("RequestReceived message `%s`.\n", msg)
     }
 }
 ```
 
-Use the usual `f.SendEcho()` to send a raw text message and `f.SendJson()` to send a json message to the client.
+Use the usual `f.ResponseSendEcho()` to send a raw text message and `f.ResponseSendJson()` to send a json message to the client.
 
 
 Once the request handler returns, 

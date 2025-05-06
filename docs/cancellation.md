@@ -1,6 +1,6 @@
 Always track cancelled requests while streaming events, web sockets, executing long running tasks or expensive tasks in your request handlers.
 
-You can detect cancelled requests with `f.ReceiveCancellation()`.
+You can detect cancelled requests with `f.RequestReceiveCancellation()`.
 
 For example using sse
 
@@ -45,12 +45,12 @@ func handle(request *f.Request, response *f.Response) {
 	alive := requestIsAlive(request)
 
 	// Upgrade to server sent events.
-	withEventName := f.SendSseUpgrade(response)
+	withEventName := f.ResponseSendSseUpgrade(response)
 	withEventName("server-time")
 
 	// Continuously check if connection is still alive.
 	for *alive {
-		f.SendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
+		f.ResponseSendEcho(response, fmt.Sprintf("Server time is %s", time.Now()))
 	}
 }
 
@@ -60,7 +60,7 @@ func requestIsAlive(request *f.Request) *bool {
 	value := true
 	go func() {
 		// Wait for cancellation.
-		<-f.ReceiveCancellation(request)
+		<-f.RequestReceiveCancellation(request)
 
 		// Update state after cancellation.
 		value = false
@@ -79,13 +79,13 @@ func handle(request *f.Request, response *f.Response) {
 	alive := requestIsAlive(request)
 
 	// Upgrade to web sockets.
-	f.SendWsUpgrade(response)
+	f.ResponseSendWsUpgrade(response)
 
 	// Continuously check if connection is still alive.
 	for *alive {
-		f.SendEcho(response, "hello")
-		msg := f.ReceiveMessage(request)
-		fmt.Printf("Received message `%s`.\n", msg)
+		f.ResponseSendEcho(response, "hello")
+		msg := f.RequestReceiveMessage(request)
+		fmt.Printf("RequestReceived message `%s`.\n", msg)
 	}
 }
 ```

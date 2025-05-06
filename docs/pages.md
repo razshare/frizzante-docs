@@ -127,21 +127,21 @@ These data fields can be retrieved from your svelte components with [getContext(
 	A page is treated like an [api](./api.md) under the hood, which means it 
 	has access to the same features.<br/>
 	<br/>
-	You can receives path fields with `f.ReceivePath()`, 
-	queries with `f.ReceiveQuery()`,
-	forms with `f.ReceiveForm()`,
-	json objects with `f.ReceiveJson[T]()` and so on.<br/>
+	You can receives path fields with `f.RequestReceivePath()`, 
+	queries with `f.RequestReceiveQuery()`,
+	forms with `f.RequestReceiveForm()`,
+	json objects with `f.RequestReceiveJson[T]()` and so on.<br/>
 	!!! danger
 		While rendering a page, you shouldn't send content to the client directly 
-		using `f.Send*` functions, 
-		like `f.SendEcho()`, `f.SendJson()`.<br/>
+		using `f.ResponseSend*` functions, 
+		like `f.ResponseSendEcho()`, `f.ResponseSendJson()`.<br/>
 		<br/>
-		Sending content directly to the client will break the HTML document structure by prepending 
+		ResponseSending content directly to the client will break the HTML document structure by prepending 
 		the content to the actual view.<br/>
 		<br/>
 		There are some use cases where sending content directly is useful, like debugging.<br/>
 		!!! note
-			Functions that send the status and header fields, like `f.SendStatus()`, `f.SendHeader()`, are safe to use.
+			Functions that send the status and header fields, like `f.ResponseSendStatus()`, `f.ResponseSendHeader()`, are safe to use.
 
 ## Other details
 
