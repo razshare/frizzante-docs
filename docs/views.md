@@ -1,6 +1,6 @@
 Views are `.svelte` files located under `lib/components/views`.
 
-Here's an example of a view located under `lib/components/views/Welcome.svelte`
+Here's an example of a view located at `lib/components/views/Welcome.svelte`
 
 ```html
 <script>
