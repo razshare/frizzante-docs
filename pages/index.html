@@ -777,23 +777,23 @@ sometimes redirects to some other page.</p>
 <p>A page is treated like an <a href="../api/">api</a> under the hood, which means it 
 has access to the same features.<br/>
 <br/>
-You can receives path fields with <code>f.ReceivePath()</code>, 
-queries with <code>f.ReceiveQuery()</code>,
-forms with <code>f.ReceiveForm()</code>,
-json objects with <code>f.ReceiveJson[T]()</code> and so on.<br/></p>
+You can receives path fields with <code>f.RequestReceivePath()</code>, 
+queries with <code>f.RequestReceiveQuery()</code>,
+forms with <code>f.RequestReceiveForm()</code>,
+json objects with <code>f.RequestReceiveJson[T]()</code> and so on.<br/></p>
 <div class="admonition danger">
 <p class="admonition-title">Danger</p>
 <p>While rendering a page, you shouldn't send content to the client directly 
-using <code>f.Send*</code> functions, 
-like <code>f.SendEcho()</code>, <code>f.SendJson()</code>.<br/>
+using <code>f.ResponseSend*</code> functions, 
+like <code>f.ResponseSendMessage()</code>, <code>f.ResponseSendJson()</code>.<br/>
 <br/>
-Sending content directly to the client will break the HTML document structure by prepending 
+ResponseSending content directly to the client will break the HTML document structure by prepending 
 the content to the actual view.<br/>
 <br/>
 There are some use cases where sending content directly is useful, like debugging.<br/></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Functions that send the status and header fields, like <code>f.SendStatus()</code>, <code>f.SendHeader()</code>, are safe to use.</p>
+<p>Functions that send the status and header fields, like <code>f.ResponseSendStatus()</code>, <code>f.ResponseSendHeader()</code>, are safe to use.</p>
 </div>
 </div>
 </div>
