@@ -37,30 +37,29 @@ func build(api *Api*) {
 
 func handle(request *f.Request, response *f.Response) {
     // Start session.
-    _, _, _ := f.SessionStart(request, response)
+    _ := f.SessionStart(request, response)
 }
 ```
 
-`f.SessionStart()` always succeeds and it always returns three functions, get, set and unset.
+`f.SessionStart()` always returns a session.
 
 !!! note
     The reason `f.SessionStart()` always succeeds is because it will automatically create a new session if none is found. The new session does **not** retain any data from the previous session.
 
-## Get
+## SessionGet
 
-Use `get()` to retrieve a session property.
+Use `f.SessionGet[T]()` to retrieve a session property, or fallback and create a default value if the property doesn't exist.
 
 ```go
-get, _, _ := f.SessionStart(request, response)
-username := get("username", "default").(string)
+username := f.SessionGet[string](session, "username", "")
 ```
 
 ## Set
 
-Use `set()` to create or update a session property.
+Use `f.SessionSet[T]()` to create or update a session property.
 
 ```go
-_, set, _ := f.SessionStart(request, response)
+f.SessionSet[string](session, response)
 set("username", "frizzante")
 ```
 
@@ -82,33 +81,32 @@ Use `f.ServerWithSessionBuilder()` to overwrite the default session operator
 
 ```go
 f.ServerWithSessionBuilder(server, func(session *Session) {
-    f.SessionWithGetter(session, func(key string, defaultValue any) (value any) {
+    f.SessionWithGetter(session, func(key string) (value any) {
         // Get `key` from the session store.
-        // If `key` doesn't exist, create it with value `defaultValue`.
     })
 
     f.SessionWithSetter(session, func(key string, value any) {
-        // Set `key` to the session store.
+        // Set `key` and `value` int the session store.
     })
 
     f.SessionWithUnsetter(session, func(key string) {
-        // Unset `key` from the session store.
+        // Unset a `key` from the session store.
     })
 
     f.SessionWithValidator(session, func() (valid bool) {
-        // Validate `sessionId`.
+        // Validate the session.
+        // Has it expired? Has it been revoked?
+    })
+
+    f.SessionWithKeyChecker(session, func(key string) (exists bool) {
+        // Check if `key` exists in the session store.
     })
 
     f.SessionWithDestroyer(session, func() {
-        // Destroy the session `sessionId` and its store.
+        // Destroy the session and its store.
     })
 })
 ```
-
-!!! note
-    The `withValidator()` function is used by Frizzante to validate sessions whenever you invoke `f.SessionStart()`.
-    <br/>
-    The `withDestroyer()` function is used by Frizzante to destroy a sessions whenever validation fails.
 
 ## Lifetime
 
