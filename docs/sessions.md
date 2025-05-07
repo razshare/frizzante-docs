@@ -37,7 +37,7 @@ func build(api *Api*) {
 
 func handle(request *f.Request, response *f.Response) {
     // Start session.
-    _ := f.SessionStart(request, response)
+    session := f.SessionStart(request, response)
 }
 ```
 
