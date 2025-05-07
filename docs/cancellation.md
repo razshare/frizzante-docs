@@ -33,11 +33,10 @@ func main() {
 	f.ServerStart(server)
 }
 
-func build(context f.ApiContext) {
+func build(api *f.Api) {
 	// Build api.
-    withPattern, withHandler := context()
-	withPath("/welcome")
-	withHandler(handle)
+    f.ApiWithPattern(api, "GET /welcome")
+    f.ApiWithHandler(api, handle)
 }
 
 func handle(request *f.Request, response *f.Response) {

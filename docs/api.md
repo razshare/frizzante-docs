@@ -29,11 +29,10 @@ func main() {
 	f.ServerStart(server)
 }
 
-func build(context f.ApiContext) {
+func build(api *f.Api) {
 	// Build api.
-    withPattern, withHandler := context()
-    withPattern("GET /")
-    withHandler(handle)
+    f.ApiWithPattern(api, "GET /")
+    f.ApiWithHandler(api, handle)
 }
 
 func handle(request *f.Request, response *f.Response) {
@@ -41,14 +40,14 @@ func handle(request *f.Request, response *f.Response) {
 }
 ```
 
-Where `withPattern()` routes the api using a pattern and `withHandler()` sets the request handler.
+Where `f.ApiWithPattern()` routes the api using a pattern and `f.ApiWithHandler()` sets the request handler.
 
 !!! note
     You can route the same api to multiple patterns
     ```go
-    withPattern("GET /")
-    withPattern("GET /api/greeting")
-    withHandler(handle)
+    f.ApiWithPattern(api, "GET /")
+    f.ApiWithPattern(api, "GET /api/greeting")
+    f.ApiWithHandler(api, handle)
     ```
 
 

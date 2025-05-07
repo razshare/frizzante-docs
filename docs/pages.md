@@ -45,14 +45,13 @@ func main() {
 }
 
 
-func build(context f.PageContext) {
+func build(page *f.Page) {
 	// Build page.
-	withPath, withView, withBase, withAction := context()
-	withPath("/welcome")
-	withView(f.ViewReference("Welcome")) // This references the file 
-										 // "lib/components/views/Welcome.svelte"
-	withBase(base)
-	withAction(action)	
+	f.PageWithPath(page, "/welcome")
+	f.PageWithView(page, f.ViewReference("Welcome")) // This references the file 
+										             // "lib/components/views/Welcome.svelte"
+	f.PageWithBaseHandler(page, base)
+	f.PageWithActionHandler(page, action)
 }
 
 func base(request *f.Request, response *f.Response, view *f.View) {
@@ -64,26 +63,26 @@ func action(request *f.Request, response *f.Response, view *f.View) {
 }
 ```
 
-In your setup function, `withPath()` sets the path of your page 
-and `withView()` sets the view of your page.
+In your setup function, `f.PageWithPath()` sets the path of your page 
+and `f.PageWithView()` sets the view of your page.
 
 !!! note
     You can map many paths to one view.
     ```go
-    withPath("/")
-    withPath("/api/greeting")
-	withView(f.ViewReference("Welcome"))
+    f.PageWithPath(page, "/")
+    f.PageWithPath(page, "/api/greeting")
+	f.PageWithView(page, f.ViewReference("Welcome"))
     ```
 	
 !!! danger
     You cannot map many views to one path.
     ```go
-    withPath("/")
-	withView(f.ViewReference("Welcome"))  // <-- This is not allowed,
-	withView(f.ViewReference("Login"))    // <-- two views are exposed by the same path.
+    f.PageWithPath(page, "/")
+	f.PageWithView(page, f.ViewReference("Welcome"))  // <-- This is not allowed,
+	f.PageWithView(page, f.ViewReference("Login"))    // <-- two views are exposed by the same path.
     ```
 
-`withBaseHandler()` sets the page base handler
+`f.PageWithBaseHandler()` sets the page base handler
 
 !!! note
 	A base page handler is a function that 
@@ -91,7 +90,7 @@ and `withView()` sets the view of your page.
 	This function usually does not modify the state, 
 	it just renders information to the screen.
 
-`withActionHandler()` sets the page action handler
+`f.PageWithActionHandler()` sets the page action handler
 
 !!! note
 	An action page handler is a function that 

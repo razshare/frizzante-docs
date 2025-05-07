@@ -34,10 +34,9 @@ func main() {
 	f.ServerStart(server)
 }
 
-func build(context f.GuardContext) {
+func build(guard *f.Guard) {
 	// Build guard.
-	withHandler := context()
-    withHandler(handle)
+	f.GuardWithHandler(guard, handle)
 }
 
 func handle(request *f.Request, response *f.Response, pass func()) {

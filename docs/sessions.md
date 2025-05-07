@@ -29,11 +29,10 @@ func main() {
 	f.ServerStart(server)
 }
 
-func build(context f.ApiContext) {
+func build(api *Api*) {
     // Build api.
-    withPath, withHandler := context()
-	withPath("/welcome")
-	withHandler(handle)
+	f.ApiWithPath(api, "/welcome")
+	f.ApiWithHandle(api, handle)
 }
 
 func handle(request *f.Request, response *f.Response) {
@@ -82,32 +81,25 @@ your own `get`, `set`, `unset`, `validate` and `destroy` functions.
 Use `f.ServerWithSessionBuilder()` to overwrite the default session operator
 
 ```go
-f.ServerWithSessionBuilder(server, func(context SessionContext) {
-    sessionId, 
-    withGetter, 
-    withSetter,
-    withUnsetter, 
-    withValidator, 
-    withDestroyer := context()
-
-    withGetter(func(key string, defaultValue any) (value any) {
+f.ServerWithSessionBuilder(server, func(session *Session) {
+    f.SessionWithGetter(session, func(key string, defaultValue any) (value any) {
         // Get `key` from the session store.
         // If `key` doesn't exist, create it with value `defaultValue`.
     })
 
-    withSetter(func(key string, value any) {
+    f.SessionWithSetter(session, func(key string, value any) {
         // Set `key` to the session store.
     })
 
-    withUnsetter(func(key string) {
+    f.SessionWithUnsetter(session, func(key string) {
         // Unset `key` from the session store.
     })
 
-    withValidator(func() (valid bool) {
+    f.SessionWithValidator(session, func() (valid bool) {
         // Validate `sessionId`.
     })
 
-    withDestroyer(func() {
+    f.SessionWithDestroyer(session, func() {
         // Destroy the session `sessionId` and its store.
     })
 })
