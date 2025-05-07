@@ -51,33 +51,43 @@ func handle(request *f.Request, response *f.Response) {
 Use `f.SessionGet[T]()` to retrieve a session property, or fallback and create a default value if the property doesn't exist.
 
 ```go
-username := f.SessionGet[string](session, "username", "")
+session := f.SessionStart(request, response)
+username := f.SessionGet[string](session, "username")
 ```
 
-## Set
+## SessionSet
 
 Use `f.SessionSet[T]()` to create or update a session property.
 
 ```go
-f.SessionSet[string](session, response)
-set("username", "frizzante")
+session := f.SessionStart(request, response)
+f.SessionSet(session, "username", "frizzante")
 ```
 
-## Unset
+## SessionUnset
 
-Use `unset()` to remove a session property.
+Use `f.SessionUnset()` to remove a session property.
 
 ```go
-_, _, unset := f.SessionStart(request, response)
-unset("username")
+session := f.SessionStart(request, response)
+f.SessionUnset(session, "username")
 ```
 
-## Session operator
+## SessionHas
 
-You can overwrite the default in-memory session operator and provide 
-your own `get`, `set`, `unset`, `validate` and `destroy` functions.
+Use `f.SessionHas()` to check if the session has a property.
 
-Use `f.ServerWithSessionBuilder()` to overwrite the default session operator
+```go
+session := f.SessionStart(request, response)
+if !f.SessionHas(session, "username") {
+    // Session key "username" doesn't exist.
+}
+```
+
+## Session builder
+
+You can overwrite the default in-memory session builder and provide 
+your own logic with `f.ServerWithSessionBuilder()`.
 
 ```go
 f.ServerWithSessionBuilder(server, func(session *Session) {
