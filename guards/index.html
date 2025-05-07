@@ -661,8 +661,7 @@
 <p>Use <code>f.ApiWithGuardHandler()</code> or <code>f.PageWithGuardHandler()</code> to add a new guard.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A guard is a setup function that can inject arbitrary request handlers
-to handle incoming requests before they reach any of your api and page handlers.<br/>
+<p>A guard is a function that handles incoming requests before they reach any of your actual api and page handlers.<br/>
 Guards can decide which requests should pass through and which request should be rejected.</p>
 </div>
 <div class="language-go highlight"><span class="filename">Go</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
