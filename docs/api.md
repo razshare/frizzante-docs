@@ -51,9 +51,9 @@ Where `f.ApiWithPattern()` routes the api using a pattern and `f.ApiWithHandler(
     ```
 
 
-## Echo
+## Send
 
-You can send out text with `f.ResponseSendMessage()`
+You can send out a message with `f.ResponseSendMessage()`
 
 ```go
 func handle(request *f.Request, response *f.Response) {
