@@ -40,16 +40,16 @@ func handle(request *f.Request, response *f.Response) {
     withEventName := f.ResponseSendSseUpgrade(response)
 
     for {
-        // ResponseSend to channel-1.
+        // Send to channel-1.
         withEventName("channel-1")
         f.ResponseSendMessage(response, "This is a message for channel-1")
         
-        // ResponseSend to channel-2.
+        // Send to channel-2.
         withEventName("channel-2")
         f.ResponseSendMessage(response, "This is a message for channel-2")
         f.ResponseSendMessage(response, "This is another message for channel-2")
 
-        // ResponseSend to channel-1.
+        // Send to channel-1.
         withEventName("channel-1")
         f.ResponseSendMessage(response, "Back to channel-1")
 

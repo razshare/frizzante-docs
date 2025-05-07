@@ -40,7 +40,7 @@ func handle(request *f.Request, response *f.Response) {
     f.ResponseSendWsUpgrade(response)
 
     for {
-        // ResponseSend message.
+        // Send message.
         f.ResponseSendMessage(response, "hello")
 
         // Wait for incoming message.
