@@ -1,4 +1,4 @@
-Use `f.ServerWithGuardBuilder()` to add a new guard.
+Use `f.ApiWithGuardHandler()` or `f.PageWithGuardHandler()` to add a new guard.
 
 !!! note
 	A guard is a setup function that can inject arbitrary request handlers
@@ -27,20 +27,26 @@ func main() {
 	f.ServerWithEmbeddedFileSystem(server, dist)
 	f.ServerWithNotifier(server, notifier)
 
-	// Guards.
-	f.ServerWithGuardBuilder(server, build)
+	// Api.
+	f.ServerWithApiBuilder(server, build)
 
 	// Start.
 	f.ServerStart(server)
 }
 
-func build(guard *f.Guard) {
-	// Build guard.
-	f.GuardWithHandler(guard, handle)
+func build(api *f.Api) {
+	// Build api.
+    f.ApiWithPattern(api, "GET /")
+    f.ApiWithHandler(api, handle)
+	f.ApiWithGuardHandler(api, guard)
+}
+
+func handle(request *f.Request, response *f.Response) {
+    // Handle request.
 }
 
 func handle(request *f.Request, response *f.Response, pass func()) {
-	// Guard.
+    // Handle guard.
 	pass()
 }
 ```
