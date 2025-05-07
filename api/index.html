@@ -113,7 +113,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#echo" class="md-skip">
+        <a href="#send" class="md-skip">
           Skip to content
         </a>
       
@@ -415,9 +415,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#echo" class="md-nav__link">
+  <a href="#send" class="md-nav__link">
     <span class="md-ellipsis">
-      Echo
+      Send
     </span>
   </a>
   
@@ -695,9 +695,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#echo" class="md-nav__link">
+  <a href="#send" class="md-nav__link">
     <span class="md-ellipsis">
-      Echo
+      Send
     </span>
   </a>
   
@@ -832,8 +832,8 @@
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nx">f</span><span class="p">.</span><span class="nx">ApiWithHandler</span><span class="p">(</span><span class="nx">api</span><span class="p">,</span><span class="w"> </span><span class="nx">handle</span><span class="p">)</span>
 </span></code></pre></div></p>
 </div>
-<h2 id="echo">Echo</h2>
-<p>You can send out text with <code>f.ResponseSendMessage()</code></p>
+<h2 id="send">Send</h2>
+<p>You can send out a message with <code>f.ResponseSendMessage()</code></p>
 <div class="language-go highlight"><span class="filename">Go</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">handle</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ResponseSendMessage</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span>
