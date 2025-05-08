@@ -36,7 +36,7 @@ func main() {
 func build(api *f.Api) {
 	// Build api.
     f.ApiWithPattern(api, "GET /")
-    f.ApiWithHandler(api, handleApi)
+    f.ApiWithRequestHandler(api, handleApi)
 	f.ApiWithGuardHandler(api, handleGuard)
 }
 

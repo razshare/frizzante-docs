@@ -36,7 +36,7 @@ func main() {
 func build(api *f.Api) {
 	// Build api.
     f.ApiWithPattern(api, "GET /welcome")
-    f.ApiWithHandler(api, handle)
+    f.ApiWithRequestHandler(api, handle)
 }
 
 func handle(request *f.Request, response *f.Response) {

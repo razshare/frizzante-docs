@@ -32,7 +32,7 @@ func main() {
 func build(api *f.Api) {
     // Build api.
 	f.ApiWithPattern("GET /welcome")
-	f.ApiWithHandler(handle)
+	f.ApiWithRequestHandler(handle)
 }
 
 func handle(request *f.Request, response *f.Response) {

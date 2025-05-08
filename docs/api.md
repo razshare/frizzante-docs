@@ -32,7 +32,7 @@ func main() {
 func build(api *f.Api) {
 	// Build api.
     f.ApiWithPattern(api, "GET /")
-    f.ApiWithHandler(api, handle)
+    f.ApiWithRequestHandler(api, handle)
 }
 
 func handle(request *f.Request, response *f.Response) {
@@ -40,14 +40,14 @@ func handle(request *f.Request, response *f.Response) {
 }
 ```
 
-Where `f.ApiWithPattern()` routes the api using a pattern and `f.ApiWithHandler()` sets the request handler.
+Where `f.ApiWithPattern()` routes the api using a pattern and `f.ApiWithRequestHandler()` sets the request handler.
 
 !!! note
     You can route the same api to multiple patterns
     ```go
     f.ApiWithPattern(api, "GET /")
     f.ApiWithPattern(api, "GET /api/greeting")
-    f.ApiWithHandler(api, handle)
+    f.ApiWithRequestHandler(api, handle)
     ```
 
 
