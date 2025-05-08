@@ -36,15 +36,15 @@ func main() {
 func build(api *f.Api) {
 	// Build api.
     f.ApiWithPattern(api, "GET /")
-    f.ApiWithHandler(api, handle)
-	f.ApiWithGuardHandler(api, guard)
+    f.ApiWithHandler(api, handleApi)
+	f.ApiWithGuardHandler(api, handleGuard)
 }
 
-func handle(request *f.Request, response *f.Response) {
+func handleApi(request *f.Request, response *f.Response) {
     // Handle request.
 }
 
-func handle(request *f.Request, response *f.Response, pass func()) {
+func handleGuard(request *f.Request, response *f.Response, pass func()) {
     // Handle guard.
 	pass()
 }
