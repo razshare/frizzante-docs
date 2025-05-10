@@ -99,17 +99,18 @@ f.ServerWithSessionBuilder(server, func(session *Session) {
         // Set `key` and `value` int the session store.
     })
 
-    f.SessionWithUnsetter(session, func(key string) {
+    f.SessionWithRemover(session, func(key string) {
         // Unset a `key` from the session store.
     })
 
+
+    f.SessionWithChecker(session, func(key string) (exists bool) {
+        // Check if `key` exists in the session store.
+    })
+    
     f.SessionWithValidator(session, func() (valid bool) {
         // Validate the session.
         // Has it expired? Has it been revoked?
-    })
-
-    f.SessionWithKeyChecker(session, func(key string) (exists bool) {
-        // Check if `key` exists in the session store.
     })
 
     f.SessionWithDestroyer(session, func() {
