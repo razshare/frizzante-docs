@@ -103,11 +103,10 @@ f.ServerWithSessionBuilder(server, func(session *Session) {
         // Unset a `key` from the session store.
     })
 
-
     f.SessionWithChecker(session, func(key string) (exists bool) {
         // Check if `key` exists in the session store.
     })
-    
+
     f.SessionWithValidator(session, func() (valid bool) {
         // Validate the session.
         // Has it expired? Has it been revoked?
