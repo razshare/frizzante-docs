@@ -1,116 +1,64 @@
-## Session builder
+Before starting a session, you must create a session builder.
 
-You can overwrite the default in-memory session builder and provide 
-your own logic with `f.ServerWithSessionBuilder()`.
+!!! note
+    The starter templates comes with two separate 
+    session builders out of the box.
+
+
+A session builder is a function that builds (or retrieves) a session for the current connection.
+
+The following is an example of a session builder that saves state in memory.
 
 ```go
-f.ServerWithSessionBuilder(server, func(session *f.Session[UserSession]) {
-	destroyed := false
+type State struct {
+	Name string
+}
+
+var stores = map[string]State{}
+
+func Memory(session *f.Session[State]) {
 	f.SessionWithLoader(session, func() {
-        // Load state.
+		state, sessionExists := stores[session.Id]
+
+		if !sessionExists {
+			state = lib.InitializeState()
+			stores[session.Id] = state
+		}
+
+		session.Store = stores[session.Id]
 	})
 
 	f.SessionWithValidator(session, func() bool {
-		// Validate.
-
-        return true.
+		return true
 	})
 
 	f.SessionWithSaver(session, func() {
-		// Save.
+		// Noop.
 	})
 
 	f.SessionWithDestroyer(session, func() {
-		// Destroy.
+		delete(stores, session.Id)
 	})
-})
+}
+
 ```
 
-Use `f.SessionStart()` to start a session.
+## Start session
+
+Use `f.SessionStart[T]()` to start the session.
 
 ```go
-package main
-
-import (
-	"embed"
-	f "github.com/razshare/frizzante"
-)
-
-//go:embed .dist/*/**
-var dist embed.FS
-
-func main() {
-	// Create.
-	server := f.ServerCreate()
-	notifier := f.NotifierCreate()
-
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-	f.ServerWithNotifier(server, notifier)
-
-	// Api.
-	f.ServerWithApiBuilder(server, build)
-
-	// Start.
-	f.ServerStart(server)
-}
-
-func build(api *Api*) {
-    // Build api.
-	f.ApiWithPath(api, "/welcome")
-	f.ApiWithHandle(api, handle)
-}
-
 func handle(request *f.Request, response *f.Response) {
     // Start session.
-    session := f.SessionStart(request, response)
+    session := f.SessionStart(request, response, Memory)
 }
 ```
 
-`f.SessionStart()` always returns a session.
+`f.SessionStart[T]()` returns a session state, which you can freely
+read and modify.
 
 !!! note
-    The reason `f.SessionStart()` always succeeds is because it will automatically create a new session if none is found. The new session does **not** retain any data from the previous session.
-
-## SessionGet
-
-Use `f.SessionGet[T]()` to retrieve a session property, or fallback and create a default value if the property doesn't exist.
-
-```go
-session := f.SessionStart(request, response)
-username := f.SessionGet[string](session, "username")
-```
-
-## SessionSet
-
-Use `f.SessionSet[T]()` to create or update a session property.
-
-```go
-session := f.SessionStart(request, response)
-f.SessionSet(session, "username", "frizzante")
-```
-
-## SessionUnset
-
-Use `f.SessionUnset()` to remove a session property.
-
-```go
-session := f.SessionStart(request, response)
-f.SessionUnset(session, "username")
-```
-
-## SessionHas
-
-Use `f.SessionHas()` to check if the session has a property.
-
-```go
-session := f.SessionStart(request, response)
-if !f.SessionHas(session, "username") {
-    // Session key "username" doesn't exist.
-}
-```
+    The session state is built by the `Memory` session builder.
 
 ## Lifetime
 
