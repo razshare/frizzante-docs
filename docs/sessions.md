@@ -1,3 +1,31 @@
+## Session builder
+
+You can overwrite the default in-memory session builder and provide 
+your own logic with `f.ServerWithSessionBuilder()`.
+
+```go
+f.ServerWithSessionBuilder(server, func(session *f.Session[UserSession]) {
+	destroyed := false
+	f.SessionWithLoader(session, func() {
+        // Load state.
+	})
+
+	f.SessionWithValidator(session, func() bool {
+		// Validate.
+
+        return true.
+	})
+
+	f.SessionWithSaver(session, func() {
+		// Save.
+	})
+
+	f.SessionWithDestroyer(session, func() {
+		// Destroy.
+	})
+})
+```
+
 Use `f.SessionStart()` to start a session.
 
 ```go
@@ -82,40 +110,6 @@ session := f.SessionStart(request, response)
 if !f.SessionHas(session, "username") {
     // Session key "username" doesn't exist.
 }
-```
-
-## Session builder
-
-You can overwrite the default in-memory session builder and provide 
-your own logic with `f.ServerWithSessionBuilder()`.
-
-```go
-f.ServerWithSessionBuilder(server, func(session *Session) {
-    f.SessionWithGetter(session, func(key string) (value any) {
-        // Get `key` from the session store.
-    })
-
-    f.SessionWithSetter(session, func(key string, value any) {
-        // Set `key` and `value` int the session store.
-    })
-
-    f.SessionWithRemover(session, func(key string) {
-        // Unset a `key` from the session store.
-    })
-
-    f.SessionWithChecker(session, func(key string) (exists bool) {
-        // Check if `key` exists in the session store.
-    })
-
-    f.SessionWithValidator(session, func() (valid bool) {
-        // Validate the session.
-        // Has it expired? Has it been revoked?
-    })
-
-    f.SessionWithDestroyer(session, func() {
-        // Destroy the session and its store.
-    })
-})
 ```
 
 ## Lifetime
