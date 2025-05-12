@@ -98,16 +98,16 @@ and `f.PageWithView()` sets the view of your page.
 	This function usually modifies the state and 
 	sometimes redirects to some other page.
 
-While handling the page, you can inject data into the view with `f.ViewWithData()`
+Each page exposes a `Data` map, which is automatically injected into the view
 
 ```go
 func base(request *f.Request, response *f.Response, view *f.View) {
-	f.ViewWithData(view, "name", "world")
+	view.Data["name"] = "world"
 }
 ```
 
 
-These data fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
+These `Data` fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
 
 ```html
 <script>
