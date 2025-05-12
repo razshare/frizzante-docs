@@ -10,6 +10,8 @@ A session builder is a function that builds (or retrieves) a session for the cur
 The following is an example of a session builder that saves state in memory.
 
 ```go
+import f "github.com/razshare/frizzante"
+
 type State struct {
 	Name string
 }
@@ -17,26 +19,25 @@ type State struct {
 var stores = map[string]State{}
 
 func Memory(session *f.Session[State]) {
-	f.SessionWithLoader(session, func() {
+	f.SessionWithLoadHandler(session, func() {
 		state, sessionExists := stores[session.Id]
-
 		if !sessionExists {
 			state = lib.InitializeState()
 			stores[session.Id] = state
 		}
 
-		session.Store = stores[session.Id]
+		session.State = stores[session.Id]
 	})
 
-	f.SessionWithValidator(session, func() bool {
+	f.SessionWithValidateHandler(session, func() bool {
 		return true
 	})
 
-	f.SessionWithSaver(session, func() {
+	f.SessionWithSaveHandler(session, func() {
 		// Noop.
 	})
 
-	f.SessionWithDestroyer(session, func() {
+	f.SessionWithDestroyHandler(session, func() {
 		delete(stores, session.Id)
 	})
 }
@@ -50,15 +51,19 @@ Use `f.SessionStart[T]()` to start the session.
 ```go
 func handle(request *f.Request, response *f.Response) {
     // Start session.
-    session := f.SessionStart(request, response, Memory)
+    state := f.SessionStart(request, response, Memory)
+
+	// Modify state.
+	state.Name = "World"
 }
 ```
 
-`f.SessionStart[T]()` returns a session state, which you can freely
-read and modify.
-
 !!! note
     The session state is built by the `Memory` session builder.
+
+!!! note
+	Generic type `T` is inferred from `Memory`, which makes it `State`.
+
 
 ## Lifetime
 

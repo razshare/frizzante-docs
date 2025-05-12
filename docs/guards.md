@@ -27,13 +27,13 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApiBuilder(server, build)
+	f.ServerWithApiBuilder(server, buildApi)
 
 	// Start.
 	f.ServerStart(server)
 }
 
-func build(api *f.Api) {
+func buildApi(api *f.Api) {
 	// Build api.
     f.ApiWithPattern(api, "GET /")
     f.ApiWithRequestHandler(api, handleApi)
