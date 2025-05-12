@@ -1,8 +1,8 @@
 Before starting a session, you must create a session builder.
 
 !!! note
-    The starter templates comes with two separate 
-    session builders out of the box.
+    The starter template comes with two separate 
+    session builders out of the box, a [persistent builder](https://github.com/razshare/frizzante-starter/blob/main/lib/sessions/archive.go) and a [volatile one](https://github.com/razshare/frizzante-starter/blob/main/lib/sessions/memory.go).
 
 
 A session builder is a function that builds (or retrieves) a session for the current connection.
