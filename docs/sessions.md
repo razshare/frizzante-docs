@@ -12,13 +12,13 @@ func handle(request *f.Request, response *f.Response) {
 
 # Session builder
 
-By default all session are saved to a `.sessions` directory on your disk.
+By default all sessions are saved to a `.sessions` directory on your disk.
 
 This is the default behavior, which is useful for quick debugging.
 
 You can customize this behavior by  providing your own session builder.
 
-!!! not
+!!! note
 	A session builder is a function that builds (or retrieves) a session's state.<br/>
 	It provides the basic mechanisms for checking, getting, setting properties and a destroyer function, which specifies what should happen when a session is "destroyed".
 
@@ -35,6 +35,29 @@ import (
 	"main/lib/api"
 	"main/lib/pages"
 )
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func main() {
+	// Create.
+	server := f.ServerCreate()
+
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithNotifier(server, notifier)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+
+	// Sessions.
+	f.ServerWithSessionBuilder(server, buildSession)
+
+	// Api.
+	f.ServerWithApiBuilder(server, buildApi)
+
+	//Start.
+	f.ServerStart(server)
+}
 
 var memory = map[string]map[string][]byte{}
 
@@ -59,29 +82,6 @@ func buildSession(session *f.Session) {
 	f.SessionWithDestroyHandler(session, func() {
 		delete(memory, sessionId)
 	})
-}
-
-//go:embed .dist/*/**
-var dist embed.FS
-
-func main() {
-	// Create.
-	server := f.ServerCreate()
-
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithNotifier(server, notifier)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-
-	// Sessions.
-	f.ServerWithSessionBuilder(server, buildSession)
-
-	// Api.
-	f.ServerWithApiBuilder(server, buildApi)
-
-	//Start.
-	f.ServerStart(server)
 }
 
 func buildApi(api *f.Api) {
