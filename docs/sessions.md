@@ -59,5 +59,3 @@ func handle(request *f.Request, response *f.Response) {
 ## Lifetime
 
 The `f.SessionStart()` function does not set any expiration date, domain or path on the session cookie sent to the browser.
-
-Instead, `f.ServerWithSessionBuilder()` has complete control over the lifetime of any session.
