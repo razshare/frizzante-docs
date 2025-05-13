@@ -1,21 +1,45 @@
-Before starting a session, you must create a session builder.
+Use `f.SessionStart()` to start the session.
 
-!!! note
-    The starter template comes with two separate 
-    session builders out of the box, a [persistent builder](https://github.com/razshare/frizzante-starter/blob/main/lib/sessions/archive.go) and a [volatile one](https://github.com/razshare/frizzante-starter/blob/main/lib/sessions/memory.go).
+```go
+func handle(request *f.Request, response *f.Response) {
+    // Start session.
+    state := f.SessionStart(request, response)
 
+	// Modify state.
+	f.SessionSetString(session, "name", "World")
+}
+```
 
-A session builder is a function that builds (or retrieves) a session' state. It provides the basic mechanisms for checking, getting, setting properties and a destroyer function, which specifies what should happen when a session is "destroyed".
+# Session builder
 
-The following is an example of a session builder that saves state in memory.
+By default all session are saved to a `.sessions` directory on your disk.
+
+This is the default behavior, which is useful for quick debugging.
+
+You can customize this behavior by  providing your own session builder.
+
+!!! not
+	A session builder is a function that builds (or retrieves) a session's state.<br/>
+	It provides the basic mechanisms for checking, getting, setting properties and a destroyer function, which specifies what should happen when a session is "destroyed".
+
+Use `f.ServerWithSessionBuilder()` to set the server's session builder.
 
 ```go
 import f "github.com/razshare/frizzante"
 
+package main
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+	"main/lib/api"
+	"main/lib/pages"
+)
+
 var memory = map[string]map[string][]byte{}
 
-// Memory builds sessions in memory.
-func Memory(session *f.Session) {
+// buildSession builds a session in memory.
+func buildSession(session *f.Session) {
 	sessionId := f.SessionId(session)
 	memory[sessionId] = map[string][]byte{}
 
@@ -36,25 +60,44 @@ func Memory(session *f.Session) {
 		delete(memory, sessionId)
 	})
 }
-```
 
-## Start session
+//go:embed .dist/*/**
+var dist embed.FS
 
-Use `f.SessionStart()` to start the session.
+func main() {
+	// Create.
+	server := f.ServerCreate()
 
-```go
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithNotifier(server, notifier)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+
+	// Sessions.
+	f.ServerWithSessionBuilder(server, buildSession)
+
+	// Api.
+	f.ServerWithApiBuilder(server, buildApi)
+
+	//Start.
+	f.ServerStart(server)
+}
+
+func buildApi(api *f.Api) {
+	// Build api.
+    f.ApiWithPattern(api, "GET /")
+    f.ApiWithRequestHandler(api, handle)
+}
+
 func handle(request *f.Request, response *f.Response) {
     // Start session.
-    state := f.SessionStart(request, response, Memory)
+    state := f.SessionStart(request, response)
 
 	// Modify state.
 	f.SessionSetString(session, "name", "World")
 }
 ```
-
-!!! note
-    The session state is built by the `Memory` session builder, as shown above.
-
 
 ## Lifetime
 
