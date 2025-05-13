@@ -5,48 +5,42 @@ Before starting a session, you must create a session builder.
     session builders out of the box, a [persistent builder](https://github.com/razshare/frizzante-starter/blob/main/lib/sessions/archive.go) and a [volatile one](https://github.com/razshare/frizzante-starter/blob/main/lib/sessions/memory.go).
 
 
-A session builder is a function that builds (or retrieves) a session for the current connection.
+A session builder is a function that builds (or retrieves) a session' state. It provides the basic mechanisms for checking, getting, setting properties and a destroyer function, which specifies what should happen when a session is "destroyed".
 
 The following is an example of a session builder that saves state in memory.
 
 ```go
 import f "github.com/razshare/frizzante"
 
-type State struct {
-	Name string
-}
+var memory = map[string]map[string][]byte{}
 
-var stores = map[string]State{}
+// Memory builds sessions in memory.
+func Memory(session *f.Session) {
+	sessionId := f.SessionId(session)
+	memory[sessionId] = map[string][]byte{}
 
-func Memory(session *f.Session[State]) {
-	f.SessionWithLoadHandler(session, func() {
-		state, sessionExists := stores[session.Id]
-		if !sessionExists {
-			state = lib.InitializeState()
-			stores[session.Id] = state
-		}
-
-		session.State = stores[session.Id]
+	f.SessionWithGetHandler(session, func(key string) []byte {
+		return memory[sessionId][key]
 	})
 
-	f.SessionWithValidateHandler(session, func() bool {
-		return true
+	f.SessionWithSetHandler(session, func(key string, value []byte) {
+		memory[sessionId][key] = value
 	})
 
-	f.SessionWithSaveHandler(session, func() {
-		stores[session.Id] = session.State
+	f.SessionWithHasHandler(session, func(key string) bool {
+		_, hasKey := memory[sessionId][key]
+		return hasKey
 	})
 
 	f.SessionWithDestroyHandler(session, func() {
-		delete(stores, session.Id)
+		delete(memory, sessionId)
 	})
 }
-
 ```
 
 ## Start session
 
-Use `f.SessionStart[T]()` to start the session.
+Use `f.SessionStart()` to start the session.
 
 ```go
 func handle(request *f.Request, response *f.Response) {
@@ -54,15 +48,12 @@ func handle(request *f.Request, response *f.Response) {
     state := f.SessionStart(request, response, Memory)
 
 	// Modify state.
-	state.Name = "World"
+	f.SessionSetString(session, "name", "World")
 }
 ```
 
 !!! note
-    The session state is built by the `Memory` session builder.
-
-!!! note
-	Generic type `T` is inferred from `Memory`, which makes it `State`.
+    The session state is built by the `Memory` session builder, as shown above.
 
 
 ## Lifetime
