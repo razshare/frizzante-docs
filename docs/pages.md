@@ -14,7 +14,7 @@ Subdirectories are joined by `.` instead of `/` or `\`.
 !!! example
 	A view located at `lib/components/views/about/Me.svelte` will be identified by `about.Me`.
 
-After you've created your view, you can create a page with `f.ServerWithPageBuilder()`
+After you've created your view, you can add a page to the server with `f.ServerWithPageBuilder()` in your `main.go` file.
 
 ```go
 package main
