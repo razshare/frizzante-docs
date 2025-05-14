@@ -1,12 +1,49 @@
 Use `f.SessionStart()` to start the session.
 
-```go
-func handle(request *f.Request, response *f.Response) {
-    // Start session.
-    state := f.SessionStart(request, response)
 
-	// Modify state.
-	f.SessionSetString(session, "name", "World")
+`main.go`
+```go
+package main
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func main() {
+	// Create.
+	server := f.ServerCreate()
+	notifier := f.NotifierCreate()
+
+	// Setup.
+	f.ServerWithPort(server, 8080)
+	f.ServerWithHostName(server, "127.0.0.1")
+	f.ServerWithEmbeddedFileSystem(server, dist)
+	f.ServerWithNotifier(server, notifier)
+
+	// Api.
+	f.ServerWithApiBuilder(server, api.MyApi)
+
+	// Start.
+	f.ServerStart(server)
+}
+```
+
+`lib/api/MyApi.go`
+```go
+package api
+
+import f "github.com/razshare/frizzante"
+
+func MyApi(api *f.Api) {
+    // Build api.
+    f.ApiWithPattern(api, "GET /")
+    f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
+        // Handle request.
+    })
 }
 ```
 
