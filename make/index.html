@@ -598,15 +598,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#guards" class="md-nav__link">
-    <span class="md-ellipsis">
-      Guards
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#pages" class="md-nav__link">
     <span class="md-ellipsis">
       Pages
@@ -657,15 +648,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#guards" class="md-nav__link">
-    <span class="md-ellipsis">
-      Guards
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#pages" class="md-nav__link">
     <span class="md-ellipsis">
       Pages
@@ -692,7 +674,7 @@
 
   <h1>Make</h1>
 
-<p>You can use <code>go run lib/make/main.go</code> to create apis, guards and pages from your terminal.</p>
+<p>You can use <code>go run lib/make/main.go</code> to create apis and pages from your terminal.</p>
 <h2 id="api">Api</h2>
 <p>Use <code>go run lib/make/main.go -api -name="{name}"</code> to create an api, where <code>{name}</code> is the human readable name of the api.</p>
 <div class="admonition example">
@@ -704,27 +686,16 @@ This will create a <code>lib/api/login.go</code> file.</p>
 <p>As an alternative, you can use the provided makefile command</p>
 <div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>make<span class="w"> </span>api
 </span></code></pre></div>
-<h2 id="guards">Guards</h2>
-<p>Use <code>go run lib/make/main.go -guard -name="{name}"</code> to create a guard, where <code>{name}</code> is the human readable name of the guard.</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<p><div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-guard<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;session&quot;</span>
-</span></code></pre></div>
-This will create a <code>lib/guards/session.go</code> file.</p>
-</div>
-<p>As an alternative, you can use the provided makefile command</p>
-<div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>make<span class="w"> </span>guard
-</span></code></pre></div>
 <h2 id="pages">Pages</h2>
 <p>Use <code>go run lib/make/main.go -page -name="{name}"</code> to create a page, where <code>{name}</code> is the human readable name of the page.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p><div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-page<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;welcome&quot;</span>
+<p><div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>go<span class="w"> </span>run<span class="w"> </span>lib/make/main.go<span class="w"> </span>-page<span class="w"> </span>-name<span class="o">=</span><span class="s2">&quot;welcome&quot;</span>
 </span></code></pre></div>
 This will create files <code>lib/page/welcome.go</code> and <code>lib/components/views/Welcome.svelte</code>.</p>
 </div>
 <p>As an alternative, you can use the provided makefile command</p>
-<div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>make<span class="w"> </span>page
+<div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>make<span class="w"> </span>page
 </span></code></pre></div>
 
 
