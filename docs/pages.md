@@ -163,6 +163,10 @@ These `Data` fields can be retrieved from your svelte components with [getContex
 		!!! note
 			Functions that send the status and header fields, like `f.ResponseSendStatus()`, `f.ResponseSendHeader()`, are safe to use.
 
+!!! danger
+	## Very important!<br/>
+	After creating a new page, you must run again `make configure` in order to compile your new `.svelte` files into `.js` files.
+
 ## Other details
 
 Page functions should be created under `lib/pages/{name}.go`, where `{name}` is the name of the page.
