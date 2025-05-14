@@ -113,7 +113,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#other-details" class="md-skip">
+        <a href="#very-important" class="md-skip">
           Skip to content
         </a>
       
@@ -459,6 +459,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#very-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      Very important!
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#other-details" class="md-nav__link">
     <span class="md-ellipsis">
       Other details
@@ -630,6 +639,15 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#very-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      Very important!
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#other-details" class="md-nav__link">
@@ -812,6 +830,11 @@ There are some use cases where sending content directly is useful, like debuggin
 <p>Functions that send the status and header fields, like <code>f.ResponseSendStatus()</code>, <code>f.ResponseSendHeader()</code>, are safe to use.</p>
 </div>
 </div>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<h2 id="very-important">Very important!<br/></h2>
+<p>After creating a new page, you must run again <code>make configure</code> in order to compile your new <code>.svelte</code> files into <code>.js</code> files.</p>
 </div>
 <h2 id="other-details">Other details</h2>
 <p>Page functions should be created under <code>lib/pages/{name}.go</code>, where <code>{name}</code> is the name of the page.</p>
