@@ -1,4 +1,4 @@
-You can use `go run lib/make/main.go` to create apis, guards and pages from your terminal.
+You can use `go run lib/make/main.go` to create apis and pages from your terminal.
 
 ## Api
 
@@ -14,22 +14,6 @@ As an alternative, you can use the provided makefile command
 
 ```sh
 make api
-```
-
-## Guards
-
-Use `go run lib/make/main.go -guard -name="{name}"` to create a guard, where `{name}` is the human readable name of the guard.
-
-!!! example
-    ```sh
-    go run lib/make/main.go -guard -name="session"
-    ```
-    This will create a `lib/guards/session.go` file.
-
-As an alternative, you can use the provided makefile command
-
-```sh
-make guard
 ```
 
 ## Pages
