@@ -1,5 +1,6 @@
 You can create a server with `f.ServerCreate()` and start it with `f.ServerStart()`.
 
+`main.go`
 ```go
 package main
 
@@ -16,6 +17,7 @@ said embedded file system to the server.
 
 This will make it so that your svelte assets get embedded directly into the final executable.
 
+`main.go`
 ```go
 package main
 
@@ -38,6 +40,7 @@ By default, your server will be listening for requests at [http://127.0.0.1:8080
 
 You can customize both your host name and port number with `f.ServerWithHostName()` and `f.ServerWithPortNumber()`.
 
+`main.go`
 ```go
 package main
 

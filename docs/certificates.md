@@ -1,5 +1,6 @@
 You can assign a certificate and a key for said certificate with `f.ServerWithCertificateAndKey()`.
 
+`main.go`
 ```go
 package main
 

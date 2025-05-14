@@ -1,5 +1,6 @@
 You can upgrade http requests to web sockets with `f.ResponseSendWsUpgrade()`.
 
+`main.go`
 ```go
 package main
 
@@ -23,28 +24,37 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApiBuilder(server, func(api *f.Api) {
-		// Build api.
-		f.ApiWithPattern("GET /welcome")
-		f.ApiWithRequestHandler(func(request *f.Request, response *f.Response) {
-			// Upgrade to web sockets.
-			f.ResponseSendWsUpgrade(response)
-
-			for {
-				// Send message.
-				f.ResponseSendMessage(response, "hello")
-
-				// Wait for incoming message.
-				msg := f.RequestReceiveMessage(request)
-				
-				// Log.
-				fmt.Printf("RequestReceived message `%s`.\n", msg)
-			}
-		})
-	})
+	f.ServerWithApiBuilder(server, api.MyApi)
 
 	// Start.
 	f.ServerStart(server)
+}
+```
+
+`lib/api/MyApi.go`
+```go
+package api
+
+import f "github.com/razshare/frizzante"
+
+func MyApi(api *f.Api) {
+	// Build api.
+	f.ApiWithPattern("GET /")
+	f.ApiWithRequestHandler(func(request *f.Request, response *f.Response) {
+		// Upgrade to web sockets.
+		f.ResponseSendWsUpgrade(response)
+
+		for {
+			// Send message.
+			f.ResponseSendMessage(response, "hello")
+
+			// Wait for incoming message.
+			msg := f.RequestReceiveMessage(request)
+			
+			// Log.
+			fmt.Printf("RequestReceived message `%s`.\n", msg)
+		}
+	})
 }
 ```
 

@@ -24,6 +24,7 @@ You can customize this behavior by  providing your own session builder.
 
 Use `f.ServerWithSessionBuilder()` to set the server's session builder.
 
+`main.go`
 ```go
 import f "github.com/razshare/frizzante"
 
@@ -74,20 +75,29 @@ func main() {
 	})
 
 	// Api.
-	f.ServerWithApiBuilder(server, func(api *f.Api) {
-		// Build api.
-		f.ApiWithPattern(api, "GET /")
-		f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
-			// Start session.
-			state := f.SessionStart(request, response)
-
-			// Modify state.
-			f.SessionSetString(session, "name", "World")
-		})
-	})
+	f.ServerWithApiBuilder(server, api.MyApi)
 
 	//Start.
 	f.ServerStart(server)
+}
+```
+
+`lib/api/MyApi.go`
+```go
+package api
+
+import f "github.com/razshare/frizzante"
+
+func MyApi(api *f.Api) {
+	// Build api.
+	f.ApiWithPattern(api, "GET /")
+	f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
+		// Start session.
+		state := f.SessionStart(request, response)
+
+		// Modify state.
+		f.SessionSetString(session, "name", "World")
+	})
 }
 ```
 

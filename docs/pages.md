@@ -16,6 +16,7 @@ Subdirectories are joined by `.` instead of `/` or `\`.
 
 After you've created your view, you can add a page to the server with `f.ServerWithPageBuilder()` in your `main.go` file.
 
+`main.go`
 ```go
 package main
 
@@ -39,22 +40,36 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Pages.
-	f.ServerWithPageBuilder(server, func(page *f.Page) {
-		// Build page.
-		f.PageWithPath(page, "/welcome")
-		f.PageWithView(page, f.ViewReference("Welcome")) // This references the file 
-														// "lib/components/views/Welcome.svelte"
-		f.PageWithBaseHandler(page, func(request *f.Request, response *f.Response, view *f.View) {
-			// Show page.
-		})
-		f.PageWithActionHandler(page, func(request *f.Request, response *f.Response, view *f.View) {
-			// Modify state.
-		})
-	})
+	f.ServerWithPageBuilder(server, pages.Welcome)
 
 	// Start.
 	f.ServerStart(server)
 }
+```
+
+`lib/pages/Welcome.go`
+```go
+package pages
+
+import f "github.com/razshare/frizzante"
+
+func Welcome(page *f.Page) {
+	// Build page.
+	f.PageWithPath(page, "/Welcome")
+	f.PageWithView(page, f.ViewReference("Welcome")) // This references the file 
+													 // "lib/components/views/Welcome.svelte"
+	f.PageWithBaseHandler(page, func(request *f.Request, response *f.Response, view *f.View) {
+		// Show page.
+	})
+	f.PageWithActionHandler(page, func(request *f.Request, response *f.Response, view *f.View) {
+		// Modify state.
+	})
+}
+```
+
+`lib/components/views/Welcome.svelte`
+```html
+<h1>Welcome to Frizzante.</h1>
 ```
 
 In your setup function, `f.PageWithPath()` sets the path of your page 

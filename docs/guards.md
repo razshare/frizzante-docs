@@ -4,6 +4,7 @@ Use `f.ApiWithGuardHandler()` or `f.PageWithGuardHandler()` to add a new guard.
 	A guard is a function that handles incoming requests before they reach any of your actual api and page handlers.<br/>
 	Guards can decide which requests should pass through and which request should be rejected.
 
+`main.go`
 ```go
 package main
 
@@ -27,20 +28,29 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApiBuilder(server, func(api *f.Api) {
-		// Build api.
-		f.ApiWithPattern(api, "GET /")
-		f.PageWithGuardHandler(api, func(request *f.Request, response *f.Response, pass func()) {
-			// Handle guard.
-			pass()
-		})
-		f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
-			// Handle request.
-		})
-	})
+	f.ServerWithApiBuilder(server, api.MyApi)
 
 	// Start.
 	f.ServerStart(server)
+}
+```
+
+`lib/api/MyApi.go`
+```go
+package api
+
+import f "github.com/razshare/frizzante"
+
+func MyApi(api *f.Api) {
+	// Build api.
+	f.ApiWithPattern(api, "GET /")
+	f.PageWithGuardHandler(api, func(request *f.Request, response *f.Response, pass func()) {
+		// Handle guard.
+		pass()
+	})
+	f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
+		// Handle request.
+	})
 }
 ```
 
