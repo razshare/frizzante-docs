@@ -36,18 +36,19 @@ func main() {
 func buildApi(api *f.Api) {
 	// Build api.
     f.ApiWithPattern(api, "GET /")
+	f.PageWithGuardHandler(api, handleGuard)
     f.ApiWithRequestHandler(api, handleApi)
-	f.ApiWithGuardHandler(api, handleGuard)
+}
+
+func handleGuard(request *f.Request, response *f.Response, pass func()) {
+	// Handle guard.
+	pass()
 }
 
 func handleApi(request *f.Request, response *f.Response) {
     // Handle request.
 }
 
-func handleGuard(request *f.Request, response *f.Response, pass func()) {
-    // Handle guard.
-	pass()
-}
 ```
 
 Use `pass()` to let the current request pass through.
