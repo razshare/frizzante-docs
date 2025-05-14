@@ -109,15 +109,27 @@ and `f.PageWithView()` sets the view of your page.
 
 Each page exposes a `Data` map, which is automatically injected into the view
 
+
+`lib/pages/Welcome.go`
 ```go
-func(request *f.Request, response *f.Response, view *f.View) {
-	f.ViewWithData(view, "name", "world")
+package pages
+
+import f "github.com/razshare/frizzante"
+
+func Welcome(page *f.Page) {
+	// Build page.
+	f.PageWithPath(page, "/Welcome")
+	f.PageWithView(page, f.ViewReference("Welcome")) // This references the file 
+													 // "lib/components/views/Welcome.svelte"
+	f.PageWithBaseHandler(page, func(request *f.Request, response *f.Response, view *f.View) {
+		f.ViewWithData(view, "name", "world")
+	})
 }
 ```
 
-
 These `Data` fields can be retrieved from your svelte components with [getContext("data")](https://svelte.dev/docs/svelte/svelte#getContext).
 
+`lib/components/views/Welcome.svelte`
 ```html
 <script>
 	import { getContext } from "svelte";
