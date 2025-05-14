@@ -102,7 +102,7 @@ Each page exposes a `Data` map, which is automatically injected into the view
 
 ```go
 func base(request *f.Request, response *f.Response, view *f.View) {
-	view.Data["name"] = "world"
+	f.ViewWithData(view, "name", "world")
 }
 ```
 
