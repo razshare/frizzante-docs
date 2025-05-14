@@ -1,4 +1,5 @@
-Before creating a page, you need to create a view.
+Before creating a page, you need to create a view, which are just `.svelte` components.<br/>
+These components *must* be located under `lib/components/views`.
 
 !!! note
 	See the [views section](./views.md) for more details.
