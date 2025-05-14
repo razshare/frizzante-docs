@@ -27,30 +27,26 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApiBuilder(server, build)
+	f.ServerWithApiBuilder(server, func(api *f.Api) {
+		// Build api.
+		f.ApiWithPattern(api, "GET /welcome")
+		f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
+			// Get a pointer to the connection status.
+			alive := requestIsAlive(request)
+
+			// Upgrade to server sent events.
+			withEventName := f.ResponseSendSseUpgrade(response)
+			withEventName("server-time")
+
+			// Continuously check if connection is still alive.
+			for *alive {
+				f.ResponseSendMessage(response, fmt.Sprintf("Server time is %s", time.Now()))
+			}
+		})
+	})
 
 	// Start.
 	f.ServerStart(server)
-}
-
-func build(api *f.Api) {
-	// Build api.
-    f.ApiWithPattern(api, "GET /welcome")
-    f.ApiWithRequestHandler(api, handle)
-}
-
-func handle(request *f.Request, response *f.Response) {
-	// Get a pointer to the connection status.
-	alive := requestIsAlive(request)
-
-	// Upgrade to server sent events.
-	withEventName := f.ResponseSendSseUpgrade(response)
-	withEventName("server-time")
-
-	// Continuously check if connection is still alive.
-	for *alive {
-		f.ResponseSendMessage(response, fmt.Sprintf("Server time is %s", time.Now()))
-	}
 }
 
 func requestIsAlive(request *f.Request) *bool {
@@ -73,7 +69,7 @@ func requestIsAlive(request *f.Request) *bool {
 or using web sockets
 
 ```go
-func handle(request *f.Request, response *f.Response) {
+func(request *f.Request, response *f.Response) {
 	// Get a pointer to the connection status.
 	alive := requestIsAlive(request)
 

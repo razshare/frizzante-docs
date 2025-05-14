@@ -27,28 +27,21 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApiBuilder(server, buildApi)
+	f.ServerWithApiBuilder(server, func(api *f.Api) {
+		// Build api.
+		f.ApiWithPattern(api, "GET /")
+		f.PageWithGuardHandler(api, func(request *f.Request, response *f.Response, pass func()) {
+			// Handle guard.
+			pass()
+		})
+		f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
+			// Handle request.
+		})
+	})
 
 	// Start.
 	f.ServerStart(server)
 }
-
-func buildApi(api *f.Api) {
-	// Build api.
-    f.ApiWithPattern(api, "GET /")
-	f.PageWithGuardHandler(api, handleGuard)
-    f.ApiWithRequestHandler(api, handleApi)
-}
-
-func handleGuard(request *f.Request, response *f.Response, pass func()) {
-	// Handle guard.
-	pass()
-}
-
-func handleApi(request *f.Request, response *f.Response) {
-    // Handle request.
-}
-
 ```
 
 Use `pass()` to let the current request pass through.

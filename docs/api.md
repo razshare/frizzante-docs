@@ -23,20 +23,16 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApiBuilder(server, build)
+	f.ServerWithApiBuilder(server, func(api *f.Api) {
+        // Build api.
+        f.ApiWithPattern(api, "GET /")
+        f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
+            // Handle request.
+        })
+    })
 
 	// Start.
 	f.ServerStart(server)
-}
-
-func build(api *f.Api) {
-	// Build api.
-    f.ApiWithPattern(api, "GET /")
-    f.ApiWithRequestHandler(api, handle)
-}
-
-func handle(request *f.Request, response *f.Response) {
-    // Handle request.
 }
 ```
 
@@ -56,7 +52,7 @@ Where `f.ApiWithPattern()` routes the api using a pattern and `f.ApiWithRequestH
 You can send out a message with `f.ResponseSendMessage()`
 
 ```go
-func handle(request *f.Request, response *f.Response) {
+func(request *f.Request, response *f.Response) {
     f.ResponseSendMessage(response, "hello")
 }
 ```
@@ -67,7 +63,7 @@ You can define path fields in your pattern using the curly
 braces format `{}` and retrieve fields with `f.RequestReceivePath()`.
 
 ```go
-func handle(request *f.Request, response *f.Response) {
+func(request *f.Request, response *f.Response) {
     name := f.RequestReceivePath(request, "name")
     f.ResponseSendMessage(response, "hello "+name)
 }
@@ -78,7 +74,7 @@ func handle(request *f.Request, response *f.Response) {
 You can send out a status code with `f.ResponseSendStatus()`
 
 ```go
-func handle(request *f.Request, response *f.Response) {
+func(request *f.Request, response *f.Response) {
     f.ResponseSendStatus(response, 404)
     f.ResponseSendMessage(response, "Resource not found, sorry.")
 }
@@ -92,7 +88,7 @@ func handle(request *f.Request, response *f.Response) {
 You can retrieve header fields with `f.RequestReceiveHeader()` and send out header fields with `f.ResponseSendHeader()`.
 
 ```go
-func handle(request *f.Request, response *f.Response) {
+func(request *f.Request, response *f.Response) {
     contentType := f.RequestReceiveHeader(request, "Content-Type")
     if "application/xml" != contentType {
         f.ResponseSendStatus(response, 400)
@@ -115,7 +111,7 @@ func handle(request *f.Request, response *f.Response) {
 You can retrieve values of query fields with `f.RequestReceiveQuery()`
 
 ```go
-func handle(request *f.Request, response *f.Response) {
+func(request *f.Request, response *f.Response) {
     name := f.RequestReceiveQuery(request, "name")
     f.ResponseSendMessage(response, "hello "+name)
 }
@@ -128,7 +124,7 @@ Forms can be retrieved with `f.RequestReceiveForm()`.
 You can use the `url.Values` api in order to retrieve specific form fields.
 
 ```go
-func handle(request *f.Request, response *f.Response) {
+func(request *f.Request, response *f.Response) {
     form := f.RequestReceiveForm(request)
     name := form.Get("name")
     f.ResponseSendMessage(response, "hello "+name)
@@ -143,7 +139,7 @@ func handle(request *f.Request, response *f.Response) {
 Json bodies can be read and decoded with `f.RequestReceiveJson[T]()`.
 
 ```go
-func handle(request *f.Request, response *f.Response) {
+func(request *f.Request, response *f.Response) {
     person, _ := f.RequestReceiveJson[Person](request)
     f.ResponseSendMessage(response, "hello "+person.name)
 }

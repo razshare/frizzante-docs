@@ -39,28 +39,21 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Pages.
-	f.ServerWithPageBuilder(server, build)
+	f.ServerWithPageBuilder(server, func(page *f.Page) {
+		// Build page.
+		f.PageWithPath(page, "/welcome")
+		f.PageWithView(page, f.ViewReference("Welcome")) // This references the file 
+														// "lib/components/views/Welcome.svelte"
+		f.PageWithBaseHandler(page, func(request *f.Request, response *f.Response, view *f.View) {
+			// Show page.
+		})
+		f.PageWithActionHandler(page, func(request *f.Request, response *f.Response, view *f.View) {
+			// Modify state.
+		})
+	})
 
 	// Start.
 	f.ServerStart(server)
-}
-
-
-func build(page *f.Page) {
-	// Build page.
-	f.PageWithPath(page, "/welcome")
-	f.PageWithView(page, f.ViewReference("Welcome")) // This references the file 
-										             // "lib/components/views/Welcome.svelte"
-	f.PageWithBaseHandler(page, base)
-	f.PageWithActionHandler(page, action)
-}
-
-func base(request *f.Request, response *f.Response, view *f.View) {
-	// Show page.
-}
-
-func action(request *f.Request, response *f.Response, view *f.View) {
-	// Modify state.
 }
 ```
 
@@ -102,7 +95,7 @@ and `f.PageWithView()` sets the view of your page.
 Each page exposes a `Data` map, which is automatically injected into the view
 
 ```go
-func base(request *f.Request, response *f.Response, view *f.View) {
+func(request *f.Request, response *f.Response, view *f.View) {
 	f.ViewWithData(view, "name", "world")
 }
 ```

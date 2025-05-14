@@ -38,6 +38,7 @@ import (
 
 //go:embed .dist/*/**
 var dist embed.FS
+var memory = map[string]map[string][]byte{}
 
 func main() {
 	// Create.
@@ -50,52 +51,43 @@ func main() {
 	f.ServerWithEmbeddedFileSystem(server, dist)
 
 	// Sessions.
-	f.ServerWithSessionBuilder(server, buildSession)
+	f.ServerWithSessionBuilder(server, func(session *f.Session) {
+		sessionId := f.SessionId(session)
+		memory[sessionId] = map[string][]byte{}
+
+		f.SessionWithGetHandler(session, func(key string) []byte {
+			return memory[sessionId][key]
+		})
+
+		f.SessionWithSetHandler(session, func(key string, value []byte) {
+			memory[sessionId][key] = value
+		})
+
+		f.SessionWithHasHandler(session, func(key string) bool {
+			_, hasKey := memory[sessionId][key]
+			return hasKey
+		})
+
+		f.SessionWithDestroyHandler(session, func() {
+			delete(memory, sessionId)
+		})
+	})
 
 	// Api.
-	f.ServerWithApiBuilder(server, buildApi)
+	f.ServerWithApiBuilder(server, func(api *f.Api) {
+		// Build api.
+		f.ApiWithPattern(api, "GET /")
+		f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
+			// Start session.
+			state := f.SessionStart(request, response)
+
+			// Modify state.
+			f.SessionSetString(session, "name", "World")
+		})
+	})
 
 	//Start.
 	f.ServerStart(server)
-}
-
-var memory = map[string]map[string][]byte{}
-
-// buildSession builds a session in memory.
-func buildSession(session *f.Session) {
-	sessionId := f.SessionId(session)
-	memory[sessionId] = map[string][]byte{}
-
-	f.SessionWithGetHandler(session, func(key string) []byte {
-		return memory[sessionId][key]
-	})
-
-	f.SessionWithSetHandler(session, func(key string, value []byte) {
-		memory[sessionId][key] = value
-	})
-
-	f.SessionWithHasHandler(session, func(key string) bool {
-		_, hasKey := memory[sessionId][key]
-		return hasKey
-	})
-
-	f.SessionWithDestroyHandler(session, func() {
-		delete(memory, sessionId)
-	})
-}
-
-func buildApi(api *f.Api) {
-	// Build api.
-    f.ApiWithPattern(api, "GET /")
-    f.ApiWithRequestHandler(api, handle)
-}
-
-func handle(request *f.Request, response *f.Response) {
-    // Start session.
-    state := f.SessionStart(request, response)
-
-	// Modify state.
-	f.SessionSetString(session, "name", "World")
 }
 ```
 

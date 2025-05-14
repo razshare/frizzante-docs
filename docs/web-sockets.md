@@ -23,32 +23,28 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApiBuilder(server, build)
+	f.ServerWithApiBuilder(server, func(api *f.Api) {
+		// Build api.
+		f.ApiWithPattern("GET /welcome")
+		f.ApiWithRequestHandler(func(request *f.Request, response *f.Response) {
+			// Upgrade to web sockets.
+			f.ResponseSendWsUpgrade(response)
+
+			for {
+				// Send message.
+				f.ResponseSendMessage(response, "hello")
+
+				// Wait for incoming message.
+				msg := f.RequestReceiveMessage(request)
+				
+				// Log.
+				fmt.Printf("RequestReceived message `%s`.\n", msg)
+			}
+		})
+	})
 
 	// Start.
 	f.ServerStart(server)
-}
-
-func build(api *f.Api) {
-    // Build api.
-	f.ApiWithPattern("GET /welcome")
-	f.ApiWithRequestHandler(handle)
-}
-
-func handle(request *f.Request, response *f.Response) {
-    // Upgrade to web sockets.
-    f.ResponseSendWsUpgrade(response)
-
-    for {
-        // Send message.
-        f.ResponseSendMessage(response, "hello")
-
-        // Wait for incoming message.
-        msg := f.RequestReceiveMessage(request)
-        
-		// Log.
-        fmt.Printf("RequestReceived message `%s`.\n", msg)
-    }
 }
 ```
 

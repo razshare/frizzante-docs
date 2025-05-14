@@ -23,39 +23,35 @@ func main() {
 	f.ServerWithNotifier(server, notifier)
 
 	// Api.
-	f.ServerWithApiBuilder(server, build)
+	f.ServerWithApiBuilder(server, func(api *f.Api) {
+        // Build api.
+        f.ApiWithPath(api, "/welcome")
+        f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
+            // Upgrade to server sent events.
+            withEventName := f.ResponseSendSseUpgrade(response)
+
+            for {
+                // Send to channel-1.
+                withEventName("channel-1")
+                f.ResponseSendMessage(response, "This is a message for channel-1")
+                
+                // Send to channel-2.
+                withEventName("channel-2")
+                f.ResponseSendMessage(response, "This is a message for channel-2")
+                f.ResponseSendMessage(response, "This is another message for channel-2")
+
+                // Send to channel-1.
+                withEventName("channel-1")
+                f.ResponseSendMessage(response, "Back to channel-1")
+
+                // Sleep for a bit.
+                time.Sleep(time.Second)
+            }
+        })
+    })
 
 	// Start.
 	f.ServerStart(server)
-}
-
-func build(api *f.Api) {
-    // Build api.
-	f.ApiWithPath(api, "/welcome")
-	f.ApiWithRequestHandler(api, handle)
-}
-
-func handle(request *f.Request, response *f.Response) {
-    // Upgrade to server sent events.
-    withEventName := f.ResponseSendSseUpgrade(response)
-
-    for {
-        // Send to channel-1.
-        withEventName("channel-1")
-        f.ResponseSendMessage(response, "This is a message for channel-1")
-        
-        // Send to channel-2.
-        withEventName("channel-2")
-        f.ResponseSendMessage(response, "This is a message for channel-2")
-        f.ResponseSendMessage(response, "This is another message for channel-2")
-
-        // Send to channel-1.
-        withEventName("channel-1")
-        f.ResponseSendMessage(response, "Back to channel-1")
-
-        // Sleep for a bit.
-        time.Sleep(time.Second)
-    }
 }
 ```
 
