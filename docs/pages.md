@@ -157,7 +157,7 @@ These `Data` fields can be retrieved from your svelte components with [getContex
 		using `f.ResponseSend*` functions, 
 		like `f.ResponseSendMessage()`, `f.ResponseSendJson()`.<br/>
 		<br/>
-		ResponseSending content directly to the client will break the HTML document structure by prepending 
+		Sending content directly to the client will break the HTML document structure by prepending 
 		the content to the actual view.<br/>
 		<br/>
 		There are some use cases where sending content directly is useful, like debugging.<br/>
