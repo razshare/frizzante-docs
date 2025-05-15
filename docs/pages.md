@@ -166,7 +166,7 @@ These `Data` fields can be retrieved from your svelte components with [getContex
 
 !!! danger
 	## Very important!<br/>
-	After creating a new page, you must run again `make configure` in order to compile your new `.svelte` files into `.js` files.
+	After creating a new page, you must run again `make configure` in order to compile your new `.svelte` file into a `.js` file.
 
 ## Other details
 
