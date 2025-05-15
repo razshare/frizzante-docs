@@ -48,7 +48,7 @@ func MyApi(api *f.Api) {
 }
 ```
 
-# Session builder
+## Session builder
 
 By default all sessions are saved to a `.sessions` directory on your disk.
 
