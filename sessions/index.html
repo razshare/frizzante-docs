@@ -441,8 +441,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -475,14 +473,21 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#session-builder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Session builder
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#lifetime" class="md-nav__link">
@@ -628,14 +633,21 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#session-builder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Session builder
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#lifetime" class="md-nav__link">
@@ -661,6 +673,8 @@
                   
 
 
+
+  <h1>Sessions</h1>
 
 <p>Use <code>f.SessionStart()</code> to start the session.</p>
 <p><code>main.go</code>
@@ -706,7 +720,7 @@
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">})</span>
 </span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
 </span></code></pre></div></p>
-<h1 id="session-builder">Session builder</h1>
+<h2 id="session-builder">Session builder</h2>
 <p>By default all sessions are saved to a <code>.sessions</code> directory on your disk.</p>
 <p>This is the default behavior, which is useful for quick debugging.</p>
 <p>You can customize this behavior by  providing your own session builder.</p>
