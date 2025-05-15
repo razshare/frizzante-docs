@@ -8,6 +8,7 @@ package main
 import (
 	"embed"
 	f "github.com/razshare/frizzante"
+	"main/lib/api"
 )
 
 //go:embed .dist/*/**
