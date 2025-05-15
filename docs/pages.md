@@ -23,6 +23,7 @@ package main
 import (
 	"embed"
 	f "github.com/razshare/frizzante"
+	"main/lib/pages"
 )
 
 //go:embed .dist/*/**
