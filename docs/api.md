@@ -1,4 +1,40 @@
-Use `server.OnRequest()` or `server.WithApiController()` to create an api.
+Use `server.OnRequest()` to handle incoming requests.
+
+`main.go`
+```go
+package main
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+	"main/lib/controllers/api"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+
+func main() {
+	// Create.
+	server := f.NewServer()
+	notifier := f.NewNotifier()
+
+	// Configure.
+	server.WithPort(8080)
+	server.WithNotifier(notifier)
+	server.WithHostName("127.0.0.1")
+	server.WithEmbeddedFileSystem(&dist)
+
+	// Api.
+	server.OnRequest("GET /api", func(req *f.Request, res *f.Response){
+		// Handle request.
+	})
+
+	//Start.
+	server.Start()
+}
+```
+
+Use `server.WithApiController()` to handle requests in a more opinionated way, using a controller
 
 `main.go`
 ```go
@@ -32,6 +68,8 @@ func main() {
 }
 ```
 
+where `api.MyApiController` is defined as
+
 `lib/controllers/api/MyApiController.go`
 ```go
 package api
@@ -45,51 +83,50 @@ type MyApiController struct {
 	f.ApiController
 }
 
-func (controller MyApiController) Configure() f.ApiConfiguration {
+func (_ MyApiController) Configure() f.ApiConfiguration {
 	return f.ApiConfiguration{
 		Pattern: "GET /api/my-controller",
 	}
 }
 
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
 	// Handle request.
 }
 ```
 
-
 ## Send message
 
-You can send out a message with `response.SendMessage()`
+You can send out a message with `res.SendMessage()`
 
 `lib/controllers/api/MyApiController.go`
 ```go
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
-	response.SendMessage("hello")
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
+	res.SendMessage("hello")
 }
 ```
 
 ## Path
 
 You can define path fields in your pattern using the curly 
-braces format `{}` and retrieve fields with `response.ReceivePath()`.
+braces format `{}` and retrieve fields with `res.ReceivePath()`.
 
 `lib/controllers/api/MyApiController.go`
 ```go
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
-    name := request.ReceivePath("name")
-	response.SendMessage("hello "+name)
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
+    name := req.ReceivePath("name")
+	res.SendMessage("hello "+name)
 }
 ```
 
 ## Status
 
-You can send out a status code with `response.SendStatus()`
+You can send out a status code with `res.SendStatus()`
 
 `lib/controllers/api/MyApiController.go`
 ```go
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
-    response.SendStatus(404)
-	response.SendMessage("Resource not found, sorry.")
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
+    res.SendStatus(404)
+	res.SendMessage("Resource not found, sorry.")
 }
 ```
 
@@ -98,22 +135,22 @@ func (controller MyApiController) Handle(request *f.Request, response *f.Respons
 
 ## Header
 
-You can retrieve header fields with `request.ReceiveHeader()` and send out header fields with `response.SendHeader()`.
+You can retrieve header fields with `req.ReceiveHeader()` and send out header fields with `res.SendHeader()`.
 
 `lib/controllers/api/MyApiController.go`
 ```go
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
-    contentType := request.ReceiveHeader("Content-Type")
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
+    contentType := req.ReceiveHeader("Content-Type")
     if "application/xml" != contentType {
-        response.SendStatus(400)
-        response.SendHeader("Content-Length", "69")
-        response.SendMessage("We don't serve your kind around here, better get an XML encoder, heh.")
+        res.SendStatus(400)
+        res.SendHeader("Content-Length", "69")
+        res.SendMessage("We don't serve your kind around here, better get an XML encoder, heh.")
         return
     }
 
-    response.SendStatus(404)
-    response.SendHeader("Content-Length", "26")
-    response.SendMessage("Resource not found, sorry.")
+    res.SendStatus(404)
+    res.SendHeader("Content-Length", "26")
+    res.SendMessage("Resource not found, sorry.")
 }
 ```
 
@@ -122,28 +159,28 @@ func (controller MyApiController) Handle(request *f.Request, response *f.Respons
 
 ## Query
 
-You can retrieve values of query fields with `request.ReceiveQuery()`
+You can retrieve values of query fields with `req.ReceiveQuery()`
 
 `lib/controllers/api/MyApiController.go`
 ```go
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
-    name := request.ReceiveQuery("name")
-    response.SendMessage("hello "+name)
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
+    name := req.ReceiveQuery("name")
+    res.SendMessage("hello "+name)
 }
 ```
 
 ## Forms
 
-Forms can be retrieved with `request.ReceiveForm()`.
+Forms can be retrieved with `req.ReceiveForm()`.
 
 You can use the `url.Values` api in order to retrieve specific form fields.
 
 `lib/controllers/api/MyApiController.go`
 ```go
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
-    form := request.ReceiveForm()
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
+    form := req.ReceiveForm()
     name := form.Get("name")
-    response.SendMessage("hello "+name)
+    res.SendMessage("hello "+name)
 }
 ```
 
@@ -152,14 +189,14 @@ func (controller MyApiController) Handle(request *f.Request, response *f.Respons
 
 ## Json
 
-Json bodies can be read and decoded with `f.RequestReceiveJson[T]()`.
+Json bodies can be read and decoded with `req.ReceiveJson[T]()`.
 
 `lib/controllers/api/MyApiController.go`
 ```go
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
     var person Person
-    request.ReceiveJson(person)
-    response.SendMessage("hello "+person.Name)
+    req.ReceiveJson(person)
+    res.SendMessage("hello "+person.Name)
 }
 ```
 

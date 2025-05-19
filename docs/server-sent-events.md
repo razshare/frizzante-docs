@@ -1,4 +1,4 @@
-You can upgrade http requests to server sent events with `f.ResponseSendSseUpgrade()`.
+You can upgrade http requests to server sent events with `res.SendSseUpgrade()`.
 
 `main.go`
 ```go
@@ -46,29 +46,29 @@ type MyApiController struct {
 	f.ApiController
 }
 
-func (controller MyApiController) Configure() f.ApiConfiguration {
+func (_ MyApiController) Configure() f.ApiConfiguration {
 	return f.ApiConfiguration{
 		Pattern: "GET /api/my-controller",
 	}
 }
 
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
     // Upgrade to server sent events.
-    event := response.SendSseUpgrade()
+    event := res.SendSseUpgrade()
 
     for {
         // Send to channel-1.
         event("channel-1")
-        response.SendMessage("This is a message for channel-1")
+        res.SendMessage("This is a message for channel-1")
         
         // Send to channel-2.
         event("channel-2")
-        response.SendMessage("This is a message for channel-2")
-        response.SendMessage("This is another message for channel-2")
+        res.SendMessage("This is a message for channel-2")
+        res.SendMessage("This is another message for channel-2")
 
         // Send to channel-1.
         event("channel-1")
-        response.SendMessage("Back to channel-1")
+        res.SendMessage("Back to channel-1")
 
         // Sleep for a bit.
         time.Sleep(time.Second)
@@ -78,7 +78,7 @@ func (controller MyApiController) Handle(request *f.Request, response *f.Respons
 
 
 Set the name of the current event with `event()`, 
-then start sending content to the client with the usual `response.SendMessage()` and `response.SendJson()`.
+then start sending content to the client with the usual `res.SendMessage()` and `res.SendJson()`.
 
 
 Once the request handler returns, 

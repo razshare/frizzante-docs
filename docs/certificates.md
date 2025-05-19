@@ -1,4 +1,4 @@
-You can assign a certificate and a key for said certificate with `f.ServerWithCertificateAndKey()`.
+Assign a certificate to the server with `server.WithCertificate()`.
 
 `main.go`
 ```go
@@ -24,7 +24,7 @@ func main() {
 	server.WithEmbeddedFileSystem(&dist)
 
     // Setup certificate.
-    server.WithCertificateAndKey("cert.pem", "key.pem")
+    server.WithCertificate("cert.pem", "key.pem")
 
 	//Start.
 	server.Start()

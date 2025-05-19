@@ -1,4 +1,4 @@
-You can upgrade http requests to server sent events with `response.SendWsUpgrade()`.
+You can upgrade http requests to server sent events with `res.SendWsUpgrade()`.
 
 `main.go`
 ```go
@@ -46,22 +46,22 @@ type MyApiController struct {
 	f.ApiController
 }
 
-func (controller MyApiController) Configure() f.ApiConfiguration {
+func (_ MyApiController) Configure() f.ApiConfiguration {
 	return f.ApiConfiguration{
 		Pattern: "GET /api/my-controller",
 	}
 }
 
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
 	// Upgrade to web sockets.
-	response.SendWsUpgrade()
+	res.SendWsUpgrade()
 
 	for {
 		// Send message.
-		response.SendMessage("hello")
+		res.SendMessage("hello")
 
 		// Wait for incoming message.
-		msg := request.ReceiveMessage()
+		msg := req.ReceiveMessage()
 		
 		// Log.
 		fmt.Printf("RequestReceived message `%s`.\n", msg)
@@ -70,7 +70,7 @@ func (controller MyApiController) Handle(request *f.Request, response *f.Respons
 ```
 
 
-You can send content to the client with the usual `response.SendMessage()` and `response.SendJson()`.
+You can send content to the client with the usual `res.SendMessage()` and `res.SendJson()`.
 
 
 Once the request handler returns, 

@@ -1,4 +1,4 @@
-Use `server.WithPageController()` to create a page.
+Use `server.WithPageController()` to create a page
 
 `main.go`
 ```go
@@ -32,6 +32,8 @@ func main() {
 }
 ```
 
+where `pages.MyPageController` is defined as
+
 `lib/controllers/page/MyPageController.go`
 ```go
 package pages
@@ -44,18 +46,18 @@ type MyPageController struct {
 	f.PageController
 }
 
-func (controller MyPageController) Configure() f.PageConfiguration {
+func (_ MyPageController) Configure() f.PageConfiguration {
 	return f.PageConfiguration{
 		Path: "/",
 	}
 }
 
-func (controller MyPageController) Base(request *f.Request, response *f.Response) {
-	response.SendView(f.NewView(nil))
+func (_ MyPageController) Base(req *f.Request, res *f.Response) {
+	res.SendView(f.NewView(f.RenderFull))
 }
 
-func (controller MyPageController) Action(request *f.Request, response *f.Response) {
-	response.SendView(f.NewView(nil))
+func (_ MyPageController) Action(req *f.Request, res *f.Response) {
+	res.SendView(f.NewView(f.RenderFull))
 }
 ```
 
@@ -75,7 +77,7 @@ This controller expects a view located at `lib/components/views/MyPageView.svelt
 <h1>Welcome to Frizzante.</h1>
 ```
 
-Both `Base` and `Action` handlers must use `response.SendView()` to send the view to the client.
+Both `Base` and `Action` handlers must use `res.SendView()` to send the view to the client.
 
 !!! note
 	A base page handler is a function that 
@@ -93,32 +95,35 @@ Both `Base` and `Action` handlers must use `response.SendView()` to send the vie
 
 ## View
 
-You can inject data into views
+Inject data into views with `f.NewViewWithData()`
 
 `lib/controllers/page/MyPageController.go`
 ```go
-func (controller MyPageController) Base(request *f.Request, response *f.Response) {
+func (_ MyPageController) Base(req *f.Request, res *f.Response) {
 	data := map[string]string{
 		"name": "world",
 	}
-	response.SendView(f.NewView(data))
+	res.SendView(f.NewViewWithData(f.RenderFull, data))
 }
 ```
 
-This data can be retrieved from your svelte components with as properties.
+This data can be retrieved from your svelte components using [getContext("server")](https://svelte.dev/docs/svelte/context).
 
 `lib/components/views/MyPageView.svelte`
 ```html
 <script lang="ts">
-    type Data = { name: string }
-    type Props = { server: ServerProperties<Data> }
-    let {server = $bindable()}: Props = $props()
+    import {getContext} from "svelte";
+    import type {ServerContext} from "$frizzante/types.ts";
+	
+    const server = getContext("server") as ServerContext<{ 
+		name: string
+	}>
 </script>
 
 <h1>Hello {server.data.name}!</h1>
 ```
 
-## Other details
+## Conventions
 
 Page controllers should be created under `lib/controllers/pages/{name}Controller.go`, where `{name}` is the name of the page.
 

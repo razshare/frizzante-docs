@@ -82,7 +82,6 @@ func main() {
 }
 ```
 
-
 `lib/controllers/api/MyApiController.go`
 ```go
 package api
@@ -96,15 +95,15 @@ type MyApiController struct {
 	f.ApiController
 }
 
-func (controller MyApiController) Configure() f.ApiConfiguration {
+func (_ MyApiController) Configure() f.ApiConfiguration {
 	return f.ApiConfiguration{
 		Pattern: "GET /api/my-controller",
 	}
 }
 
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
 	// Start session.
-	session := f.SessionStart(request, response, sessions.Memorized)
+	session := f.SessionStart(req, res, sessions.Memorized)
 }
 ```
 

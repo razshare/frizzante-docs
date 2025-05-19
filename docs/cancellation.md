@@ -1,6 +1,6 @@
 Always track cancelled requests while streaming events, web sockets, executing long running tasks or expensive tasks in your request handlers.
 
-You can detect cancelled requests with `request.IsAlive()`.
+You can detect cancelled requests with `req.IsAlive()`.
 
 For example using sse
 
@@ -38,18 +38,19 @@ func main() {
 
 `lib/controllers/api/MyApiController.go`
 ```go
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
-	alive := request.IsAlive() // <======== This tracks status of the request.
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
+	// Track the status of the request.
+	alive := req.IsAlive()
 
 	// Upgrade to server sent events.
-	event := response.SendSseUpgrade()
+	event := res.SendSseUpgrade()
 	event("server-time")
 
-	// Continuously check if connection is still alive.
+	// Loop until request is cancelled.
 	for *alive {
 		now := time.Now()
 		message := fmt.Sprintf("Server time is %s", now)
-		response.SendMessage(message)
+		res.SendMessage(message)
 	}
 }
 ```

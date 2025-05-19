@@ -1,5 +1,7 @@
 You can guard api and page controllers by configuring the `Guards` property on your controller.
 
+First you need to expose your controller
+
 `main.go`
 ```go
 package main
@@ -32,6 +34,8 @@ func main() {
 }
 ```
 
+then within your controller configure the `Guards` property.
+
 `lib/controllers/api/MyApiController.go`
 ```go
 package api
@@ -47,26 +51,27 @@ type MyApiController struct {
 	f.ApiController
 }
 
-func (controller MyApiController) Configure() f.ApiConfiguration {
+func (_ MyApiController) Configure() f.ApiConfiguration {
 	return f.ApiConfiguration{
 		Pattern: "GET /api/my-controller",
 		Guards: []f.GuardFunction{
-			guards.SessionIsValid, // <======== This configures a guard.
+			guards.SessionIsValid,
 		}
 	}
 }
 
-func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
+func (_ MyApiController) Handle(req *f.Request, res *f.Response) {
 	// Handle request.
 }
 ```
 
-Where `guards.SessionIsValid` is a guard function
+Where `guards.SessionIsValid` is a guard function.
 
 
 !!! note
 	A guard function is a function that handles incoming requests before they reach any of your actual api and page handlers.<br/>
 	Guards can decide which requests should pass through and which request should be rejected.
+
 
 `lib/guards/SessionIsValid.go`
 ```go
@@ -78,12 +83,12 @@ import (
 	"time"
 )
 
-func SessionIsValid(request *f.Request, response *f.Response) bool {
-	session := f.SessionStart(request, response, sessions.Archived)
+func SessionIsValid(req *f.Request, res *f.Response) bool {
+	session := f.SessionStart(req, res, sessions.Archived)
 
 	if time.Since(session.Data.LastActivity) > 30*time.Minute {
 		session.Destroy()
-		response.SendNavigate("Expired")
+		res.SendNavigate("Expired")
 		return false
 	}
 
