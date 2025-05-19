@@ -54,6 +54,7 @@ type MyApiController struct {
 func (_ MyApiController) Configure() f.ApiConfiguration {
 	return f.ApiConfiguration{
 		Pattern: "GET /api/my-controller",
+		// Configure guards here.
 		Guards: []f.GuardFunction{
 			guards.SessionIsValid,
 		}
