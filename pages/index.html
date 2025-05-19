@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.11">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.4af4bdda.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
@@ -113,7 +113,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#very-important" class="md-skip">
+        <a href="#view" class="md-skip">
           Skip to content
         </a>
       
@@ -459,9 +459,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#very-important" class="md-nav__link">
+  <a href="#view" class="md-nav__link">
     <span class="md-ellipsis">
-      Very important!
+      View
     </span>
   </a>
   
@@ -641,9 +641,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#very-important" class="md-nav__link">
+  <a href="#view" class="md-nav__link">
     <span class="md-ellipsis">
-      Very important!
+      View
     </span>
   </a>
   
@@ -676,30 +676,14 @@
 
   <h1>Pages</h1>
 
-<p>Before creating a page, you need to create a view, which are just <code>.svelte</code> components.<br/>
-These components <em>must</em> be located under <code>lib/components/views</code>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>See the <a href="../views/">views section</a> for more details.</p>
-</div>
-<p>Views can be referred to by your Go code using their name relative to <code>lib/components/views</code>.</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<p>A view located at <code>lib/components/views/Welcome.svelte</code> will be identified by <code>Welcome</code>.</p>
-</div>
-<p>Subdirectories are joined by <code>.</code> instead of <code>/</code> or <code>\</code>.</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<p>A view located at <code>lib/components/views/about/Me.svelte</code> will be identified by <code>about.Me</code>.</p>
-</div>
-<p>After you've created your view, you can add a page to the server with <code>f.ServerWithPageBuilder()</code> in your <code>main.go</code> file.</p>
+<p>Use <code>server.WithPageController()</code> to create a page.</p>
 <p><code>main.go</code>
 <div class="language-go highlight"><span class="filename">Go</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="s">&quot;embed&quot;</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="s">&quot;main/lib/pages&quot;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="s">&quot;main/lib/controllers/pages&quot;</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1">//go:embed .dist/*/**</span>
@@ -707,62 +691,64 @@ These components <em>must</em> be located under <code>lib/components/views</code
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="c1">// Create.</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerCreate</span><span class="p">()</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nx">notifier</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">NotifierCreate</span><span class="p">()</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">NewServer</span><span class="p">()</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nx">notifier</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">NewNotifier</span><span class="p">()</span>
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="c1">// Setup.</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithPort</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="mi">8080</span><span class="p">)</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithHostName</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">)</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithEmbeddedFileSystem</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">dist</span><span class="p">)</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithNotifier</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">notifier</span><span class="p">)</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="c1">// Configure.</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="nx">server</span><span class="p">.</span><span class="nx">WithPort</span><span class="p">(</span><span class="mi">8080</span><span class="p">)</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="nx">server</span><span class="p">.</span><span class="nx">WithNotifier</span><span class="p">(</span><span class="nx">notifier</span><span class="p">)</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="nx">server</span><span class="p">.</span><span class="nx">WithHostName</span><span class="p">(</span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">)</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="nx">server</span><span class="p">.</span><span class="nx">WithEmbeddedFileSystem</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">dist</span><span class="p">)</span>
 </span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">    </span><span class="c1">// Pages.</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerWithPageBuilder</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span><span class="w"> </span><span class="nx">pages</span><span class="p">.</span><span class="nx">Welcome</span><span class="p">)</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="nx">server</span><span class="p">.</span><span class="nx">WithPageController</span><span class="p">(</span><span class="nx">pages</span><span class="p">.</span><span class="nx">MyPageController</span><span class="p">{})</span>
 </span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">    </span><span class="c1">// Start.</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">ServerStart</span><span class="p">(</span><span class="nx">server</span><span class="p">)</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">    </span><span class="c1">//Start.</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="nx">server</span><span class="p">.</span><span class="nx">Start</span><span class="p">()</span>
 </span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="p">}</span>
 </span></code></pre></div></p>
-<p><code>lib/pages/Welcome.go</code>
+<p><code>lib/controllers/page/MyPageController.go</code>
 <div class="language-go highlight"><span class="filename">Go</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">pages</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">import</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kd">func</span><span class="w"> </span><span class="nx">Welcome</span><span class="p">(</span><span class="nx">page</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="c1">// Build page.</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithPath</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/Welcome&quot;</span><span class="p">)</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithView</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Welcome&quot;</span><span class="p">))</span><span class="w"> </span><span class="c1">// This references the file </span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">                                                     </span><span class="c1">// &quot;lib/components/views/Welcome.svelte&quot;</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithBaseHandler</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">View</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="c1">// Show page.</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="p">})</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithActionHandler</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">View</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="c1">// Modify state.</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="p">})</span>
-</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">}</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="kd">type</span><span class="w"> </span><span class="nx">MyPageController</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageController</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">controller</span><span class="w"> </span><span class="nx">MyPageController</span><span class="p">)</span><span class="w"> </span><span class="nx">Configure</span><span class="p">()</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageConfiguration</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageConfiguration</span><span class="p">{</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="nx">Path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">controller</span><span class="w"> </span><span class="nx">MyPageController</span><span class="p">)</span><span class="w"> </span><span class="nx">Base</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="nx">response</span><span class="p">.</span><span class="nx">SendView</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">NewView</span><span class="p">(</span><span class="kc">nil</span><span class="p">))</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">}</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">controller</span><span class="w"> </span><span class="nx">MyPageController</span><span class="p">)</span><span class="w"> </span><span class="nx">Action</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">    </span><span class="nx">response</span><span class="p">.</span><span class="nx">SendView</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">NewView</span><span class="p">(</span><span class="kc">nil</span><span class="p">))</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="p">}</span>
 </span></code></pre></div></p>
-<p><code>lib/components/views/Welcome.svelte</code>
-<div class="language-html highlight"><span class="filename">HTML</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Welcome to Frizzante.<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-</span></code></pre></div></p>
-<p>In your setup function, <code>f.PageWithPath()</code> sets the path of your page 
-and <code>f.PageWithView()</code> sets the view of your page.</p>
+<p>This controller expects a view located at <code>lib/components/views/MyPageView.svelte</code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You can map many paths to one view.
-<div class="language-go highlight"><span class="filename">Go</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithPath</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">)</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithPath</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/api/greeting&quot;</span><span class="p">)</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithView</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Welcome&quot;</span><span class="p">))</span>
-</span></code></pre></div></p>
+<p>Page views are automatically bound to page controllers based on the name their names.<br/>
+<br/>
+Any page controller is expected to be named as <code>{Name}Controller</code> and its view is expected to be named <code>{Name}View</code>,
+where <code>Name</code> is the common prefix binding the controller to the view.<br/></p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>A page controller located at <code>lib/controllers/pages/TestController.go</code> 
+will bind to a page view located at <code>lib/components/views/TestView.svelte</code>.</p>
 </div>
-<div class="admonition danger">
-<p class="admonition-title">Danger</p>
-<p>You cannot map many views to one path.
-<div class="language-go highlight"><span class="filename">Go</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithPath</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">)</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithView</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Welcome&quot;</span><span class="p">))</span><span class="w">  </span><span class="c1">// &lt;-- This is not allowed,</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithView</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Login&quot;</span><span class="p">))</span><span class="w">    </span><span class="c1">// &lt;-- two views are exposed by the same path.</span>
-</span></code></pre></div></p>
 </div>
-<p><code>f.PageWithBaseHandler()</code> sets the page base handler</p>
+<p><code>lib/components/views/MyPageView.svelte</code>
+<div class="language-html highlight"><span class="filename">HTML</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Welcome to Frizzante.<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span></code></pre></div></p>
+<p>Both <code>Base</code> and <code>Action</code> handlers must use <code>response.SendView()</code> to send the view to the client.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A base page handler is a function that 
@@ -770,7 +756,6 @@ handles requests to the <code>GET</code> http verb.<br/>
 This function usually does not modify the state, 
 it just renders information to the screen.</p>
 </div>
-<p><code>f.PageWithActionHandler()</code> sets the page action handler</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>An action page handler is a function that 
@@ -778,67 +763,29 @@ handles requests to the <code>POST</code> http verb.<br/>
 This function usually modifies the state and 
 sometimes redirects to some other page.</p>
 </div>
-<p>Each page exposes a <code>Data</code> map, which is automatically injected into the view</p>
-<p><code>lib/pages/Welcome.go</code>
-<div class="language-go highlight"><span class="filename">Go</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">pages</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">import</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="s">&quot;github.com/razshare/frizzante&quot;</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="kd">func</span><span class="w"> </span><span class="nx">Welcome</span><span class="p">(</span><span class="nx">page</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Page</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="c1">// Build page.</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithPath</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/Welcome&quot;</span><span class="p">)</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithView</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewReference</span><span class="p">(</span><span class="s">&quot;Welcome&quot;</span><span class="p">))</span><span class="w"> </span><span class="c1">// This references the file </span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">                                                     </span><span class="c1">// &quot;lib/components/views/Welcome.svelte&quot;</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">PageWithBaseHandler</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span><span class="w"> </span><span class="nx">view</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">View</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="nx">f</span><span class="p">.</span><span class="nx">ViewWithData</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="p">})</span>
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="p">}</span>
+<h2 id="view">View</h2>
+<p>You can inject data into views</p>
+<p><code>lib/controllers/page/MyPageController.go</code>
+<div class="language-go highlight"><span class="filename">Go</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">controller</span><span class="w"> </span><span class="nx">MyPageController</span><span class="p">)</span><span class="w"> </span><span class="nx">Base</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">*</span><span class="nx">f</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">        </span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nx">response</span><span class="p">.</span><span class="nx">SendView</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">NewView</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">}</span>
 </span></code></pre></div></p>
-<p>These <code>Data</code> fields can be retrieved from your svelte components with <a href="https://svelte.dev/docs/svelte/svelte#getContext">getContext("data")</a>.</p>
-<p><code>lib/components/views/Welcome.svelte</code>
-<div class="language-html highlight"><span class="filename">HTML</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">getContext</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;svelte&quot;</span><span class="p">;</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {data.name}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<p>This data can be retrieved from your svelte components with as properties.</p>
+<p><code>lib/components/views/MyPageView.svelte</code>
+<div class="language-html highlight"><span class="filename">HTML</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;ts&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nx">type</span><span class="w"> </span><span class="nx">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="nx">string</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nx">type</span><span class="w"> </span><span class="nx">Props</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">server</span><span class="o">:</span><span class="w"> </span><span class="nx">ServerProperties</span><span class="o">&lt;</span><span class="nx">Data</span><span class="o">&gt;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="p">{</span><span class="nx">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">$bindable</span><span class="p">()}</span><span class="o">:</span><span class="w"> </span><span class="nx">Props</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">$props</span><span class="p">()</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello {server.data.name}!<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
 </span></code></pre></div></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Context <code>data</code> is created with <a href="https://svelte.dev/docs/svelte/$state">$state()</a>, hence it is reactive.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A page is treated like an <a href="../api/">api</a> under the hood, which means it 
-has access to the same features.<br/>
-<br/>
-You can receives path fields with <code>f.RequestReceivePath()</code>, 
-queries with <code>f.RequestReceiveQuery()</code>,
-forms with <code>f.RequestReceiveForm()</code>,
-json objects with <code>f.RequestReceiveJson[T]()</code> and so on.<br/></p>
-<div class="admonition danger">
-<p class="admonition-title">Danger</p>
-<p>While rendering a page, you shouldn't send content to the client directly 
-using <code>f.ResponseSend*</code> functions, 
-like <code>f.ResponseSendMessage()</code>, <code>f.ResponseSendJson()</code>.<br/>
-<br/>
-Sending content directly to the client will break the HTML document structure by prepending 
-the content to the actual view.<br/>
-<br/>
-There are some use cases where sending content directly is useful, like debugging.<br/></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Functions that send the status and header fields, like <code>f.ResponseSendStatus()</code>, <code>f.ResponseSendHeader()</code>, are safe to use.</p>
-</div>
-</div>
-</div>
-<div class="admonition danger">
-<p class="admonition-title">Danger</p>
-<h2 id="very-important">Very important!<br/></h2>
-<p>After creating a new page, you must run again <code>make configure</code> in order to compile your new <code>.svelte</code> file into a <code>.js</code> file.</p>
-</div>
 <h2 id="other-details">Other details</h2>
-<p>Page functions should be created under <code>lib/pages/{name}.go</code>, where <code>{name}</code> is the name of the page.</p>
+<p>Page controllers should be created under <code>lib/controllers/pages/{name}Controller.go</code>, where <code>{name}</code> is the name of the page.</p>
+<p>Page views should be created under <code>lib/components/views/{name}Views.go</code>, where <code>{name}</code> is the name of the page.</p>
 
 
 
@@ -871,10 +818,10 @@ There are some use cases where sending content directly is useful, like debuggin
     
     
       
-      <script id="__config" type="application/json">{"base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
       
     
   </body>
