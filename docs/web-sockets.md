@@ -1,4 +1,4 @@
-You can upgrade http requests to web sockets with `f.ResponseSendWsUpgrade()`.
+You can upgrade http requests to server sent events with `response.SendWsUpgrade()`.
 
 `main.go`
 ```go
@@ -7,7 +7,7 @@ package main
 import (
 	"embed"
 	f "github.com/razshare/frizzante"
-	"main/lib/api"
+	"main/lib/controllers/api"
 )
 
 //go:embed .dist/*/**
@@ -15,57 +15,68 @@ var dist embed.FS
 
 func main() {
 	// Create.
-	server := f.ServerCreate()
-	notifier := f.NotifierCreate()
+	server := f.NewServer()
+	notifier := f.NewNotifier()
 
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-	f.ServerWithNotifier(server, notifier)
+	// Configure.
+	server.WithPort(8080)
+	server.WithNotifier(notifier)
+	server.WithHostName("127.0.0.1")
+	server.WithEmbeddedFileSystem(&dist)
 
 	// Api.
-	f.ServerWithApiBuilder(server, api.MyApi)
+	server.WithApiController(api.MyApiController{})
 
-	// Start.
-	f.ServerStart(server)
+	//Start.
+	server.Start()
 }
 ```
 
-`lib/api/MyApi.go`
+`lib/controllers/api/MyApiController.go`
 ```go
 package api
 
-import f "github.com/razshare/frizzante"
+import (
+	"fmt"
+	f "github.com/razshare/frizzante"
+	"time"
+)
 
-func MyApi(api *f.Api) {
-	// Build api.
-	f.ApiWithPattern("GET /")
-	f.ApiWithRequestHandler(func(request *f.Request, response *f.Response) {
-		// Upgrade to web sockets.
-		f.ResponseSendWsUpgrade(response)
+type MyApiController struct {
+	f.ApiController
+}
 
-		for {
-			// Send message.
-			f.ResponseSendMessage(response, "hello")
+func (controller MyApiController) Configure() f.ApiConfiguration {
+	return f.ApiConfiguration{
+		Pattern: "GET /api/my-controller",
+	}
+}
 
-			// Wait for incoming message.
-			msg := f.RequestReceiveMessage(request)
-			
-			// Log.
-			fmt.Printf("RequestReceived message `%s`.\n", msg)
-		}
-	})
+func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
+	// Upgrade to web sockets.
+	response.SendWsUpgrade()
+
+	for {
+		// Send message.
+		response.SendMessage("hello")
+
+		// Wait for incoming message.
+		msg := request.ReceiveMessage()
+		
+		// Log.
+		fmt.Printf("RequestReceived message `%s`.\n", msg)
+	}
 }
 ```
 
-Use the usual `f.ResponseSendMessage()` to send a raw text message and `f.ResponseSendJson()` to send a json message to the client.
+
+You can send content to the client with the usual `response.SendMessage()` and `response.SendJson()`.
 
 
 Once the request handler returns, 
 for example by exiting the `for` loop, 
-the web socket stream ends.
+the web socket connection ends.
 
 !!! warning
-    Always track cancelled requests while streaming web sockets.<br/>
-    Read more about cancellation [here](./cancellation.md).
+	Always track cancelled requests while streaming web sockets.<br/>
+	Read more about cancellation [here](./cancellation.md).

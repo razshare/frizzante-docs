@@ -1,4 +1,5 @@
 configure:
+	sudo apt install python3.12-venv
 	python3 -m venv venv
 	. venv/bin/activate && \
 	pip install mkdocs && \

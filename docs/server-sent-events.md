@@ -7,7 +7,7 @@ package main
 import (
 	"embed"
 	f "github.com/razshare/frizzante"
-	"main/lib/api"
+	"main/lib/controllers/api"
 )
 
 //go:embed .dist/*/**
@@ -15,60 +15,70 @@ var dist embed.FS
 
 func main() {
 	// Create.
-	server := f.ServerCreate()
-	notifier := f.NotifierCreate()
+	server := f.NewServer()
+	notifier := f.NewNotifier()
 
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-	f.ServerWithNotifier(server, notifier)
+	// Configure.
+	server.WithPort(8080)
+	server.WithNotifier(notifier)
+	server.WithHostName("127.0.0.1")
+	server.WithEmbeddedFileSystem(&dist)
 
 	// Api.
-	f.ServerWithApiBuilder(server, api.MyApi)
+	server.WithApiController(api.MyApiController{})
 
-	// Start.
-	f.ServerStart(server)
+	//Start.
+	server.Start()
 }
 ```
 
-`lib/api/MyApi.go`
+`lib/controllers/api/MyApiController.go`
 ```go
 package api
 
-import f "github.com/razshare/frizzante"
+import (
+	"fmt"
+	f "github.com/razshare/frizzante"
+	"time"
+)
 
-func MyApi(api *f.Api) {
-    // Build api.
-    f.ApiWithPattern(api, "GET /")
-    f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
-        // Upgrade to server sent events.
-        withEventName := f.ResponseSendSseUpgrade(response)
+type MyApiController struct {
+	f.ApiController
+}
 
-        for {
-            // Send to channel-1.
-            withEventName("channel-1")
-            f.ResponseSendMessage(response, "This is a message for channel-1")
-            
-            // Send to channel-2.
-            withEventName("channel-2")
-            f.ResponseSendMessage(response, "This is a message for channel-2")
-            f.ResponseSendMessage(response, "This is another message for channel-2")
+func (controller MyApiController) Configure() f.ApiConfiguration {
+	return f.ApiConfiguration{
+		Pattern: "GET /api/my-controller",
+	}
+}
 
-            // Send to channel-1.
-            withEventName("channel-1")
-            f.ResponseSendMessage(response, "Back to channel-1")
+func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
+    // Upgrade to server sent events.
+    event := response.SendSseUpgrade()
 
-            // Sleep for a bit.
-            time.Sleep(time.Second)
-        }
-    })
+    for {
+        // Send to channel-1.
+        event("channel-1")
+        response.SendMessage("This is a message for channel-1")
+        
+        // Send to channel-2.
+        event("channel-2")
+        response.SendMessage("This is a message for channel-2")
+        response.SendMessage("This is another message for channel-2")
+
+        // Send to channel-1.
+        event("channel-1")
+        response.SendMessage("Back to channel-1")
+
+        // Sleep for a bit.
+        time.Sleep(time.Second)
+    }
 }
 ```
 
 
-Set the name of the current event with `withEventName`, 
-then start sending content to the client with the usual `f.ResponseSendMessage()` and `f.ResponseSendJson()`.
+Set the name of the current event with `event()`, 
+then start sending content to the client with the usual `response.SendMessage()` and `response.SendJson()`.
 
 
 Once the request handler returns, 

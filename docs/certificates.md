@@ -14,20 +14,20 @@ var dist embed.FS
 
 func main() {
 	// Create.
-	server := f.ServerCreate()
-	notifier := f.NotifierCreate()
+	server := f.NewServer()
+	notifier := f.NewNotifier()
 
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-	f.ServerWithNotifier(server, notifier)
+	// Configure.
+	server.WithPort(8080)
+	server.WithNotifier(notifier)
+	server.WithHostName("127.0.0.1")
+	server.WithEmbeddedFileSystem(&dist)
 
     // Setup certificate.
-    f.ServerWithCertificateAndKey(server, "cert.pem", "key.pem")
+    server.WithCertificateAndKey("cert.pem", "key.pem")
 
-	// Start.
-	f.ServerStart(server)
+	//Start.
+	server.Start()
 }
 ```
 

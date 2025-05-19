@@ -1,3 +1,52 @@
+Before starting a session you first need a session builder.
+
+!!! note
+	A session builder is a function that builds (or retrieves) a session's state.<br/>
+	It provides the basic mechanisms for checking, getting, setting properties and a destroyer function, which specifies what should happen when a session is "destroyed".
+
+`lib/sessions/memory.go`
+```go
+package sessions
+
+import f "github.com/razshare/frizzante"
+
+type State struct {
+	Name string `json:"name"`
+}
+
+var memory = map[string]State{}
+
+// Memorized builds sessions in memory.
+func Memorized(session *f.Session[State]) {
+	session.WithExistsHandler(func() bool {
+		_, exists := memory[session.Id]
+		return exists
+	})
+
+	session.WithLoadHandler(func() {
+		session.Data = memory[session.Id]
+	})
+
+	session.WithSaveHandler(func() {
+		memory[session.Id] = session.Data
+	})
+
+	session.WithDestroyHandler(func() {
+		delete(memory, session.Id)
+	})
+
+	if session.Exists() {
+		session.Load()
+		return
+	}
+
+	session.Data = State{Name: "world"}
+}
+```
+
+
+## Start session
+
 Use `f.SessionStart()` to start the session.
 
 
@@ -8,7 +57,7 @@ package main
 import (
 	"embed"
 	f "github.com/razshare/frizzante"
-	"main/lib/api"
+	"main/lib/controllers/api"
 )
 
 //go:embed .dist/*/**
@@ -16,125 +65,46 @@ var dist embed.FS
 
 func main() {
 	// Create.
-	server := f.ServerCreate()
-	notifier := f.NotifierCreate()
+	server := f.NewServer()
+	notifier := f.NewNotifier()
 
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-	f.ServerWithNotifier(server, notifier)
-
-	// Api.
-	f.ServerWithApiBuilder(server, api.MyApi)
-
-	// Start.
-	f.ServerStart(server)
-}
-```
-
-`lib/api/MyApi.go`
-```go
-package api
-
-import f "github.com/razshare/frizzante"
-
-func MyApi(api *f.Api) {
-    // Build api.
-    f.ApiWithPattern(api, "GET /")
-    f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
-        // Handle request.
-    })
-}
-```
-
-## Session builder
-
-By default all sessions are saved to a `.sessions` directory on your disk.
-
-This is the default behavior, which is useful for quick debugging.
-
-You can customize this behavior by  providing your own session builder.
-
-!!! note
-	A session builder is a function that builds (or retrieves) a session's state.<br/>
-	It provides the basic mechanisms for checking, getting, setting properties and a destroyer function, which specifies what should happen when a session is "destroyed".
-
-Use `f.ServerWithSessionBuilder()` to set the server's session builder.
-
-`main.go`
-```go
-import f "github.com/razshare/frizzante"
-
-package main
-
-import (
-	"embed"
-	f "github.com/razshare/frizzante"
-	"main/lib/api"
-)
-
-//go:embed .dist/*/**
-var dist embed.FS
-var memory = map[string]map[string][]byte{}
-
-func main() {
-	// Create.
-	server := f.ServerCreate()
-
-	// Setup.
-	f.ServerWithPort(server, 8080)
-	f.ServerWithNotifier(server, notifier)
-	f.ServerWithHostName(server, "127.0.0.1")
-	f.ServerWithEmbeddedFileSystem(server, dist)
-
-	// Sessions.
-	f.ServerWithSessionBuilder(server, func(session *f.Session) {
-		sessionId := f.SessionId(session)
-		memory[sessionId] = map[string][]byte{}
-
-		f.SessionWithGetHandler(session, func(key string) []byte {
-			return memory[sessionId][key]
-		})
-
-		f.SessionWithSetHandler(session, func(key string, value []byte) {
-			memory[sessionId][key] = value
-		})
-
-		f.SessionWithHasHandler(session, func(key string) bool {
-			_, hasKey := memory[sessionId][key]
-			return hasKey
-		})
-
-		f.SessionWithDestroyHandler(session, func() {
-			delete(memory, sessionId)
-		})
-	})
+	// Configure.
+	server.WithPort(8080)
+	server.WithNotifier(notifier)
+	server.WithHostName("127.0.0.1")
+	server.WithEmbeddedFileSystem(&dist)
 
 	// Api.
-	f.ServerWithApiBuilder(server, api.MyApi)
+	server.WithApiController(api.MyApiController{})
 
 	//Start.
-	f.ServerStart(server)
+	server.Start()
 }
 ```
 
-`lib/api/MyApi.go`
+
+`lib/controllers/api/MyApiController.go`
 ```go
 package api
 
-import f "github.com/razshare/frizzante"
+import (
+	"fmt"
+	f "github.com/razshare/frizzante"
+)
 
-func MyApi(api *f.Api) {
-	// Build api.
-	f.ApiWithPattern(api, "GET /")
-	f.ApiWithRequestHandler(api, func(request *f.Request, response *f.Response) {
-		// Start session.
-		state := f.SessionStart(request, response)
+type MyApiController struct {
+	f.ApiController
+}
 
-		// Modify state.
-		f.SessionSetString(session, "name", "World")
-	})
+func (controller MyApiController) Configure() f.ApiConfiguration {
+	return f.ApiConfiguration{
+		Pattern: "GET /api/my-controller",
+	}
+}
+
+func (controller MyApiController) Handle(request *f.Request, response *f.Response) {
+	// Start session.
+	session := f.SessionStart(request, response, sessions.Memorized)
 }
 ```
 
