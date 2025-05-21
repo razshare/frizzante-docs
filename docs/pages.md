@@ -15,14 +15,13 @@ var dist embed.FS
 
 func main() {
 	// Create.
-	server := f.NewServer()
+	server := f.NewServer(dist)
 	notifier := f.NewNotifier()
 
 	// Configure.
 	server.WithPort(8080)
 	server.WithNotifier(notifier)
 	server.WithHostName("127.0.0.1")
-	server.WithEmbeddedFileSystem(&dist)
 
 	// Pages.
 	server.WithPageController(pages.MyPageController{})
