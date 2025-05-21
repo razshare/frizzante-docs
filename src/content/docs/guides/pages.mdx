@@ -1,0 +1,196 @@
+---
+title: Pages
+---
+
+import { FileTree } from '@astrojs/starlight/components';
+
+Pages are defined through **page controllers** and **views**.
+
+### Page Controllers
+
+A page controller is an implementation of `f.PageController`.
+
+By convention, all page controllers must be located under `lib/controllers/pages`.
+
+<FileTree>
+    - makefile
+    - main.go
+    - lib
+        - controllers
+            - pages
+                - any.go
+                - dashboard.go
+                - welcome.go
+</FileTree>
+
+Page controllers are created with `f.NewPageController()`
+
+```go
+//lib/controllers/pages/welcome.go
+
+package pages
+
+import f "github.com/razshare/frizzante"
+
+var Welcome = f.NewPageController()
+```
+
+A controller cannot programmatically specify its own pattern.
+
+##### Any
+
+The `any` page has a special meaning.
+
+It is a fallback page, meaning it will handle any
+request that doesn't match any other page.
+
+For that reason, `any` is often paired with `.TryFileFirst()`,
+so that it automatically exposes the file system before actually handling
+fallback requests.
+
+:::note
+This is useful for implementing SPAs, which often fallback to `/index.html`.
+:::
+
+```go
+package pages
+
+import f "github.com/razshare/frizzante"
+
+var Any = f.NewPageController().TryFileFirst()
+```
+
+### Views
+
+Views are svelte components located near page controllers with **similar names**.
+
+When a view is located near a page controller with a **similar name**, that view is automatically
+bound to that controller, allowing the controller to render the view into the browser page.
+
+##### Similar names
+
+A view and a controller have **similar names** whenever both have the **same name**, excluding the extension.
+
+Some examples
+
+<FileTree>
+    - makefile
+    - main.go
+    - lib
+        - controllers
+            - pages
+                - dashboard.go
+                - dashboard.svelte
+                - user
+                    - about.go
+                    - about.svelte
+                - welcome.go
+                - welcome.svelte
+</FileTree>
+
+`dashboard.svelte` is bound to `dashboard.go`, to `user/about.svelte` to `user/about.go`, `welcome.svelte` to `welcome.go`.
+
+
+## Publishing a Page
+
+Once you have both a view and a page controller, you can publish the page to the server using `.WithPageController()`.
+
+```go
+//main.go
+package main
+
+import f "github.com/razshare/frizzante"
+
+func main() {
+    f.
+    NewServer().
+    WithPageController(pages.Todos).
+    Start()
+}
+```
+```go
+//lib/controllers/pages/todos.go
+package pages
+
+import f "github.com/razshare/frizzante"
+
+var Todos = f.NewPageController().WithBase(base).WithAction(action)
+
+func base(req *f.Request, res *f.Response) {
+    // Show page.
+	res.SendView(f.NewView(f.RenderModeFull))
+}
+
+func action(req *f.Request, res *f.Response) {
+    // Modify state.
+	res.SendView(f.NewView(f.RenderModeFull))
+}
+```
+
+Each controller can define a `base` function and an `action` function.
+
+##### Base Function
+
+The base function handles requests to the `GET` verb.
+
+Generally speaking, this function does not modify server state in any way, it just render data to the screen.
+
+You users will most likely hit this function most of the time.
+
+##### Action Function
+
+On the other hand, the action function handles requests to the `POST` verb.
+
+Generally speaking, this function modifies state in some way and sometimes
+redirects to another page using `res.SendNavigate()` or `res.SendNavigateWithQuery()`.
+
+## Injecting Data
+
+You can inject data into views using `f.NewViewWithData()` instead of `f.NewView()`.
+
+```go
+//lib/controllers/pages/todos.go
+package pages
+
+import f "github.com/razshare/frizzante"
+
+var Todos = f.NewPageController().WithBase(base)
+
+type Data struct {
+	Items []string `json:"items"`
+}
+
+func base(req *f.Request, res *f.Response) {
+	res.SendView(f.NewViewWithData(f.RenderModeFull, Data{
+		Items: []string{
+			"Pet the cat.",
+			"Work.",
+			"Pet the cat.",
+			"Wash dishes.",
+			"Pet the cat. Again.",
+			"Watch tv.",
+			"You guessed it. Pet the cat.",
+			"Buy groceries",
+			"Pet the cat.",
+		},
+	}))
+}
+```
+
+Then you can retrieve this data in your view using the [context](https://svelte.dev/docs/svelte/context) api.
+
+```svelte
+<script lang="ts">
+    import {getContext} from "svelte";
+    import type {ServerContext} from "$frizzante/types.ts";
+    const server = getContext("server") as ServerContext<{
+        items: string[]
+    }>
+</script>
+
+<ol>
+    {#each server.data.items as item}
+        <li>{item}</li>
+    {/each}
+</ol>
+```
