@@ -15,7 +15,7 @@ var Server = f.NewServer()
 
 ```
 
-In order to properly render [views](/guides/pages#views),
+In order to properly render [views](/frizzante-docs/guides/pages#views),
 you will need to embed the `.dist` directory from your `config` package.
 
 The api is fluent, so you can chain modifiers.

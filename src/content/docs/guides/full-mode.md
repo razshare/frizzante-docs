@@ -31,6 +31,6 @@ even easy things, like hyperlinks and http requests.
 
 It's important to figure out beforehand what type of application you're trying to build.
 
-Are you trying to build a chatbot? [Client Mode](/guides/client-mode) is probably the best choice for that.
+Are you trying to build a chatbot? [Client Mode](/frizzante-docs/guides/client-mode) is probably the best choice for that.
 
-Are you trying to build an E-Commerce website? Cookies and anonymous sessions can be useful to onboard users without using an account, so [Server Mode](/guides/server-mode) or [Full Mode](/guides/full-mode) are probably best suited for that. 
+Are you trying to build an E-Commerce website? Cookies and anonymous sessions can be useful to onboard users without using an account, so [Server Mode](/frizzante-docs/guides/server-mode) or [Full Mode](/frizzante-docs/guides/full-mode) are probably best suited for that. 
