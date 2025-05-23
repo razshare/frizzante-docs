@@ -52,12 +52,12 @@ This will load package `welcome` as a controller.
 
 The `any` package has a special meaning.
 
-It is treated as a fallback controller, meaning it will handle any
-request that doesn't match any other controller.
+It automatically takes over your root path `/`,
+and because of that it is treated as a fallback controller,
+meaning it will handle any request that doesn't match any controller.
 
-For that reason, `any` is often paired with `.TryFileFirst()`,
-so that it automatically exposes the file system before actually handling
-fallback requests.
+For that reason, `any` is often paired with `.GiveWay()`,
+which gives way to the file server before executing the controller itself.
 
 :::note
 This is useful for implementing SPAs, which often fallback to `/index.html`.
