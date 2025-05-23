@@ -5,6 +5,8 @@ import catppuccin from "@catppuccin/starlight";
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://frizzante.github.io',
+  base: '/frizzante-docs',
   integrations: [
     starlight({
       title: "Frizzante Docs",
@@ -27,7 +29,6 @@ export default defineConfig({
             { label: "Full Mode", slug: "guides/full-mode" },
             { label: "Server", slug: "guides/server" },
             { label: "Notifiers", slug: "guides/notifiers" },
-            { label: "Certificates", slug: "guides/certificates" },
             { label: "Pages", slug: "guides/pages" },
             { label: "Api", slug: "guides/api" },
             { label: "Sessions", slug: "guides/sessions" },

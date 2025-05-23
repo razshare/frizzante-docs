@@ -2,19 +2,55 @@
 title: Server
 ---
 
-You can create and start a web server using `NewServer()` followed by `.Start()`
+You can create server using `NewServer()`.
 
 ```go
-// main.go
-package main
+// config/server.go
+
+package config
 
 import f "github.com/razshare/frizzante"
 
-func main() {
-    f.
-    NewServer().
-    Start()
-}
+var Server = f.NewServer()
+
 ```
 
-And using a custom notifier ([as mentioned previously](/guides/notifiers))
+In order to properly render [views](/guides/pages#views),
+you will need to embed the `.dist` directory from your `config` package.
+
+The api is fluent, so you can chain modifiers.
+
+```go
+//config/server.go
+
+package config
+
+import (
+	"embed"
+	f "github.com/razshare/frizzante"
+)
+
+//go:embed .dist/*/**
+var dist embed.FS
+var Server = f.NewServer().WithEfs(dist)
+
+```
+
+Then `.Start()` the server.
+
+```go
+//main.go
+
+package main
+
+import "main/lib/config"
+
+func main() {
+	config.Server.Start()
+}
+
+```
+
+:::note
+The starter template is configured out of the box.
+:::

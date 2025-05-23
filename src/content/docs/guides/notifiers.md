@@ -10,7 +10,7 @@ it is forgiving and assumes the developer knows what they are doing.
 This doesn't mean you have to look out for `nil` references, it just means errors and messages
 are handled through **notifiers**.
 
-Notifiers are the main mechanism that handle errors and more generally messages.
+Notifiers are a mechanism that handle errors and messages.
 
 You can create a notifier with `NewNotifier()`.
 
@@ -41,17 +41,14 @@ For example the web server comes with its own notifier,
 but you can overwrite it by using `.WithNotifier()`.
 
 ```go
-// main.go
-package main
+// config/server.go
+
+package config
 
 import f "github.com/razshare/frizzante"
 
-var notifier = f.NewNotifier()
+var Server = f.
+	NewServer().
+	WithNotifier(f.NewNotifier())
 
-func main() {
-    f.
-    NewServer().
-    WithNotifier(notifier).
-    Start()
-}
 ```

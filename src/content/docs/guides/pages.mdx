@@ -4,45 +4,55 @@ title: Pages
 
 import { FileTree } from '@astrojs/starlight/components';
 
-Pages are defined through **page controllers** and **views**.
+Pages are defined through **controllers**.
 
-### Page Controllers
+A controller is just a directory grouping together a `page.go` file and `view.svelte` file.
 
-A page controller is an implementation of `f.PageController`.
-
-By convention, all page controllers must be located under `lib/controllers/pages`.
+By convention, all controllers must live under `lib/controllers`.
 
 <FileTree>
     - makefile
     - main.go
     - lib
         - controllers
-            - pages
-                - any.go
-                - dashboard.go
-                - welcome.go
+            - any
+                - page.go
+                - view.svelte
+            - dashboard
+                - page.go
+                - view.svelte
+            - welcome
+                - page.go
+                - view.svelte
 </FileTree>
 
-Page controllers are created with `f.NewPageController()`
+### Load Controllers
+
+Controllers are not automatically loaded,
+you must manually load into on the
+server using `.LoadController()` during package initialization.
 
 ```go
-//lib/controllers/pages/welcome.go
+// lib/controllers/welcome.go
 
-package pages
+package welcome
 
-import f "github.com/razshare/frizzante"
+import "main/lib/config"
 
-var Welcome = f.NewPageController()
+func init() {
+	config.Server.LoadController(nil)
+}
+
 ```
 
-A controller cannot programmatically specify its own pattern.
+This will load the current package, in this case `welcome`, as a controller.
 
-##### Any
+### Any
 
-The `any` page has a special meaning.
+The `any` package has a special meaning.
 
-It is a fallback page, meaning it will handle any
-request that doesn't match any other page.
+It is treated as a fallback controller, meaning it will handle any
+request that doesn't match any other controller.
 
 For that reason, `any` is often paired with `.TryFileFirst()`,
 so that it automatically exposes the file system before actually handling
@@ -53,126 +63,92 @@ This is useful for implementing SPAs, which often fallback to `/index.html`.
 :::
 
 ```go
-package pages
+// lib/controllers/welcome.go
 
-import f "github.com/razshare/frizzante"
+package welcome
 
-var Any = f.NewPageController().TryFileFirst()
+import "main/lib/config"
+
+func init() {
+	config.Server.LoadController(nil).TryFileFirst()
+}
+
 ```
 
 ### Views
 
-Views are svelte components located near page controllers with **similar names**.
+When you invoke `.LoadController()`,
+the server will implicitly use the nearby `view.svelte` as the rendering
+template for the current controller.
 
-When a view is located near a page controller with a **similar name**, that view is automatically
-bound to that controller, allowing the controller to render the view into the browser page.
+### Base Function
 
-##### Similar names
+Each controller can define a **base** function.
 
-A view and a controller have **similar names** whenever both have the **same name**, excluding the extension.
-
-Some examples
-
-<FileTree>
-    - makefile
-    - main.go
-    - lib
-        - controllers
-            - pages
-                - dashboard.go
-                - dashboard.svelte
-                - user
-                    - about.go
-                    - about.svelte
-                - welcome.go
-                - welcome.svelte
-</FileTree>
-
-`dashboard.svelte` is bound to `dashboard.go`, to `user/about.svelte` to `user/about.go`, `welcome.svelte` to `welcome.go`.
-
-
-## Publishing a Page
-
-Once you have both a view and a page controller, you can publish the page to the server using `.WithPageController()`.
-
-```go
-//main.go
-package main
-
-import f "github.com/razshare/frizzante"
-
-func main() {
-    f.
-    NewServer().
-    WithPageController(pages.Todos).
-    Start()
-}
-```
-```go
-//lib/controllers/pages/todos.go
-package pages
-
-import f "github.com/razshare/frizzante"
-
-var Todos = f.NewPageController().WithBase(base).WithAction(action)
-
-func base(req *f.Request, res *f.Response) {
-    // Show page.
-	res.SendView(f.NewView(f.RenderModeFull))
-}
-
-func action(req *f.Request, res *f.Response) {
-    // Modify state.
-	res.SendView(f.NewView(f.RenderModeFull))
-}
-```
-
-Each controller can define a `base` function and an `action` function.
-
-##### Base Function
-
-The base function handles requests to the `GET` verb.
-
-Generally speaking, this function does not modify server state in any way, it just render data to the screen.
+This function handles requests to the `GET` verb, and it generally
+doesn't modify server state in any way, it just renders
+data to the screen.
 
 You users will most likely hit this function most of the time.
 
-##### Action Function
+```go
+// lib/controllers/welcome.go
 
-On the other hand, the action function handles requests to the `POST` verb.
+func init() {
+	config.Server.LoadController(func(controller *f.Controller) {
+		controller.WithBase(base).
+	})
+}
 
-Generally speaking, this function modifies state in some way and sometimes
-redirects to another page using `res.SendNavigate()` or `res.SendNavigateWithQuery()`.
+func base(req *f.Request, res *f.Response) {
+	res.SendView(f.NewView(f.RenderModeFull))
+}
+```
 
-## Injecting Data
+### Action Function
+
+Each controller can define an **action** function.
+
+This function handles requests to the `POST` verb. and
+it usually modifies state in some way or redirects the user to another.
+
+```go
+// lib/controllers/welcome.go
+
+func init() {
+	config.Server.LoadController(func(controller *f.Controller) {
+		controller.WithAction(base).
+	})
+}
+
+var state = map[string]string{}
+
+func action(req *f.Request, res *f.Response) {
+	state["name"] = req.ReceiveQuery("name")
+	res.SendNavigate("greeting")
+}
+```
+
+### Data
 
 You can inject data into views using `f.NewViewWithData()` instead of `f.NewView()`.
 
 ```go
-//lib/controllers/pages/todos.go
-package pages
+// lib/controllers/welcome.go
 
-import f "github.com/razshare/frizzante"
+func init() {
+	config.Server.LoadController(func(controller *f.Controller) {
+		controller.WithBase(base).
+	})
+}
 
-var Todos = f.NewPageController().WithBase(base)
-
-type Data struct {
-	Items []string `json:"items"`
+type data struct {
+	Name string `json:"name"`
 }
 
 func base(req *f.Request, res *f.Response) {
-	res.SendView(f.NewViewWithData(f.RenderModeFull, Data{
-		Items: []string{
-			"Pet the cat.",
-			"Work.",
-			"Pet the cat.",
-			"Wash dishes.",
-			"Pet the cat. Again.",
-			"Watch tv.",
-			"You guessed it. Pet the cat.",
-			"Buy groceries",
-			"Pet the cat.",
-		},
+	res.SendView(f.NewViewWithData(f.RenderModeFull, data{
+		Name: "world",
 	}))
 }
 ```
@@ -184,13 +160,9 @@ Then you can retrieve this data in your view using the [context](https://svelte.
     import {getContext} from "svelte";
     import type {ServerContext} from "$frizzante/types.ts";
     const server = getContext("server") as ServerContext<{
-        items: string[]
+        name: string
     }>
 </script>
 
-<ol>
-    {#each server.data.items as item}
-        <li>{item}</li>
-    {/each}
-</ol>
+<h1>Hello {server.data.name}!</h1>
 ```

@@ -2,47 +2,47 @@
 title: Sessions
 ---
 
-Sessions are the recommended way to manage state.
-
 You can start a session with `f.SessionStart()`.
 
 ```go
-//main.go
-package main
+//lib/api
+package api
 
-import f "github.com/razshare/frizzante"
+import (
+	f "github.com/razshare/frizzante"
+	"main/lib/config"
+)
 
-func main() {
-    f.NewServer().OnRequest("GET /api", handle).Start()
+func init() {
+	config.Server.OnRequest("GET /api/events", []f.Guard{}, get)
 }
 
-func handle(req *f.Request, res *f.Response){
-	session := f.SessionStart(req, res, sessions.Archived)
+func get(req *f.Request, res *f.Response) {
+	session := f.SessionStart(req, res, config.SessionAdapter)
 	// Do something with session.
 }
 ```
 
-Where `session.Archived` is a `f.SessionBuilder[T]` function and is implemented as follows.
+Where `config.SessionAdapter` is a `f.SessionAdapter[T]`, for example
 
 ```go
-//lib/sessions/archived.go
+//lib/config/session.go
 package sessions
 
 import (
 	"encoding/json"
 	f "github.com/razshare/frizzante"
-	"main/lib"
 	"time"
 )
 
-type Data struct {
-	Items        []string    `json:"items"`
+type SessionData struct {
+	Items        []string  `json:"items"`
 	LastActivity time.Time `json:"lastActivity"`
 	Expired      bool      `json:"expired"`
 }
 
-func NewData() Data {
-	return Data{
+func NewSessionData() SessionData {
+	return SessionData{
 		Items: []string{
 			"Pet the cat.",
 			"Do laundry",
@@ -57,7 +57,7 @@ var key = "session.json"
 var notifier = f.NewNotifier()
 var archive = f.NewArchiveOnDisk(".sessions", time.Second/2)
 
-func Archived(session *f.Session[Data]) {
+func SessionAdapter(session *f.Session[SessionData]) {
 	// Define handlers.
 	session.WithExistsHandler(func() bool {
 		return archive.Has(session.Id, key)
@@ -88,18 +88,14 @@ func Archived(session *f.Session[Data]) {
 	}
 
 	// Otherwise initialize the session data.
-	session.Data = NewData()
+	session.Data = NewSessionData()
 }
+
 ```
 
-This sessions implementation manages session on the local file system.
+This session adapter manages sessions on the local file system.
 
-:::note
-Currently, it's up to you to create an implementation that best suits your needs,
-but in the future, specific implementations that manage session using databases will be provided out of the box.
-:::
-
-## Modify Data
+## Modify Session Data
 
 Once you retrieve a session, you can freely modify its `.Data`.
 
@@ -125,11 +121,11 @@ func handle(req *f.Request, res *f.Response){
 }
 ```
 
-Once you've made your changes to the `session.Data`, 
+After you've made your changes to the `session.Data`, 
 you should save those change by invoking `session.Save()`, as shown above.
 
 
-## Lifetime
+## Session Lifetime
 
 As you might've noticed, the `f.SessionStart()` function acts on 
 both the `request` and the `response`. 
@@ -153,6 +149,6 @@ No expiration date or path constraints.
 There are plans to introduce limitations on domain names.
 :::
 
-That is because the session implementation (for example `sessions.Archived` from above) 
+That is because the session adapter (for example `config.SessionAdapter` from above) 
 is expected to fully manage sessions on the server side,
 including expirations dates and other restrictions.
