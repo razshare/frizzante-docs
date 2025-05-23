@@ -34,10 +34,6 @@ export default defineConfig({
             { label: "Sessions", slug: "guides/sessions" },
           ],
         },
-        {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
-        },
       ],
       plugins: [
         catppuccin()
