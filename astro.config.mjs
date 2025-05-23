@@ -5,8 +5,8 @@ import catppuccin from "@catppuccin/starlight";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://frizzante.github.io',
-  base: '/frizzante-docs',
+  site: "https://frizzante.github.io",
+  base: "/frizzante-docs",
   integrations: [
     starlight({
       title: "Frizzante Docs",
@@ -35,9 +35,7 @@ export default defineConfig({
           ],
         },
       ],
-      plugins: [
-        catppuccin()
-      ]
+      plugins: [catppuccin()],
     }),
   ],
 });
