@@ -28,9 +28,10 @@ By convention, all controllers must live under `lib/controllers`.
 
 ### Load Controllers
 
-Controllers are not automatically loaded,
-you must manually load into on the
-server using `.LoadController()` during package initialization.
+Controllers are not automatically loaded.
+
+You can load the current package as a controller
+into your server using `.LoadController()`.
 
 ```go
 // lib/controllers/welcome.go
@@ -45,7 +46,7 @@ func init() {
 
 ```
 
-This will load the current package, in this case `welcome`, as a controller.
+This will load package `welcome` as a controller.
 
 ### Any
 
