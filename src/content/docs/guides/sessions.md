@@ -93,7 +93,7 @@ func SessionAdapter(session *f.Session[SessionData]) {
 
 ```
 
-This session adapter manages sessions on the local file system.
+This **session adapter** manages sessions on the local file system.
 
 ## Modify Session Data
 
@@ -130,25 +130,16 @@ you should save those change by invoking `session.Save()`, as shown above.
 As you might've noticed, the `f.SessionStart()` function acts on 
 both the `request` and the `response`. 
 
-This is because this functions not only **creates** sessions, but
-it also takes care of **retrieving** existing sessions based on the request's
-`session-id` cookie.
+The reason being is that `f.SessionStart()` tries to 
+**retrieve an existing session** based on the request's `session-id` 
+cookie **before creating a new** one from scratch.
 
-If no valid session is found, it silently creates a new session and provides
-the client with a new (**valid**) `session-id` cookie, which is why this functions 
-acts on the `respnse`.
+When the given `session-id` is not valid it creates a new session, 
+and so **it sends** the new `session-id` back to the client as a cookie.
 
-**It sends header fields to the client.**
-
-However, on the same note, when `f.SessionStart()` provides the client with a new `session-id`
-cookie, it doesn't set any limitations on that cookie.
+The newly created `session-id` cookie doesn't set any limitations.
 
 No expiration date or path constraints.
 
-:::note
-There are plans to introduce limitations on domain names.
-:::
-
-That is because the session adapter (for example `config.SessionAdapter` from above) 
-is expected to fully manage sessions on the server side,
+That is because the **session adapter** is expected to fully manage sessions on the server side,
 including expirations dates and other restrictions.
