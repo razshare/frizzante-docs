@@ -1,0 +1,171 @@
+---
+title: Controllers
+---
+
+import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+
+
+A controller is a Go package located under `lib/controllers`.
+
+<FileTree>
+    - makefile
+    - main.go
+    - lib
+        - controllers
+            - any
+                - controller.go
+                - view.svelte
+            - dashboard
+                - controller.go
+                - view.svelte
+            - welcome
+                - controller.go
+                - view.svelte
+</FileTree>
+
+You can load package as a controller using `config.Server.LoadController()`.
+
+The server will implicitly use the nearby `view.svelte` file as the rendering
+template for the current controller.
+
+<Tabs>
+  <TabItem label="controller.go">
+    ```go
+    package welcome
+
+    import "main/lib/config"
+
+    func init() {
+        config.Server.LoadController(nil)
+    }
+    ```
+  </TabItem>
+
+  <TabItem label="view.svelte">
+    ```svelte
+    <h1>Hello world.</h1>
+    ```
+  </TabItem>
+</Tabs>
+
+
+### Any
+
+The `any` controller has a special meaning.
+
+It automatically takes over your root path `/` and
+it is treated as a fallback controller,
+meaning it will handle any request that doesn't match a controller.
+
+For that reason, `any` is often paired with `.GiveWay()`,
+which gives way to the file server before executing the controller itself.
+
+:::tip
+This special `any` controller is very useful for
+implementing SPAs, which often fallback to `/index.html`.
+:::
+
+<Tabs>
+  <TabItem label="controller.go">
+    ```go
+    package welcome
+
+    import "main/lib/config"
+
+    func init() {
+        config.Server.LoadController(nil).TryFileFirst()
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Base Function
+
+Each controller can define a **base** function.
+
+This function handles requests to the `GET` verb, and it generally
+doesn't modify server state in any way, it just renders
+data to the screen.
+
+You users will most likely hit this function most of the time.
+
+<Tabs>
+  <TabItem label="controller.go">
+    ```go
+    func init() {
+        config.Server.LoadController(func(controller *f.Controller) {
+            controller.WithBase(base).
+        })
+    }
+
+    func base(req *f.Request, res *f.Response) {
+        res.SendView(f.NewView(f.RenderModeFull))
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Action Function
+
+Each controller can define an **action** function.
+
+This function handles requests to the `POST` verb. and
+it usually modifies state in some way or redirects the user to another.
+
+<Tabs>
+  <TabItem label="controller.go">
+    ```go
+    func init() {
+        config.Server.LoadController(func(controller *f.Controller) {
+            controller.WithAction(base).
+        })
+    }
+
+    var state = map[string]string{}
+
+    func action(req *f.Request, res *f.Response) {
+        state["name"] = req.ReceiveQuery("name")
+        res.SendNavigate("greeting")
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Data
+
+You can inject data into views using `f.NewViewWithData()` instead of `f.NewView()`
+and then you can retrieve this data in your view using the [context](https://svelte.dev/docs/svelte/context) api.
+
+<Tabs>
+  <TabItem label="controller.go">
+    ```go
+    func init() {
+        config.Server.LoadController(func(controller *f.Controller) {
+            controller.WithBase(base).
+        })
+    }
+
+    type data struct {
+        Name string `json:"name"`
+    }
+
+    func base(req *f.Request, res *f.Response) {
+        res.SendView(f.NewViewWithData(f.RenderModeFull, data{
+            Name: "world",
+        }))
+    }
+    ```
+  </TabItem>
+
+  <TabItem label="view.svelte">
+    ```svelte
+    <script lang="ts">
+        import type {ServerContext} from "$frizzante/types.ts";
+        const server = getContext("server") as ServerContext<{
+            name: string
+        }>
+    </script>
+    <h1>Hello {server.data.name}.</h1>
+    ```
+  </TabItem>
+</Tabs>

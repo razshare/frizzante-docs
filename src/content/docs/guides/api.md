@@ -2,7 +2,7 @@
 title: Api
 ---
 
-Apis are defined onto the server as request handlers using `.OnRequest()`.
+Apis are defined onto the server as request handlers using `server.OnRequest()`.
 
 ```go
 //lib/api
@@ -29,7 +29,7 @@ using curly braces syntax (`{}`)
 GET /api/{username}/about
 ```
 
-You can then retrieve these fields from the request by using `.ReceivePath()`.
+You can then retrieve these fields from the request by using `request.ReceivePath()`.
 
 ```go
 func get(req *f.Request, res *f.Response){

@@ -2,13 +2,20 @@
 title: Get Started
 ---
 
+Frizzante is a an opinionated web server framework that uses Svelte to render web pages.
+
+
 ### Prerequisites
 
 Make sure you have [Go](https://go.dev/doc/install), 
 [build-essential](https://askubuntu.com/questions/398489/how-to-install-build-essential) and 
 [Bun](https://bun.sh/) installed.
 
-### Step 1
+:::note
+Frizzante is aimed mainly at linux distributions.
+:::
+
+### Create Project
 
 Create a new project by cloning the started template.
 
@@ -17,7 +24,7 @@ git clone https://github.com/razshare/frizzante-starter && \
 rm frizzante-starter/.git -fr
 ```
 
-### Step 2
+### Configure Project
 
 Configure the project
 
@@ -29,16 +36,22 @@ make configure
 Guides lead a user through a specific task they want to accomplish, often with a sequence of steps.
 Writing a good guide requires thinking about what your users are trying to do.
 
-### Step 3
+### Start Development Mode
 
-Start the server in development mode
+Start the server in development mode with
 
 ```sh
 make dev
 ```
 
-or build it into a standalone executable for production
+### Build Project
+
+Build the project it into a standalone executable for production with
 
 ```sh
 make build
 ```
+
+:::note
+The final output is a standalone executable.
+:::

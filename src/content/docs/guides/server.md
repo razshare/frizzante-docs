@@ -2,7 +2,7 @@
 title: Server
 ---
 
-You can create server using `NewServer()`.
+You can create a server using `f.NewServer()`.
 
 
 ```go

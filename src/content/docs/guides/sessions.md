@@ -2,10 +2,25 @@
 title: Sessions
 ---
 
-You can start a session with `f.SessionStart()`.
+You can start a session with `f.SessionStart()`, a function that acts on 
+both the `request` and the `response`. 
+
+The reason being is that `f.SessionStart()` tries to 
+**retrieve an existing session** based on the request's `session-id` 
+cookie **before creating a new** one from scratch.
+
+When the given `session-id` is not valid, it creates a new session, 
+and so **it sends** the new `session-id` back to the client as a cookie.
+
+The newly created `session-id` cookie doesn't set any limitations.
+
+No expiration date or path constraints.
+
+That is because the **session adapter** is expected to fully manage sessions on the server side,
+including expirations dates and other restrictions.
 
 ```go
-//lib/api
+//lib/api/welcome/endpoint.go
 package api
 
 import (
@@ -14,7 +29,7 @@ import (
 )
 
 func init() {
-	config.Server.OnRequest("GET /api/events", []f.Guard{}, get)
+	config.Server.OnRequest("GET /api/welcome", []f.Guard{}, get)
 }
 
 func get(req *f.Request, res *f.Response) {
@@ -23,7 +38,7 @@ func get(req *f.Request, res *f.Response) {
 }
 ```
 
-Where `config.SessionAdapter` is a `f.SessionAdapter[T]`, for example
+where `config.SessionAdapter` is a `f.SessionAdapter[T]`, for example
 
 ```go
 //lib/config/session.go
@@ -36,14 +51,14 @@ import (
 )
 
 type SessionData struct {
-	Items        []string  `json:"items"`
+	Todos        []string  `json:"todos"`
 	LastActivity time.Time `json:"lastActivity"`
 	Expired      bool      `json:"expired"`
 }
 
 func NewSessionData() SessionData {
 	return SessionData{
-		Items: []string{
+		Todos: []string{
 			"Pet the cat.",
 			"Do laundry",
 			"Pet the cat.",
@@ -58,39 +73,45 @@ var notifier = f.NewNotifier()
 var archive = f.NewArchiveOnDisk(".sessions", time.Second/2)
 
 func SessionAdapter(session *f.Session[SessionData]) {
-	// Define handlers.
+	// Handle exists.
 	session.WithExistsHandler(func() bool {
 		return archive.Has(session.Id, key)
 	})
+
+	// Handle load.
 	session.WithLoadHandler(func() {
 		data := archive.Get(session.Id, key)
-		unmarshalError := json.Unmarshal(data, &session.Data)
-		if nil != unmarshalError {
-			notifier.SendError(unmarshalError)
+		err := json.Unmarshal(data, &session.Data)
+		if nil != err {
+			notifier.SendError(err)
 		}
 	})
+
+	// Handle save.
 	session.WithSaveHandler(func() {
-		data, marshalError := json.Marshal(session.Data)
-		if nil != marshalError {
-			notifier.SendError(marshalError)
+		data, err := json.Marshal(session.Data)
+		if nil != err {
+			notifier.SendError(err)
 			return
 		}
 		archive.Set(session.Id, key, data)
 	})
+
+	// Handle destroy.
 	session.WithDestroyHandler(func() {
 		archive.RemoveDomain(session.Id)
 	})
 
-	// Load session data from disk if it exists.
+	// Check if session exists.
 	if session.Exists() {
+		// Load existing state.
 		session.Load()
 		return
 	}
 
-	// Otherwise initialize the session data.
+	// Otherwise initialize new state.
 	session.Data = NewSessionData()
 }
-
 ```
 
 This **session adapter** manages sessions on the local file system.
@@ -100,16 +121,19 @@ This **session adapter** manages sessions on the local file system.
 Once you retrieve a session, you can freely modify its `.Data`.
 
 ```go
-//main.go
-package main
+//lib/api/welcome/endpoint.go
+package api
 
-import f "github.com/razshare/frizzante"
+import (
+	f "github.com/razshare/frizzante"
+	"main/lib/config"
+)
 
-func main() {
-	f.NewServer().OnRequest("GET /api", handle).Start()
+func init() {
+	config.Server.OnRequest("GET /api/welcome", []f.Guard{}, get)
 }
 
-func handle(req *f.Request, res *f.Response){
+func get(req *f.Request, res *f.Response) {
 	// Retrieve session.
 	session := f.SessionStart(req, res, sessions.Archived)
 	
@@ -123,23 +147,3 @@ func handle(req *f.Request, res *f.Response){
 
 After you've made your changes to the `session.Data`, 
 you should save those change by invoking `session.Save()`, as shown above.
-
-
-## Session Lifetime
-
-As you might've noticed, the `f.SessionStart()` function acts on 
-both the `request` and the `response`. 
-
-The reason being is that `f.SessionStart()` tries to 
-**retrieve an existing session** based on the request's `session-id` 
-cookie **before creating a new** one from scratch.
-
-When the given `session-id` is not valid it creates a new session, 
-and so **it sends** the new `session-id` back to the client as a cookie.
-
-The newly created `session-id` cookie doesn't set any limitations.
-
-No expiration date or path constraints.
-
-That is because the **session adapter** is expected to fully manage sessions on the server side,
-including expirations dates and other restrictions.
