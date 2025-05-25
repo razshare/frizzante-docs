@@ -14,13 +14,13 @@ Create a new project by cloning the started template.
 
 ```sh
 git clone https://github.com/razshare/frizzante-starter && \
-rm frizzante-starter/.git -fr
+rm frizzante-starter/.git -fr && \
+cd frizzante-starter
 ```
 
 Configure the project
 
 ```sh
-cd frizzante-starter && \
 make configure
 ```
 
