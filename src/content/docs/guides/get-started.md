@@ -2,7 +2,7 @@
 title: Get Started
 ---
 
-Frizzante is a an opinionated web server framework that uses Svelte to render web pages.
+Frizzante is an opinionated web server framework that uses Svelte to render web pages.
 
 
 ### Prerequisites
