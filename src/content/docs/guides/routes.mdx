@@ -2,7 +2,7 @@
 title: Routes
 ---
 
-import { FileTree} from '@astrojs/starlight/components';
+import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
 
 Make a new `lib/routes.go` file.
 <FileTree>
@@ -256,6 +256,75 @@ Then use context api to retrieve provided data.
 
 <h1>Hello {server.data.name}</h1>
 ```
+
+## Views Render Modes
+
+When sending views, you can choose how to render them with the `RenderMode` 
+property.
+
+<Tabs>
+    <TabItem label='Server'>
+        ```go
+        //lib/routes.go
+        package lib
+
+        import f "github.com/razshare/frizzante"
+
+        func init() {
+            Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+                res.SendView(f.View{
+                    Name: "Welcome",
+                    RenderMode: f.RenderModeServer, // Renders only on the server.
+                })
+            })
+        }
+        ```
+        :::tip
+        While using `RenderModeServer` your application won't serve a JavaScript bundle,
+        but you can still use the `<svelte:head>` special
+        tag in order to load scripts dynamically.
+        ```svelte
+        <svelte:head>
+            <script type="text/javascript" src="https://some.cdn/some.js" />
+        </svelte:head>
+        ```
+        :::
+    </TabItem>
+    <TabItem label='Client'>
+        ```go
+        //lib/routes.go
+        package lib
+
+        import f "github.com/razshare/frizzante"
+
+        func init() {
+            Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+                res.SendView(f.View{
+                    Name: "Welcome",
+                    RenderMode: f.RenderModeClient, // Renders only on the client.
+                })
+            })
+        }
+        ```
+    </TabItem>
+    <TabItem label='Full'>
+        ```go
+        //lib/routes.go
+        package lib
+
+        import f "github.com/razshare/frizzante"
+
+        func init() {
+            Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+                res.SendView(f.View{
+                    Name: "Welcome",
+                    RenderMode: f.RenderModeFull,   // Renders on both the client and the server.
+                })
+            })
+        }
+        ```
+    </TabItem>
+</Tabs>
 
 ## Server Sent Events
 

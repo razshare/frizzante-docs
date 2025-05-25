@@ -4,15 +4,13 @@ title: Creating & Starting a Server
 
 import { FileTree} from '@astrojs/starlight/components';
 
-Make a new `lib/server.go` file.
+Make a new file called `lib/server.go` and use `f.NewServer()` to create a new server.
 
 <FileTree>
     - main.go
     - lib
         - server.go
 </FileTree>
-
-Create a server with `f.NewServer()`.
 
 ```go
 // lib/server.go
