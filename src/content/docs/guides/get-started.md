@@ -2,8 +2,6 @@
 title: Get Started
 ---
 
-Frizzante is an opinionated web server framework that uses Svelte to render web pages.
-
 Make sure you have [Go](https://go.dev/doc/install),
 [build-essential](https://askubuntu.com/questions/398489/how-to-install-build-essential) and
 [Bun](https://bun.sh/) installed.
