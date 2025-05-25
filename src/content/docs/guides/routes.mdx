@@ -27,6 +27,24 @@ func init() {
 }
 ```
 
+## Status
+
+Use `res.SendStatus()` to set the status of the response.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        res.SendStatus(404)                             // Sends status 404.
+        res.SendMessage("Resource not found, sorry.")   // Sends text.
+    })
+}
+```
+
 ## Path
 
 Request handlers can define dynamic fields within the pattern using `{}` syntax.
@@ -152,24 +170,6 @@ func init() {
 	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
         cookie := req.ReceiveCookie("session-id")   // Retrieves cookie "session-id".
         res.SendCookie("session-id", cookie)        // Sends it back.
-    })
-}
-```
-
-## Status
-
-Use `res.SendStatus()` to set the status of the response.
-
-```go
-//lib/routes.go
-package lib
-
-import f "github.com/razshare/frizzante"
-
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        res.SendStatus(404)                             // Sends status 404.
-        res.SendMessage("Resource not found, sorry.")   // Sends text.
     })
 }
 ```
@@ -313,3 +313,52 @@ func init() {
     })
 }
 ```
+
+## Other Details
+
+Order of operations matters when sending data to the client.
+
+**Status codes** must be sent **before headers**, which must be sent **before content**.
+
+:::danger
+For example, sending the status code with `res.SendStatus()` **after** you've already sent content
+with `res.SendMessage()` is not allowed.
+
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        res.SendMessage("Hello.")   // Sending text.    (Will Succeed)
+        res.SendStatus(200)         // Sending status.  (Will Fail Silently)
+    })
+}
+```
+
+The request handler will continue execution and the user will receive the response correctly
+
+```http
+HTTP/1.1 200 OK
+Date: Sun, 25 May 2025 02:00:37 GMT
+Content-Length: 6
+Content-Type: text/plain; charset=utf-8
+
+Hello.
+```
+
+But `res.SendStatus()` will fail and send an error to 
+the server notifier.
+
+Assuming you're using the default notifier, you'll see and error of sorts in your console
+
+```sh
+listening for requests at http://127.0.0.1:8080
+status is locked
+```
+
+`status is locked`, meaning the status code has already been sent to the client and there's nothing you can do about it.
+:::
