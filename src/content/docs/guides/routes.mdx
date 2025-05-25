@@ -274,7 +274,7 @@ property.
             Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
                 res.SendView(f.View{
                     Name: "Welcome",
-                    RenderMode: f.RenderModeServer, // Renders only on the server.
+                    RenderMode: f.RenderModeServer, // Renders on server.
                 })
             })
         }
@@ -301,7 +301,7 @@ property.
             Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
                 res.SendView(f.View{
                     Name: "Welcome",
-                    RenderMode: f.RenderModeClient, // Renders only on the client.
+                    RenderMode: f.RenderModeClient, // Renders on client.
                 })
             })
         }
@@ -318,7 +318,7 @@ property.
             Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
                 res.SendView(f.View{
                     Name: "Welcome",
-                    RenderMode: f.RenderModeFull,   // Renders on both the client and the server.
+                    RenderMode: f.RenderModeFull,   // Renders on client and server.
                 })
             })
         }
