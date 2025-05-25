@@ -1,0 +1,315 @@
+---
+title: Routes
+---
+
+import { FileTree} from '@astrojs/starlight/components';
+
+Make a new `lib/routes.go` file.
+<FileTree>
+    - main.go
+    - lib
+        - server.go
+        - routes.go
+</FileTree>
+
+Define an `init()` function and use `Server.WithRequestHandler()` to define a request handler.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        res.SendMessage("Hello")
+    })
+}
+```
+
+## Path
+
+Request handlers can define dynamic fields within the pattern using `{}` syntax.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /{name}", func(req *f.Request, res *f.Response) {
+        //...
+    })
+}
+```
+
+Use `req.ReceivePath()` to retrieve such fields.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /{name}", func(req *f.Request, res *f.Response) {
+        name := req.ReceivePath("name")     // Retrieves field "name".
+        res.SendMessage("Hello " + name)    // Sends text.
+    })
+}
+```
+
+## Query
+
+Use `req.ReceiveQuery()` to retrieve query fields.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        name := req.ReceiveQuery("name")    // Retrieves field "name".
+        res.SendMessage("Hello " + name)    // Sends text.
+    })
+}
+```
+
+## Forms
+
+Use `req.ReceiveForm()` to retrieve and parse forms.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        form := req.ReceiveForm()           // Retrieves and parses the form.
+        name := form.Get("name")            // Retrieves field "name".
+        res.SendMessage("Hello " + name)    // Sends text.
+    })
+}
+```
+
+## Json
+
+Use `req.ReceiveJson()` to parse incoming content as json and `req.SendJson()` to send data as json.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+type model struct {
+    Name string `json:"name"`
+}
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        var value *model         // Prepares empty value.
+        req.ReceiveJson(value)   // Parses the content into value.
+        res.SendJson(value)      // Sends it back.
+    })
+}
+```
+
+## Headers
+
+Use `req.ReceiveHead()` to retrieve header fields and `res.SendHeader()` to send them.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        ctype := req.ReceiveHeader("Content-Type")  // Retrieves field "Content-Type".
+        res.SendHeader("Content-Type", ctype)       // Sends it back.
+    })
+}
+```
+
+## Cookies
+
+Use `req.ReceiveCookie()` to retrieve cookies and `res.SendCookie()` to send them.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        cookie := req.ReceiveCookie("session-id")   // Retrieves cookie "session-id".
+        res.SendCookie("session-id", cookie)        // Sends it back.
+    })
+}
+```
+
+## Status
+
+Use `res.SendStatus()` to set the status of the response.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        res.SendStatus(404)                             // Sends status 404.
+        res.SendMessage("Resource not found, sorry.")   // Sends text.
+    })
+}
+```
+
+## Redirect
+
+
+Use `res.SendRedirect()` to redirect to a different location.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        res.SendRedirect("/login", 302)
+    })
+}
+```
+
+## Navigate
+
+Use `res.SendNavigate()` to redirect to a different location with status `302`.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        res.SendNavigate("/login")
+    })
+}
+```
+
+## Views
+
+View files are svelte components located under `lib/components/views`.
+
+<FileTree>
+    - main.go
+    - lib
+        - components
+            - views
+                - Welcome.svelte
+                - Login.svelte
+                - Profile.svelte
+                - ...
+</FileTree>
+
+Use `res.SendView()` to send a view along with some optional data.
+
+```go
+//lib/routes.go
+package lib
+
+import f "github.com/razshare/frizzante"
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        res.SendView(f.View{
+            Name: "Welcome",
+            Data: map[string]string{
+                "name": "world", // Provide data for the view.
+            }
+        }) // Sends file "lib/components/views/Welcome.svelte"
+    })
+}
+```
+
+Then use context api to retrieve provided data.
+
+```svelte
+<script lang="ts">
+    import type { ServerContext } from "$frizzante/types.ts"
+    const server = getContext("server") as ServerContext<{
+        name: string
+    }>
+</script>
+
+<h1>Hello {server.data.name}</h1>
+```
+
+## Server Sent Events
+
+Use `res.SendSseUpgrade()` to upgrade the connection to server sent events.
+
+
+```go
+//lib/routes.go
+package lib
+
+import (
+    f "github.com/razshare/frizzante"
+    "time"
+)
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        alive := req.IsAlive()          // Track request status.
+        ev := res.SendSseUpgrade()      // Send sse upgrade.
+        for *alive {                    // Loop until request gets cancelled.
+            ev("channel-1")             // Switch to event "channel-1".
+            res.SendMessage("hello 1")  // Send text.
+            ev("channel-2")             // Switch to event "channel-1".
+            res.SendMessage("hello 2")  // Send text.
+            time.Sleep(time.Second)     // Sleep for 1 second.
+        }
+    })
+}
+```
+
+## Web Sockets
+
+Use `res.SendWsUpgrade()` to upgrade the connection to web sockets.
+
+```go
+//lib/routes.go
+package lib
+
+import (
+    f "github.com/razshare/frizzante"
+    "time"
+)
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+        alive := req.IsAlive()          // Track request status.
+        res.SendWsUpgrade()             // Send ws upgrade.
+        for *alive {                    // Loop until request gets cancelled.
+            ev("channel-1")             // Switch to event "channel-1".
+            res.SendMessage("hello 1")  // Send text.
+            ev("channel-2")             // Switch to event "channel-1".
+            res.SendMessage("hello 2")  // Send text.
+            time.Sleep(time.Second)     // Sleep for 1 second.
+        }
+    })
+}
+```

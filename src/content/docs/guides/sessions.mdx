@@ -1,0 +1,75 @@
+---
+title: Sessions
+---
+
+import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components'
+
+Before using sessions you need to create your own **session adapter**.
+
+:::note
+The starter templates comes with one out of the box.
+:::
+
+## Session Adapter
+
+Make a `lib/session.go` file and implement your **session adapter** in there.
+
+```go
+//lib/session.go
+import f "github.com/razshare/frizzante"
+
+type SessionState struct {
+	Name string
+}
+
+var memory = map[string]SessionState{}
+
+// SessionAdapter builds sessions in memory.
+func SessionAdapter(session *Session[SessionState]) {
+	session.WithExistsHandler(func() bool {
+		_, exists := memory[session.Id]
+		return exists
+	})
+
+	session.WithLoadHandler(func() {
+		session.Data = memory[session.Id]
+	})
+
+	session.WithSaveHandler(func() {
+		memory[session.Id] = session.Data
+	})
+
+	session.WithDestroyHandler(func() {
+		delete(memory, session.Id)
+	})
+
+	if session.Exists() {
+		session.Load()
+		return
+	}
+
+	session.Data = SessionState{}
+}
+```
+
+## Start Session
+
+Use `f.SessionStart()` to start a session.
+
+```go
+//lib/routes.go
+package lib
+
+import (
+    f "github.com/razshare/frizzante"
+    "time"
+)
+
+func init() {
+	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
+		session := f.SessionStart(req, res, SessionAdapter) // Start session.
+		session.Data.Name = "world"                         // Modify state.
+		session.Save()                                      // Save state changes.
+	})
+}
+```
