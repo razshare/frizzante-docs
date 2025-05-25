@@ -403,7 +403,7 @@ import f "github.com/razshare/frizzante"
 func init() {
 	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
         res.SendMessage("Hello.")   // Sending text.    (Will Succeed)
-        res.SendStatus(200)         // Sending status.  (Will Fail Silently)
+        res.SendStatus(200)         // Sending status.  (Will Fail)
     })
 }
 ```
