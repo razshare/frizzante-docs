@@ -1,11 +1,13 @@
 ---
-title: Controllers
+title: Views
 ---
 
 import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
 
 
-A controller is a Go package located under `lib/controllers`.
+A controller is a `struct` that implements `f.PageController` and is
+located under `lib/controllers/{id}/controller.go`,
+where `{id}` is the **id** of the controller.
 
 <FileTree>
     - makefile
@@ -23,31 +25,26 @@ A controller is a Go package located under `lib/controllers`.
                 - view.svelte
 </FileTree>
 
-You can load package as a controller using `config.Server.LoadController()`.
+You can add a page controller to your server with `server.WithPageController()`.
 
 The server will implicitly use the nearby `view.svelte` file as the rendering
-template for the current controller.
+template for the controller.
 
-<Tabs>
-  <TabItem label="controller.go">
-    ```go
-    package welcome
+```go
+//lib/controllers/welcome/controller.go
+package welcome
 
-    import "main/lib/config"
+import "main/lib/config"
 
-    func init() {
-        config.Server.LoadController(nil)
-    }
-    ```
-  </TabItem>
+func init(){
+  config.Server.LoadController(nil)
+}
+```
 
-  <TabItem label="view.svelte">
-    ```svelte
-    <h1>Hello world.</h1>
-    ```
-  </TabItem>
-</Tabs>
-
+```svelte
+//lib/controllers/welcome/view.svelte
+<h1>Hello world.</h1>
+```
 
 ### Any
 
@@ -65,19 +62,16 @@ This special `any` controller is very useful for
 implementing SPAs, which often fallback to `/index.html`.
 :::
 
-<Tabs>
-  <TabItem label="controller.go">
-    ```go
-    package welcome
+```go
+//lib/controllers/welcome/controller.go
+package welcome
 
-    import "main/lib/config"
+import "main/lib/config"
 
-    func init() {
-        config.Server.LoadController(nil).TryFileFirst()
-    }
-    ```
-  </TabItem>
-</Tabs>
+func init(){
+  config.Server.LoadController(nil).GiveWay()
+}
+```
 
 ### Base Function
 
@@ -89,21 +83,16 @@ data to the screen.
 
 You users will most likely hit this function most of the time.
 
-<Tabs>
-  <TabItem label="controller.go">
-    ```go
-    func init() {
-        config.Server.LoadController(func(controller *f.Controller) {
-            controller.WithBase(base).
-        })
-    }
 
-    func base(req *f.Request, res *f.Response) {
-        res.SendView(f.NewView(f.RenderModeFull))
-    }
-    ```
-  </TabItem>
-</Tabs>
+```go
+//lib/controllers/welcome/controller.go
+
+var id = config.Server.LoadController().WithBase(base).Mount()
+
+func base(req *f.Request, res *f.Response) {
+    res.SendView(f.NewView(f.RenderModeFull))
+}
+```
 
 ### Action Function
 
@@ -115,10 +104,10 @@ it usually modifies state in some way or redirects the user to another.
 <Tabs>
   <TabItem label="controller.go">
     ```go
-    func init() {
-        config.Server.LoadController(func(controller *f.Controller) {
-            controller.WithAction(base).
-        })
+    func init(){
+      config.Server.LoadController(func(controller *f.Controller) {
+          controller.WithAction(base).
+      })
     }
 
     var state = map[string]string{}
@@ -139,10 +128,10 @@ and then you can retrieve this data in your view using the [context](https://sve
 <Tabs>
   <TabItem label="controller.go">
     ```go
-    func init() {
-        config.Server.LoadController(func(controller *f.Controller) {
-            controller.WithBase(base).
-        })
+    func init(){
+      config.Server.LoadController(func(controller *f.Controller) {
+          controller.WithBase(base).
+      })
     }
 
     type data struct {
