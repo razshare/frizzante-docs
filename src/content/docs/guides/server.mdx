@@ -4,38 +4,27 @@ title: Creating & Starting a Server
 
 import { FileTree} from '@astrojs/starlight/components';
 
-Make a new file called `lib/server.go` and use `f.NewServer()` to create a new server.
+Use `frizzante.NewServer()` to create a new server and `.Start()` to start it.
 
-<FileTree>
-    - main.go
-    - lib
-        - server.go
-</FileTree>
 
 ```go
 // lib/server.go
-package lib
-
-import f "github.com/razshare/frizzante"
-
-var Server = f.NewServer().WithAddress("127.0.0.1:8080")
-```
-
-Then start the server in your `main.go`.
-
-```go
 package main
 
 import (
 	"embed"
-	"main/lib"
+	"github.com/razshare/frizzante"
+	"main/lib/notifiers"
 )
 
 //go:embed .dist/*/**
 var dist embed.FS
+var server = frizzante.NewServer().
+	WithNotifier(notifiers.Console).
+	WithAddress("127.0.0.1:8080")
 
 func main() {
-	lib.Server.Start(dist)
+	server.Start(dist)
 }
 ```
 

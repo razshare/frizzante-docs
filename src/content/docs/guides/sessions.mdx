@@ -12,20 +12,20 @@ The starter template comes with one out of the box.
 
 ## Session Adapter
 
-Make a `lib/session.go` file and implement your **session adapter** in there.
+Make a `lib/sessions/adapter.go` file and implement your **session adapter** in there.
 
 ```go
-//lib/session.go
-import f "github.com/razshare/frizzante"
+//lib/sessions/adapter.go
+import "github.com/razshare/frizzante"
 
-type SessionState struct {
+type Data struct {
 	Name string
 }
 
-var memory = map[string]SessionState{}
+var memory = map[string]Data{}
 
-// SessionAdapter builds sessions in memory.
-func SessionAdapter(session *Session[SessionState]) {
+// Adapter builds sessions in memory.
+func Adapter(session *Session[Data]) {
 	session.WithExistsHandler(func() bool {
 		_, exists := memory[session.Id]
 		return exists
@@ -48,28 +48,36 @@ func SessionAdapter(session *Session[SessionState]) {
 		return
 	}
 
-	session.Data = SessionState{}
+	session.Data = Data{}
 }
 ```
 
 ## Start Session
 
-Use `f.SessionStart()` to start a session.
+Use `frizzante.SessionStart()` to start a session.
 
 ```go
-//lib/routes.go
+//main.go
+var server = frizzante.
+    //...
+    WithRequestHandler("GET /", routes.GetHandler)
+    //...
+```
+
+```go
+//lib/routes/handler.go
 package lib
 
 import (
-    f "github.com/razshare/frizzante"
-    "time"
+	"github.com/razshare/frizzante"
+	"main/lib/sessions"
+	"time"
 )
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-		session := f.SessionStart(req, res, SessionAdapter) // Start session.
-		session.Data.Name = "world"                         // Modify state.
-		session.Save()                                      // Save state changes.
-	})
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+	session := frizzante.
+        SessionStart(req, res, sessions.Adapter)  // Start session.
+    session.Data.Name = "world"                   // Modify session data.
+    session.Save()                                // Save changes.
 }
 ```

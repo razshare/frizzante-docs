@@ -4,26 +4,44 @@ title: Routes
 
 import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
 
-Make a new `lib/routes.go` file.
-<FileTree>
-    - main.go
-    - lib
-        - server.go
-        - routes.go
-</FileTree>
-
-Define an `init()` function and use `Server.WithRequestHandler()` to define a request handler.
+You can create a route by adding a request handler to the server using
+`server.WithRequestHandler()`.
 
 ```go
-//lib/routes.go
-package lib
+//main.go
+package main
 
-import f "github.com/razshare/frizzante"
+import (
+    "embed"
+    "github.com/razshare/frizzante"
+    "main/lib/api"
+    "main/lib/notifiers"
+)
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        res.SendMessage("Hello")
-    })
+//go:embed .dist/*/**
+var dist embed.FS
+var server = frizzante.NewServer().
+    WithNotifier(notifiers.Console).
+    WithAddress("127.0.0.1:8080").
+    WithRequestHandler("GET /", routes.GetHandler)    // <=== Adds handler.
+
+func main() {
+    server.Start(dist)
+}
+```
+
+Generally speaking your request handlers should be 
+located under `lib/routes`, so in this example, `routes.GetHandler` 
+is located in `lib/routes/handler.go`.
+
+```go
+//lib/routes/handler.go
+package routes
+
+import "github.com/razshare/frizzante"
+
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    res.SendMessage("Hello")
 }
 ```
 
@@ -32,49 +50,39 @@ func init() {
 Use `res.SendStatus()` to set the status of the response.
 
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        res.SendStatus(404)                             // Sends status 404.
-        res.SendMessage("Resource not found, sorry.")   // Sends text.
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    res.SendStatus(404)                             // Sends status 404.
+    res.SendMessage("Resource not found, sorry.")   // Sends text.
 }
 ```
 
 ## Path
 
-Request handlers can define dynamic fields within the pattern using `{}` syntax.
+Request handlers can define dynamic fields within the pattern using `{}` syntax,
+which you can retrieve with `req.ReceivePath()`.
 
 ```go
-//lib/routes.go
-package lib
-
-import f "github.com/razshare/frizzante"
-
-func init() {
-	Server.WithRequestHandler("GET /{name}", func(req *f.Request, res *f.Response) {
-        //...
-    })
-}
+//main.go
+var server = frizzante.
+    //...
+    WithRequestHandler("GET /{name}", routes.GetHello)
+    //...
 ```
 
-Use `req.ReceivePath()` to retrieve such fields.
-
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /{name}", func(req *f.Request, res *f.Response) {
-        name := req.ReceivePath("name")     // Retrieves field "name".
-        res.SendMessage("Hello " + name)    // Sends text.
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    name := req.ReceivePath("name")     // Retrieves field "name".
+    res.SendMessage("Hello " + name)    // Sends text.
 }
 ```
 
@@ -83,58 +91,70 @@ func init() {
 Use `req.ReceiveQuery()` to retrieve query fields.
 
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        name := req.ReceiveQuery("name")    // Retrieves field "name".
-        res.SendMessage("Hello " + name)    // Sends text.
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    name := req.ReceiveQuery("name")    // Retrieves field "name".
+    res.SendMessage("Hello " + name)    // Sends text.
 }
 ```
 
 ## Forms
 
-Use `req.ReceiveForm()` to retrieve and parse forms.
+Use `req.ReceiveForm()` to retrieve and parse forms
+when using `POST` and `PUT` http verbs.
 
 ```go
-//lib/routes.go
+//main.go
+var server = frizzante.
+    //...
+    WithRequestHandler("POST /", routes.PostHello)
+    //...
+```
+
+```go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        form := req.ReceiveForm()           // Retrieves and parses the form.
-        name := form.Get("name")            // Retrieves field "name".
-        res.SendMessage("Hello " + name)    // Sends text.
-    })
+func PostHello(req *frizzante.Request, res *frizzante.Response) {
+    form := req.ReceiveForm()           // Retrieves and parses the form.
+    name := form.Get("name")            // Retrieves field "name".
+    res.SendMessage("Hello " + name)    // Sends text.
 }
+
 ```
 
 ## Json
 
-Use `req.ReceiveJson()` to parse incoming content as json and `req.SendJson()` to send data as json.
+Use `req.ReceiveJson()` to parse incoming content as json and `req.SendJson()` to send data as json when using `POST` and `PUT` http verbs.
 
 ```go
-//lib/routes.go
+//main.go
+var server = frizzante.
+    //...
+    WithRequestHandler("POST /", routes.PostHello)
+    //...
+```
+
+```go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-type model struct {
+type GreetingDetails struct {
     Name string `json:"name"`
 }
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        var value *model         // Prepares empty value.
-        req.ReceiveJson(value)   // Parses the content into value.
-        res.SendJson(value)      // Sends it back.
-    })
+func PostHello(req *frizzante.Request, res *frizzante.Response) {
+    var value *GreetingDetails  // Prepares empty value.
+    req.ReceiveJson(value)      // Parses the content into value.
+    res.SendJson(value)         // Sends it back.
 }
 ```
 
@@ -143,16 +163,14 @@ func init() {
 Use `req.ReceiveHead()` to retrieve header fields and `res.SendHeader()` to send them.
 
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        ctype := req.ReceiveHeader("Content-Type")  // Retrieves field "Content-Type".
-        res.SendHeader("Content-Type", ctype)       // Sends it back.
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    ctype := req.ReceiveHeader("Content-Type")  // Retrieves field "Content-Type".
+    res.SendHeader("Content-Type", ctype)       // Sends it back.
 }
 ```
 
@@ -161,34 +179,29 @@ func init() {
 Use `req.ReceiveCookie()` to retrieve cookies and `res.SendCookie()` to send them.
 
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        cookie := req.ReceiveCookie("session-id")   // Retrieves cookie "session-id".
-        res.SendCookie("session-id", cookie)        // Sends it back.
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    cookie := req.ReceiveCookie("session-id")   // Retrieves cookie "session-id".
+    res.SendCookie("session-id", cookie)        // Sends it back.
 }
 ```
 
 ## Redirect
 
-
 Use `res.SendRedirect()` to redirect to a different location.
 
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        res.SendRedirect("/login", 302)
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    res.SendRedirect("/login", 302)
 }
 ```
 
@@ -197,15 +210,13 @@ func init() {
 Use `res.SendNavigate()` to redirect to a different location with status `302`.
 
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        res.SendNavigate("/login")
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    res.SendNavigate("/login")
 }
 ```
 
@@ -227,20 +238,18 @@ View files are svelte components located under `lib/components/views`.
 Use `res.SendView()` to send a view along with some optional data.
 
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        res.SendView(f.View{
-            Name: "Welcome",
-            Data: map[string]string{
-                "name": "world", // Provide data for the view.
-            }
-        }) // Sends file "lib/components/views/Welcome.svelte"
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    res.SendView(frizzante.View{
+        Name: "Welcome",
+        Data: map[string]string{
+            "name": "world", // Provide data for the view.
+        }
+    }) // Sends file "lib/components/views/Welcome.svelte"
 }
 ```
 
@@ -264,18 +273,17 @@ property.
 
 <Tabs>
     <TabItem label='Server'>
+    
         ```go
-        //lib/routes.go
+        //lib/routes/handler.go
         package lib
 
-        import f "github.com/razshare/frizzante"
+        import "github.com/razshare/frizzante"
 
-        func init() {
-            Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-                res.SendView(f.View{
-                    Name: "Welcome",
-                    RenderMode: f.RenderModeServer, // Renders on server.
-                })
+        func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+            res.SendView(frizzante.View{
+                Name: "Welcome",
+                RenderMode: frizzante.RenderModeServer, // Renders on server.
             })
         }
         ```
@@ -292,34 +300,30 @@ property.
     </TabItem>
     <TabItem label='Client'>
         ```go
-        //lib/routes.go
+        //lib/routes/handler.go
         package lib
 
-        import f "github.com/razshare/frizzante"
+        import "github.com/razshare/frizzante"
 
-        func init() {
-            Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-                res.SendView(f.View{
-                    Name: "Welcome",
-                    RenderMode: f.RenderModeClient, // Renders on client.
-                })
+        func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+            res.SendView(frizzante.View{
+                Name: "Welcome",
+                RenderMode: frizzante.RenderModeClient, // Renders on client.
             })
         }
         ```
     </TabItem>
     <TabItem label='Full'>
         ```go
-        //lib/routes.go
+        //lib/routes/handler.go
         package lib
 
-        import f "github.com/razshare/frizzante"
+        import "github.com/razshare/frizzante"
 
-        func init() {
-            Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-                res.SendView(f.View{
-                    Name: "Welcome",
-                    RenderMode: f.RenderModeFull,   // Renders on client and server.
-                })
+        func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+            res.SendView(frizzante.View{
+                Name: "Welcome",
+                RenderMode: frizzante.RenderModeFull,   // Renders on client and server.
             })
         }
         ```
@@ -330,28 +334,25 @@ property.
 
 Use `res.SendSseUpgrade()` to upgrade the connection to server sent events.
 
-
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
 import (
-    f "github.com/razshare/frizzante"
+    "github.com/razshare/frizzante"
     "time"
 )
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        alive := req.IsAlive()          // Track request status.
-        ev := res.SendSseUpgrade()      // Send sse upgrade.
-        for *alive {                    // Loop until request gets cancelled.
-            ev("channel-1")             // Switch to event "channel-1".
-            res.SendMessage("hello 1")  // Send text.
-            ev("channel-2")             // Switch to event "channel-1".
-            res.SendMessage("hello 2")  // Send text.
-            time.Sleep(time.Second)     // Sleep for 1 second.
-        }
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    alive := req.IsAlive()          // Track request status.
+    ev := res.SendSseUpgrade()      // Send sse upgrade.
+    for *alive {                    // Loop until request gets cancelled.
+        ev("channel-1")             // Switch to event "channel-1".
+        res.SendMessage("hello 1")  // Send text.
+        ev("channel-2")             // Switch to event "channel-1".
+        res.SendMessage("hello 2")  // Send text.
+        time.Sleep(time.Second)     // Sleep for 1 second.
+    }
 }
 ```
 
@@ -360,26 +361,24 @@ func init() {
 Use `res.SendWsUpgrade()` to upgrade the connection to web sockets.
 
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
 import (
-    f "github.com/razshare/frizzante"
+    "github.com/razshare/frizzante"
     "time"
 )
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        alive := req.IsAlive()          // Track request status.
-        res.SendWsUpgrade()             // Send ws upgrade.
-        for *alive {                    // Loop until request gets cancelled.
-            ev("channel-1")             // Switch to event "channel-1".
-            res.SendMessage("hello 1")  // Send text.
-            ev("channel-2")             // Switch to event "channel-1".
-            res.SendMessage("hello 2")  // Send text.
-            time.Sleep(time.Second)     // Sleep for 1 second.
-        }
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    alive := req.IsAlive()          // Track request status.
+    res.SendWsUpgrade()             // Send ws upgrade.
+    for *alive {                    // Loop until request gets cancelled.
+        ev("channel-1")             // Switch to event "channel-1".
+        res.SendMessage("hello 1")  // Send text.
+        ev("channel-2")             // Switch to event "channel-1".
+        res.SendMessage("hello 2")  // Send text.
+        time.Sleep(time.Second)     // Sleep for 1 second.
+    }
 }
 ```
 
@@ -393,18 +392,15 @@ Order of operations matters when sending data to the client.
 For example, sending the status code with `res.SendStatus()` **after** you've already sent content
 with `res.SendMessage()` is not allowed.
 
-
 ```go
-//lib/routes.go
+//lib/routes/handler.go
 package lib
 
-import f "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante"
 
-func init() {
-	Server.WithRequestHandler("GET /", func(req *f.Request, res *f.Response) {
-        res.SendMessage("Hello.")   // Sending text.    (Will Succeed)
-        res.SendStatus(200)         // Sending status.  (Will Fail)
-    })
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    res.SendMessage("Hello.")   // Sending text.    (Will Succeed)
+    res.SendStatus(200)         // Sending status.  (Will Fail)
 }
 ```
 
