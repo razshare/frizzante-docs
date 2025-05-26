@@ -26,6 +26,7 @@ export default defineConfig({
             { label: "Server", slug: "guides/server" },
             { label: "Routes", slug: "guides/routes" },
             { label: "Sessions", slug: "guides/sessions" },
+            { label: "Views", slug: "guides/views" },
           ],
         },
       ],
