@@ -250,7 +250,7 @@ func GetHandler(req *frizzante.Request, res *frizzante.Response) {
     for *alive {                    // Loop until request gets cancelled.
         ev("channel-1")             // Switch to event "channel-1".
         res.SendMessage("hello 1")  // Send text.
-        ev("channel-2")             // Switch to event "channel-1".
+        ev("channel-2")             // Switch to event "channel-2".
         res.SendMessage("hello 2")  // Send text.
         time.Sleep(time.Second)     // Sleep for 1 second.
     }
