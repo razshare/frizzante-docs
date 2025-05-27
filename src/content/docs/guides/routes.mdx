@@ -97,7 +97,7 @@ which you can retrieve with `req.ReceivePath()`.
 //main.go
 var server = frizzante.NewServer().
     //...
-    WithRequestHandler("GET /{name}", routes.GetHello)
+    WithRequestHandler("GET /{name}", routes.GetHandler)
     //...
 ```
 
