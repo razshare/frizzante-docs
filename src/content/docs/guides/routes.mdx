@@ -274,7 +274,7 @@ func GetHandler(req *frizzante.Request, res *frizzante.Response) {
     alive := req.IsAlive()          // Track request status.
     res.SendWsUpgrade()             // Send ws upgrade.
     for *alive {                    // Loop until request gets cancelled.
-        res.SendMessage("hello")  // Send text.
+        res.SendMessage("hello")    // Send text.
         time.Sleep(time.Second)     // Sleep for 1 second.
     }
 }
