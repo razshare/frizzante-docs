@@ -301,7 +301,7 @@ import "github.com/razshare/frizzante"
 
 func GetHandler(req *frizzante.Request, res *frizzante.Response) {
     res.SendMessage("Hello.")   // Sending text.    (Will Succeed)
-    res.SendStatus(200)         // Sending status.  (Will Fail)
+    res.SendStatus(404)         // Sending status.  (Will Fail)
 }
 ```
 
