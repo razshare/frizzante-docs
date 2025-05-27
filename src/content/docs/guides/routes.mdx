@@ -47,7 +47,7 @@ func GetHandler(req *frizzante.Request, res *frizzante.Response) {
 
 ## Status
 
-Use `res.SendStatus()` to set the status of the response.
+Use `res.SendStatus()` to send the status of the response.
 
 ```go
 //lib/routes/handler.go
@@ -60,6 +60,33 @@ func GetHandler(req *frizzante.Request, res *frizzante.Response) {
     res.SendMessage("Resource not found, sorry.")   // Sends text.
 }
 ```
+
+:::danger
+The order in which data is sent to the client matters. <br/>
+Read more about [order of operations](#order-of-operations).
+:::
+
+
+## Header
+
+Use `req.ReceiveHead()` to retrieve header fields and `res.SendHeader()` to send them.
+
+```go
+//lib/routes/handler.go
+package lib
+
+import "github.com/razshare/frizzante"
+
+func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+    ctype := req.ReceiveHeader("Content-Type")  // Retrieves field "Content-Type".
+    res.SendHeader("Content-Type", ctype)       // Sends it back.
+}
+```
+
+:::danger
+The order in which data is sent to the client matters. <br/>
+Read more about [order of operations](#order-of-operations).
+:::
 
 ## Path
 
@@ -155,22 +182,6 @@ func PostHello(req *frizzante.Request, res *frizzante.Response) {
     var value *GreetingDetails  // Prepares empty value.
     req.ReceiveJson(value)      // Parses the content into value.
     res.SendJson(value)         // Sends it back.
-}
-```
-
-## Headers
-
-Use `req.ReceiveHead()` to retrieve header fields and `res.SendHeader()` to send them.
-
-```go
-//lib/routes/handler.go
-package lib
-
-import "github.com/razshare/frizzante"
-
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    ctype := req.ReceiveHeader("Content-Type")  // Retrieves field "Content-Type".
-    res.SendHeader("Content-Type", ctype)       // Sends it back.
 }
 ```
 
@@ -272,7 +283,7 @@ func GetHandler(req *frizzante.Request, res *frizzante.Response) {
 }
 ```
 
-## Other Details
+## Order of Operations
 
 Order of operations matters when sending data to the client.
 
