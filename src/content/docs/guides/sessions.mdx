@@ -58,7 +58,7 @@ Use `frizzante.SessionStart()` to start a session.
 
 ```go
 //main.go
-var server = frizzante.
+var server = frizzante.NewServer().
     //...
     WithRequestHandler("GET /", routes.GetHandler)
     //...

@@ -68,7 +68,7 @@ which you can retrieve with `req.ReceivePath()`.
 
 ```go
 //main.go
-var server = frizzante.
+var server = frizzante.NewServer().
     //...
     WithRequestHandler("GET /{name}", routes.GetHello)
     //...
@@ -109,7 +109,7 @@ when using `POST` and `PUT` http verbs.
 
 ```go
 //main.go
-var server = frizzante.
+var server = frizzante.NewServer().
     //...
     WithRequestHandler("POST /", routes.PostHello)
     //...
@@ -135,7 +135,7 @@ Use `req.ReceiveJson()` to parse incoming content as json and `req.SendJson()` t
 
 ```go
 //main.go
-var server = frizzante.
+var server = frizzante.NewServer().
     //...
     WithRequestHandler("POST /", routes.PostHello)
     //...
