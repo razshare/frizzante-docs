@@ -34,7 +34,7 @@ func GetHandler(req *frizzante.Request, res *frizzante.Response) {
 
 ## Views Data
 
-Optionally, you can send data data along with the views by adding a `Data` property to your `frizzante.View`.
+Optionally, you can send data along with the views by adding a `Data` property to your `frizzante.View`.
 
 ```go
 //lib/routes/handler.go
@@ -52,8 +52,7 @@ func GetHandler(req *frizzante.Request, res *frizzante.Response) {
 }
 ```
 
-Then use [getContext()](https://svelte.dev/docs/svelte/context) to retrieve 
-`"server"` context, which contains your data.
+Then use [getContext("server")](https://svelte.dev/docs/svelte/context) to retrieve your data.
 
 ```svelte
 <script lang="ts">
@@ -64,7 +63,7 @@ Then use [getContext()](https://svelte.dev/docs/svelte/context) to retrieve
 <h1>Hello {server.data.name}</h1>
 ```
 
-Since server data is retrieved with [getContext()](https://svelte.dev/docs/svelte/context), it can be accessed not only by the root component (your view), but it can be accessed anywhere in your application, as long as you don't overwrite the context.
+Since this data is provided [using the context api](https://svelte.dev/docs/svelte/context), it can be accessed not only by the root component (your view), but also by any other component.
 
 ```svelte
 //lib/components/views/Example.svelte
