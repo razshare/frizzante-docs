@@ -18,7 +18,7 @@ View files are svelte components located under `lib/components/views`.
                 - ...
 </FileTree>
 
-Use `res.SendView()` to send a view along with some optional data.
+Use `res.SendView()` to send a view.
 
 ```go
 //lib/routes/handler.go
@@ -34,7 +34,7 @@ func GetHandler(req *frizzante.Request, res *frizzante.Response) {
 
 ## Views Data
 
-You can inject data into views by adding a `Data` property to your `frizzante.View`.
+Optionally, you can send data data along with the views by adding a `Data` property to your `frizzante.View`.
 
 ```go
 //lib/routes/handler.go
