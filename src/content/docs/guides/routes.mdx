@@ -20,13 +20,12 @@ import (
 
 //go:embed .dist/*/**
 var dist embed.FS
-var server = frizzante.NewServer().
-    WithNotifier(notifiers.Console).
-    WithAddress("127.0.0.1:8080").
-    WithRequestHandler("GET /", routes.GetHandler)    // <=== Adds handler.
-
 func main() {
-    server.Start(dist)
+    frizzante.NewServer().
+        WithNotifier(notifiers.Console).
+        WithAddress("127.0.0.1:8080").
+        WithRequestHandler("GET /", routes.GetHandler).
+        Start(dist)
 }
 ```
 
@@ -90,28 +89,31 @@ Read more about [order of operations](#order-of-operations).
 
 ## Path
 
-Request handlers can define dynamic fields within the pattern using `{}` syntax,
-which you can retrieve with `req.ReceivePath()`.
+Request handlers can define dynamic fields within the **pattern** using `{}` syntax.
 
-```go
-//main.go
-var server = frizzante.NewServer().
-    //...
-    WithRequestHandler("GET /{name}", routes.GetHandler)
-    //...
-```
+Path fields can then be retrieved with `req.ReceivePath()`.
 
-```go
-//lib/routes/handler.go
-package lib
+<Tabs>
+    <TabItem icon='seti:go' label='Handler'>
+        ```go
+        //lib/routes/handler.go
+        package lib
 
-import "github.com/razshare/frizzante"
+        import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    name := req.ReceivePath("name")     // Retrieves field "name".
-    res.SendMessage("Hello " + name)    // Sends text.
-}
-```
+        func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+            name := req.ReceivePath("name")     // Retrieves field "name".
+            res.SendMessage("Hello " + name)    // Sends text.
+        }
+        ```
+    </TabItem>
+    <TabItem icon='seti:info' label='Pattern'>
+        ```http
+        GET /{name}
+        ```
+    </TabItem>
+</Tabs>
+
 
 ## Query
 
@@ -135,14 +137,6 @@ Use `req.ReceiveForm()` to retrieve and parse forms
 when using `POST` and `PUT` http verbs.
 
 ```go
-//main.go
-var server = frizzante.NewServer().
-    //...
-    WithRequestHandler("POST /", routes.PostHello)
-    //...
-```
-
-```go
 //lib/routes/handler.go
 package lib
 
@@ -159,14 +153,6 @@ func PostHello(req *frizzante.Request, res *frizzante.Response) {
 ## Json
 
 Use `req.ReceiveJson()` to parse incoming content as json and `req.SendJson()` to send data as json when using `POST` and `PUT` http verbs.
-
-```go
-//main.go
-var server = frizzante.NewServer().
-    //...
-    WithRequestHandler("POST /", routes.PostHello)
-    //...
-```
 
 ```go
 //lib/routes/handler.go

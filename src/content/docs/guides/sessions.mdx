@@ -57,14 +57,6 @@ func Adapter(session *Session[Data]) {
 Use `frizzante.SessionStart()` to start a session.
 
 ```go
-//main.go
-var server = frizzante.NewServer().
-    //...
-    WithRequestHandler("GET /", routes.GetHandler)
-    //...
-```
-
-```go
 //lib/routes/handler.go
 package lib
 
@@ -75,9 +67,13 @@ import (
 )
 
 func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-	session := frizzante.
-        SessionStart(req, res, sessions.Adapter)  // Start session.
-    session.Data.Name = "world"                   // Modify session data.
-    session.Save()                                // Save changes.
+	// Start session.
+	session := frizzante.SessionStart(req, res, sessions.Adapter)
+
+	// Modify session data.
+    session.Data.Name = "world"
+
+	// Save changes.
+    session.Save()
 }
 ```
