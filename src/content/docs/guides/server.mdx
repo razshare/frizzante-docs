@@ -8,22 +8,21 @@ Use `frizzante.NewServer()` to create a new server and `.Start()` to start it.
 
 
 ```go
-// lib/server.go
 package main
 
 import (
 	"embed"
 	"github.com/razshare/frizzante"
-	"main/lib/notifiers"
 )
 
 //go:embed .dist/*/**
 var dist embed.FS
+
 func main() {
-	frizzante.NewServer().
-		WithNotifier(notifiers.Console).
-		WithAddress("127.0.0.1:8080").
-		Start(dist)
+	frizzante.
+		NewServer().
+		WithDist(dist).
+		Start()
 }
 ```
 

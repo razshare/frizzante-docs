@@ -12,7 +12,7 @@ View files are svelte components located under `lib/components/views`.
     - lib
         - components
             - views
-                - Welcome.svelte
+                - Hello.svelte
                 - Login.svelte
                 - Profile.svelte
                 - ...
@@ -26,9 +26,9 @@ package lib
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-	// Sends file "lib/components/views/Welcome.svelte"
-    res.SendView(frizzante.View{ Name: "Welcome" }) 
+func GetHello(req *frizzante.Request, res *frizzante.Response) {
+    // Sends file "lib/components/views/Hello.svelte"
+    res.SendView(frizzante.View{Name: "Hello"}) 
 }
 ```
 
@@ -42,9 +42,9 @@ package lib
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+func GetHello(req *frizzante.Request, res *frizzante.Response) {
     res.SendView(frizzante.View{ 
-		Name: "Welcome",
+		Name: "Hello",
 		Data: map[string]string{
 			"name": "world",
 		}
@@ -104,9 +104,9 @@ property.
 
         import "github.com/razshare/frizzante"
 
-        func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+        func GetHello(req *frizzante.Request, res *frizzante.Response) {
             res.SendView(frizzante.View{
-                Name: "Welcome",
+                Name: "Hello",
                 RenderMode: frizzante.RenderModeServer, // Renders on server.
             })
         }
@@ -129,9 +129,9 @@ property.
 
         import "github.com/razshare/frizzante"
 
-        func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+        func GetHello(req *frizzante.Request, res *frizzante.Response) {
             res.SendView(frizzante.View{
-                Name: "Welcome",
+                Name: "Hello",
                 RenderMode: frizzante.RenderModeClient, // Renders on client.
             })
         }
@@ -144,9 +144,9 @@ property.
 
         import "github.com/razshare/frizzante"
 
-        func GetHandler(req *frizzante.Request, res *frizzante.Response) {
+        func GetHello(req *frizzante.Request, res *frizzante.Response) {
             res.SendView(frizzante.View{
-                Name: "Welcome",
+                Name: "Hello",
                 RenderMode: frizzante.RenderModeFull,   // Renders on client and server.
             })
         }

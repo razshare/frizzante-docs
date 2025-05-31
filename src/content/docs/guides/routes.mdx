@@ -8,55 +8,49 @@ You can create a route by adding a request handler to the server using
 `.WithRequestHandler()`.
 
 ```go
-//main.go
 package main
 
 import (
-    "embed"
-    "github.com/razshare/frizzante"
-    "main/lib/api"
-    "main/lib/notifiers"
+	"embed"
+	"github.com/razshare/frizzante"
+	"main/lib/handlers"
 )
 
 //go:embed .dist/*/**
 var dist embed.FS
+
 func main() {
-    frizzante.NewServer().
-        WithNotifier(notifiers.Console).
-        WithAddress("127.0.0.1:8080").
-        WithRequestHandler("GET /", routes.GetHandler).
-        Start(dist)
+	frizzante.NewServer().
+		WithDist(dist).
+		WithRequestHandler("GET /", handlers.GetHello).
+		Start()
 }
 ```
 
-Generally speaking your request handlers should be 
-located under `lib/routes`, so in this example, `routes.GetHandler` 
-is located in `lib/routes/handler.go`.
-
 ```go
-//lib/routes/handler.go
-package routes
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    res.SendMessage("Hello")
+func GetHello(c *frizzante.Connection) {
+    c.SendMessage("Hello")
 }
 ```
 
 ## Status
 
-Use `res.SendStatus()` to send the status of the response.
+Use `c.SendStatus()` to send the status of the response.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    res.SendStatus(404)                             // Sends status 404.
-    res.SendMessage("Resource not found, sorry.")   // Sends text.
+func GetHello(c *frizzante.Connection) {
+    c.SendStatus(404)                             // Sends status 404.
+    c.SendMessage("Resource not found, sorry.")   // Sends text.
 }
 ```
 
@@ -68,17 +62,17 @@ Read more about [order of operations](#order-of-operations).
 
 ## Header
 
-Use `req.ReceiveHeader()` to retrieve header fields and `res.SendHeader()` to send them.
+Use `c.ReceiveHeader()` to retrieve header fields and `c.SendHeader()` to send them.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    ctype := req.ReceiveHeader("Content-Type")  // Retrieves field "Content-Type".
-    res.SendHeader("Content-Type", ctype)       // Sends it back.
+func GetHello(c *frizzante.Connection) {
+    ctype := c.ReceiveHeader("Content-Type")  // Retrieves field "Content-Type".
+    c.SendHeader("Content-Type", ctype)       // Sends it back.
 }
 ```
 
@@ -91,19 +85,19 @@ Read more about [order of operations](#order-of-operations).
 
 Request handlers can define dynamic fields within the **pattern** using `{}` syntax.
 
-Path fields can then be retrieved with `req.ReceivePath()`.
+Path fields can then be retrieved with `c.ReceivePath()`.
 
 <Tabs>
     <TabItem icon='seti:go' label='Handler'>
         ```go
-        //lib/routes/handler.go
-        package lib
+        //lib/handlers/hello.go
+        package handlers
 
         import "github.com/razshare/frizzante"
 
-        func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-            name := req.ReceivePath("name")     // Retrieves field "name".
-            res.SendMessage("Hello " + name)    // Sends text.
+        func GetHello(c *frizzante.Connection) {
+            name := c.ReceivePath("name")     // Retrieves field "name".
+            c.SendMessage("Hello " + name)    // Sends text.
         }
         ```
     </TabItem>
@@ -117,46 +111,46 @@ Path fields can then be retrieved with `req.ReceivePath()`.
 
 ## Query
 
-Use `req.ReceiveQuery()` to retrieve query fields.
+Use `c.ReceiveQuery()` to retrieve query fields.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    name := req.ReceiveQuery("name")    // Retrieves field "name".
-    res.SendMessage("Hello " + name)    // Sends text.
+func GetHello(c *frizzante.Connection) {
+    name := c.ReceiveQuery("name")    // Retrieves field "name".
+    c.SendMessage("Hello " + name)    // Sends text.
 }
 ```
 
 ## Forms
 
-Use `req.ReceiveForm()` to retrieve and parse forms
+Use `c.ReceiveForm()` to retrieve and parse forms
 when using `POST` and `PUT` http verbs.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
-func PostHello(req *frizzante.Request, res *frizzante.Response) {
-    form := req.ReceiveForm()           // Retrieves and parses the form.
-    name := form.Get("name")            // Retrieves field "name".
-    res.SendMessage("Hello " + name)    // Sends text.
+func PostHello(c *frizzante.Connection) {
+    form := c.ReceiveForm()         // Retrieves and parses the form.
+    name := form.Get("name")        // Retrieves field "name".
+    c.SendMessage("Hello " + name)  // Sends text.
 }
 
 ```
 
 ## Json
 
-Use `req.ReceiveJson()` to parse incoming content as json and `req.SendJson()` to send data as json when using `POST` and `PUT` http verbs.
+Use `c.ReceiveJson()` to parse incoming content as json and `c.SendJson()` to send data as json when using `POST` and `PUT` http verbs.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
@@ -164,80 +158,80 @@ type GreetingDetails struct {
     Name string `json:"name"`
 }
 
-func PostHello(req *frizzante.Request, res *frizzante.Response) {
+func PostHello(c *frizzante.Connection) {
     var value *GreetingDetails  // Prepares empty value.
-    req.ReceiveJson(value)      // Parses the content into value.
-    res.SendJson(value)         // Sends it back.
+    c.ReceiveJson(value)        // Parses the content into value.
+    c.SendJson(value)           // Sends it back.
 }
 ```
 
 ## Cookies
 
-Use `req.ReceiveCookie()` to retrieve cookies and `res.SendCookie()` to send them.
+Use `c.ReceiveCookie()` to retrieve cookies and `c.SendCookie()` to send them.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    cookie := req.ReceiveCookie("session-id")   // Retrieves cookie "session-id".
-    res.SendCookie("session-id", cookie)        // Sends it back.
+func GetHello(c *frizzante.Connection) {
+    cookie := c.ReceiveCookie("session-id")   // Retrieves cookie "session-id".
+    c.SendCookie("session-id", cookie)        // Sends it back.
 }
 ```
 
 ## Redirect
 
-Use `res.SendRedirect()` to redirect to a different location.
+Use `c.SendRedirect()` to redirect to a different location.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    res.SendRedirect("/login", 302)
+func GetHello(c *frizzante.Connection) {
+    c.SendRedirect("/login", 302)
 }
 ```
 
 ## Navigate
 
-Use `res.SendNavigate()` to redirect to a different location with status `302`.
+Use `c.SendNavigate()` to redirect to a different location with status `302`.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    res.SendNavigate("/login")
+func GetHello(c *frizzante.Connection) {
+    c.SendNavigate("/login")
 }
 ```
 
 ## Server Sent Events
 
-Use `res.SendSseUpgrade()` to upgrade the connection to server sent events.
+Use `c.SendSseUpgrade()` to upgrade the connection to server sent events.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import (
     "github.com/razshare/frizzante"
     "time"
 )
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    alive := req.IsAlive()          // Track request status.
-    ev := res.SendSseUpgrade()      // Send sse upgrade.
+func GetHello(c *frizzante.Connection) {
+    alive := c.IsAlive()            // Track request status.
+    ev := c.SendSseUpgrade()        // Send sse upgrade.
     for *alive {                    // Loop until request gets cancelled.
         ev("channel-1")             // Switch to event "channel-1".
-        res.SendMessage("hello 1")  // Send text.
+        c.SendMessage("hello 1")    // Send text.
         ev("channel-2")             // Switch to event "channel-2".
-        res.SendMessage("hello 2")  // Send text.
+        c.SendMessage("hello 2")    // Send text.
         time.Sleep(time.Second)     // Sleep for 1 second.
     }
 }
@@ -245,23 +239,23 @@ func GetHandler(req *frizzante.Request, res *frizzante.Response) {
 
 ## Web Sockets
 
-Use `res.SendWsUpgrade()` to upgrade the connection to web sockets.
+Use `c.SendWsUpgrade()` to upgrade the connection to web sockets.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import (
     "github.com/razshare/frizzante"
     "time"
 )
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    alive := req.IsAlive()          // Track request status.
-    res.SendWsUpgrade()             // Send ws upgrade.
-    for *alive {                    // Loop until request gets cancelled.
-        res.SendMessage("hello")    // Send text.
-        time.Sleep(time.Second)     // Sleep for 1 second.
+func GetHello(c *frizzante.Connection) {
+    alive := c.IsAlive()        // Track request status.
+    c.SendWsUpgrade()           // Send ws upgrade.
+    for *alive {                // Loop until request gets cancelled.
+        c.SendMessage("hello")  // Send text.
+        time.Sleep(time.Second) // Sleep for 1 second.
     }
 }
 ```
@@ -273,18 +267,18 @@ Order of operations matters when sending data to the client.
 **Status codes** must be sent **before headers**, which must be sent **before content**.
 
 :::danger
-For example, sending the status code with `res.SendStatus()` **after** you've already sent content
-with `res.SendMessage()` is not allowed.
+For example, sending the status code with `c.SendStatus()` **after** you've already sent content
+with `c.SendMessage()` is not allowed.
 
 ```go
-//lib/routes/handler.go
-package lib
+//lib/handlers/hello.go
+package handlers
 
 import "github.com/razshare/frizzante"
 
-func GetHandler(req *frizzante.Request, res *frizzante.Response) {
-    res.SendMessage("Hello.")   // Sending text.    (Will Succeed)
-    res.SendStatus(404)         // Sending status.  (Will Fail)
+func GetHello(c *frizzante.Connection) {
+    c.SendMessage("Hello.")   // Sending text.    (Will Succeed)
+    c.SendStatus(404)         // Sending status.  (Will Fail)
 }
 ```
 
@@ -299,10 +293,10 @@ Content-Type: text/plain; charset=utf-8
 Hello.
 ```
 
-But `res.SendStatus()` will fail and send an error to 
+But `c.SendStatus()` will fail and send an error to 
 the server notifier.
 
-Assuming you're using the default notifier, you'll see and error of sorts in your console
+Assuming you're using the default notifier, you'll see an error of sorts in your console
 
 ```sh
 listening for requests at http://127.0.0.1:8080
