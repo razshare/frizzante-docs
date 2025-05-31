@@ -1,0 +1,60 @@
+---
+title: Sessions
+---
+
+Use `Session()` to start a session.
+
+```go
+//lib/handlers/hello.go
+package handlers
+
+import frz "github.com/razshare/frizzante"
+
+type State struct{}
+
+func GetHello(c *frz.Connection) {
+    state, operator := frz.Session(c, State{})
+}
+```
+
+This will retrieve the user's session or create a new one if none is found.
+
+:::note
+Is the user provides a `session-id` cookie, `Session()` will try and find that session.
+
+If the session doesn't exist, it will create a new session with a new id.
+When this happens, `Session()` will automatically send the new id to the user
+using a `session-id` cookie.
+:::
+
+:::danger
+Since `Session()` may send a cookie, it is important to remember that
+the order in which data is sent to the user matters.
+
+Read more about [order of operations](../routes#order-of-operations).
+:::
+
+## Operator
+
+Session state and session operations are handled separately.
+
+When invoking `Session()`, you're given back 2 values, a `state` and an `operator`.
+
+Use the `operator` to save, reload and destroy the session.
+
+```go
+//lib/handlers/hello.go
+package handlers
+
+import frz "github.com/razshare/frizzante"
+
+type State struct{
+    Name string
+}
+
+func GetHello(c *frz.Connection) {
+    state, operator := frz.Session(c, State{})
+    defer operator.Save(state)
+    state.Name = "world"
+}
+```

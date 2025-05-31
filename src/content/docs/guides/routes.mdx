@@ -4,26 +4,26 @@ title: Routes
 
 import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
 
-You can create a route by adding a request handler to the server using
-`.WithRequestHandler()`.
+You can add a new route to the server by mapping a pattern to a request handler with `Map()`.
 
 ```go
 package main
 
 import (
 	"embed"
-	"github.com/razshare/frizzante"
+	frz "github.com/razshare/frizzante"
 	"main/lib/handlers"
 )
 
 //go:embed .dist/*/**
 var dist embed.FS
+var public []frz.Guard
 
 func main() {
-	frizzante.NewServer().
-		WithDist(dist).
-		WithRequestHandler("GET /", handlers.GetHello).
-		Start()
+    frz.NewServer().
+        WithDist(dist).
+        Map(public, "GET /", handlers.GetHello).
+        Start()
 }
 ```
 
@@ -31,9 +31,9 @@ func main() {
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     c.SendMessage("Hello")
 }
 ```
@@ -46,9 +46,9 @@ Use `c.SendStatus()` to send the status of the response.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     c.SendStatus(404)                             // Sends status 404.
     c.SendMessage("Resource not found, sorry.")   // Sends text.
 }
@@ -68,9 +68,9 @@ Use `c.ReceiveHeader()` to retrieve header fields and `c.SendHeader()` to send t
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     ctype := c.ReceiveHeader("Content-Type")  // Retrieves field "Content-Type".
     c.SendHeader("Content-Type", ctype)       // Sends it back.
 }
@@ -93,9 +93,9 @@ Path fields can then be retrieved with `c.ReceivePath()`.
         //lib/handlers/hello.go
         package handlers
 
-        import "github.com/razshare/frizzante"
+        import frz "github.com/razshare/frizzante"
 
-        func GetHello(c *frizzante.Connection) {
+        func GetHello(c *frz.Connection) {
             name := c.ReceivePath("name")     // Retrieves field "name".
             c.SendMessage("Hello " + name)    // Sends text.
         }
@@ -117,9 +117,9 @@ Use `c.ReceiveQuery()` to retrieve query fields.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     name := c.ReceiveQuery("name")    // Retrieves field "name".
     c.SendMessage("Hello " + name)    // Sends text.
 }
@@ -134,9 +134,9 @@ when using `POST` and `PUT` http verbs.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func PostHello(c *frizzante.Connection) {
+func PostHello(c *frz.Connection) {
     form := c.ReceiveForm()         // Retrieves and parses the form.
     name := form.Get("name")        // Retrieves field "name".
     c.SendMessage("Hello " + name)  // Sends text.
@@ -152,13 +152,13 @@ Use `c.ReceiveJson()` to parse incoming content as json and `c.SendJson()` to se
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
 type GreetingDetails struct {
     Name string `json:"name"`
 }
 
-func PostHello(c *frizzante.Connection) {
+func PostHello(c *frz.Connection) {
     var value *GreetingDetails  // Prepares empty value.
     c.ReceiveJson(value)        // Parses the content into value.
     c.SendJson(value)           // Sends it back.
@@ -173,9 +173,9 @@ Use `c.ReceiveCookie()` to retrieve cookies and `c.SendCookie()` to send them.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     cookie := c.ReceiveCookie("session-id")   // Retrieves cookie "session-id".
     c.SendCookie("session-id", cookie)        // Sends it back.
 }
@@ -189,9 +189,9 @@ Use `c.SendRedirect()` to redirect to a different location.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     c.SendRedirect("/login", 302)
 }
 ```
@@ -204,9 +204,9 @@ Use `c.SendNavigate()` to redirect to a different location with status `302`.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     c.SendNavigate("/login")
 }
 ```
@@ -220,11 +220,11 @@ Use `c.SendSseUpgrade()` to upgrade the connection to server sent events.
 package handlers
 
 import (
-    "github.com/razshare/frizzante"
+    frz "github.com/razshare/frizzante"
     "time"
 )
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     alive := c.IsAlive()            // Track request status.
     ev := c.SendSseUpgrade()        // Send sse upgrade.
     for *alive {                    // Loop until request gets cancelled.
@@ -246,11 +246,11 @@ Use `c.SendWsUpgrade()` to upgrade the connection to web sockets.
 package handlers
 
 import (
-    "github.com/razshare/frizzante"
+    frz "github.com/razshare/frizzante"
     "time"
 )
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     alive := c.IsAlive()        // Track request status.
     c.SendWsUpgrade()           // Send ws upgrade.
     for *alive {                // Loop until request gets cancelled.
@@ -274,9 +274,9 @@ with `c.SendMessage()` is not allowed.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(c *frizzante.Connection) {
+func GetHello(c *frz.Connection) {
     c.SendMessage("Hello.")   // Sending text.    (Will Succeed)
     c.SendStatus(404)         // Sending status.  (Will Fail)
 }

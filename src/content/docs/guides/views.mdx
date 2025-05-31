@@ -24,26 +24,26 @@ Use `res.SendView()` to send a view.
 //lib/routes/handler.go
 package lib
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(req *frizzante.Request, res *frizzante.Response) {
+func GetHello(req *frz.Request, res *frz.Response) {
     // Sends file "lib/components/views/Hello.svelte"
-    res.SendView(frizzante.View{Name: "Hello"}) 
+    res.SendView(frz.View{Name: "Hello"}) 
 }
 ```
 
 ## Views Data
 
-Optionally, you can send data along with the views by adding a `Data` property to your `frizzante.View`.
+Optionally, you can send data along with the views by adding a `Data` property to your `View`.
 
 ```go
 //lib/routes/handler.go
 package lib
 
-import "github.com/razshare/frizzante"
+import frz "github.com/razshare/frizzante"
 
-func GetHello(req *frizzante.Request, res *frizzante.Response) {
-    res.SendView(frizzante.View{ 
+func GetHello(req *frz.Request, res *frz.Response) {
+    res.SendView(frz.View{ 
 		Name: "Hello",
 		Data: map[string]string{
 			"name": "world",
@@ -102,12 +102,12 @@ property.
         //lib/routes/handler.go
         package lib
 
-        import "github.com/razshare/frizzante"
+        import frz "github.com/razshare/frizzante"
 
-        func GetHello(req *frizzante.Request, res *frizzante.Response) {
-            res.SendView(frizzante.View{
+        func GetHello(req *frz.Request, res *frz.Response) {
+            res.SendView(frz.View{
                 Name: "Hello",
-                RenderMode: frizzante.RenderModeServer, // Renders on server.
+                RenderMode: frz.RenderModeServer, // Renders on server.
             })
         }
         ```
@@ -127,12 +127,12 @@ property.
         //lib/routes/handler.go
         package lib
 
-        import "github.com/razshare/frizzante"
+        import frz "github.com/razshare/frizzante"
 
-        func GetHello(req *frizzante.Request, res *frizzante.Response) {
-            res.SendView(frizzante.View{
+        func GetHello(req *frz.Request, res *frz.Response) {
+            res.SendView(frz.View{
                 Name: "Hello",
-                RenderMode: frizzante.RenderModeClient, // Renders on client.
+                RenderMode: frz.RenderModeClient, // Renders on client.
             })
         }
         ```
@@ -142,12 +142,12 @@ property.
         //lib/routes/handler.go
         package lib
 
-        import "github.com/razshare/frizzante"
+        import frz "github.com/razshare/frizzante"
 
-        func GetHello(req *frizzante.Request, res *frizzante.Response) {
-            res.SendView(frizzante.View{
+        func GetHello(req *frz.Request, res *frz.Response) {
+            res.SendView(frz.View{
                 Name: "Hello",
-                RenderMode: frizzante.RenderModeFull,   // Renders on client and server.
+                RenderMode: frz.RenderModeFull,   // Renders on client and server.
             })
         }
         ```
