@@ -282,9 +282,7 @@ func GetHello(c *frizzante.Connection) {
 }
 ```
 
-The request handler will continue execution and the user will receive the response,
-however, `c.SendStatus()` will fail, 
-and ultimately the user will receive a status code of `200` instead of `404.`
+`c.SendStatus(404)` will fail and the user will receive status `200` instead of `404`.
 
 ```http
 HTTP/1.1 200 OK
@@ -297,7 +295,7 @@ Hello.
 
 The failure is notified to the server notifier.
 
-Assuming you're using the default notifier, you'll see an error of sorts in your console
+Assuming you're using the default notifier, you'll see an error of sorts in your **console**
 
 ```sh
 listening for requests at http://127.0.0.1:8080
