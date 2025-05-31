@@ -20,9 +20,9 @@ func GetHello(c *frz.Connection) {
 This will retrieve the user's session or create a new one if none is found.
 
 :::note
-Is the user provides a `session-id` cookie, `Session()` will try and find that session.
+If the user provides a `session-id` cookie `Session()` will try and find that session,
+otherwise it will create a new session with a new id.
 
-If the session doesn't exist, it will create a new session with a new id.
 When this happens, `Session()` will automatically send the new id to the user
 using a `session-id` cookie.
 :::
