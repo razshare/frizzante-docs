@@ -2,6 +2,8 @@
 title: Sessions
 ---
 
+import { FileTree } from '@astrojs/starlight/components'
+
 Use `Session()` to start a session.
 
 ```go
@@ -56,5 +58,84 @@ func GetHello(c *frz.Connection) {
     state, operator := frz.Session(c, State{})
     defer operator.Save(state)
     state.Name = "world"
+}
+```
+
+## Archive
+
+Sessions are managed through the operator's `Archive`.
+
+You can overwrite the default `Archive` of any operator using `WithArchive()`.
+
+```go
+//lib/handlers/hello.go
+package handlers
+
+import frz "github.com/razshare/frizzante"
+
+type State struct{
+    Name string
+}
+
+func GetHello(c *frz.Connection) {
+    state, operator := frz.Session(c, State{})
+    operator.WithArchive(MyCustomArchive)
+    defer operator.Save(state)
+    state.Name = "world"
+}
+```
+
+An `Archive` is an interface defined as follows
+
+```go
+type Archive interface {
+	Get(domain string, key string) ([]byte, error)
+	Set(domain string, key string, value []byte) error
+	Has(domain string, key string) (bool, error)
+	Remove(domain string, key string) error
+	HasDomain(domain string) (bool, error)
+	RemoveDomain(domain string) error
+}
+```
+
+Think of it as a repository of data separated in two layers, `domains` and `keys`.
+
+An archive contains `domains` which contains `keys`.
+
+In the case of session management, a `domain` is identified by the session id, while the `key` is 
+a file named `session.json`.
+
+<FileTree>
+    - .archive
+        - domain-1
+            - key-a.txt
+            - key-b.txt
+        - domain-2
+            - key-x.txt
+            - key-y.txt
+</FileTree>
+
+The default sessions archive is backed by the file system.
+
+In other words, the default sessions archive organizes sessions in a `.sessions` directory
+containing as many subdirectories as there are sessions.
+
+Each subdirectory contains a `session.json` file
+which describes the state of each session.
+
+<FileTree>
+    - .sessions
+        - 0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2
+            - session.json
+        - 8a6d8cfa-2fc7-4dbb-6be9-beb823318303
+            - session.json
+</FileTree>
+
+Unsurprisingly enough, each `session.json` file contains the state of each session in json format.
+
+```json
+//./sessions/0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2/session.json
+{
+    "Name": "world"
 }
 ```
