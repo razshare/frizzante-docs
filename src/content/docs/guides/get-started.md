@@ -10,7 +10,7 @@ Make sure you have [Go](https://go.dev/doc/install),
 Frizzante is aimed mainly at linux distributions.
 :::
 
-Create a new project by cloning the started template.
+Create a new project by cloning the starter template.
 
 ```sh
 git clone https://github.com/razshare/frizzante-starter && \
