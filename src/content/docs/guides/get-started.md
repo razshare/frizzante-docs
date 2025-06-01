@@ -18,13 +18,13 @@ rm frizzante-starter/.git -fr && \
 cd frizzante-starter
 ```
 
-Start the server in development mode with
+Start development with
 
 ```sh
 make dev
 ```
 
-Build the project it into a standalone executable for production with
+Build with
 
 ```sh
 make build
