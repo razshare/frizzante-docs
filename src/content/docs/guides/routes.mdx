@@ -4,7 +4,7 @@ title: Routes
 
 import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
 
-You can add a new route to the server by mapping a pattern to a request handler with `Map()`.
+You can add a new route to the server with `AddRoute()`.
 
 ```go
 package main
@@ -17,12 +17,11 @@ import (
 
 //go:embed .dist/*/**
 var dist embed.FS
-var public []frz.Guard
 
 func main() {
     frz.NewServer().
         WithDist(dist).
-        Map(public, "GET /", handlers.GetHello).
+        AddRoute(frz.Route{Pattern: "GET /", Handler: handlers.GetHello}).
         Start()
 }
 ```
