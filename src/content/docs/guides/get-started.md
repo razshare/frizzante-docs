@@ -18,12 +18,6 @@ rm frizzante-starter/.git -fr && \
 cd frizzante-starter
 ```
 
-Configure the project
-
-```sh
-make configure
-```
-
 Start the server in development mode with
 
 ```sh
