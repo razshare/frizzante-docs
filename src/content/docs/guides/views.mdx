@@ -4,125 +4,97 @@ title: Views
 
 import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components'
 
-Views are `.svelte` files located under `lib/components/views`.
+Views are **svelte components** exported from 
+`lib/components/views/client.ts` 
+and 
+`lib/components/views/server.ts`.
 
 <FileTree>
     - main.go
     - lib
         - components
             - views
+                - client.ts
+                - server.ts
                 - Hello.svelte
-                - Login.svelte
-                - Profile.svelte
+                - Todos.svelte
                 - ...
 </FileTree>
 
-## Render Files
-
-Before sending views to the user, you'll need to **generate**
-some **glue code**.
-
-```sh
-make update generate
-```
-
-The output is generated in `.generated/`.
-
-<FileTree>
-    - main.go
-    - .generated
-        - client.svelte
-        - client.ts
-        - server.svelte
-        - server.ts
-        - view.svelte
-</FileTree>
-
-These are glue files that bootstrap your **view** components
-and make sure to render them at the correct time on both 
-the server and the client.
-
-There is no magic going on here, all these files do is simply switch between different views 
-based on the current view **name**.
-
 <Tabs>
-    <TabItem icon='seti:svelte' label='.generated/client.svelte'>
-    ```svelte
-    <script lang="ts">
-        import ViewComponent from './view.svelte'
-        import {setContext} from "svelte"
-
-        let {name, data, error, renderMode} = $props()
-        const view = $state({name, data, error, renderMode})
-        setContext("view", view)
-    </script>
-    {#if 'Todos' === view.name}
-        <ViewComponent from={import('./../../lib/components/views/Todos.svelte')}/>
-    {:else if 'Welcome' === view.name}
-        <ViewComponent from={import('./../../lib/components/views/Welcome.svelte')}/>
-    {/if}
-    ```
-    </TabItem>
-    <TabItem icon='seti:typescript' label='.generated/client.ts'>
+    <TabItem icon='seti:typescript' label='server.ts'>
+    This file exports views that can be rendered on the server using 
+    `RenderModeServer` or `RenderModeFull`.
     ```ts
-    import { hydrate } from "svelte";
-    import RenderClient from "./client.svelte";
+    import Welcome from './Welcome.svelte'
+    import Todos from './Todos.svelte'
+    import type {Component} from "svelte";
 
-    target().innerHTML = "";
-    hydrate(RenderClient, { target: target(), props: props() });
-    ```
-    :::note
-    Functions `target()` and `props()` are injected dynamically into the Html document.
-    :::
-    </TabItem>
-</Tabs>
-
-<Tabs>
-    <TabItem icon='seti:svelte' label='.generated/server.svelte'>
-    ```svelte
-    <script lang="ts">
-        import TODOS from './../../lib/components/views/Todos.svelte'
-        import WELCOME from './../../lib/components/views/Welcome.svelte'
-        import {setContext} from "svelte"
-
-        let {name, data, error, renderMode} = $props()
-        const view = $state({name, data, error, renderMode})
-        setContext("view", view)
-    </script>
-
-    {#if 'Todos' === view.name}
-        <TODOS/>
-    {:else if 'Welcome' === view.name}
-        <WELCOME/>
-    {/if}
+    export const views: Record<string, Component> = {
+        "Welcome": Welcome,
+        "Todos": Todos,
+    }
     ```
     </TabItem>
-    <TabItem icon='seti:typescript' label='.generated/server.ts'>
+    <TabItem icon='seti:typescript' label='client.ts'>
+    This file exports views that can be rendered on the client using `RenderModeClient` or `RenderModeFull`.
     ```ts
-    import { render as _render } from "svelte/server";
-    import RenderServer from "./server.svelte";
-    export async function render(props:unknown) {
-        return _render(RenderServer, { props });
+    export const views: Record<string, Promise<unknown>> = {
+        "Welcome": import('./Welcome.svelte'),
+        "Todos": import('./Todos.svelte'),
+    }
+    ```
+    
+    These views are being imported inline in order to split them 
+    in different bundles, however you can simply create fake promises
+    in order to get just 1 single bundle and eliminate network latency
+    when transitioning between views.
+    
+    ```ts
+    import Welcome from './Welcome.svelte'
+    import Todos from './Todos.svelte'
+    import type {Component} from "svelte";
+
+    export const views: Record<string, Promise<unknown>> = {
+        "Welcome": Promise.resolve(Welcome),
+        "Todos": Promise.resolve(Todos),
     }
     ```
     </TabItem>
 </Tabs>
 
+## Load views
 
+Once you've exported your views, you must load them on the server.
 
+Add `WithPublicRoot()`, `WithViewIndex()` and `WithViewServer()` to the 
+call chain in your server definition.
 
-It's simple and readable, there's no need for an advanced programmatic router.
+```go
+//main.go
+package main
 
----
+import (
+	"embed"
+	"github.com/razshare/frizzante/frz"
+)
 
-:::note
-You'll need to generate these files once again 
-when you add or remove views.
-:::
+//go:embed dist/*
+var dist embed.FS
+
+func main() {
+	frz.NewServer().
+		WithDist(dist).
+		WithPublicRoot("dist/client").
+		WithViewIndex("dist/client/index.html").
+		WithViewServer("dist/server/server.js").
+		Start()
+}
+```
 
 ## Send Views
 
-You can to send views with `res.SendView()`.
+You can send views with `res.SendView()`.
 
 ```go
 //lib/routes/handler.go
@@ -132,9 +104,23 @@ import "github.com/razshare/frizzante/frz"
 
 func GetHello(req *frz.Request, res *frz.Response) {
     // Sends file "lib/components/views/Hello.svelte"
-    res.SendView(frz.View{Name: "Hello"}) 
+    res.SendView(frz.View{Name: "Hello", RenderMode: frz.RenderModeFull}) 
 }
 ```
+
+The **Name** of the view will be used to lookup the view component.
+
+Depending on the **RenderMode**, your view should be exported by either **server.ts** or **client.ts**.
+
+| RenderModes |  |
+|------------|--------|
+| RenderModeServer | view component should to be exported by **server.ts**. |
+| RenderModeClient | view component should to be exported by **client.ts**. |
+| RenderModeFull | view component should to be exported by both **server.ts** and **client.ts**. |
+
+:::note
+The default render mode is `RenderModeFull`.
+:::
 
 ## Data
 

@@ -2,7 +2,7 @@
 title: Get Started
 ---
 
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
 
 You can create a new project using either **git** or the frizzante **binary**.
 
@@ -30,21 +30,14 @@ You can create a new project using either **git** or the frizzante **binary**.
 </Tabs>
 
 
-Update dependencies and generate [render files](../views#render-files).
+Generate utilities and update dependencies.
 
 ```sh
-make update generate
-```
-
-Start development with
-
-```sh
-make dev
+make generate update
 ```
 
 :::note
-Make sure you have [build-essential](https://askubuntu.com/questions/398489/how-to-install-build-essential) and
-[Bun](https://bun.sh/) installed.
+Make sure [Bun](https://bun.sh/) and [build-essential](https://askubuntu.com/questions/398489/how-to-install-build-essential) are installed.
 :::
 
 :::tip
@@ -56,12 +49,28 @@ Note that this will have no impact on your application's performance, Bun is onl
 in order to be able to run the Vite server.
 :::
 
-And build with
+Start development with
+
+```sh
+make dev
+```
+
+Build with
 
 ```sh
 make build
 ```
 
+This will create a `bin/app` standalone executable.
+
+<FileTree>
+    - bin
+        - app
+</FileTree>
+
 :::note
-The final output is a standalone executable.
+The final executable uses [V8](https://v8.dev/) bindings to run JavaScript code on the server in order to render svelte components.
+
+For that reason, the first build or launch may take some time, just be patient.<br/>
+Once that is done, subsequent builds or launches will take considerably less time.
 :::
