@@ -117,7 +117,7 @@ It's simple and readable, there's no need for an advanced programmatic router.
 
 :::note
 You'll need to generate these files once again 
-when you add a new view to your application.
+when you add or remove views.
 :::
 
 ## Send Views
@@ -159,6 +159,7 @@ func GetHello(req *frz.Request, res *frz.Response) {
 Then use [getContext("server")](https://svelte.dev/docs/svelte/context) to retrieve your data.
 
 ```svelte
+//lib/components/views/Hello.svelte
 <script lang="ts">
     import type { ServerContext } from "$frizzante/types.ts"
     const server = getContext("server") as ServerContext<{ name: string }>
@@ -167,37 +168,9 @@ Then use [getContext("server")](https://svelte.dev/docs/svelte/context) to retri
 <h1>Hello {server.data.name}</h1>
 ```
 
-Since this data is provided [using the context api](https://svelte.dev/docs/svelte/context), it can be accessed not only by the root component (your view), but also by any other component.
-
-```svelte
-//lib/components/views/Example.svelte
-<script lang="ts">
-	import SayHello from "$lib/components/SayHello.svelte"
-</script>
-
-<SayHello/>
-```
-
-```svelte
-//lib/components/SayHello.svelte
-<script lang="ts">
-	import type { SvelteContext } from "$frizzante/types.ts"
-	const server = getContext("server") as ServerContext<{ name: string }>
-</script>
-
-<h1>Hello {server.data.name}</h1>
-```
-
-As you can see, in this example, view `lib/components/views/Example.svelte`
-doesn't concern itself with passing the name down to `<SayHello/>`,
-because `<SayHello/>` itself can get access to the data directly 
-by simply invoking `getContext("server")`.
-
-
 ## Render Modes
 
-When sending views, you can choose how to render them with the `RenderMode` 
-property.
+You can choose how to render views with the `RenderMode` property.
 
 <Tabs>
     <TabItem label='Server'>
