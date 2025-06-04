@@ -4,7 +4,6 @@ title: Views
 
 import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components'
 
-
 Views are `.svelte` files located under `lib/components/views`.
 
 <FileTree>
@@ -18,7 +17,112 @@ Views are `.svelte` files located under `lib/components/views`.
                 - ...
 </FileTree>
 
-Use `res.SendView()` to send a view.
+## Render Files
+
+Before sending views to the user, you'll need to **generate**
+some **glue code**.
+
+```sh
+make update generate
+```
+
+The output is generated in `.generated/`.
+
+<FileTree>
+    - main.go
+    - .generated
+        - client.svelte
+        - client.ts
+        - server.svelte
+        - server.ts
+        - view.svelte
+</FileTree>
+
+These are glue files that bootstrap your **view** components
+and make sure to render them at the correct time on both 
+the server and the client.
+
+There is no magic going on here, all these files do is simply switch between different views 
+based on the current view **name**.
+
+<Tabs>
+    <TabItem icon='seti:svelte' label='.generated/client.svelte'>
+    ```svelte
+    <script lang="ts">
+        import ViewComponent from './view.svelte'
+        import {setContext} from "svelte"
+
+        let {name, data, error, renderMode} = $props()
+        const view = $state({name, data, error, renderMode})
+        setContext("view", view)
+    </script>
+    {#if 'Todos' === view.name}
+        <ViewComponent from={import('./../../lib/components/views/Todos.svelte')}/>
+    {:else if 'Welcome' === view.name}
+        <ViewComponent from={import('./../../lib/components/views/Welcome.svelte')}/>
+    {/if}
+    ```
+    </TabItem>
+    <TabItem icon='seti:typescript' label='.generated/client.ts'>
+    ```ts
+    import { hydrate } from "svelte";
+    import RenderClient from "./client.svelte";
+
+    target().innerHTML = "";
+    hydrate(RenderClient, { target: target(), props: props() });
+    ```
+    :::note
+    Functions `target()` and `props()` are injected dynamically into the Html document.
+    :::
+    </TabItem>
+</Tabs>
+
+<Tabs>
+    <TabItem icon='seti:svelte' label='.generated/server.svelte'>
+    ```svelte
+    <script lang="ts">
+        import TODOS from './../../lib/components/views/Todos.svelte'
+        import WELCOME from './../../lib/components/views/Welcome.svelte'
+        import {setContext} from "svelte"
+
+        let {name, data, error, renderMode} = $props()
+        const view = $state({name, data, error, renderMode})
+        setContext("view", view)
+    </script>
+
+    {#if 'Todos' === view.name}
+        <TODOS/>
+    {:else if 'Welcome' === view.name}
+        <WELCOME/>
+    {/if}
+    ```
+    </TabItem>
+    <TabItem icon='seti:typescript' label='.generated/server.ts'>
+    ```ts
+    import { render as _render } from "svelte/server";
+    import RenderServer from "./server.svelte";
+    export async function render(props:unknown) {
+        return _render(RenderServer, { props });
+    }
+    ```
+    </TabItem>
+</Tabs>
+
+
+
+
+It's simple and readable, there's no need for an advanced programmatic router.
+
+---
+
+:::note
+You'll need to generate these files once again 
+when you add a new view to your application.
+:::
+
+## Send Views
+
+You can to send views with `res.SendView()`.
 
 ```go
 //lib/routes/handler.go
@@ -32,7 +136,7 @@ func GetHello(req *frz.Request, res *frz.Response) {
 }
 ```
 
-## Views Data
+## Data
 
 Optionally, you can send data along with the views by adding a `Data` property to your `View`.
 
@@ -90,7 +194,7 @@ because `<SayHello/>` itself can get access to the data directly
 by simply invoking `getContext("server")`.
 
 
-## Views Render Modes
+## Render Modes
 
 When sending views, you can choose how to render them with the `RenderMode` 
 property.
