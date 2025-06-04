@@ -128,7 +128,7 @@ You can to send views with `res.SendView()`.
 //lib/routes/handler.go
 package lib
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(req *frz.Request, res *frz.Response) {
     // Sends file "lib/components/views/Hello.svelte"
@@ -144,7 +144,7 @@ Optionally, you can send data along with the views by adding a `Data` property t
 //lib/routes/handler.go
 package lib
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(req *frz.Request, res *frz.Response) {
     res.SendView(frz.View{ 
@@ -179,7 +179,7 @@ You can choose how to render views with the `RenderMode` property.
         //lib/routes/handler.go
         package lib
 
-        import frz "github.com/razshare/frizzante"
+        import "github.com/razshare/frizzante/frz"
 
         func GetHello(req *frz.Request, res *frz.Response) {
             res.SendView(frz.View{
@@ -204,7 +204,7 @@ You can choose how to render views with the `RenderMode` property.
         //lib/routes/handler.go
         package lib
 
-        import frz "github.com/razshare/frizzante"
+        import "github.com/razshare/frizzante/frz"
 
         func GetHello(req *frz.Request, res *frz.Response) {
             res.SendView(frz.View{
@@ -219,7 +219,7 @@ You can choose how to render views with the `RenderMode` property.
         //lib/routes/handler.go
         package lib
 
-        import frz "github.com/razshare/frizzante"
+        import "github.com/razshare/frizzante/frz"
 
         func GetHello(req *frz.Request, res *frz.Response) {
             res.SendView(frz.View{

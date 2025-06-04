@@ -11,7 +11,7 @@ package main
 
 import (
 	"embed"
-	frz "github.com/razshare/frizzante"
+	"github.com/razshare/frizzante/frz"
 	"main/lib/handlers"
 )
 
@@ -30,7 +30,7 @@ func main() {
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(c *frz.Connection) {
     c.SendMessage("Hello")
@@ -45,7 +45,7 @@ Use `c.SendStatus()` to send the status of the response.
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(c *frz.Connection) {
     c.SendStatus(404)                             // Sends status 404.
@@ -67,7 +67,7 @@ Use `c.ReceiveHeader()` to retrieve header fields and `c.SendHeader()` to send t
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(c *frz.Connection) {
     ctype := c.ReceiveHeader("Accept")      // Retrieves field "Accept".
@@ -92,7 +92,7 @@ Path fields can then be retrieved with `c.ReceivePath()`.
         //lib/handlers/hello.go
         package handlers
 
-        import frz "github.com/razshare/frizzante"
+        import "github.com/razshare/frizzante/frz"
 
         func GetHello(c *frz.Connection) {
             name := c.ReceivePath("name")     // Retrieves field "name".
@@ -116,7 +116,7 @@ Use `c.ReceiveQuery()` to retrieve query fields.
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(c *frz.Connection) {
     name := c.ReceiveQuery("name")    // Retrieves field "name".
@@ -133,7 +133,7 @@ when using `POST` and `PUT` http verbs.
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func PostHello(c *frz.Connection) {
     form := c.ReceiveForm()         // Retrieves and parses the form.
@@ -151,7 +151,7 @@ Use `c.ReceiveJson()` to parse incoming content as json and `c.SendJson()` to se
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 type GreetingDetails struct {
     Name string `json:"name"`
@@ -172,7 +172,7 @@ Use `c.ReceiveCookie()` to retrieve cookies and `c.SendCookie()` to send them.
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(c *frz.Connection) {
     cookie := c.ReceiveCookie("session-id")   // Retrieves cookie "session-id".
@@ -188,7 +188,7 @@ Use `c.SendRedirect()` to redirect to a different location.
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(c *frz.Connection) {
     c.SendRedirect("/login", 302)
@@ -203,7 +203,7 @@ Use `c.SendNavigate()` to redirect to a different location with status `302`.
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(c *frz.Connection) {
     c.SendNavigate("/login")
@@ -219,7 +219,7 @@ Use `c.SendSseUpgrade()` to upgrade the connection to server sent events.
 package handlers
 
 import (
-    frz "github.com/razshare/frizzante"
+    "github.com/razshare/frizzante/frz"
     "time"
 )
 
@@ -245,7 +245,7 @@ Use `c.SendWsUpgrade()` to upgrade the connection to web sockets.
 package handlers
 
 import (
-    frz "github.com/razshare/frizzante"
+    "github.com/razshare/frizzante/frz"
     "time"
 )
 
@@ -273,7 +273,7 @@ with `c.SendMessage()` is not allowed.
 //lib/handlers/hello.go
 package handlers
 
-import frz "github.com/razshare/frizzante"
+import "github.com/razshare/frizzante/frz"
 
 func GetHello(c *frz.Connection) {
     c.SendMessage("Hello.")   // Sending text.    (Will Succeed)
