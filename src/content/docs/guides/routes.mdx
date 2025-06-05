@@ -16,12 +16,12 @@ import (
 	"main/lib/handlers"
 )
 
-//go:embed dist/*
-var dist embed.FS
+//go:embed dist
+var efs embed.FS
 
 func main() {
     frz.NewServer().
-        WithDist(dist).
+        WithEfs(efs).
         WithPublicRoot("dist/client").
         WithViewIndex("dist/client/index.html").
         WithViewServer("dist/server/server.js").
