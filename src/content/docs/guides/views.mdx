@@ -182,7 +182,7 @@ You can choose how to render views with the `RenderMode` property.
 
 <Tabs>
     <TabItem label='RenderModeFull'>
-        The view will be rendered on both the server and the client.<br/>
+        The view is rendered on both the server and the client.<br/>
         This is the **default** mode.
         ```go
         //lib/routes/handler.go
@@ -193,13 +193,13 @@ You can choose how to render views with the `RenderMode` property.
         func GetHello(req *frz.Request, res *frz.Response) {
             res.SendView(frz.View{
                 Name: "Hello",
-                RenderMode: frz.RenderModeFull,   // Renders on client and server.
+                RenderMode: frz.RenderModeFull,   // Renders on server and client.
             })
         }
         ```
     </TabItem>
     <TabItem label='RenderModeServer'>
-        The view will be rendered only on the server.<br/>
+        The view is rendered only on the server.<br/>
         You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
         your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
         ```go
@@ -221,7 +221,7 @@ You can choose how to render views with the `RenderMode` property.
         tag in order to load scripts dynamically.
         ```svelte
         <svelte:head>
-            <script type="text/javascript" src="https://some.cdn/some.js" />
+            <script type="text/javascript" src="https://some.cdn/file.js" />
         </svelte:head>
         ```
         :::
