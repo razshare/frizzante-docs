@@ -4,10 +4,8 @@ title: Views
 
 import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components'
 
-Views are **svelte components** exported from 
-`lib/components/views/client.ts` 
-and 
-`lib/components/views/server.ts`.
+Views are **svelte components** exported by 
+`lib/components/views/server.ts` and/or `lib/components/views/client.ts`.
 
 <FileTree>
     - main.go
@@ -16,52 +14,56 @@ and
             - views
                 - client.ts
                 - server.ts
-                - Hello.svelte
-                - Todos.svelte
+                - Welcome.svelte
+                - Profile.svelte
                 - ...
 </FileTree>
 
 <Tabs>
-    <TabItem icon='seti:typescript' label='server.ts'>
-    This file exports views that can be rendered on the server using 
-    `RenderModeServer` or `RenderModeFull`.
+    <TabItem icon='seti:typescript' label='lib/components/views/server.ts'>
+    Views that can be rendered on the server should be exported by this file.
     ```ts
     import Welcome from './Welcome.svelte'
-    import Todos from './Todos.svelte'
+    import Profile from './Profile.svelte'
     import type {Component} from "svelte";
 
     export const views: Record<string, Component> = {
         "Welcome": Welcome,
-        "Todos": Todos,
+        "Profile": Profile,
     }
     ```
     </TabItem>
-    <TabItem icon='seti:typescript' label='client.ts'>
-    This file exports views that can be rendered on the client using `RenderModeClient` or `RenderModeFull`.
+    <TabItem icon='seti:typescript' label='lib/components/views/client.ts'>
+    Views that can be rendered on the client should be exported by this file.
     ```ts
     export const views: Record<string, Promise<unknown>> = {
         "Welcome": import('./Welcome.svelte'),
-        "Todos": import('./Todos.svelte'),
+        "Profile": import('./Profile.svelte'),
     }
     ```
     
-    These views are being imported inline in order to split them 
+    These views are being imported asynchronously in order to split them 
     in different bundles, however you can simply create fake promises
     in order to get just 1 single bundle and eliminate network latency
     when transitioning between views.
     
     ```ts
     import Welcome from './Welcome.svelte'
-    import Todos from './Todos.svelte'
+    import Profile from './Profile.svelte'
     import type {Component} from "svelte";
 
     export const views: Record<string, Promise<unknown>> = {
         "Welcome": Promise.resolve(Welcome),
-        "Todos": Promise.resolve(Todos),
+        "Profile": Promise.resolve(Profile),
     }
     ```
     </TabItem>
 </Tabs>
+
+:::tip
+The same view can be exported by both **server.ts** and **client.ts**,
+this would mean the view can be rendered on both the server and the client using [RenderModeFull](#render-modes).
+:::
 
 ## Load views
 
@@ -83,12 +85,12 @@ import (
 var dist embed.FS
 
 func main() {
-	frz.NewServer().
-		WithDist(dist).
-		WithPublicRoot("dist/client").
-		WithViewIndex("dist/client/index.html").
-		WithViewServer("dist/server/server.js").
-		Start()
+    frz.NewServer().
+        WithDist(dist).
+        WithPublicRoot("dist/client").
+        WithViewIndex("dist/client/index.html").
+        WithViewServer("dist/server/server.js").
+        Start()
 }
 ```
 
@@ -104,23 +106,11 @@ import "github.com/razshare/frizzante/frz"
 
 func GetHello(req *frz.Request, res *frz.Response) {
     // Sends file "lib/components/views/Hello.svelte"
-    res.SendView(frz.View{Name: "Hello", RenderMode: frz.RenderModeFull}) 
+    res.SendView(frz.View{Name: "Hello"}) 
 }
 ```
 
-The **Name** of the view will be used to lookup the view component.
-
-Depending on the **RenderMode**, your view should be exported by either **server.ts** or **client.ts**.
-
-| RenderModes |  |
-|------------|--------|
-| RenderModeServer | view component should to be exported by **server.ts**. |
-| RenderModeClient | view component should to be exported by **client.ts**. |
-| RenderModeFull | view component should to be exported by both **server.ts** and **client.ts**. |
-
-:::note
-The default render mode is `RenderModeFull`.
-:::
+The **Name** of the view will be used to lookup the view component exported by **server.ts** and/or **client.ts**.
 
 ## Data
 
@@ -159,8 +149,27 @@ Then use [getContext("server")](https://svelte.dev/docs/svelte/context) to retri
 You can choose how to render views with the `RenderMode` property.
 
 <Tabs>
-    <TabItem label='Server'>
-    
+    <TabItem label='RenderModeFull'>
+        The view will be rendered on both the server and the client.<br/>
+        This is the **default** mode.
+        ```go
+        //lib/routes/handler.go
+        package lib
+
+        import "github.com/razshare/frizzante/frz"
+
+        func GetHello(req *frz.Request, res *frz.Response) {
+            res.SendView(frz.View{
+                Name: "Hello",
+                RenderMode: frz.RenderModeFull,   // Renders on client and server.
+            })
+        }
+        ```
+    </TabItem>
+    <TabItem label='RenderModeServer'>
+        The view will be rendered only on the server.<br/>
+        You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
+        your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
         ```go
         //lib/routes/handler.go
         package lib
@@ -175,7 +184,7 @@ You can choose how to render views with the `RenderMode` property.
         }
         ```
         :::tip
-        While using `RenderModeServer` your application won't serve a JavaScript bundle,
+        While using `RenderModeServer` the view won't serve a JavaScript bundle,
         but you can still use the `<svelte:head>` special
         tag in order to load scripts dynamically.
         ```svelte
@@ -185,7 +194,8 @@ You can choose how to render views with the `RenderMode` property.
         ```
         :::
     </TabItem>
-    <TabItem label='Client'>
+    <TabItem label='RenderModeClient'>
+        The view is rendered only on the client by loading a JavaScript bundle asynchronously.
         ```go
         //lib/routes/handler.go
         package lib
@@ -196,21 +206,6 @@ You can choose how to render views with the `RenderMode` property.
             res.SendView(frz.View{
                 Name: "Hello",
                 RenderMode: frz.RenderModeClient, // Renders on client.
-            })
-        }
-        ```
-    </TabItem>
-    <TabItem label='Full'>
-        ```go
-        //lib/routes/handler.go
-        package lib
-
-        import "github.com/razshare/frizzante/frz"
-
-        func GetHello(req *frz.Request, res *frz.Response) {
-            res.SendView(frz.View{
-                Name: "Hello",
-                RenderMode: frz.RenderModeFull,   // Renders on client and server.
             })
         }
         ```
