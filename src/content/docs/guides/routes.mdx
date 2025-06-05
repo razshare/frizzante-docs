@@ -22,9 +22,9 @@ var dist embed.FS
 func main() {
     frz.NewServer().
         WithDist(dist).
-		WithPublicRoot("dist/client").
-		WithViewIndex("dist/client/index.html").
-		WithViewServer("dist/server/server.js").
+        WithPublicRoot("dist/client").
+        WithViewIndex("dist/client/index.html").
+        WithViewServer("dist/server/server.js").
 
         // This adds a new route.
         AddRoute(frz.Route{Pattern: "GET /", Handler: handlers.GetHello}).
