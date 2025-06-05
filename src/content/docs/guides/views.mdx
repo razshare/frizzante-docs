@@ -65,67 +65,6 @@ The same view can be exported by both **server.ts** and **client.ts**,
 this would mean the view can be rendered on both the server and the client using [RenderModeFull](#render-modes).
 :::
 
-## Load views
-
-Once you've exported your views, you must load them on the server.
-
-Generate frizzante's utilities files.
-
-```sh
-make generate
-```
-
-This will create a new **frz** directory.
-
-<FileTree>
-    - main.go
-    - frz
-        - components
-            - Action.svelte
-            - ClientView.svelte
-            - ClientViewLoader.svelte
-            - ServerView.svelte
-        - scripts
-            - action.ts
-            - client.ts
-            - href.ts
-            - route.ts
-            - server.ts
-            - swaps.ts
-            - uuid.ts
-        - types.ts
-</FileTree>
-
-Reference `dist/client` in your server definition using `WithPublicRoot()`,
-`dist/client/index.html` using `dist/client/index.html()` and
-`dist/server/server.js` using `WithViewServer()`.
-
-```go
-//main.go
-package main
-
-import (
-	"embed"
-	"github.com/razshare/frizzante/frz"
-)
-
-//go:embed dist/*
-var dist embed.FS
-
-func main() {
-    frz.NewServer().
-        WithDist(dist).
-        WithPublicRoot("dist/client").
-        WithViewIndex("dist/client/index.html").
-        WithViewServer("dist/server/server.js").
-        Start()
-}
-```
-
-:::note
-These `dist/*` files will be automatically created whenever you build the project or start development mode.
-:::
-
 ## Send Views
 
 Use `res.SendView()` to send a view from a route handler.
