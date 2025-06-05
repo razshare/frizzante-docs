@@ -24,7 +24,7 @@ func main() {
         WithEfs(efs).
         WithPublicRoot("dist/client").
         WithViewIndex("dist/client/index.html").
-        WithViewServer("dist/server/server.js").
+        WithViewServer("dist/server.js").
 
         // This adds a new route.
         AddRoute(frz.Route{Pattern: "GET /", Handler: handlers.GetHello}).
