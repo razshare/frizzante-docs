@@ -21,7 +21,7 @@ Views are **svelte components** exported by
 
 <Tabs>
     <TabItem icon='seti:typescript' label='lib/components/views/server.ts'>
-    Views that can be rendered on the server should be exported by this file.
+    Views that are meant to be rendered on the server should be exported by this file.
     ```ts
     import Welcome from './Welcome.svelte'
     import Profile from './Profile.svelte'
@@ -34,7 +34,7 @@ Views are **svelte components** exported by
     ```
     </TabItem>
     <TabItem icon='seti:typescript' label='lib/components/views/client.ts'>
-    Views that can be rendered on the client should be exported by this file.
+    Views that are meant to be rendered on the client should be exported by this file.
     ```ts
     export const views: Record<string, Promise<unknown>> = {
         "Welcome": import('./Welcome.svelte'),
@@ -69,8 +69,36 @@ this would mean the view can be rendered on both the server and the client using
 
 Once you've exported your views, you must load them on the server.
 
-Add `WithPublicRoot()`, `WithViewIndex()` and `WithViewServer()` to the 
-call chain in your server definition.
+Generate frizzante's utilities files.
+
+```sh
+make generate
+```
+
+This will create a new **frz** directory.
+
+<FileTree>
+    - main.go
+    - frz
+        - components
+            - Action.svelte
+            - ClientView.svelte
+            - ClientViewLoader.svelte
+            - ServerView.svelte
+        - scripts
+            - action.ts
+            - client.ts
+            - href.ts
+            - route.ts
+            - server.ts
+            - swaps.ts
+            - uuid.ts
+        - types.ts
+</FileTree>
+
+Reference `dist/client` in your server definition using `WithPublicRoot()`,
+`dist/client/index.html` using `dist/client/index.html()` and
+`dist/server/server.js` using `WithViewServer()`.
 
 ```go
 //main.go
@@ -94,9 +122,13 @@ func main() {
 }
 ```
 
+:::note
+These `dist/*` files will be automatically created whenever you build the project or start development mode.
+:::
+
 ## Send Views
 
-You can send views with `res.SendView()`.
+Use `res.SendView()` to send a view from a route handler.
 
 ```go
 //lib/routes/handler.go
