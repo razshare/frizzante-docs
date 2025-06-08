@@ -5,26 +5,25 @@ title: Views
 import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components'
 
 Views are **svelte components** exported by 
-`lib/components/views/server.ts` and/or `lib/components/views/client.ts`.
+`app/lib/exports/server.ts` and/or `app/lib/exports/client.ts`.
 
 <FileTree>
     - main.go
-    - lib
-        - components
-            - views
+    - app
+        - lib
+            - exports
                 - client.ts
                 - server.ts
-                - Welcome.svelte
-                - Profile.svelte
                 - ...
 </FileTree>
 
 <Tabs>
-    <TabItem icon='seti:typescript' label='lib/components/views/server.ts'>
+    <TabItem icon='seti:typescript' label='Server exports'>
     Views that are meant to be rendered on the server should be exported by this file.
     ```ts
-    import Welcome from './Welcome.svelte'
-    import Profile from './Profile.svelte'
+    //app/lib/exports/server.ts
+    import Welcome from '$lib/components/views/Welcome.svelte'
+    import Profile from '$lib/components/views/Profile.svelte'
     import type {Component} from "svelte";
 
     export const views: Record<string, Component> = {
@@ -33,23 +32,25 @@ Views are **svelte components** exported by
     }
     ```
     </TabItem>
-    <TabItem icon='seti:typescript' label='lib/components/views/client.ts'>
+    <TabItem icon='seti:typescript' label='Client exports'>
     Views that are meant to be rendered on the client should be exported by this file.
     ```ts
+    //app/lib/exports/client.ts
     export const views: Record<string, Promise<unknown>> = {
-        "Welcome": import('./Welcome.svelte'),
-        "Profile": import('./Profile.svelte'),
+        "Welcome": import('$lib/components/views/Welcome.svelte'),
+        "Profile": import('$lib/components/views/Profile.svelte'),
     }
     ```
     
     These views are being imported asynchronously in order to split them 
     in different bundles, however you can simply create fake promises
-    in order to get just 1 single bundle and eliminate network latency
+    in order to bundle them all together and eliminate network latency
     when transitioning between views.
     
     ```ts
-    import Welcome from './Welcome.svelte'
-    import Profile from './Profile.svelte'
+    //app/lib/exports/client.ts
+    import Welcome from '$lib/components/views/Welcome.svelte'
+    import Profile from '$lib/components/views/Profile.svelte'
     import type {Component} from "svelte";
 
     export const views: Record<string, Promise<unknown>> = {
@@ -60,14 +61,71 @@ Views are **svelte components** exported by
     </TabItem>
 </Tabs>
 
-:::tip
-The same view can be exported by both **server.ts** and **client.ts**,
-this would mean the view can be rendered on both the server and the client using [RenderModeFull](#render-modes).
-:::
+## Configuring server
 
-## Send Views
+In order for the server to be able to serve views you must configure it first
+by specifying a **public root** directory, a **view server** and a **view index**.
 
-Use `res.SendView()` to send a view from a route handler.
+##### Public root
+
+Use `WithPublicRoot()` to configure the server's public root directory,
+which is usually `app/dist/client`.
+
+```go
+package main
+
+import "github.com/razshare/frizzante/frz"
+
+
+func main() {
+    frz.NewServer().
+        WithPublicRoot("app/dist/client").
+        Start()
+}
+```
+
+##### View server
+
+Use `WithViewServer()` to configure the view server,
+which is usually `app/dist/server.js`.
+
+```go
+package main
+
+import "github.com/razshare/frizzante/frz"
+
+
+func main() {
+    frz.NewServer().
+        WithPublicRoot("app/dist/client").
+        WithViewServer("app/dist/server.js").
+        Start()
+}
+```
+
+##### View index
+
+Use `WithViewIndex()` to configure the view index file,
+which is usually `app/dist/client/index.html`.
+
+```go
+package main
+
+import "github.com/razshare/frizzante/frz"
+
+
+func main() {
+    frz.NewServer().
+        WithPublicRoot("app/dist/client").
+        WithViewServer("app/dist/server.js").
+        WithViewIndex("app/dist/client/index.html").
+        Start()
+}
+```
+
+## Send views
+
+Use `SendView()` to send a view from a route handler.
 
 ```go
 //lib/routes/handler.go
@@ -75,13 +133,57 @@ package lib
 
 import "github.com/razshare/frizzante/frz"
 
-func GetHello(req *frz.Request, res *frz.Response) {
+func Hello(c *frz.Connection) {
     // Sends file "lib/components/views/Hello.svelte"
-    res.SendView(frz.View{Name: "Hello"}) 
+    c.SendView(frz.View{Name: "Hello"}) 
 }
 ```
 
 The **Name** of the view will be used to lookup the view component exported by **server.ts** and/or **client.ts**.
+
+## Default view
+
+There is no way to specify a "**default view**".
+
+However, you can use `SendFileOrElse()` in order to send a file or run custom logic if it doesn't exist.
+
+```go
+//lib/routes/handler.go
+package lib
+
+import "github.com/razshare/frizzante/frz"
+
+func Hello(c *frz.Connection) {
+    c.SendFileOrElse(func () {
+        c.SendView(frz.View{Name: "Hello"})
+    })
+}
+```
+
+Usually you would map this handler to the default `GET /` pattern, which automatically captures
+all un matched requests.
+
+```go
+package main
+
+import (
+    "embed"
+    "github.com/razshare/frizzante/frz"
+)
+
+//go:embed app/dist
+var efs embed.FS
+
+func main() {
+    frz.NewServer().
+        WithEfs(efs).
+        WithPublicRoot("app/dist/client").
+        WithViewServer("app/dist/server.js").
+        WithViewIndex("app/dist/client/index.html").
+        AddRoute(frz.Route{Pattern: "GET /", Handler: handlers.Hello}).
+        Start()
+}
+```
 
 ## Data
 
@@ -93,13 +195,13 @@ package lib
 
 import "github.com/razshare/frizzante/frz"
 
-func GetHello(req *frz.Request, res *frz.Response) {
-    res.SendView(frz.View{ 
-		Name: "Hello",
-		Data: map[string]string{
-			"name": "world",
-		}
-	}) 
+func Hello(c *frz.Connection) {
+    c.SendView(frz.View{ 
+        Name: "Hello",
+        Data: map[string]string{
+            "name": "world",
+        }
+    }) 
 }
 ```
 
@@ -115,7 +217,7 @@ Then use [getContext("server")](https://svelte.dev/docs/svelte/context) to retri
 <h1>Hello {server.data.name}</h1>
 ```
 
-## Render Modes
+## Render modes
 
 You can choose how to render views with the `RenderMode` property.
 
@@ -129,8 +231,8 @@ You can choose how to render views with the `RenderMode` property.
 
         import "github.com/razshare/frizzante/frz"
 
-        func GetHello(req *frz.Request, res *frz.Response) {
-            res.SendView(frz.View{
+        func Hello(c *frz.Connection) {
+            c.SendView(frz.View{
                 Name: "Hello",
                 RenderMode: frz.RenderModeFull,   // Renders on server and client.
             })
@@ -147,8 +249,8 @@ You can choose how to render views with the `RenderMode` property.
 
         import "github.com/razshare/frizzante/frz"
 
-        func GetHello(req *frz.Request, res *frz.Response) {
-            res.SendView(frz.View{
+        func Hello(c *frz.Connection) {
+            c.SendView(frz.View{
                 Name: "Hello",
                 RenderMode: frz.RenderModeServer, // Renders on server.
             })
@@ -173,8 +275,8 @@ You can choose how to render views with the `RenderMode` property.
 
         import "github.com/razshare/frizzante/frz"
 
-        func GetHello(req *frz.Request, res *frz.Response) {
-            res.SendView(frz.View{
+        func Hello(c *frz.Connection) {
+            c.SendView(frz.View{
                 Name: "Hello",
                 RenderMode: frz.RenderModeClient, // Renders on client.
             })
@@ -182,3 +284,43 @@ You can choose how to render views with the `RenderMode` property.
         ```
     </TabItem>
 </Tabs>
+
+
+## Embedding views
+
+You can embed views into your binary so that you don't have to carry around your `app/dist` directory.
+
+Use `WithEfs()` to set the server's embedded file system.
+
+```go
+package main
+
+import (
+    "embed"
+    "github.com/razshare/frizzante/frz"
+)
+
+//go:embed app/dist
+var efs embed.FS
+
+func main() {
+    frz.NewServer().
+        WithEfs(efs).
+        WithPublicRoot("app/dist/client").
+        WithViewServer("app/dist/server.js").
+        WithViewIndex("app/dist/client/index.html").
+        Start()
+}
+```
+
+
+Now `SendFileOrElse()` will also take into consideration the embedded file 
+when looking files up.
+
+:::tip
+The **host** file system **has precedence** over the embedded file system.
+
+This means you can add a custom `app/dist` directory nearby your binary in order to serve
+files that were not originally embedded into the binary.
+:::
+

@@ -1,0 +1,25 @@
+---
+title: Path
+---
+
+import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
+
+Request handlers can define dynamic fields within the **pattern** using `{}` syntax.
+
+Path fields can then be retrieved with `ReceivePath()`.
+
+```go
+frz.Route{Pattern: "GET /{name}", Handler: handlers.Hello}
+```
+
+```go
+//lib/handlers/hello.go
+package handlers
+
+import "github.com/razshare/frizzante/frz"
+
+func Hello(c *frz.Connection) {
+    name := c.ReceivePath("name")     // Retrieves field "name".
+    c.SendMessage("Hello " + name)    // Sends text.
+}
+```

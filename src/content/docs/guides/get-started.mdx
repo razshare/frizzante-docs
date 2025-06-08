@@ -33,6 +33,22 @@ You can create a new project using either **git** or the frizzante **binary**.
 Make sure [Bun](https://bun.sh/) and [build-essential](https://askubuntu.com/questions/398489/how-to-install-build-essential) are installed.
 :::
 
+Generate utilities
+
+```sh
+make generate
+```
+
+:::note
+This will create `app/lib/utilities`.\
+These utilities are the glue code between Go and Svelte.
+:::
+
+:::tip
+The reason these utilities are generated instead of being 
+distributed as a library is so that you can easily 
+customize your glue code if you need to.
+:::
 
 Start development with
 
@@ -70,6 +86,7 @@ This will create a `bin/app` standalone executable.
 The final executable uses [V8](https://v8.dev/) bindings to run 
 JavaScript code on the server in order to render svelte components.
 
-For that reason, the first build or launch may take some time, just be patient.<br/>
-Once that is done, subsequent builds or launches will take considerably less time.
+For that reason, the first run may take some time, just be patient.
+
+Subsequent runs will take considerably less time.
 :::

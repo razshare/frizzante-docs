@@ -14,7 +14,7 @@ import "github.com/razshare/frizzante/frz"
 
 type State struct{}
 
-func GetHello(c *frz.Connection) {
+func Hello(c *frz.Connection) {
     state, operator := frz.Session(c, State{})
 }
 ```
@@ -22,18 +22,17 @@ func GetHello(c *frz.Connection) {
 This will retrieve the user's session or create a new one if none is found.
 
 :::note
-If the user provides a `session-id` cookie `Session()` will try and find that session,
-otherwise it will create a new session with a new id.
+The session is retrieved based on the user's `session-id` cookie.
 
-When this happens, `Session()` will automatically send the new id to the user
-using a `session-id` cookie.
+When session retrieval fails, `Session()` creates a 
+new session instead and sends a new `session-id` cookie to the user.
 :::
 
 :::danger
 Since `Session()` may send a cookie, it is important to remember that
 the order in which data is sent to the user matters.
 
-Read more about [order of operations](../routes#order-of-operations).
+Read more about [order of operations](../order-of-operations).
 :::
 
 ## State & Operator
@@ -54,7 +53,7 @@ type State struct{
     Name string
 }
 
-func GetHello(c *frz.Connection) {
+func Hello(c *frz.Connection) {
     state, operator := frz.Session(c, State{})
     defer operator.Save(state)
     state.Name = "world"
@@ -77,7 +76,7 @@ type State struct{
     Name string
 }
 
-func GetHello(c *frz.Connection) {
+func Hello(c *frz.Connection) {
     state, operator := frz.Session(c, State{})
     operator.WithArchive(MyCustomArchive)
     defer operator.Save(state)
@@ -89,12 +88,12 @@ An `Archive` is an interface defined as follows
 
 ```go
 type Archive interface {
-	Get(domain string, key string) ([]byte, error)
-	Set(domain string, key string, value []byte) error
-	Has(domain string, key string) (bool, error)
-	Remove(domain string, key string) error
-	HasDomain(domain string) (bool, error)
-	RemoveDomain(domain string) error
+    Get(domain string, key string) ([]byte, error)
+    Set(domain string, key string, value []byte) error
+    Has(domain string, key string) (bool, error)
+    Remove(domain string, key string) error
+    HasDomain(domain string) (bool, error)
+    RemoveDomain(domain string) error
 }
 ```
 
