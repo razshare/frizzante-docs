@@ -23,7 +23,7 @@ export default defineConfig({
           items: [
             // Each item here is one entry in the navigation menu.
             { label: "Get Started", slug: "guides/get-started" },
-            { label: "Start server", slug: "guides/start-server" },
+            { label: "Server", slug: "guides/server" },
             { label: "Routes", slug: "guides/routes" },
             { label: "Path", slug: "guides/path" },
             { label: "Status", slug: "guides/status" },
