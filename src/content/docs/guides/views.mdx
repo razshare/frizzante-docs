@@ -61,68 +61,6 @@ Views are **svelte components** exported by
     </TabItem>
 </Tabs>
 
-## Configuring server
-
-In order for the server to be able to serve views you must configure it first
-by specifying a **public root** directory, a **view server** and a **view index**.
-
-##### Public root
-
-Use `WithPublicRoot()` to configure the server's public root directory,
-which is usually `app/dist/client`.
-
-```go
-package main
-
-import "github.com/razshare/frizzante/frz"
-
-
-func main() {
-    frz.NewServer().
-        WithPublicRoot("app/dist/client").
-        Start()
-}
-```
-
-##### View server
-
-Use `WithViewServer()` to configure the view server,
-which is usually `app/dist/server.js`.
-
-```go
-package main
-
-import "github.com/razshare/frizzante/frz"
-
-
-func main() {
-    frz.NewServer().
-        WithPublicRoot("app/dist/client").
-        WithViewServer("app/dist/server.js").
-        Start()
-}
-```
-
-##### View index
-
-Use `WithViewIndex()` to configure the view index file,
-which is usually `app/dist/client/index.html`.
-
-```go
-package main
-
-import "github.com/razshare/frizzante/frz"
-
-
-func main() {
-    frz.NewServer().
-        WithPublicRoot("app/dist/client").
-        WithViewServer("app/dist/server.js").
-        WithViewIndex("app/dist/client/index.html").
-        Start()
-}
-```
-
 ## Send views
 
 Use `SendView()` to send a view from a route handler.
@@ -134,7 +72,7 @@ package lib
 import "github.com/razshare/frizzante/frz"
 
 func Hello(c *frz.Connection) {
-    // Sends file "lib/components/views/Hello.svelte"
+    // Sends file "app/lib/components/views/Hello.svelte"
     c.SendView(frz.View{Name: "Hello"}) 
 }
 ```
@@ -176,10 +114,6 @@ var efs embed.FS
 
 func main() {
     frz.NewServer().
-        WithEfs(efs).
-        WithPublicRoot("app/dist/client").
-        WithViewServer("app/dist/server.js").
-        WithViewIndex("app/dist/client/index.html").
         AddRoute(frz.Route{Pattern: "GET /", Handler: handlers.Hello}).
         Start()
 }
@@ -306,9 +240,6 @@ var efs embed.FS
 func main() {
     frz.NewServer().
         WithEfs(efs).
-        WithPublicRoot("app/dist/client").
-        WithViewServer("app/dist/server.js").
-        WithViewIndex("app/dist/client/index.html").
         Start()
 }
 ```
