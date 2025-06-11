@@ -6,7 +6,7 @@
       "dependencies": {
         "@astrojs/starlight": "^0.34.3",
         "@catppuccin/starlight": "^1.0.1",
-        "astro": "^5.8.1",
+        "astro": "^5.9.2",
         "sharp": "^0.32.6",
       },
     },
