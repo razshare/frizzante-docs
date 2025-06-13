@@ -61,7 +61,7 @@ Views are **svelte components** exported by
     </TabItem>
 </Tabs>
 
-## Send views
+## Send Views
 
 Use `SendView()` to send a view from a route handler.
 
@@ -79,7 +79,7 @@ func Hello(c *frz.Connection) {
 
 The **Name** of the view will be used to lookup the view component exported by **server.ts** and/or **client.ts**.
 
-## Default view
+## Default View
 
 There is no way to specify a "**default view**".
 
@@ -151,7 +151,7 @@ Then use [getContext("server")](https://svelte.dev/docs/svelte/context) to retri
 <h1>Hello {server.data.name}</h1>
 ```
 
-## Render modes
+## Render Modes
 
 You can choose how to render views with the `RenderMode` property.
 
