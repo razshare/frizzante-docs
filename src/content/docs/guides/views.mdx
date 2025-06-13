@@ -218,38 +218,3 @@ You can choose how to render views with the `RenderMode` property.
         ```
     </TabItem>
 </Tabs>
-
-
-## Embedding views
-
-You can embed views into your binary so that you don't have to carry around your `app/dist` directory.
-
-Use `WithEfs()` to set the server's embedded file system.
-
-```go
-package main
-
-import (
-    "embed"
-    "github.com/razshare/frizzante/frz"
-)
-
-//go:embed app/dist
-var efs embed.FS
-
-func main() {
-    frz.NewServer().
-        WithEfs(efs).
-        Start()
-}
-```
-
-When serving a file, `SendFileOrElse()` also takes into account the embedded file system.
-
-:::tip
-The **host** file system **has precedence** over the embedded file system.
-
-This means you can add a custom `app/dist` directory nearby your binary in order to serve
-files that were not originally embedded into the binary.
-:::
-

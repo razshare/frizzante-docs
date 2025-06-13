@@ -1,5 +1,5 @@
 ---
-title: Web sockets
+title: Web Sockets
 ---
 
 Use `SendWsUpgrade()` to upgrade the connection to web sockets.

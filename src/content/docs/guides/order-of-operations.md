@@ -1,5 +1,5 @@
 ---
-title: Order of operations
+title: Order of Operations
 ---
 
 Order of operations matters when sending data to the client.

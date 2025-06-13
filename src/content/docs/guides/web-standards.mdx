@@ -1,0 +1,37 @@
+---
+title: Web Standards
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+
+You can use adaptive hyperlinks with `href()` and adaptive forms with `action()`.
+
+<Tabs>
+    <TabItem label="Adaptive Hyperlinks" icon='seti:svelte'>
+        ```svelte
+        <script lang="ts">
+            import { href } from "$lib/utilities/scripts/href.ts"
+        </script>
+
+        <a {...href("/some-othjer-page")}> Go to some other page </a>
+        ```
+    </TabItem>
+    <TabItem label="Adaptive  Forms" icon='seti:svelte'>
+        ```svelte
+        <script lang="ts">
+            import { action } from "$lib/utilities/scripts/action.ts"
+        </script>
+
+        <form {...action("/process")}>
+            <input type="text" name="name" />
+            <button type="submit">Submit</button>
+        </form>
+        ```
+    </TabItem>
+
+    When JavaScript is disabled, these hyperlinks and forms are converted into 
+    traditional HTML hyperlinks and forms,
+    but when JavaScript is enabled, they swap the client's view dynamically
+    without reloading the page,
+    triggering your transition animations and updating your application state.
+</Tabs>
