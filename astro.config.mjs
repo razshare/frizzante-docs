@@ -22,7 +22,6 @@ export default defineConfig({
           label: "Guides",
           items: [
             // Each item here is one entry in the navigation menu.
-            { label: "Get Started", slug: "guides/get-started" },
             { label: "Server", slug: "guides/server" },
             { label: "Routes", slug: "guides/routes" },
             { label: "Path", slug: "guides/path" },
@@ -34,8 +33,8 @@ export default defineConfig({
             { label: "Cookies", slug: "guides/cookies" },
             { label: "Redirect", slug: "guides/redirect" },
             { label: "Navigate", slug: "guides/navigate" },
-            { label: "Server sent events", slug: "guides/server-sent-events" },
             { label: "Web sockets", slug: "guides/web-sockets" },
+            { label: "Server sent events", slug: "guides/server-sent-events" },
             { label: "Sessions", slug: "guides/sessions" },
             { label: "Views", slug: "guides/views" },
             {

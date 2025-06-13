@@ -4,16 +4,217 @@ description: Get started building your docs site with Starlight.
 template: splash
 hero:
   tagline: A minimalistic and opinionated web server framework written in Go that uses Svelte to render pages.
-  image:
-    file: ../../assets/houston.webp
   actions:
-    - text: Get Started
-      link: /frizzante-docs/guides/get-started/
+    - text: Documentation
+      link: /frizzante-docs/guides/server
       icon: right-arrow
-    # - text: Read Frizzante's docs
-    #   link: https://starlight.astro.build
-    #   icon: external
-    #   variant: minimal
+    - text: View on GitHub
+      link: https://github.com/razshare/frizzante
+      icon: external
+      variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, Tabs, TabItem, FileTree, LinkCard } from '@astrojs/starlight/components';
+
+<Card title="Get Started" icon='star'>
+You can create a new project using either **git** or the frizzante **binary**.
+
+<Tabs>
+    <TabItem icon='seti:git' label='Git'>
+    Clone the basic starter template.
+    ```sh
+    git clone https://github.com/razshare/frizzante-starter && \
+    rm frizzante-starter/.git -fr
+    ```
+    </TabItem>
+    <TabItem icon='linux' label='Binary'>
+    Install frizzante.
+    ```sh
+    go install github.com/razshare/frizzante@latest
+    ```
+
+    Start the guided setup by running
+
+    ```sh
+    frizzante
+    ```
+    </TabItem>
+</Tabs>
+
+Install and configure development dependencies
+
+```sh
+sudo apt install build-essential curl unzip && \
+make configure
+```
+
+Start development with
+
+```sh
+make dev
+```
+
+:::tip
+The default makefile uses [Bun](https://bun.sh/) to install 
+dependencies while in development mode.
+
+You can swap Bun out with whatever runtime you want to use to develop 
+by replacing all `bun` references within the makefile with 
+the equivalent of whatever runtime you'd like to use.
+
+This change will have no impact on your application's performance, 
+Bun is only used in development mode 
+in order to be able to run the Vite server.
+:::
+
+Build with
+
+```sh
+make build
+```
+
+This will create a `bin/app` standalone executable.
+
+<FileTree>
+    - bin
+        - app
+</FileTree>
+
+:::note
+The final executable uses [V8](https://v8.dev/) bindings to run 
+JavaScript code on the server in order to render svelte components.
+
+For that reason, the first run may take some time, just be patient.
+
+Subsequent runs will take considerably less time.
+:::
+
+:::note
+Frizzante is aimed mainly at debian based distributions.\
+Feel free to contribute improvements for other platforms.
+:::
+</Card>
+<Card title="Dynamic Render Modes" icon='biome'>
+  Pick your render mode at runtime.
+
+  <Tabs>
+    <TabItem label="Server Mode" icon='seti:go'>
+      Renders on the server.
+      ```go
+      func Handler(c *frz.Connection) {
+        c.SendView(frz.View{Name: "MyView", RenderMode: frz.RenderModeServer})
+      }
+      ```
+    </TabItem>
+    <TabItem label="Client mode" icon='seti:go'>
+      Renders on the client.
+      ```go
+      func Handler(c *frz.Connection) {
+        c.SendView(frz.View{Name: "MyView", RenderMode: frz.RenderModeClient})
+      }
+      ```
+    </TabItem>
+    <TabItem label="Full Mode" icon='seti:go'>
+      Renders on the server and client.
+      ```go
+      func Handler(c *frz.Connection) {
+        c.SendView(frz.View{Name: "MyView", RenderMode: frz.RenderModeFull})
+      }
+      ```
+    </TabItem>
+  </Tabs>
+  <LinkCard title='Read More' href='/frizzante-docs/guides/views/#render-modes'/>
+</Card>
+
+<Card title="Sessions" icon='add-document'>
+  Create and manage sessions with a minimal api.
+  ```go
+      func Handler(c *frz.Connection) {
+        s, op := frz.Session(c, MyState{})
+        defer op.Save(state)
+        s.Name = "Mr. Kittens"
+        s.Greeting = "Meow"
+        s.Details = "Strangely enough he likes sparkly water."
+      }
+  ```
+  <LinkCard title='Read More' href='/frizzante-docs/guides/sessions'/>
+</Card>
+
+<Card title="Web Standards" icon='open-book'>
+  Promotes the use of web standards through adaptive hyperlinks with `href()` and adaptive forms with `action()`.
+  <Tabs>
+    <TabItem label="Adaptive Hyperlinks" icon='seti:svelte'>
+      ```svelte
+      <script lang="ts">
+          import { href } from "$lib/utilities/scripts/href.ts"
+      </script>
+
+      <a {...href("/some-othjer-page")}> Go to some other page </a>
+      ```
+    </TabItem>
+    <TabItem label="Adaptive  Forms" icon='seti:svelte'>
+      ```svelte
+      <script lang="ts">
+          import { action } from "$lib/utilities/scripts/action.ts"
+      </script>
+
+      <form {...action("/process")}>
+          <input type="text" name="name" />
+          <button type="submit">Submit</button>
+      </form>
+      ```
+    </TabItem>
+
+
+      With JavaScript disabled, hyperlinks and forms are converted into 
+      traditional HTML hyperlinks and forms,
+      but with JavaScript enabled, they swap the client view dynamically,
+      triggering your transition animations and updating your application state.
+    </Tabs>
+</Card>
+
+<Card title="Shared Api" icon='sun'>
+  Less things to remember, more things to combine.
+
+  Use the a shared api to manage traditional 
+  Http Requests, Server Sent Events and WebSockets.
+
+  <Tabs>
+    <TabItem label='Http Requests' icon='seti:go'>
+      ```go
+      func Handler(c *frz.Connection) {
+          name := c.ReceiveMessage()                // Receives name.
+          message := fmt.Printf("Hello %s!", name)  // Formats message.
+          c.SendMessage(message)                    // Sends message.
+      }
+      ```
+    </TabItem>
+    <TabItem label='Web Sockets' icon='seti:go'>
+      ```go
+      func Handler(c *frz.Connection) {
+          alive := c.IsAlive()
+          c.SendWsUpgrade()
+          for *alive {
+            name := c.ReceiveMessage()                // Receives name.
+            message := fmt.Printf("Hello %s!", name)  // Formats message.
+            c.SendMessage(message)                    // Sends message.
+          }
+      }
+      ```
+    </TabItem>
+    <TabItem label='Server Sent Events' icon='seti:go'>
+      ```go
+      func Handler(c *frz.Connection) {
+          alive := c.IsAlive()
+          c.SendSseUpgrade()
+          for *alive {
+            name := c.ReceiveMessage()                // Receives name.
+            message := fmt.Printf("Hello %s!", name)  // Formats message.
+            c.SendMessage(message)                    // Sends message.
+          }
+      }
+      ```
+    </TabItem>
+  </Tabs>
+  <LinkCard title='Read More' href='/frizzante-docs/guides/web-sockets'/>
+</Card>
