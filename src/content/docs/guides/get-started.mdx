@@ -11,8 +11,7 @@ You can create a new project using either **git** or the frizzante **binary**.
     Clone the basic starter template.
     ```sh
     git clone https://github.com/razshare/frizzante-starter && \
-    rm frizzante-starter/.git -fr && \
-    cd frizzante-starter
+    rm frizzante-starter/.git -fr
     ```
     </TabItem>
     <TabItem icon='linux' label='Binary'>
@@ -29,22 +28,25 @@ You can create a new project using either **git** or the frizzante **binary**.
     </TabItem>
 </Tabs>
 
+Install development dependencies
+
+```sh
+sudo apt install build-essential curl unzip && \
+make configure
+```
+
 Start development with
 
 ```sh
 make dev
 ```
 
-:::note
-Make sure [Bun](https://bun.sh/) and [build-essential](https://askubuntu.com/questions/398489/how-to-install-build-essential) are installed.
-:::
-
 :::tip
 The default makefile uses [Bun](https://bun.sh/) to install 
 dependencies while in development mode.
 
 You can swap Bun out with whatever runtime you want to use to develop 
-by replacing all `bun` and `bunx` references within the makefile with 
+by replacing all `bun` references within the makefile with 
 the equivalent of whatever runtime you'd like to use.
 
 This change will have no impact on your application's performance, 
