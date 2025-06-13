@@ -20,12 +20,12 @@ import (
 func Hello(c *frz.Connection) {
     alive := c.IsAlive()            // Track request status.
     ev := c.SendSseUpgrade()        // Send sse upgrade.
-    for *alive {                  // Loop until request gets cancelled.
-        ev("channel-1")           // Switch to event "channel-1".
+    for *alive {                    // Loop until request gets cancelled.
+        ev("channel-1")             // Switch to event "channel-1".
         c.SendMessage("hello 1")    // Send text.
-        ev("channel-2")           // Switch to event "channel-2".
+        ev("channel-2")             // Switch to event "channel-2".
         c.SendMessage("hello 2")    // Send text.
-        time.Sleep(time.Second)   // Sleep for 1 second.
+        time.Sleep(time.Second)     // Sleep for 1 second.
     }
 }
 ```

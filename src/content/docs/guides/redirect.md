@@ -11,6 +11,6 @@ package handlers
 import "github.com/razshare/frizzante/frz"
 
 func Hello(c *frz.Connection) {
-    c.SendRedirect("/login", 302)
+    c.SendRedirect("/login", 302)    // Redirects to /login
 }
 ```
