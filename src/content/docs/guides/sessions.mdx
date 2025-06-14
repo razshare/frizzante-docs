@@ -111,10 +111,8 @@ An archive contains `domains` which contains `keys`.
             - key-y.txt
 </FileTree>
 
-The default operator archive is backed by the file system.
-
-Each `session` is a `domain` containing a `session.json` file 
-which describes the state of each session.
+The default operator archive is backed by the file system,
+more specifically, they are saved in a `session` directory.
 
 <FileTree>
     - sessions
@@ -131,5 +129,5 @@ which describes the state of each session.
 }
 ```
 
-In other words, the default operator organizes sessions in a `sessions` directory
-containing as many subdirectories as there are sessions.
+Each `subdirectory` (**domain**) takes the id of a session and it contains the state in a `session.json` file (**key**), 
+thus, there are as many subdirectories as there are sessions.
