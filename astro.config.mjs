@@ -40,7 +40,7 @@ export default defineConfig({
             { label: "Embedding Assets", slug: "guides/embedding-assets" },
             { label: "Web Standards", slug: "guides/web-standards" },
             {
-              label: "Order of operations",
+              label: "Order of Operations",
               slug: "guides/order-of-operations",
             },
           ],
