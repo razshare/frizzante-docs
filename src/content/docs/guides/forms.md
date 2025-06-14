@@ -6,6 +6,12 @@ Use `ReceiveForm()` to retrieve and parse forms
 when using `POST` and `PUT` http verbs.
 
 ```go
+frz.Route{Pattern: "POST /", Handler: handlers.Hello}
+// or
+frz.Route{Pattern: "PUT /", Handler: handlers.Hello}
+```
+
+```go
 //lib/handlers/hello.go
 package handlers
 
