@@ -101,11 +101,8 @@ Think of it as a repository of data separated in two layers, `domains` and `keys
 
 An archive contains `domains` which contains `keys`.
 
-In the case of session management, a `domain` is identified by the session id, while the `key` is 
-a file named `session.json`.
-
 <FileTree>
-    - .archive
+    - archive
         - domain-1
             - key-a.txt
             - key-b.txt
@@ -114,16 +111,13 @@ a file named `session.json`.
             - key-y.txt
 </FileTree>
 
-The default sessions archive is backed by the file system.
+The default operator archive is backed by the file system.
 
-In other words, the default sessions archive organizes sessions in a `.sessions` directory
-containing as many subdirectories as there are sessions.
-
-Each subdirectory contains a `session.json` file
+Each `session` is a `domain` containing a `session.json` file 
 which describes the state of each session.
 
 <FileTree>
-    - .sessions
+    - sessions
         - 0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2
             - session.json
         - 8a6d8cfa-2fc7-4dbb-6be9-beb823318303
@@ -136,3 +130,6 @@ which describes the state of each session.
     "Name": "world"
 }
 ```
+
+In other words, the default operator organizes sessions in a `sessions` directory
+containing as many subdirectories as there are sessions.
