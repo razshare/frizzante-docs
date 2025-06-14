@@ -5,6 +5,12 @@ title: Json
 Use `ReceiveJson()` to parse incoming content as json and `SendJson()` to send data as json when using `POST` and `PUT` http verbs.
 
 ```go
+frz.Route{Pattern: "POST /", Handler: handlers.Hello}
+// or
+frz.Route{Pattern: "PUT /", Handler: handlers.Hello}
+```
+
+```go
 //lib/handlers/hello.go
 package handlers
 
