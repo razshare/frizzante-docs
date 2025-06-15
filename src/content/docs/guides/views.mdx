@@ -22,8 +22,8 @@ Views are **svelte components** exported by
     Views that are meant to be rendered on the server should be exported by this file.
     ```ts
     //app/lib/exports/server.ts
-    import Welcome from '$lib/components/views/Welcome.svelte'
-    import Profile from '$lib/components/views/Profile.svelte'
+    import Welcome from '$lib/views/Welcome.svelte'
+    import Profile from '$lib/views/Profile.svelte'
 
     export const views = {
         "Welcome": Welcome,
@@ -36,8 +36,8 @@ Views are **svelte components** exported by
     ```ts
     //app/lib/exports/client.ts
     export const views = {
-        "Welcome": import('$lib/components/views/Welcome.svelte'),
-        "Profile": import('$lib/components/views/Profile.svelte'),
+        "Welcome": import('$lib/views/Welcome.svelte'),
+        "Profile": import('$lib/views/Profile.svelte'),
     }
     ```
     
@@ -48,8 +48,8 @@ Views are **svelte components** exported by
     
     ```ts
     //app/lib/exports/client.ts
-    import Welcome from '$lib/components/views/Welcome.svelte'
-    import Profile from '$lib/components/views/Profile.svelte'
+    import Welcome from '$lib/views/Welcome.svelte'
+    import Profile from '$lib/views/Profile.svelte'
 
     export const views = {
         "Welcome": Promise.resolve(Welcome),
