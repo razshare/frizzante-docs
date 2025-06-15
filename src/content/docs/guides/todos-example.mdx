@@ -479,6 +479,7 @@ func Check(c *frz.Connection) {
 
 	index := c.ReceiveQuery("index")
 	if "" == index {
+		// No index found, ignore the request.
 		return
 	}
 
