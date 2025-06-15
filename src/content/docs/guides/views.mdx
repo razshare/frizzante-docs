@@ -153,16 +153,16 @@ These properties are passed down to your view component.
 <h1>Hello {name}</h1>
 ```
 
-You can also use [getContext("server")](https://svelte.dev/docs/svelte/context) to retrieve your data.
+You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to retrieve your data.
 
 ```svelte
 //app/lib/views/Hello.svelte
 <script lang="ts">
     import type { View } from "$lib/utilities/frz/types.ts"
-    const server = getContext("server") as View<{ name: string }>
+    const view = getContext("view") as View<{ name: string }>
 </script>
 
-<h1>Hello {server.data.name}</h1>
+<h1>Hello {view.data.name}</h1>
 ```
 
 ## Render Modes
