@@ -11,7 +11,7 @@ package handlers
 import "github.com/razshare/frizzante/frz"
 
 func Hello(c *frz.Connection) {
-    cookie := c.ReceiveCookie("session-id")   // Retrieves cookie "session-id".
-    c.SendCookie("session-id", cookie)        // Sends it back.
+    cookie := c.ReceiveCookie("session-id") // Retrieves cookie.
+    c.SendCookie("session-id", cookie)      // Sends it back.
 }
 ```
