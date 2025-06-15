@@ -6,11 +6,12 @@ import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
 
 Request handlers can define dynamic fields within the **pattern** using `{}` syntax.
 
-Path fields can then be retrieved with `ReceivePath()`.
 
 ```go
 frz.Route{Pattern: "GET /{name}", Handler: handlers.Hello}
 ```
+
+Path fields can then be retrieved with `ReceivePath()`.
 
 ```go
 //lib/handlers/hello.go
