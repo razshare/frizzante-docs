@@ -11,8 +11,8 @@ package handlers
 import "github.com/razshare/frizzante/frz"
 
 func Hello(c *frz.Connection) {
-    ctype := c.ReceiveHeader("Accept")      // Retrieves field "Accept".
-    c.SendHeader("Content-Type", ctype)     // Sends it back.
+    ctype := c.ReceiveHeader("Accept")  // Retrieves field "Accept".
+    c.SendHeader("Content-Type", ctype) // Sends it back.
 }
 ```
 
