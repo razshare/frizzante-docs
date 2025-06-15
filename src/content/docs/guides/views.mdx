@@ -140,13 +140,25 @@ func Hello(c *frz.Connection) {
 }
 ```
 
-Then use [getContext("server")](https://svelte.dev/docs/svelte/context) to retrieve your data.
+These properties are passed down to your view component.
 
 ```svelte
 //lib/components/views/Hello.svelte
 <script lang="ts">
-    import type { ServerContext } from "$frizzante/types.ts"
-    const server = getContext("server") as ServerContext<{ name: string }>
+    type Props = { name: string }
+    let {name}:Props = $props()
+</script>
+
+<h1>Hello {name}</h1>
+```
+
+You can also use [getContext("server")](https://svelte.dev/docs/svelte/context) to retrieve your data.
+
+```svelte
+//lib/components/views/Hello.svelte
+<script lang="ts">
+    import type { View } from "$lib/utilities/frz/types.ts"
+    const server = getContext("server") as View<{ name: string }>
 </script>
 
 <h1>Hello {server.data.name}</h1>
