@@ -18,25 +18,25 @@ import (
 )
 
 func Hello(c *frz.Connection) {
-    alive := c.IsAlive()                // Tracks request status.
-    c.SendWsUpgrade()                   // Sends ws upgrade.
-    for *alive {                        // Loops until request gets cancelled.
-        name := c.ReceiveMessage()      // Receives message.
-        c.SendMessage("hello "+name)    // Sends message.
-        time.Sleep(time.Second)         // Sleeps for 1 second.
+    alive := c.IsAlive()             // Tracks request status.
+    c.SendWsUpgrade()                // Sends ws upgrade.
+    for *alive {                     // Loops until cancellation.
+        name := c.ReceiveMessage()   // Receives message.
+        c.SendMessage("hello "+name) // Sends message.
+        time.Sleep(time.Second)      // Sleeps for 1 second.
     }
 }
 ```
 
 
-Then consume the web socket on the client.
+Then consume the web on the client.
 
 ```svelte
 <script lang="ts">
     import {source} from "$lib/utilities/scripts/source.ts";
     const messages = [] as string[]
-    const c = new WebSocket("/ws")      // Connects to the handler.
-    c.addEventListener(                 // Listens for messages.
+    const c = new WebSocket("/ws") // Connects to handler.
+    c.addEventListener(            // Listens for messages.
         "message", 
         function incoming(e){
             messages.push(e.data)
