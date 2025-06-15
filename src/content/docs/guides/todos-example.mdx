@@ -133,9 +133,9 @@ export function href(path = ""): {
 }
 ```
 
-When the view is allowed to execute JavaScript in the client's browser,
-the hyperlink will locally swap the view in inside the client's browser
-instead of navigating away to the given path.
+When the view is allowed to execute JavaScript inside the client's browser,
+the hyperlink will swap the view dynamically instead 
+of navigating away to the given path.
 
 However, if the view is not allowed to execute JavaScript code, then
 the hyperlink will fallback to using web standards, 
