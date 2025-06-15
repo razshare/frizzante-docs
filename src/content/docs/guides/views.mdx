@@ -112,7 +112,10 @@ var efs embed.FS
 
 func main() {
     frz.NewServer().
-        AddRoute(frz.Route{Pattern: "GET /", Handler: handlers.Hello}).
+        AddRoute(frz.Route{
+            Pattern: "GET /", 
+            Handler: handlers.Hello,
+        }).
         Start()
 }
 ```
@@ -166,7 +169,8 @@ You can choose how to render views with the `RenderMode` property.
         func Hello(c *frz.Connection) {
             c.SendView(frz.View{
                 Name: "Hello",
-                RenderMode: frz.RenderModeFull,   // Renders on server and client.
+                RenderMode: frz.RenderModeFull, // Renders on server 
+                                                // and client.
             })
         }
         ```
