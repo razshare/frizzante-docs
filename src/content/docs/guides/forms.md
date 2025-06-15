@@ -18,7 +18,7 @@ package handlers
 import "github.com/razshare/frizzante/frz"
 
 func Hello(c *frz.Connection) {
-    form := c.ReceiveForm()         // Retrieves and parses the form.
+    form := c.ReceiveForm()         // Retrieves the form.
     name := form.Get("name")        // Retrieves field "name".
     c.SendMessage("Hello " + name)  // Sends text.
 }
