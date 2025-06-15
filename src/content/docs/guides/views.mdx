@@ -126,7 +126,7 @@ func main() {
 Optionally, you can send data along with the views by adding a `Data` property to your `View`.
 
 ```go
-//lib/routes/handler.go
+//lib/handlers/hello.go
 package lib
 
 import "github.com/razshare/frizzante/frz"
@@ -174,7 +174,7 @@ You can choose how to render views with the `RenderMode` property.
         The view is rendered on both the server and the client.<br/>
         This is the **default** mode.
         ```go
-        //lib/routes/handler.go
+        //lib/handlers/hello.go
         package lib
 
         import "github.com/razshare/frizzante/frz"
@@ -193,7 +193,7 @@ You can choose how to render views with the `RenderMode` property.
         You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
         your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
         ```go
-        //lib/routes/handler.go
+        //lib/handlers/hello.go
         package lib
 
         import "github.com/razshare/frizzante/frz"
@@ -219,7 +219,7 @@ You can choose how to render views with the `RenderMode` property.
     <TabItem label='RenderModeClient'>
         The view is rendered only on the client by loading a JavaScript bundle asynchronously.
         ```go
-        //lib/routes/handler.go
+        //lib/handlers/hello.go
         package lib
 
         import "github.com/razshare/frizzante/frz"
