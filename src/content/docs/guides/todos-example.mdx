@@ -77,7 +77,7 @@ import Welcome from "$lib/views/Welcome.svelte"
 import Todos from "$lib/views/Todos.svelte"
 
 export const views = {
-    "Welcome": Welcome, // <=== Exporting "Welcome".
+    "Welcome": Welcome, // Exporting "Welcome".
     "Todos": Todos,
 }
 ```
@@ -85,7 +85,7 @@ export const views = {
 ```ts
 //app/lib/exports/client.ts
 export const views = {
-    "Welcome": import("$lib/views/Welcome.svelte"), // <=== Exporting "Welcome".
+    "Welcome": import("$lib/views/Welcome.svelte"), // Exporting "Welcome".
     "Todos": import("$lib/views/Todos.svelte"),
 }
 ```
@@ -96,7 +96,7 @@ The keys are important, because they dictate the `Name` of the view, the actual 
 
 ```go
 frz.View{
-	Name: "Welcome", // <=== This Name.
+	Name: "Welcome", // This.
 }
 ```
 
@@ -156,7 +156,7 @@ The server itself could choose to not serve a JavaScript bundle to the client.
 ```go
 frz.View{
 	Name: "Welcome",
-	RenderMode: frz.RenderModeServer, // <=== This will disable JavaScript.
+	RenderMode: frz.RenderModeServer, // This will disable JavaScript.
 }
 ```
 
@@ -216,7 +216,7 @@ In other words, **this is not needed**
 //lib/handlers/todos.go
 func Todos(c *frz.Connection) {
 	state, op := frz.Session(c, lib.NewState())
-	defer op.Save(state)	// <=== Don't do it Anakin!
+	defer op.Save(state)	// Don't do it Anakin!
 
 	c.SendView(frz.View{Name: "Todos", Data: map[string]any{
 		"todos": state.Todos,
@@ -232,8 +232,8 @@ Something like this
 //lib/handlers/todos.go
 func Todos(c *frz.Connection) {
 	state, op := frz.Session(c, lib.NewState())
-    defer op.Save(state)    // <=== This is fine because 
-                            //      we're changing things below.
+    defer op.Save(state)    // This is fine because 
+                            // we're changing things below.
 
 	state.Todos[0].Checked = false
 	state.Todos[0].Description = "Hello there."
