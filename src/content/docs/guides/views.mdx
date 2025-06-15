@@ -64,7 +64,7 @@ Views are **svelte components** exported by
 Use `SendView()` to send a view from a route handler.
 
 ```go
-//lib/routes/handler.go
+//lib/handlers/hello.go
 package lib
 
 import "github.com/razshare/frizzante/frz"
@@ -84,7 +84,7 @@ There is no way to specify a "**default view**".
 However, you can use `SendFileOrElse()` in order to send a file or run custom logic if it doesn't exist.
 
 ```go
-//lib/routes/handler.go
+//lib/handlers/hello.go
 package lib
 
 import "github.com/razshare/frizzante/frz"
@@ -108,10 +108,11 @@ import (
 )
 
 //go:embed app/dist
-var efs embed.FS
+var dist embed.FS
 
 func main() {
     frz.NewServer().
+        WithEfs(dist).
         AddRoute(frz.Route{
             Pattern: "GET /", 
             Handler: handlers.Hello,
