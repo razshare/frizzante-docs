@@ -137,9 +137,13 @@ When the view is allowed to execute JavaScript inside the client's browser,
 the hyperlink will swap the view dynamically instead 
 of navigating away to the given path.
 
+![](image98.gif)
+
 However, if the view is not allowed to execute JavaScript code, then
 the hyperlink will fallback to using web standards, 
 and it will navigate away to the given path when clicked.
+
+![](image99.gif)
 
 :::tip
 There are several reason as to when and why a view can't execute JavaScript code.
@@ -377,6 +381,23 @@ index of the item, which is hidden.
 
 This action is then captured by the `Remove` handler, which does some basic validation
 and error handling to then finally remove the item from the session.
+
+:::tip
+Similarly to `href()`, the `action()` function adapts the form.
+
+In essence, forms behave similarly to hyperlinks, in that when submitted,
+they naturally navigate away to a new path, the `action` path.
+
+When JavaScript is enabled, `action()` makes it so that instead of navigating away
+and reloading the whole page, the form will swap the view locally.
+
+![](image101.gif)
+
+On the other hand, if JavaScript is disabled, the form will fallback to web standards
+and behave like any other form, navigating away to the new path.
+
+![](image102.gif)
+:::
 
 ```go
 //lib/handlers/remove.go
