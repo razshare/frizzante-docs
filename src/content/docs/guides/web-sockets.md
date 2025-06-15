@@ -36,6 +36,7 @@ Then consume the web socket on the client.
     import {source} from "$lib/utilities/scripts/source.ts";
     const messages = [] as string[]
     const c = new WebSocket("/ws") // Connects to handler.
+    c.send("hello")                // Sends a message.
     c.addEventListener(            // Listens for messages.
         "message", 
         function incoming(e){
