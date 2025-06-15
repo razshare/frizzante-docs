@@ -1,0 +1,541 @@
+---
+title: Todos Example
+---
+
+The starter template comes with a todos application.
+
+You can find this example at https://github.com/razshare/frizzante-starter.
+
+![alt text](image100.png)
+
+Although the application itself is simple, there are a lot of things that might need some explanation.
+
+## Main
+
+First of all every interaction happens through a `GET` verb.
+
+```go
+//main.go
+func main() {
+	frz.NewServer().
+		WithEfs(efs).
+		AddRoute(frz.Route{Pattern: "GET /", Handler: handlers.Default}).
+		AddRoute(frz.Route{Pattern: "GET /welcome", Handler: handlers.Welcome}).
+		AddRoute(frz.Route{Pattern: "GET /todos", Handler: handlers.Todos}).
+		AddRoute(frz.Route{Pattern: "GET /check", Handler: handlers.Check}).
+		AddRoute(frz.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck}).
+		AddRoute(frz.Route{Pattern: "GET /add", Handler: handlers.Add}).
+		AddRoute(frz.Route{Pattern: "GET /remove", Handler: handlers.Remove}).
+		Start()
+}
+```
+
+As you can see, all handlers are exposed with a `GET /...` pattern.
+
+## Default
+
+The `default` handler is exposed with a `GET /` pattern.
+
+This is important because this pattern will capture 
+any request that is not captured by the other patterns.
+
+This means that the default handler not only handles the default application view,
+but it also handles all file requests.
+
+![](image200.svg)
+
+It is for that reason that this handler tries to send a matching file
+with `SendFileOrElse()` before doing anything else.
+
+```go
+//lib/handlers/default.go
+func Default(c *frz.Connection) {
+	c.SendFileOrElse(func() { Welcome(c) })
+}
+```
+
+`SendFileOrElse` will try find the file on the host file system first,
+if the file is not found, it will try to find it in the binary embedded file system,
+otherwise it falls back to the `Welcome` handler.
+
+## Welcome Handler
+
+All this handler does is simple send the `"Welcome"` view to the user using `SendView()`.
+
+```go
+//lib/handlers/welcome.go
+func Welcome(c *frz.Connection) {
+	c.SendView(frz.View{Name: "Welcome"})
+}
+```
+
+This `"Welcome"` view is exported by the application for both the client and the server.
+
+```ts
+//app/lib/exports/server.ts
+import Welcome from "$lib/views/Welcome.svelte"
+import Todos from "$lib/views/Todos.svelte"
+
+export const views = {
+    "Welcome": Welcome, // <=== Exporting "Welcome".
+    "Todos": Todos,
+}
+```
+
+```ts
+//app/lib/exports/client.ts
+export const views = {
+    "Welcome": import("$lib/views/Welcome.svelte"), // <=== Exporting "Welcome".
+    "Todos": import("$lib/views/Todos.svelte"),
+}
+```
+
+These are key/value records.
+
+The keys are important, because they dictate the `Name` of the view,
+as it the actual property `Name` of the view.
+
+```go
+frz.View{
+	Name: "Welcome", // <=== This Name.
+}
+```
+
+## Welcome View
+
+The `"Welcome"` view is simply laying down a header message and link pointing 
+to `"/todos"`.
+
+```svelte
+//app/lib/views/Welcome.svelte
+<script lang="ts">
+    import Layout from "$lib/components/Layout.svelte"
+    import { href } from "$lib/utilities/frz/scripts/href.ts"
+</script>
+
+<Layout title="Welcome">
+    <h1>Welcome to Frizzante.</h1>
+    <a class="link" {...href("/todos")}> Show todos </a>
+</Layout>
+```
+
+This hyperlink is a bit special, because it doesn't just specify an `href` attribute
+as you would normally expect.
+
+Instead it uses the `href()` function to set said attribute.
+
+This is because in reality `href()` also returns a `onclick` handler.
+
+```ts
+//$lib/utilities/frz/href.ts
+export function href(path = ""): {
+    href: string
+    onclick: (e: MouseEvent) => void
+}
+```
+
+When the view is allowed to execute JavaScript in the client's browser,
+the hyperlink will locally swap the view in inside the client's browser
+instead of navigating away to the given path.
+
+However, if the view is not allowed to execute JavaScript code, then
+the hyperlink will fallback to using web standards, 
+and it will navigate away to the given path when clicked.
+
+:::tip
+There are several reason as to when and why a view can't execute JavaScript code.
+
+Although rare, a use might choose to disable JavaScript altogether on your
+website.
+
+The server itself could choose to not serve a JavaScript bundle to the client.
+
+```go
+frz.View{
+	Name: "Welcome",
+	RenderMode: frz.RenderModeServer, // <=== This will disable JavaScript.
+}
+```
+
+Another reason might be that, for some reason, your JavaScript bundle is broken, or
+not compatible with the user's browser, in which case the hyperlink will 
+continue to work by falling back to its standard behavior.
+:::
+
+## Todos Handler
+
+It sends the `"Todos"` view to the user, along with a list of todos, which is
+retrieved from the session `state`.
+
+```go
+//lib/handlers/todos.go
+func Todos(c *frz.Connection) {
+	state, _ := frz.Session(c, lib.NewState())
+	c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+		"todos": state.Todos,
+	}})
+}
+```
+
+As mentioned in the [sessions](../../guides/sessions) section,
+the default session operator handles things in a local `sessions` directory.
+
+Initially, the session state has a few items in it, which are initialized by 
+`NewState()`.
+
+```go
+//lib/state.go
+func NewState() State {
+	return State{
+		Todos: []Todo{
+			{Checked: false, Description: "Pet the cat."},
+			{Checked: false, Description: "Do laundry"},
+			{Checked: false, Description: "Pet the cat."},
+			{Checked: false, Description: "Cook"},
+			{Checked: false, Description: "Pet the cat."},
+		},
+	}
+}
+```
+
+This state is immediately overwritten by the session operator if an existing session
+is found for the user.
+
+If the session is a fresh one instead, the initial state remains untouched,
+thus the final `state` variable will always contain the 5 todo items when initialized.
+
+:::tip
+You don't need to check and `Save()` your fresh sessions because `Session()`
+does it automatically for you.
+
+In other words, **this is not needed**
+```go
+//lib/handlers/todos.go
+func Todos(c *frz.Connection) {
+	state, op := frz.Session(c, lib.NewState())
+	defer op.Save(state)	// <=== Don't do it Anakin!
+
+	c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+		"todos": state.Todos,
+	}})
+}
+```
+
+Only use `Save()` if you're actually making changes to the state inside your handler.
+
+Something like this
+
+```go
+//lib/handlers/todos.go
+func Todos(c *frz.Connection) {
+	state, op := frz.Session(c, lib.NewState())
+    defer op.Save(state)    // <=== This is fine because 
+                            //      we're changing things below.
+
+	state.Todos[0].Checked = false
+	state.Todos[0].Description = "Hello there."
+
+	c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+		"todos": state.Todos,
+	}})
+}
+```
+:::
+
+## Todos View
+
+This `"Todos"` view does quite a few things.
+
+1. List Items
+1. Removes items.
+1. Checks items.
+1. Unchecks items.
+1. Adds items.
+
+```svelte
+//app/lib/views/Todos.svelte
+<script lang="ts">
+    import Layout from "$lib/components/Layout.svelte"
+    import { action } from "$lib/utilities/frz/scripts/action.ts"
+    import { href } from "$lib/utilities/frz/scripts/href.ts"
+
+    type Todo = {
+        Checked: boolean
+        Description: string
+    }
+
+    type Props = {
+        todos: Todo[],
+        error: string,
+    }
+
+    let {todos, error}:Props = $props()
+</script>
+
+<Layout title="Todos">
+    <ol>
+        {#each todos as todo, index (index)}
+            <li>
+                <form {...action("/remove")}>
+                    <input type="hidden" name="index" value={index} />
+                    <button class="link">[Remove]</button>
+                </form>
+                {#if todo.Checked}
+                    <form {...action("/uncheck")}>
+                        <input type="hidden" name="index" value={index} />
+                        <button class="link">
+                            <!---->
+                            (x) {todo.Description}
+                            <!---->
+                        </button>
+                    </form>
+                {:else}
+                    <form {...action("/check")}>
+                        <input type="hidden" name="index" value={index} />
+                        <button class="link">
+                            <!---->
+                            (&nbsp;&nbsp;) {todo.Description}
+                            <!---->
+                        </button>
+                    </form>
+                {/if}
+            </li>
+        {/each}
+    </ol>
+    <form {...action("/add")}>
+        <span class="link">Description</span>
+        <input type="text" value="" name="description" />
+        <button class="link" type="submit">Add +</button>
+    </form>
+
+    {#if error}
+        <br />
+        <span class="error">{error}</span>
+    {/if}
+
+    <br />
+    <a class="link" {...href("/")}>&lt; Back</a>
+</Layout>
+```
+
+###### Listing Items
+
+The component itself receives the todo list 
+as a `todos` property from the server
+
+```ts
+//app/lib/views/Todos.svelte
+let {todos, error}:Props = $props()
+```
+
+which is then iterated upon to render the items
+
+```svelte
+//app/lib/views/Todos.svelte
+{#each todos as todo, index (index)}
+	<li>
+		<form {...action("/remove")}>
+			<input type="hidden" name="index" value={index} />
+			<button class="link">[Remove]</button>
+		</form>
+		{#if todo.Checked}
+			<form {...action("/uncheck")}>
+				<input type="hidden" name="index" value={index} />
+				<button class="link">
+					<!---->
+					(x) {todo.Description}
+					<!---->
+				</button>
+			</form>
+		{:else}
+			<form {...action("/check")}>
+				<input type="hidden" name="index" value={index} />
+				<button class="link">
+					<!---->
+					(&nbsp;&nbsp;) {todo.Description}
+					<!---->
+				</button>
+			</form>
+		{/if}
+	</li>
+{/each}
+```
+
+Each item has two buttons, a **remove button** and a **toggle** button.
+
+###### Removing Items
+
+Removing an item from the list involves submitting a form to `/remove`, along with the
+index of the item, which is hidden.
+
+```svelte
+//app/lib/views/Todos.svelte
+<form {...action("/remove")}>
+	<input type="hidden" name="index" value={index} />
+	<button class="link">[Remove]</button>
+</form>
+```
+
+This action is then captured by the `Remove` handler, which does some basic validation
+and error handling to then finally remove the item from the session.
+
+```go
+//lib/handlers/remove.go
+func Remove(c *frz.Connection) {
+	state, operator := frz.Session(c, lib.NewState())
+	defer operator.Save(state)
+
+	if 0 == len(state.Todos) {
+		// No items found, ignore the request.
+		return
+	}
+
+	index := c.ReceiveQuery("index")
+	if "" == index {
+		// No index found, ignore the request.
+		return
+	}
+
+	id, intError := strconv.ParseInt(index, 10, 64)
+	if nil != intError {
+		c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+			"error": intError.Error(),
+		}})
+		return
+	}
+
+	// Removes item from session.
+	state.Todos = append(state.Todos[:id], state.Todos[id+1:]...)
+
+	// This will update the client user interface.
+	c.SendNavigate("/todos")
+}
+```
+
+###### Checking & Unchecking Items
+
+Checking and unchecking items is also done using forms.
+
+```svelte
+//app/lib/views/Todos.svelte
+{#if todo.Checked}
+	<form {...action("/uncheck")}>
+		<input type="hidden" name="index" value={index} />
+		<button class="link">
+			<!---->
+			(x) {todo.Description}
+			<!---->
+		</button>
+	</form>
+{:else}
+	<form {...action("/check")}>
+		<input type="hidden" name="index" value={index} />
+		<button class="link">
+			<!---->
+			(&nbsp;&nbsp;) {todo.Description}
+			<!---->
+		</button>
+	</form>
+{/if}
+```
+
+Where checking an item sends a form to `/check` and unchecking an items sends it instead to `/uncheck`.
+
+Both forms indicate the index of the item using a hidden input field.
+
+```svelte
+//lib/views/Todos.svelte
+<input type="hidden" name="index" value={index} />
+```
+
+Checking is handled by the `Check` handler.
+
+```go
+//lib/handlers/check.go
+func Check(c *frz.Connection) {
+	state, operator := frz.Session(c, lib.NewState())
+	defer operator.Save(state)
+
+	index := c.ReceiveQuery("index")
+	if "" == index {
+		return
+	}
+
+	id, intError := strconv.ParseInt(index, 10, 64)
+	if nil != intError {
+		c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+			"error": intError.Error(),
+		}})
+		return
+	}
+
+	// Checks the item.
+	state.Todos[id].Checked = true
+
+	// This will update the client user interface.
+	c.SendNavigate("/todos")
+}
+```
+
+While unchecking is handled by the `Uncheck` handler, which does the exact same thing
+as `Check`, except it sets `.Checked` to `false` instead of `true`.
+
+```go
+//lib/handlers/uncheck.go
+// ...
+state.Todos[id].Checked = false
+// ...
+```
+
+###### Adding Items
+
+The final piece of the puzzle is adding items to the list, which is done
+by sending a form to `/add`.
+
+```svelte
+//lib/views/Todos.svelte
+<form {...action("/add")}>
+	<span class="link">Description</span>
+	<input type="text" value="" name="description" />
+	<button class="link" type="submit">Add +</button>
+</form>
+```
+
+This form is then captured by the `Add` handler.
+
+```go
+//lib/handlers/add.go
+func Add(c *frz.Connection) {
+	state, operator := frz.Session(c, lib.NewState())
+	defer operator.Save(state)
+
+	description := c.ReceiveQuery("description")
+
+	if "" == description {
+		c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+			"todos": state.Todos,
+			"error": "todo description cannot be empty",
+		}})
+		return
+	}
+
+	// Adds the item to the session.
+	state.Todos = append(
+		state.Todos, 
+		lib.Todo{
+			Checked: false, 
+			Description: description,
+		},
+	)
+
+	// This will update the client user interface.
+	c.SendNavigate("/todos")
+}
+```
+
+## More Examples
+
+| Description | Hyperlink |
+|-------------|-----------|
+| A live chat application | https://github.com/razshare/frizzante-example-chat |
+| A blog application with login and registration forms | https://github.com/razshare/frizzante-example-blog |

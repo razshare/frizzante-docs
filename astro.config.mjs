@@ -44,6 +44,7 @@ export default defineConfig({
               label: "Order of Operations",
               slug: "guides/order-of-operations",
             },
+            { label: "Todos Example", slug: "guides/todos-example" },
           ],
         },
       ],
