@@ -143,7 +143,7 @@ func Hello(c *frz.Connection) {
 These properties are passed down to your view component.
 
 ```svelte
-//app/lib/components/views/Hello.svelte
+//app/lib/views/Hello.svelte
 <script lang="ts">
     type Props = { name: string }
     let {name}:Props = $props()
@@ -155,7 +155,7 @@ These properties are passed down to your view component.
 You can also use [getContext("server")](https://svelte.dev/docs/svelte/context) to retrieve your data.
 
 ```svelte
-//app/lib/components/views/Hello.svelte
+//app/lib/views/Hello.svelte
 <script lang="ts">
     import type { View } from "$lib/utilities/frz/types.ts"
     const server = getContext("server") as View<{ name: string }>
