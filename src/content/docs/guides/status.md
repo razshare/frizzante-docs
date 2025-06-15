@@ -12,7 +12,7 @@ import "github.com/razshare/frizzante/frz"
 
 func Hello(c *frz.Connection) {
     c.SendStatus(404)                             // Sends status 404.
-    c.SendMessage("Resource not found, sorry.")   // Sends text.
+    c.SendMessage("Resource not found.")   // Sends text.
 }
 ```
 
