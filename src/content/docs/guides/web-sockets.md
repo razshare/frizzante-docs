@@ -29,7 +29,7 @@ func Hello(c *frz.Connection) {
 ```
 
 
-Then consume the web on the client.
+Then consume the web socket on the client.
 
 ```svelte
 <script lang="ts">
