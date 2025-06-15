@@ -18,14 +18,14 @@ import (
 )
 
 func Hello(c *frz.Connection) {
-    alive := c.IsAlive()            // Track request status.
-    ev := c.SendSseUpgrade()        // Send sse upgrade.
-    for *alive {                    // Loop until request gets cancelled.
-        ev("channel-1")             // Switch to event "channel-1".
-        c.SendMessage("hello 1")    // Send text.
-        ev("channel-2")             // Switch to event "channel-2".
-        c.SendMessage("hello 2")    // Send text.
-        time.Sleep(time.Second)     // Sleep for 1 second.
+    alive := c.IsAlive()            // Tracks request status.
+    ev := c.SendSseUpgrade()        // Sends sse upgrade.
+    for *alive {                    // Loops until request gets cancelled.
+        ev("channel-1")             // Switches to event "channel-1".
+        c.SendMessage("hello 1")    // Sends message.
+        ev("channel-2")             // Switches to event "channel-2".
+        c.SendMessage("hello 2")    // Sends message.
+        time.Sleep(time.Second)     // Sleeps for 1 second.
     }
 }
 ```
