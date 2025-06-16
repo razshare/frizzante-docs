@@ -50,18 +50,13 @@ func Default(c *frz.Connection) {
 }
 ```
 
-`SendFileOrElse` will try find the file on the host file system first,
-if the file is not found, it will try to find it in the binary embedded file system,
-otherwise it falls back to the `Welcome` handler.
-
-:::caution
-Without invoking `SendFileOrElse()` in this manner
-the server wouldn't be able to serve assets at all.
+:::note
+This handler essentially acts as a file server and falls back to `Welcome`.
 :::
 
 ## Welcome Handler
 
-All this handler does is send the `"Welcome"` view to the user using `SendView()`.
+All this handler does is send the `"Welcome"` view to the user with `SendView()`.
 
 ```go
 //lib/handlers/welcome.go
