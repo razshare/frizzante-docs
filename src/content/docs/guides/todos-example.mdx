@@ -211,8 +211,8 @@ In other words, **this is not needed**
 ```go
 //lib/handlers/todos.go
 func Todos(c *frz.Connection) {
-	state, op := frz.Session(c, lib.NewState())
-	defer op.Save(state)	// Don't do it Anakin!
+	state, operator := frz.Session(c, lib.NewState())
+	defer operator.Save(state) // Don't do it Anakin!
 
 	c.SendView(frz.View{Name: "Todos", Data: map[string]any{
 		"todos": state.Todos,
@@ -227,9 +227,9 @@ Something like this
 ```go
 //lib/handlers/todos.go
 func Todos(c *frz.Connection) {
-    state, op := frz.Session(c, lib.NewState())
-    defer op.Save(state)    // This is fine because 
-                            // we're changing things below.
+    state, operator := frz.Session(c, lib.NewState())
+    defer operator.Save(state) // This is fine because 
+                               // we're changing things below.
 
     state.Todos[0].Checked = false
     state.Todos[0].Description = "Hello there."
