@@ -428,6 +428,31 @@ func Remove(c *frz.Connection) {
 }
 ```
 
+:::caution
+Notice the use of `c.ReceiveQuery("index")`.
+
+This is a reminder that, if not specified otherwise, 
+forms prefer using the `GET` verb.
+
+The equivalent using the `POST` verb would be
+
+```svelte
+//app/lib/views/Todos.svelte
+<form method="POST" {...action("/remove")}>
+	<input type="hidden" name="index" value={index} />
+	<button class="link">[Remove]</button>
+</form>
+```
+
+```go
+//lib/handlers/remove.go
+// ...
+form := c.ReceiveForm()
+index := form.Get("index")
+// ...
+```
+:::
+
 ###### Checking & Unchecking Items
 
 Checking and unchecking items is also done using forms.
