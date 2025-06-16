@@ -35,13 +35,11 @@ As you can see, all handlers are exposed with a `GET /...` pattern.
 
 ## Default
 
-The `default` handler is exposed with a `GET /` pattern.
+The `Default` handler is exposed with a `GET /` pattern, which 
+captures any request that is not captured by the other patterns.
 
-This is important because this pattern will capture 
-any request that is not captured by the other patterns.
-
-This means that the default handler not only handles the default application view,
-but it also handles all file requests.
+This means that the `Default` handler not only handles the main 
+application view, but it also handles all file requests.
 
 ![](image200.svg)
 
