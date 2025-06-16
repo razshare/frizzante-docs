@@ -122,7 +122,7 @@ Instead it uses the `href()` function to set said attribute.
 This is because in reality `href()` also returns a `onclick` handler.
 
 ```ts
-//$lib/utilities/frz/href.ts
+//app/lib/utilities/frz/href.ts
 export function href(path = ""): {
     href: string
     onclick: (e: MouseEvent) => void
