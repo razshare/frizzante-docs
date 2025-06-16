@@ -129,7 +129,7 @@ export function href(path = ""): {
 }
 ```
 
-When the view is allowed to execute JavaScript inside the client's browser,
+When the view is allowed to execute JavaScript inside the users's browser,
 the hyperlink will swap the view dynamically instead 
 of navigating away to the given path.
 
@@ -147,7 +147,7 @@ There are several reason as to when and why a view can't execute JavaScript code
 Although rare, a user might choose to disable JavaScript altogether on your
 website.
 
-The server itself could choose to not serve a JavaScript bundle to the client.
+The server itself could choose to not serve a JavaScript bundle to the user.
 
 ```go
 frz.View{
@@ -423,7 +423,7 @@ func Remove(c *frz.Connection) {
 	// Removes item from session.
 	state.Todos = append(state.Todos[:id], state.Todos[id+1:]...)
 
-	// This will update the client user interface.
+	// This will update the user interface.
 	c.SendNavigate("/todos")
 }
 ```
