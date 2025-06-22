@@ -112,18 +112,19 @@ An archive contains `domains` which contains `keys`.
 </FileTree>
 
 The default operator archive is backed by the file system,
-more specifically, in a `sessions` directory.
+more specifically, in a `.gen/sessions` directory.
 
 <FileTree>
-    - sessions
-        - 0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2
-            - session.json
-        - 8a6d8cfa-2fc7-4dbb-6be9-beb823318303
-            - session.json
+    - .gen
+        - sessions
+            - 0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2
+                - session.json
+            - 8a6d8cfa-2fc7-4dbb-6be9-beb823318303
+                - session.json
 </FileTree>
 
 ```json
-//./sessions/0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2/session.json
+//.gen/sessions/0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2/session.json
 {
     "Name": "world"
 }
