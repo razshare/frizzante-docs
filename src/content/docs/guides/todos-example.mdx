@@ -505,6 +505,7 @@ func Check(con *libcon.Connection) {
 
 	id, intError := strconv.ParseInt(index, 10, 64)
 	if nil != intError {
+		// This will update the user interface.
 		con.SendView(libview.View{Name: "Todos", Data: map[string]any{
 			"error": intError.Error(),
 		}})
@@ -514,8 +515,10 @@ func Check(con *libcon.Connection) {
 	// Checks the item.
 	state.Todos[id].Checked = true
 
-	// This will update the client user interface.
-	con.SendNavigate("/todos")
+	// This will update the user interface.
+	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
+		"todos": state.Todos,
+	}})
 }
 ```
 
@@ -554,6 +557,7 @@ func Add(con *libcon.Connection) {
 	description := con.ReceiveQuery("description")
 
 	if "" == description {
+		// This will update the user interface.
 		con.SendView(libview.View{Name: "Todos", Data: map[string]any{
 			"todos": state.Todos,
 			"error": "todo description cannot be empty",
@@ -570,8 +574,10 @@ func Add(con *libcon.Connection) {
 		},
 	)
 
-	// This will update the client user interface.
-	con.SendNavigate("/todos")
+	// This will update the user interface.
+	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
+		"todos": state.Todos,
+	}})
 }
 ```
 
