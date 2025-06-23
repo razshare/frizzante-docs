@@ -46,7 +46,7 @@ with `SendFileOrElse()` before doing anything else.
 ```go
 //lib/handlers/default.go
 func Default(con *libcon.Connection) {
-	con.SendFileOrElse(func() { Welcome(c) })
+	con.SendFileOrElse(func() { Welcome(con) })
 }
 ```
 
@@ -169,7 +169,7 @@ retrieved from the session `state`.
 ```go
 //lib/handlers/todos.go
 func Todos(con *libcon.Connection) {
-	state, _ := libsession.Session(c, lib.NewState())
+	state, _ := libsession.Session(con, lib.NewState())
 	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
 		"todos": state.Todos,
 	}})
@@ -211,7 +211,7 @@ In other words, **this is not needed**
 ```go
 //lib/handlers/todos.go
 func Todos(con *libcon.Connection) {
-	state, operator := libsession.Session(c, lib.NewState())
+	state, operator := libsession.Session(con, lib.NewState())
 	defer operator.Save(state) // Don't do it Anakin!
 
 	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
@@ -227,7 +227,7 @@ Something like this
 ```go
 //lib/handlers/todos.go
 func Todos(con *libcon.Connection) {
-    state, operator := libsession.Session(c, lib.NewState())
+    state, operator := libsession.Session(con, lib.NewState())
     defer operator.Save(state) // This is fine because 
                                // we're changing things below.
 
@@ -398,7 +398,7 @@ and behave like any other form, navigating away to the new path.
 ```go
 //lib/handlers/remove.go
 func Remove(con *libcon.Connection) {
-	state, operator := libsession.Session(c, lib.NewState())
+	state, operator := libsession.Session(con, lib.NewState())
 	defer operator.Save(state)
 
 	if 0 == len(state.Todos) {
@@ -494,7 +494,7 @@ Checking is handled by the `Check` handler.
 ```go
 //lib/handlers/check.go
 func Check(con *libcon.Connection) {
-	state, operator := libsession.Session(c, lib.NewState())
+	state, operator := libsession.Session(con, lib.NewState())
 	defer operator.Save(state)
 
 	index := con.ReceiveQuery("index")
@@ -548,7 +548,7 @@ This form is then captured by the `Add` handler.
 ```go
 //lib/handlers/add.go
 func Add(con *libcon.Connection) {
-	state, operator := libsession.Session(c, lib.NewState())
+	state, operator := libsession.Session(con, lib.NewState())
 	defer operator.Save(state)
 
 	description := con.ReceiveQuery("description")

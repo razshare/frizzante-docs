@@ -18,7 +18,7 @@ import (
 type State struct{}
 
 func Hello(con *libcon.Connection) {
-    state, operator := libsession.Session(c, State{})
+    state, operator := libsession.Session(con, State{})
 }
 ```
 
@@ -60,7 +60,7 @@ type State struct{
 }
 
 func Hello(con *libcon.Connection) {
-    state, operator := libsession.Session(c, State{})
+    state, operator := libsession.Session(con, State{})
     defer operator.Save(state)
     state.Name = "world"
 }
@@ -86,7 +86,7 @@ type State struct{
 }
 
 func Hello(con *libcon.Connection) {
-    state, operator := libsession.Session(c, State{})
+    state, operator := libsession.Session(con, State{})
     operator.WithArchive(MyCustomArchive)
     defer operator.Save(state)
     state.Name = "world"
