@@ -13,7 +13,7 @@ routes.Route{Pattern: "GET /ws", Handler: handlers.Hello}
 package handlers
 
 import (
-    "github.com/razshare/frizzante/frz"
+    "github.com/razshare/frizzante/connections"
     "time"
 )
 
