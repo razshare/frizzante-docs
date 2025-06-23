@@ -8,10 +8,10 @@ Use `SendNavigate()` to redirect to a different location with status `302`.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/frz"
+import "github.com/razshare/frizzante/libcon"
 
-func Hello(c *frz.Connection) {
-    c.SendNavigate("/login") // Redirects to /login 
-                             // with status 302
+func Hello(con *libcon.Connection) {
+    con.SendNavigate("/login") // Redirects to /login 
+                               // with status 302
 }
 ```

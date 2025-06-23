@@ -6,20 +6,20 @@ Use `ReceiveForm()` to retrieve and parse forms
 when using `POST` and `PUT` http verbs.
 
 ```go
-frz.Route{Pattern: "POST /", Handler: handlers.Hello}
+libsrv.Route{Pattern: "POST /", Handler: handlers.Hello}
 // or
-frz.Route{Pattern: "PUT /", Handler: handlers.Hello}
+libsrv.Route{Pattern: "PUT /", Handler: handlers.Hello}
 ```
 
 ```go
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/frz"
+import "github.com/razshare/frizzante/libcon"
 
-func Hello(c *frz.Connection) {
-    form := c.ReceiveForm()         // Retrieves the form.
-    name := form.Get("name")        // Retrieves field "name".
-    c.SendMessage("Hello " + name)  // Sends text.
+func Hello(con *libcon.Connection) {
+    form := con.ReceiveForm()        // Retrieves the form.
+    name := form.Get("name")         // Retrieves field "name".
+    con.SendMessage("Hello " + name) // Sends text.
 }
 ```

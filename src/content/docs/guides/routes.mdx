@@ -11,19 +11,20 @@ You can add a new route to the server with `AddRoute()`.
 package main
 
 import (
-    "github.com/razshare/frizzante/frz"
+    "github.com/razshare/frizzante/libsrv"
     "main/lib/handlers"
 )
 
-var hello = frz.Route{
+var server = libsrv.NewServer()
+
+var hello = libsrv.Route{
     Pattern: "GET /", 
     Handler: handlers.Hello,
 }
 
 func main() {
-    frz.NewServer().
-        AddRoute(hello).    // Adds route.
-        Start()
+    server.AddRoute(hello) // Adds route.
+    server.Start()
 }
 ```
 
@@ -31,9 +32,9 @@ func main() {
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/frz"
+import "github.com/razshare/frizzante/libcon"
 
-func Hello(c *frz.Connection) {
-    c.SendMessage("Hello")    // Sends text.
+func Hello(con *libcon.Connection) {
+    con.SendMessage("Hello") // Sends text.
 }
 ```

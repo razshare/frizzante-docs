@@ -5,24 +5,24 @@ title: Json
 Use `ReceiveJson()` to parse incoming content as json and `SendJson()` to send data as json when using `POST` and `PUT` http verbs.
 
 ```go
-frz.Route{Pattern: "POST /", Handler: handlers.Hello}
+libsrv.Route{Pattern: "POST /", Handler: handlers.Hello}
 // or
-frz.Route{Pattern: "PUT /", Handler: handlers.Hello}
+libsrv.Route{Pattern: "PUT /", Handler: handlers.Hello}
 ```
 
 ```go
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/frz"
+import "github.com/razshare/frizzante/libcon"
 
 type GreetingDetails struct {
     Name string `json:"name"`
 }
 
-func Hello(c *frz.Connection) {
-    var value *GreetingDetails  // Prepares empty value.
-    c.ReceiveJson(value)        // Parses the content into value.
-    c.SendJson(value)           // Sends it back.
+func Hello(con *libcon.Connection) {
+    var value *GreetingDetails // Prepares empty value.
+    con.ReceiveJson(value)     // Parses the content into value.
+    con.SendJson(value)        // Sends it back.
 }
 ```

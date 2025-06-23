@@ -5,7 +5,7 @@ title: Server Sent Events
 Use `SendSseUpgrade()` to upgrade the connection to server sent events.
 
 ```go
-frz.Route{Pattern: "GET /sse", Handler: handlers.Hello}
+libsrv.Route{Pattern: "GET /sse", Handler: handlers.Hello}
 ```
 
 ```go
@@ -13,19 +13,19 @@ frz.Route{Pattern: "GET /sse", Handler: handlers.Hello}
 package handlers
 
 import (
-    "github.com/razshare/frizzante/frz"
+    "github.com/razshare/frizzante/libcon"
     "time"
 )
 
-func Hello(c *frz.Connection) {
-    alive := c.IsAlive()         // Tracks request status.
-    ev := c.SendSseUpgrade()     // Sends sse upgrade.
-    for *alive {                 // Loops until cancellation.
-        ev("channel-1")          // Switches to "channel-1".
-        c.SendMessage("hello 1") // Sends message.
-        ev("channel-2")          // Switches to "channel-2".
-        c.SendMessage("hello 2") // Sends message.
-        time.Sleep(time.Second)  // Sleeps for 1 second.
+func Hello(con *libcon.Connection) {
+    alive := con.IsAlive()         // Tracks request status.
+    ev := con.SendSseUpgrade()     // Sends sse upgrade.
+    for *alive {                   // Loops until cancellation.
+        ev("channel-1")            // Switches to "channel-1".
+        con.SendMessage("hello 1") // Sends message.
+        ev("channel-2")            // Switches to "channel-2".
+        con.SendMessage("hello 2") // Sends message.
+        time.Sleep(time.Second)    // Sleeps for 1 second.
     }
 }
 ```
@@ -35,9 +35,9 @@ Then consume the stream on the client.
 ```svelte
 <script lang="ts">
     import {source} from "$lib/utilities/scripts/source.ts";
-    const c = source("/sse")         // Connects to the handler.
-    const c1 = c.select("channel-1") // Listens to "channel-1"
-    const c2 = c.select("channel-2") // Listens to "channel-2"
+    const con = source("/sse")         // Connects to the handler.
+    const c1 = con.select("channel-1") // Listens to "channel-1"
+    const c2 = con.select("channel-2") // Listens to "channel-2"
 </script>
 
 <h1>Channel 1</h1>

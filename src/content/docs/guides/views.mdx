@@ -67,11 +67,14 @@ Use `SendView()` to send a view from a route handler.
 //lib/handlers/hello.go
 package lib
 
-import "github.com/razshare/frizzante/frz"
+import (
+    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/libview"
+)
 
-func Hello(c *frz.Connection) {
+func Hello(con *libcon.Connection) {
     // Sends file "app/lib/components/views/Hello.svelte"
-    c.SendView(frz.View{Name: "Hello"}) 
+    con.SendView(libview.View{Name: "Hello"}) 
 }
 ```
 
@@ -87,11 +90,14 @@ However, you can use `SendFileOrElse()` in order to send a file or run custom lo
 //lib/handlers/hello.go
 package lib
 
-import "github.com/razshare/frizzante/frz"
+import (
+    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/libview"
+)
 
-func Hello(c *frz.Connection) {
-    c.SendFileOrElse(func () {
-        c.SendView(frz.View{Name: "Hello"})
+func Hello(con *libcon.Connection) {
+    con.SendFileOrElse(func () {
+        con.SendView(libview.View{Name: "Hello"})
     })
 }
 ```
@@ -104,20 +110,20 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/frz"
+    "github.com/razshare/frizzante/libsrv"
 )
 
 //go:embed app/dist
 var dist embed.FS
+var server = libsrv.NewServer()
 
 func main() {
-    frz.NewServer().
-        WithEfs(dist).
-        AddRoute(frz.Route{
-            Pattern: "GET /", 
-            Handler: handlers.Hello,
-        }).
-        Start()
+    server.Efs = dist
+    server.AddRoute(libsrv.Route{
+        Pattern: "GET /", 
+        Handler: handlers.Hello,
+    })
+    server.Start()
 }
 ```
 
@@ -129,10 +135,13 @@ Optionally, you can send data along with the views by adding a `Data` property t
 //lib/handlers/hello.go
 package lib
 
-import "github.com/razshare/frizzante/frz"
+import (
+    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/libview"
+)
 
-func Hello(c *frz.Connection) {
-    c.SendView(frz.View{ 
+func Hello(con *libcon.Connection) {
+    con.SendView(libview.View{ 
         Name: "Hello",
         Data: map[string]string{
             "name": "world",
@@ -177,13 +186,16 @@ You can choose how to render views with the `RenderMode` property.
         //lib/handlers/hello.go
         package lib
 
-        import "github.com/razshare/frizzante/frz"
+        import (
+            "github.com/razshare/frizzante/libcon"
+            "github.com/razshare/frizzante/libview"
+        )
 
-        func Hello(c *frz.Connection) {
-            c.SendView(frz.View{
+        func Hello(con *libcon.Connection) {
+            con.SendView(libview.View{
                 Name: "Hello",
-                RenderMode: frz.RenderModeFull, // Renders on server 
-                                                // and client.
+                RenderMode: libview.RenderModeFull, // Renders on server 
+                                                   // and client.
             })
         }
         ```
@@ -196,12 +208,15 @@ You can choose how to render views with the `RenderMode` property.
         //lib/handlers/hello.go
         package lib
 
-        import "github.com/razshare/frizzante/frz"
+        import (
+            "github.com/razshare/frizzante/libcon"
+            "github.com/razshare/frizzante/libview"
+        )
 
-        func Hello(c *frz.Connection) {
-            c.SendView(frz.View{
+        func Hello(con *libcon.Connection) {
+            con.SendView(libview.View{
                 Name: "Hello",
-                RenderMode: frz.RenderModeServer, // Renders on server.
+                RenderMode: libview.RenderModeServer, // Renders on server.
             })
         }
         ```
@@ -222,12 +237,15 @@ You can choose how to render views with the `RenderMode` property.
         //lib/handlers/hello.go
         package lib
 
-        import "github.com/razshare/frizzante/frz"
+        import (
+            "github.com/razshare/frizzante/libcon"
+            "github.com/razshare/frizzante/libview"
+        )
 
-        func Hello(c *frz.Connection) {
-            c.SendView(frz.View{
+        func Hello(con *libcon.Connection) {
+            con.SendView(libview.View{
                 Name: "Hello",
-                RenderMode: frz.RenderModeClient, // Renders on client.
+                RenderMode: libview.RenderModeClient, // Renders on client.
             })
         }
         ```

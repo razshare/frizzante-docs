@@ -8,9 +8,9 @@ Use `SendRedirect()` to redirect to a different location.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/frz"
+import "github.com/razshare/frizzante/libcon"
 
-func Hello(c *frz.Connection) {
-    c.SendRedirect("/login", 302) // Redirects to /login
+func Hello(con *libcon.Connection) {
+    con.SendRedirect("/login", 302) // Redirects to /login
 }
 ```

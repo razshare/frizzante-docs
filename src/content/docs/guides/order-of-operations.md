@@ -14,11 +14,11 @@ with `SendMessage()` is not allowed.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/frz"
+import "github.com/razshare/frizzante/libcon"
 
-func Hello(c *frz.Connection) {
-    c.SendMessage("Hello.")   // Sends text.    (Will Succeed)
-    c.SendStatus(404)         // Sends status.  (Will Fail)
+func Hello(con *libcon.Connection) {
+    con.SendMessage("Hello.")   // Sends text. (Succeeds)
+    con.SendStatus(404)         // Sends status. (Fails)
 }
 ```
 

@@ -17,17 +17,17 @@ First of all every interaction happens through a `GET` verb.
 
 ```go
 //main.go
+var server = libsrv.NewServer().
 func main() {
-	frz.NewServer().
-		WithEfs(efs).
-		AddRoute(frz.Route{Pattern: "GET /", Handler: handlers.Default}).
-		AddRoute(frz.Route{Pattern: "GET /welcome", Handler: handlers.Welcome}).
-		AddRoute(frz.Route{Pattern: "GET /todos", Handler: handlers.Todos}).
-		AddRoute(frz.Route{Pattern: "GET /check", Handler: handlers.Check}).
-		AddRoute(frz.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck}).
-		AddRoute(frz.Route{Pattern: "GET /add", Handler: handlers.Add}).
-		AddRoute(frz.Route{Pattern: "GET /remove", Handler: handlers.Remove}).
-		Start()
+	server.Efs = efs
+	server.AddRoute(libsrv.Route{Pattern: "GET /", Handler: handlers.Default})
+	server.AddRoute(libsrv.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
+	server.AddRoute(libsrv.Route{Pattern: "GET /todos", Handler: handlers.Todos})
+	server.AddRoute(libsrv.Route{Pattern: "GET /check", Handler: handlers.Check})
+	server.AddRoute(libsrv.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
+	server.AddRoute(libsrv.Route{Pattern: "GET /add", Handler: handlers.Add})
+	server.AddRoute(libsrv.Route{Pattern: "GET /remove", Handler: handlers.Remove})
+	server.Start()
 }
 ```
 
@@ -45,8 +45,8 @@ with `SendFileOrElse()` before doing anything else.
 
 ```go
 //lib/handlers/default.go
-func Default(c *frz.Connection) {
-	c.SendFileOrElse(func() { Welcome(c) })
+func Default(con *libcon.Connection) {
+	con.SendFileOrElse(func() { Welcome(c) })
 }
 ```
 
@@ -60,8 +60,8 @@ All this handler does is send the `"Welcome"` view to the user with `SendView()`
 
 ```go
 //lib/handlers/welcome.go
-func Welcome(c *frz.Connection) {
-	c.SendView(frz.View{Name: "Welcome"})
+func Welcome(con *libcon.Connection) {
+	con.SendView(libview.View{Name: "Welcome"})
 }
 ```
 
@@ -91,7 +91,7 @@ These are key/value records.
 The keys are important, because they dictate the `Name` of the view, the actual property `Name` of the view.
 
 ```go
-frz.View{
+libview.View{
 	Name: "Welcome", // This.
 }
 ```
@@ -150,9 +150,9 @@ website.
 The server itself could choose to not serve a JavaScript bundle to the user.
 
 ```go
-frz.View{
+libview.View{
 	Name: "Welcome",
-	RenderMode: frz.RenderModeServer, // This will disable JavaScript.
+	RenderMode: libview.RenderModeServer, // This will disable JavaScript.
 }
 ```
 
@@ -168,9 +168,9 @@ retrieved from the session `state`.
 
 ```go
 //lib/handlers/todos.go
-func Todos(c *frz.Connection) {
-	state, _ := frz.Session(c, lib.NewState())
-	c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+func Todos(con *libcon.Connection) {
+	state, _ := libsession.Session(c, lib.NewState())
+	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
 		"todos": state.Todos,
 	}})
 }
@@ -210,11 +210,11 @@ does it automatically for you.
 In other words, **this is not needed**
 ```go
 //lib/handlers/todos.go
-func Todos(c *frz.Connection) {
-	state, operator := frz.Session(c, lib.NewState())
+func Todos(con *libcon.Connection) {
+	state, operator := libsession.Session(c, lib.NewState())
 	defer operator.Save(state) // Don't do it Anakin!
 
-	c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
 		"todos": state.Todos,
 	}})
 }
@@ -226,15 +226,15 @@ Something like this
 
 ```go
 //lib/handlers/todos.go
-func Todos(c *frz.Connection) {
-    state, operator := frz.Session(c, lib.NewState())
+func Todos(con *libcon.Connection) {
+    state, operator := libsession.Session(c, lib.NewState())
     defer operator.Save(state) // This is fine because 
                                // we're changing things below.
 
     state.Todos[0].Checked = false
     state.Todos[0].Description = "Hello there."
 
-    c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+    con.SendView(libview.View{Name: "Todos", Data: map[string]any{
         "todos": state.Todos,
     }})
 }
@@ -397,8 +397,8 @@ and behave like any other form, navigating away to the new path.
 
 ```go
 //lib/handlers/remove.go
-func Remove(c *frz.Connection) {
-	state, operator := frz.Session(c, lib.NewState())
+func Remove(con *libcon.Connection) {
+	state, operator := libsession.Session(c, lib.NewState())
 	defer operator.Save(state)
 
 	if 0 == len(state.Todos) {
@@ -406,7 +406,7 @@ func Remove(c *frz.Connection) {
 		return
 	}
 
-	index := c.ReceiveQuery("index")
+	index := con.ReceiveQuery("index")
 	if "" == index {
 		// No index found, ignore the request.
 		return
@@ -414,7 +414,7 @@ func Remove(c *frz.Connection) {
 
 	id, intError := strconv.ParseInt(index, 10, 64)
 	if nil != intError {
-		c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+		con.SendView(libview.View{Name: "Todos", Data: map[string]any{
 			"error": intError.Error(),
 		}})
 		return
@@ -424,12 +424,12 @@ func Remove(c *frz.Connection) {
 	state.Todos = append(state.Todos[:id], state.Todos[id+1:]...)
 
 	// This will update the user interface.
-	c.SendNavigate("/todos")
+	con.SendNavigate("/todos")
 }
 ```
 
 :::caution
-Notice the use of `c.ReceiveQuery("index")`.
+Notice the use of `con.ReceiveQuery("index")`.
 
 This is a reminder that, if not specified otherwise, 
 forms prefer using the `GET` verb.
@@ -447,7 +447,7 @@ The equivalent using the `POST` verb would be
 ```go
 //lib/handlers/remove.go
 // ...
-form := c.ReceiveForm()
+form := con.ReceiveForm()
 index := form.Get("index")
 // ...
 ```
@@ -493,11 +493,11 @@ Checking is handled by the `Check` handler.
 
 ```go
 //lib/handlers/check.go
-func Check(c *frz.Connection) {
-	state, operator := frz.Session(c, lib.NewState())
+func Check(con *libcon.Connection) {
+	state, operator := libsession.Session(c, lib.NewState())
 	defer operator.Save(state)
 
-	index := c.ReceiveQuery("index")
+	index := con.ReceiveQuery("index")
 	if "" == index {
 		// No index found, ignore the request.
 		return
@@ -505,7 +505,7 @@ func Check(c *frz.Connection) {
 
 	id, intError := strconv.ParseInt(index, 10, 64)
 	if nil != intError {
-		c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+		con.SendView(libview.View{Name: "Todos", Data: map[string]any{
 			"error": intError.Error(),
 		}})
 		return
@@ -515,7 +515,7 @@ func Check(c *frz.Connection) {
 	state.Todos[id].Checked = true
 
 	// This will update the client user interface.
-	c.SendNavigate("/todos")
+	con.SendNavigate("/todos")
 }
 ```
 
@@ -547,14 +547,14 @@ This form is then captured by the `Add` handler.
 
 ```go
 //lib/handlers/add.go
-func Add(c *frz.Connection) {
-	state, operator := frz.Session(c, lib.NewState())
+func Add(con *libcon.Connection) {
+	state, operator := libsession.Session(c, lib.NewState())
 	defer operator.Save(state)
 
-	description := c.ReceiveQuery("description")
+	description := con.ReceiveQuery("description")
 
 	if "" == description {
-		c.SendView(frz.View{Name: "Todos", Data: map[string]any{
+		con.SendView(libview.View{Name: "Todos", Data: map[string]any{
 			"todos": state.Todos,
 			"error": "todo description cannot be empty",
 		}})
@@ -571,7 +571,7 @@ func Add(c *frz.Connection) {
 	)
 
 	// This will update the client user interface.
-	c.SendNavigate("/todos")
+	con.SendNavigate("/todos")
 }
 ```
 

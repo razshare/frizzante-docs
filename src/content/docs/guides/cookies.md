@@ -8,10 +8,10 @@ Use `ReceiveCookie()` to retrieve cookies and `SendCookie()` to send them.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/frz"
+import "github.com/razshare/frizzante/libcon"
 
-func Hello(c *frz.Connection) {
-    cookie := c.ReceiveCookie("session-id") // Retrieves cookie.
-    c.SendCookie("session-id", cookie)      // Sends it back.
+func Hello(con *libcon.Connection) {
+    cookie := con.ReceiveCookie("session-id") // Retrieves cookie.
+    con.SendCookie("session-id", cookie)      // Sends it back.
 }
 ```

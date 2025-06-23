@@ -8,11 +8,11 @@ Use `ReceiveHeader()` to retrieve header fields and `SendHeader()` to send them.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/frz"
+import "github.com/razshare/frizzante/libcon"
 
-func Hello(c *frz.Connection) {
-    ctype := c.ReceiveHeader("Accept")  // Retrieves field "Accept".
-    c.SendHeader("Content-Type", ctype) // Sends it back.
+func Hello(con *libcon.Connection) {
+    accept := con.ReceiveHeader("Accept")  // Retrieves field "Accept".
+    con.SendHeader("Content-Type", accept) // Sends it back.
 }
 ```
 
