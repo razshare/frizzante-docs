@@ -110,15 +110,14 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/servers"
+    "github.com/razshare/frizzante/server"
 )
 
 //go:embed app/dist
-var dist embed.FS
-var server = servers.New()
+var efs embed.FS
 
 func main() {
-    server.Efs = dist
+    server.WithEfs(efs)
     server.AddRoute(routes.Route{
         Pattern: "GET /", 
         Handler: handlers.Hello,
