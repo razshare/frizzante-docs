@@ -18,7 +18,7 @@ import (
 type State struct{}
 
 func Hello(con *connections.Connection) {
-    state, operator := sessions.Start[State](con)
+    state, operator := sessions.Start(con, State{})
 }
 ```
 
@@ -60,39 +60,29 @@ type State struct{
 }
 
 func Hello(con *connections.Connection) {
-    state, operator := sessions.Start[State](con)
+    state, operator := sessions.Start(con, State{})
     defer operator.Save(state)
     state.Name = "world"
 }
 ```
 
-## Archive
+## Custom Archive
 
 Sessions are managed through the operator's `Archive` and 
-you can overwrite the default `Archive`.
+you can overwrite the default `Archive` using `sessions.WithArchive()`.
+
 
 ```go
-//lib/handlers/hello.go
-package handlers
+//main.go
 
-import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/sessions"
-)
+import "github.com/razshare/frizzante/sessions"
 
-type State struct{
-    Name string
-}
-
-func Hello(con *connections.Connection) {
-    state, operator := sessions.Start[State](con)
-    operator.Archive = MyCustomArchive
-    defer operator.Save(state)
-    state.Name = "world"
+func main(){
+    sessions.WithArchive(&CustomArchive{})
 }
 ```
 
-An `Archive` is an interface defined as follows
+Where `CustomArchive` implements `Archive`.
 
 ```go
 type Archive interface {
@@ -105,7 +95,9 @@ type Archive interface {
 }
 ```
 
-Think of it as a repository of data separated in two layers, `domains` and `keys`.
+### Archive Details
+
+Think of an `Archive` as a repository of data separated in two layers; `domains` and `keys`.
 
 An archive contains `domains` which contains `keys`.
 
@@ -119,8 +111,10 @@ An archive contains `domains` which contains `keys`.
             - key-y.txt
 </FileTree>
 
+### Default Archive
+
 The default operator archive is backed by the file system,
-more specifically, in a `.gen/sessions` directory.
+more specifically, by a `.gen/sessions` directory.
 
 <FileTree>
     - .gen
