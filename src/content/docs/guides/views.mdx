@@ -68,13 +68,13 @@ Use `SendView()` to send a view from a route handler.
 package lib
 
 import (
-    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/connections"
     "github.com/razshare/frizzante/libview"
 )
 
-func Hello(con *libcon.Connection) {
+func Hello(con *connections.Connection) {
     // Sends file "app/lib/components/views/Hello.svelte"
-    con.SendView(libview.View{Name: "Hello"}) 
+    con.SendView(views.View{Name: "Hello"}) 
 }
 ```
 
@@ -91,13 +91,13 @@ However, you can use `SendFileOrElse()` in order to send a file or run custom lo
 package lib
 
 import (
-    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/connections"
     "github.com/razshare/frizzante/libview"
 )
 
-func Hello(con *libcon.Connection) {
+func Hello(con *connections.Connection) {
     con.SendFileOrElse(func () {
-        con.SendView(libview.View{Name: "Hello"})
+        con.SendView(views.View{Name: "Hello"})
     })
 }
 ```
@@ -110,16 +110,16 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/libsrv"
+    "github.com/razshare/frizzante/servers"
 )
 
 //go:embed app/dist
 var dist embed.FS
-var server = libsrv.NewServer()
+var server = servers.New()
 
 func main() {
     server.Efs = dist
-    server.AddRoute(libsrv.Route{
+    server.AddRoute(routes.Route{
         Pattern: "GET /", 
         Handler: handlers.Hello,
     })
@@ -136,12 +136,12 @@ Optionally, you can send data along with the views by adding a `Data` property t
 package lib
 
 import (
-    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/connections"
     "github.com/razshare/frizzante/libview"
 )
 
-func Hello(con *libcon.Connection) {
-    con.SendView(libview.View{ 
+func Hello(con *connections.Connection) {
+    con.SendView(views.View{ 
         Name: "Hello",
         Data: map[string]string{
             "name": "world",
@@ -187,15 +187,15 @@ You can choose how to render views with the `RenderMode` property.
         package lib
 
         import (
-            "github.com/razshare/frizzante/libcon"
+            "github.com/razshare/frizzante/connections"
             "github.com/razshare/frizzante/libview"
         )
 
-        func Hello(con *libcon.Connection) {
-            con.SendView(libview.View{
+        func Hello(con *connections.Connection) {
+            con.SendView(views.View{
                 Name: "Hello",
-                RenderMode: libview.RenderModeFull, // Renders on server 
-                                                   // and client.
+                RenderMode: views.RenderModeFull, // Renders on server 
+                                                  // and client.
             })
         }
         ```
@@ -209,14 +209,14 @@ You can choose how to render views with the `RenderMode` property.
         package lib
 
         import (
-            "github.com/razshare/frizzante/libcon"
+            "github.com/razshare/frizzante/connections"
             "github.com/razshare/frizzante/libview"
         )
 
-        func Hello(con *libcon.Connection) {
-            con.SendView(libview.View{
+        func Hello(con *connections.Connection) {
+            con.SendView(views.View{
                 Name: "Hello",
-                RenderMode: libview.RenderModeServer, // Renders on server.
+                RenderMode: views.RenderModeServer, // Renders on server.
             })
         }
         ```
@@ -238,14 +238,14 @@ You can choose how to render views with the `RenderMode` property.
         package lib
 
         import (
-            "github.com/razshare/frizzante/libcon"
+            "github.com/razshare/frizzante/connections"
             "github.com/razshare/frizzante/libview"
         )
 
-        func Hello(con *libcon.Connection) {
-            con.SendView(libview.View{
+        func Hello(con *connections.Connection) {
+            con.SendView(views.View{
                 Name: "Hello",
-                RenderMode: libview.RenderModeClient, // Renders on client.
+                RenderMode: views.RenderModeClient, // Renders on client.
             })
         }
         ```

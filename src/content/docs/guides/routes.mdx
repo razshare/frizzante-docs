@@ -11,13 +11,13 @@ You can add a new route to the server with `AddRoute()`.
 package main
 
 import (
-    "github.com/razshare/frizzante/libsrv"
+    "github.com/razshare/frizzante/servers"
     "main/lib/handlers"
 )
 
-var server = libsrv.NewServer()
+var server = servers.New()
 
-var hello = libsrv.Route{
+var hello = routes.Route{
     Pattern: "GET /", 
     Handler: handlers.Hello,
 }
@@ -32,9 +32,9 @@ func main() {
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/libcon"
+import "github.com/razshare/frizzante/connections"
 
-func Hello(con *libcon.Connection) {
+func Hello(con *connections.Connection) {
     con.SendMessage("Hello") // Sends text.
 }
 ```

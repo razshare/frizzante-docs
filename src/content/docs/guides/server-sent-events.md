@@ -5,7 +5,7 @@ title: Server Sent Events
 Use `SendSseUpgrade()` to upgrade the connection to server sent events.
 
 ```go
-libsrv.Route{Pattern: "GET /sse", Handler: handlers.Hello}
+routes.Route{Pattern: "GET /sse", Handler: handlers.Hello}
 ```
 
 ```go
@@ -13,11 +13,11 @@ libsrv.Route{Pattern: "GET /sse", Handler: handlers.Hello}
 package handlers
 
 import (
-    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/connections"
     "time"
 )
 
-func Hello(con *libcon.Connection) {
+func Hello(con *connections.Connection) {
     alive := con.IsAlive()         // Tracks request status.
     ev := con.SendSseUpgrade()     // Sends sse upgrade.
     for *alive {                   // Loops until cancellation.

@@ -9,12 +9,12 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/libsrv"
+    "github.com/razshare/frizzante/servers"
 )
 
 //go:embed app/dist
 var efs embed.FS
-var server = libsrv.NewServer()
+var server = servers.New()
 
 func main() {
     server.Efs = efs

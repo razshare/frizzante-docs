@@ -5,7 +5,7 @@ title: Web Sockets
 Use `SendWsUpgrade()` to upgrade the connection to web sockets.
 
 ```go
-libsrv.Route{Pattern: "GET /ws", Handler: handlers.Hello}
+routes.Route{Pattern: "GET /ws", Handler: handlers.Hello}
 ```
 
 ```go
@@ -17,7 +17,7 @@ import (
     "time"
 )
 
-func Hello(con *libcon.Connection) {
+func Hello(con *connections.Connection) {
     alive := con.IsAlive()             // Tracks request status.
     con.SendWsUpgrade()                // Sends ws upgrade.
     for *alive {                       // Loops until cancellation.

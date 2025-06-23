@@ -2,15 +2,15 @@
 title: Start server
 ---
 
-Use `NewServer().Start()` to create and start a new server.
+Use `servers.New().Start()` to create and start a new server.
 
 ```go
 //main.go
 package main
 
-import "github.com/razshare/frizzante/libsrv"
+import "github.com/razshare/frizzante/servers"
 
 func main() {
-    libsrv.NewServer().Start()
+    servers.New().Start()
 }
 ```

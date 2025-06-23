@@ -8,9 +8,9 @@ Use `SendStatus()` to send the status of the response.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/libcon"
+import "github.com/razshare/frizzante/connections"
 
-func Hello(con *libcon.Connection) {
+func Hello(con *connections.Connection) {
     con.SendStatus(404)                    // Sends status 404.
     con.SendMessage("Resource not found.") // Sends text.
 }

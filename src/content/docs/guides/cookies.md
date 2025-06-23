@@ -8,9 +8,9 @@ Use `ReceiveCookie()` to retrieve cookies and `SendCookie()` to send them.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/libcon"
+import "github.com/razshare/frizzante/connections"
 
-func Hello(con *libcon.Connection) {
+func Hello(con *connections.Connection) {
     cookie := con.ReceiveCookie("session-id") // Retrieves cookie.
     con.SendCookie("session-id", cookie)      // Sends it back.
 }

@@ -4,21 +4,21 @@ title: Sessions
 
 import { FileTree } from '@astrojs/starlight/components'
 
-Use `Session()` to start a session.
+Use `sessions.Start()` to start a session.
 
 ```go
 //lib/handlers/hello.go
 package handlers
 
 import (
-    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/connections"
     "github.com/razshare/frizzante/libsession"
 )
 
 type State struct{}
 
-func Hello(con *libcon.Connection) {
-    state, operator := libsession.Session(con, State{})
+func Hello(con *connections.Connection) {
+    state, operator := sessions.Start[State](con)
 }
 ```
 
@@ -27,12 +27,12 @@ This will retrieve the user's session or create a new one if none is found.
 :::note
 The session is retrieved based on the user's `session-id` cookie.
 
-When session retrieval fails, `Session()` creates a 
+When session retrieval fails, `sessions.Start()` creates a 
 new session instead and sends a new `session-id` cookie to the user.
 :::
 
 :::danger
-Since `Session()` may send a cookie, it is important to remember that
+Since `sessions.Start()` may send a cookie, it is important to remember that
 the order in which data is sent to the user matters.
 
 Read more about [order of operations](../order-of-operations).
@@ -42,7 +42,7 @@ Read more about [order of operations](../order-of-operations).
 
 Session state and session operations are handled separately.
 
-When invoking `Session()`, you're given back a `state` and an `operator`.
+When invoking `sessions.Start()`, you're given back a `state` and an `operator`.
 
 Use the `operator` to save, reload or destroy the state.
 
@@ -51,7 +51,7 @@ Use the `operator` to save, reload or destroy the state.
 package handlers
 
 import (
-    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/connections"
     "github.com/razshare/frizzante/libsession"
 )
 
@@ -59,8 +59,8 @@ type State struct{
     Name string
 }
 
-func Hello(con *libcon.Connection) {
-    state, operator := libsession.Session(con, State{})
+func Hello(con *connections.Connection) {
+    state, operator := sessions.Start[State](con)
     defer operator.Save(state)
     state.Name = "world"
 }
@@ -68,16 +68,15 @@ func Hello(con *libcon.Connection) {
 
 ## Archive
 
-Sessions are managed through the operator's `Archive`.
-
-You can overwrite the default `Archive` of any operator using `WithArchive()`.
+Sessions are managed through the operator's `Archive` and 
+you can overwrite the default `Archive`.
 
 ```go
 //lib/handlers/hello.go
 package handlers
 
 import (
-    "github.com/razshare/frizzante/libcon"
+    "github.com/razshare/frizzante/connections"
     "github.com/razshare/frizzante/libsession"
 )
 
@@ -85,9 +84,9 @@ type State struct{
     Name string
 }
 
-func Hello(con *libcon.Connection) {
-    state, operator := libsession.Session(con, State{})
-    operator.WithArchive(MyCustomArchive)
+func Hello(con *connections.Connection) {
+    state, operator := sessions.Start[State](con)
+    operator.Archive = MyCustomArchive
     defer operator.Save(state)
     state.Name = "world"
 }

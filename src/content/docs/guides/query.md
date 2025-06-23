@@ -8,9 +8,9 @@ Use `ReceiveQuery()` to retrieve query fields.
 //lib/handlers/hello.go
 package handlers
 
-import "github.com/razshare/frizzante/libcon"
+import "github.com/razshare/frizzante/connections"
 
-func Hello(con *libcon.Connection) {
+func Hello(con *connections.Connection) {
     name := con.ReceiveQuery("name") // Retrieves field "name".
     con.SendMessage("Hello " + name) // Sends text.
 }

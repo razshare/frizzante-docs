@@ -17,16 +17,19 @@ First of all every interaction happens through a `GET` verb.
 
 ```go
 //main.go
-var server = libsrv.NewServer().
+//go:embed app/dist
+var efs embed.FS
+var server = servers.New()
+
 func main() {
 	server.Efs = efs
-	server.AddRoute(libsrv.Route{Pattern: "GET /", Handler: handlers.Default})
-	server.AddRoute(libsrv.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
-	server.AddRoute(libsrv.Route{Pattern: "GET /todos", Handler: handlers.Todos})
-	server.AddRoute(libsrv.Route{Pattern: "GET /check", Handler: handlers.Check})
-	server.AddRoute(libsrv.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
-	server.AddRoute(libsrv.Route{Pattern: "GET /add", Handler: handlers.Add})
-	server.AddRoute(libsrv.Route{Pattern: "GET /remove", Handler: handlers.Remove})
+	server.AddRoute(routes.Route{Pattern: "GET /", Handler: handlers.Default})
+	server.AddRoute(routes.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
+	server.AddRoute(routes.Route{Pattern: "GET /todos", Handler: handlers.Todos})
+	server.AddRoute(routes.Route{Pattern: "GET /check", Handler: handlers.Check})
+	server.AddRoute(routes.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
+	server.AddRoute(routes.Route{Pattern: "GET /add", Handler: handlers.Add})
+	server.AddRoute(routes.Route{Pattern: "GET /remove", Handler: handlers.Remove})
 	server.Start()
 }
 ```
@@ -45,7 +48,7 @@ with `SendFileOrElse()` before doing anything else.
 
 ```go
 //lib/handlers/default.go
-func Default(con *libcon.Connection) {
+func Default(con *connections.Connection) {
 	con.SendFileOrElse(func() { Welcome(con) })
 }
 ```
@@ -60,8 +63,8 @@ All this handler does is send the `"Welcome"` view to the user with `SendView()`
 
 ```go
 //lib/handlers/welcome.go
-func Welcome(con *libcon.Connection) {
-	con.SendView(libview.View{Name: "Welcome"})
+func Welcome(con *connections.Connection) {
+	con.SendView(views.View{Name: "Welcome"})
 }
 ```
 
@@ -91,7 +94,7 @@ These are key/value records.
 The keys are important, because they dictate the `Name` of the view, the actual property `Name` of the view.
 
 ```go
-libview.View{
+views.View{
 	Name: "Welcome", // This.
 }
 ```
@@ -150,9 +153,9 @@ website.
 The server itself could choose to not serve a JavaScript bundle to the user.
 
 ```go
-libview.View{
+views.View{
 	Name: "Welcome",
-	RenderMode: libview.RenderModeServer, // This will disable JavaScript.
+	RenderMode: views.RenderModeServer, // This will disable JavaScript.
 }
 ```
 
@@ -168,9 +171,13 @@ retrieved from the session `state`.
 
 ```go
 //lib/handlers/todos.go
-func Todos(con *libcon.Connection) {
-	state, _ := libsession.Session(con, lib.NewState())
-	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
+func Todos(con *connections.Connection) {
+	state, operator := sessions.Start[lib.State](con)
+	if state.Todos == nil {
+		state.Todos = lib.InitialTodos()
+	}
+	defer operator.Save(state)
+	con.SendView(views.View{Name: "Todos", Data: map[string]any{
 		"todos": state.Todos,
 	}})
 }
@@ -180,19 +187,17 @@ As mentioned in the [sessions](../../guides/sessions) section,
 the default session operator handles things in a local `sessions` directory.
 
 Initially, the session state has a few items in it, which are initialized by 
-`NewState()`.
+`InitialTodos()`.
 
 ```go
 //lib/state.go
-func NewState() State {
-	return State{
-		Todos: []Todo{
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Do laundry"},
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Cook"},
-			{Checked: false, Description: "Pet the cat."},
-		},
+func InitialTodos() []Todo {
+	return []Todo{
+		{Checked: false, Description: "Pet the cat."},
+		{Checked: false, Description: "Do laundry"},
+		{Checked: false, Description: "Pet the cat."},
+		{Checked: false, Description: "Cook"},
+		{Checked: false, Description: "Pet the cat."},
 	}
 }
 ```
@@ -202,44 +207,6 @@ is found for the user.
 
 If the session is a fresh one instead, the initial state remains untouched,
 thus the final `state` variable will always contain the 5 todo items when initialized.
-
-:::tip
-You don't need to check and `Save()` your fresh sessions because `Session()`
-does it automatically for you.
-
-In other words, **this is not needed**
-```go
-//lib/handlers/todos.go
-func Todos(con *libcon.Connection) {
-	state, operator := libsession.Session(con, lib.NewState())
-	defer operator.Save(state) // Don't do it Anakin!
-
-	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
-		"todos": state.Todos,
-	}})
-}
-```
-
-Only use `Save()` if you're actually making changes to the state inside your handler.
-
-Something like this
-
-```go
-//lib/handlers/todos.go
-func Todos(con *libcon.Connection) {
-    state, operator := libsession.Session(con, lib.NewState())
-    defer operator.Save(state) // This is fine because 
-                               // we're changing things below.
-
-    state.Todos[0].Checked = false
-    state.Todos[0].Description = "Hello there."
-
-    con.SendView(libview.View{Name: "Todos", Data: map[string]any{
-        "todos": state.Todos,
-    }})
-}
-```
-:::
 
 ## Todos View
 
@@ -397,33 +364,44 @@ and behave like any other form, navigating away to the new path.
 
 ```go
 //lib/handlers/remove.go
-func Remove(con *libcon.Connection) {
-	state, operator := libsession.Session(con, lib.NewState())
+func Remove(con *connections.Connection) {
+	state, operator := sessions.Start[lib.State](con)
+	if state.Todos == nil {
+		state.Todos = lib.InitialTodos()
+	}
 	defer operator.Save(state)
 
-	if 0 == len(state.Todos) {
-		// No items found, ignore the request.
-		return
-	}
+	count := int64(len(state.Todos))
 
-	index := con.ReceiveQuery("index")
-	if "" == index {
+	if 0 == count {
 		// No index found, ignore the request.
+		con.SendNavigate("/todos")
 		return
 	}
 
-	id, intError := strconv.ParseInt(index, 10, 64)
-	if nil != intError {
-		con.SendView(libview.View{Name: "Todos", Data: map[string]any{
-			"error": intError.Error(),
+	indexString := con.ReceiveQuery("index")
+	if "" == indexString {
+		// No index found, ignore the request.
+		con.SendNavigate("/todos")
+		return
+	}
+
+	index, indexError := strconv.ParseInt(indexString, 10, 64)
+	if nil != indexError {
+		con.SendView(views.View{Name: "Todos", Data: map[string]any{
+			"error": indexError.Error(),
 		}})
 		return
 	}
 
-	// Removes item from session.
-	state.Todos = append(state.Todos[:id], state.Todos[id+1:]...)
+	if index >= count {
+		// Index is out of bounds, ignore the request.
+		con.SendNavigate("/todos")
+		return
+	}
 
-	// This will update the user interface.
+	state.Todos = append(state.Todos[:index], state.Todos[index+1:]...)
+
 	con.SendNavigate("/todos")
 }
 ```
@@ -448,7 +426,7 @@ The equivalent using the `POST` verb would be
 //lib/handlers/remove.go
 // ...
 form := con.ReceiveForm()
-index := form.Get("index")
+indexString := form.Get("index")
 // ...
 ```
 :::
@@ -493,32 +471,38 @@ Checking is handled by the `Check` handler.
 
 ```go
 //lib/handlers/check.go
-func Check(con *libcon.Connection) {
-	state, operator := libsession.Session(con, lib.NewState())
+func Check(con *connections.Connection) {
+	state, operator := sessions.Start[lib.State](con)
+	if state.Todos == nil {
+		state.Todos = lib.InitialTodos()
+	}
 	defer operator.Save(state)
 
-	index := con.ReceiveQuery("index")
-	if "" == index {
+	indexString := con.ReceiveQuery("index")
+	if "" == indexString {
 		// No index found, ignore the request.
+		con.SendNavigate("/todos")
 		return
 	}
 
-	id, intError := strconv.ParseInt(index, 10, 64)
-	if nil != intError {
-		// This will update the user interface.
-		con.SendView(libview.View{Name: "Todos", Data: map[string]any{
-			"error": intError.Error(),
+	index, indexError := strconv.ParseInt(indexString, 10, 64)
+	if nil != indexError {
+		con.SendView(views.View{Name: "Todos", Data: map[string]any{
+			"error": indexError.Error(),
 		}})
 		return
 	}
 
-	// Checks the item.
-	state.Todos[id].Checked = true
+	count := int64(len(state.Todos))
+	if index >= count {
+		// Index is out of bounds, ignore the request.
+		con.SendNavigate("/todos")
+		return
+	}
 
-	// This will update the user interface.
-	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
-		"todos": state.Todos,
-	}})
+	state.Todos[index].Checked = true
+
+	con.SendNavigate("/todos")
 }
 ```
 
@@ -550,34 +534,29 @@ This form is then captured by the `Add` handler.
 
 ```go
 //lib/handlers/add.go
-func Add(con *libcon.Connection) {
-	state, operator := libsession.Session(con, lib.NewState())
+func Add(con *connections.Connection) {
+	state, operator := sessions.Start[lib.State](con)
+	if state.Todos == nil {
+		state.Todos = lib.InitialTodos()
+	}
 	defer operator.Save(state)
 
 	description := con.ReceiveQuery("description")
 
 	if "" == description {
-		// This will update the user interface.
-		con.SendView(libview.View{Name: "Todos", Data: map[string]any{
+		con.SendView(views.View{Name: "Todos", Data: map[string]any{
 			"todos": state.Todos,
 			"error": "todo description cannot be empty",
 		}})
 		return
 	}
 
-	// Adds the item to the session.
-	state.Todos = append(
-		state.Todos, 
-		lib.Todo{
-			Checked: false, 
-			Description: description,
-		},
-	)
+	state.Todos = append(state.Todos, lib.Todo{
+		Checked: false, 
+		Description: description,
+	})
 
-	// This will update the user interface.
-	con.SendView(libview.View{Name: "Todos", Data: map[string]any{
-		"todos": state.Todos,
-	}})
+	con.SendNavigate("/todos")
 }
 ```
 
