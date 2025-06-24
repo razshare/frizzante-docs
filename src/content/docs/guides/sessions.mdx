@@ -44,7 +44,7 @@ Session state and session operations are handled separately.
 
 When invoking `sessions.Start()`, you're given back a `state` and an `operator`.
 
-Use the `operator` to save, reload or destroy the state.
+Use the `operator` to save, reload or destroy the `state`.
 
 ```go
 //lib/handlers/hello.go
@@ -104,11 +104,11 @@ An archive contains `domains` which contains `keys`.
 <FileTree>
     - archive
         - domain-1
-            - key-a.txt
-            - key-b.txt
+            - key-a
+            - key-b
         - domain-2
-            - key-x.txt
-            - key-y.txt
+            - key-x
+            - key-y
 </FileTree>
 
 ### Default Archive
