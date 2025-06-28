@@ -6,23 +6,20 @@ import { Tabs, TabItem, FileTree, CardGrid, Card, Steps } from '@astrojs/starlig
 
 Frizzante is a minimalistic and opinionated web server framework written in Go that uses Svelte to render pages.
 
-## Prerequisites
+:::note
+#### Prerequisites
 
-Make sure you have `build-essential`, `curl` and `unzip` installed on your machine.
+Make sure you have `go`, `build-essential`, `curl` and `unzip` installed on your machine.
 
 ```sh
-sudo apt install build-essential unzip curl
+sudo apt install build-essential unzip curl && \
+go install github.com/razshare/frizzante@latest
 ```
+:::
 
-## Create Project
 
 <Steps>
-1. Install frizzante
-    ```sh
-    go install github.com/razshare/frizzante@latest
-    ```
-    
-1. Create project
+1. Create project with
     ```sh
     frizzante -c MyProject
     ```
