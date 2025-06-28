@@ -29,15 +29,9 @@ go install github.com/razshare/frizzante@latest
     make install
     ```
 
-1. Start development with
-
-    ```sh
-    make dev
-    ```
-
     :::tip
     The default makefile uses [Bun](https://bun.sh/) to install 
-    dependencies while in development mode.
+    dependencies and compile your svelte application into JavaScript.
 
     You can swap Bun out with whatever runtime you want to use to develop 
     by replacing all `bun` references within the makefile with 
@@ -47,6 +41,12 @@ go install github.com/razshare/frizzante@latest
     Bun is only used to compile `.svelte` files into `.js` files 
     in development mode or when building for production.
     :::
+
+1. Start development with
+
+    ```sh
+    make dev
+    ```
 
 1. Build with
 
