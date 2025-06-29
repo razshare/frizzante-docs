@@ -11,12 +11,13 @@ You can add a new route to the server with `AddRoute()`.
 package main
 
 import (
-    "github.com/razshare/frizzante/routes"
-    "github.com/razshare/frizzante/server"
+    "github.com/razshare/frizzante/web"
     "main/lib/handlers"
 )
 
-var hello = routes.Route{
+var server = web.NewServer()
+
+var hello = web.Route{
     Pattern: "GET /", 
     Handler: handlers.Hello,
 }

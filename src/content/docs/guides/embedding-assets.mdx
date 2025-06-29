@@ -4,21 +4,22 @@ title: Embedding Assets
 
 You can embed assets into your binary so that you don't have to carry around your `app/dist` directory.
 
-Use `server.WithEfs()` to set the server embedded file system.
+Use the server's `Efs` property to set the embedded file system.
 
 ```go
 package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/server"
+    "github.com/razshare/frizzante/web"
 )
 
 //go:embed app/dist
 var efs embed.FS
+var server = web.NewServer()
 
 func main() {
-    server.WithEfs(efs)
+    server.Efs = efs
     server.Start()
 }
 ```
