@@ -71,7 +71,7 @@ func Welcome(con *connections.Connection) {
 This `"Welcome"` view is exported by the application for both the client and the server.
 
 ```ts
-//app/lib/exports/server.ts
+//exports/server.ts
 import Welcome from "$lib/views/Welcome.svelte"
 import Todos from "$lib/views/Todos.svelte"
 
@@ -82,7 +82,7 @@ export const views = {
 ```
 
 ```ts
-//app/lib/exports/client.ts
+//exports/client.ts
 export const views = {
     "Welcome": import("$lib/views/Welcome.svelte"), // Exporting "Welcome".
     "Todos": import("$lib/views/Todos.svelte"),
@@ -108,7 +108,7 @@ to `"/todos"`.
 //app/lib/views/Welcome.svelte
 <script lang="ts">
     import Layout from "$lib/components/Layout.svelte"
-    import { href } from "$lib/utilities/frz/scripts/href.ts"
+    import { href } from "$frizzante/scripts/href.ts"
 </script>
 
 <Layout title="Welcome">
@@ -125,7 +125,7 @@ Instead it uses the `href()` function to set said attribute.
 This is because in reality `href()` also returns a `onclick` handler.
 
 ```ts
-//app/lib/utilities/frz/href.ts
+//frizzante/scripts/href.ts
 export function href(path = ""): {
     href: string
     onclick: (e: MouseEvent) => void
@@ -225,8 +225,8 @@ This `"Todos"` view does quite a few things.
 //app/lib/views/Todos.svelte
 <script lang="ts">
     import Layout from "$lib/components/Layout.svelte"
-    import { action } from "$lib/utilities/frz/scripts/action.ts"
-    import { href } from "$lib/utilities/frz/scripts/href.ts"
+    import { action } from "$frizzante/scripts/action.ts"
+    import { href } from "$frizzante/scripts/href.ts"
 
     type Todo = {
         Checked: boolean

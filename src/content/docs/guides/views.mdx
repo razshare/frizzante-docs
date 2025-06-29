@@ -5,7 +5,7 @@ title: Views
 import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components'
 
 Views are **svelte components** exported by 
-`app/lib/exports/server.ts` and/or `app/lib/exports/client.ts`.
+`exports/server.ts` and/or `exports/client.ts`.
 
 <FileTree>
     - main.go
@@ -21,7 +21,7 @@ Views are **svelte components** exported by
     <TabItem icon='seti:typescript' label='Server exports'>
     Views that are meant to be rendered on the server should be exported by this file.
     ```ts
-    //app/lib/exports/server.ts
+    //exports/server.ts
     import Welcome from '$lib/views/Welcome.svelte'
     import Profile from '$lib/views/Profile.svelte'
 
@@ -34,7 +34,7 @@ Views are **svelte components** exported by
     <TabItem icon='seti:typescript' label='Client exports'>
     Views that are meant to be rendered on the client should be exported by this file.
     ```ts
-    //app/lib/exports/client.ts
+    //exports/client.ts
     export const views = {
         "Welcome": import('$lib/views/Welcome.svelte'),
         "Profile": import('$lib/views/Profile.svelte'),
@@ -47,7 +47,7 @@ Views are **svelte components** exported by
     when transitioning between views.
     
     ```ts
-    //app/lib/exports/client.ts
+    //exports/client.ts
     import Welcome from '$lib/views/Welcome.svelte'
     import Profile from '$lib/views/Profile.svelte'
 
@@ -168,7 +168,7 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 ```svelte
 //app/lib/views/Hello.svelte
 <script lang="ts">
-    import type { View } from "$lib/utilities/frz/types.ts"
+    import type { View } from "$frizzante/types.ts"
     const view = getContext("view") as View<{ name: string }>
 </script>
 
