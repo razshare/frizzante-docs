@@ -1,15 +1,14 @@
 ---
-title: Get Started
+title: What is frizzante?
 ---
 
 import { Tabs, TabItem, FileTree, CardGrid, Card, Steps } from '@astrojs/starlight/components';
 
-Frizzante is an opinionated web server framework written in Go that uses Svelte to render pages.
+Frizzante is an opinionated web server framework written in Go that uses Svelte to render web pages.
 
-:::note
 #### Prerequisites
 
-Install `frizzante`, `air`, `bun`, `build-essential`
+Install `frizzante`, `air`, `bun`, `build-essential`.
 
 ```sh
 sudo apt install build-essential
@@ -18,13 +17,16 @@ which air || go install github.com/air-verse/air@latest
 which bun || curl -fsSL https://bun.sh/install | bash
 ```
 
-and add Go binaries to your path
+:::tip
+Remember to add Go binaries to your path.
 
 ```sh
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 ```
 :::
+
+#### Get Started
 
 <Steps>
 1. Create project with
