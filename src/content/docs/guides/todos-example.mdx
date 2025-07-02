@@ -71,7 +71,7 @@ func Welcome(con *connections.Connection) {
 This `"Welcome"` view is exported by the application for both the client and the server.
 
 ```ts
-//exports/server.ts
+//app/exports/server.ts
 import Welcome from "$lib/views/Welcome.svelte"
 import Todos from "$lib/views/Todos.svelte"
 
@@ -82,7 +82,7 @@ export const views = {
 ```
 
 ```ts
-//exports/client.ts
+//app/exports/client.ts
 export const views = {
     "Welcome": import("$lib/views/Welcome.svelte"), // Exporting "Welcome".
     "Todos": import("$lib/views/Todos.svelte"),

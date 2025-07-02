@@ -5,21 +5,22 @@ title: Views
 import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components'
 
 Views are **svelte components** exported by 
-`exports/server.ts` and/or `exports/client.ts`.
+`app/exports/server.ts` and/or `app/exports/client.ts`.
 
 <FileTree>
     - main.go
-    - exports
-        - client.ts
-        - server.ts
-        - ...
+    - app
+        - exports
+            - client.ts
+            - server.ts
+            - ...
 </FileTree>
 
 <Tabs>
     <TabItem icon='seti:typescript' label='Server exports'>
     Views that are meant to be rendered on the server should be exported by this file.
     ```ts
-    //exports/server.ts
+    //app/exports/server.ts
     import Welcome from '$lib/views/Welcome.svelte'
     import Profile from '$lib/views/Profile.svelte'
 
@@ -32,7 +33,7 @@ Views are **svelte components** exported by
     <TabItem icon='seti:typescript' label='Client exports'>
     Views that are meant to be rendered on the client should be exported by this file.
     ```ts
-    //exports/client.ts
+    //app/exports/client.ts
     export const views = {
         "Welcome": import('$lib/views/Welcome.svelte'),
         "Profile": import('$lib/views/Profile.svelte'),
@@ -45,7 +46,7 @@ Views are **svelte components** exported by
     when transitioning between views.
     
     ```ts
-    //exports/client.ts
+    //app/exports/client.ts
     import Welcome from '$lib/views/Welcome.svelte'
     import Profile from '$lib/views/Profile.svelte'
 
