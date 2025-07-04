@@ -5,7 +5,7 @@ title: Web Sockets
 Use `SendWsUpgrade()` to upgrade the connection to web sockets.
 
 ```go
-routes.Route{Pattern: "GET /ws", Handler: handlers.Hello}
+web.Route{Pattern: "GET /ws", Handler: handlers.Hello}
 ```
 
 ```go

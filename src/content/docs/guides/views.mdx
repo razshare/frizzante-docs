@@ -119,7 +119,7 @@ var server = web.NewServer()
 
 func main() {
     server.Efs = efs
-    server.AddRoute(routes.Route{
+    server.AddRoute(web.Route{
         Pattern: "GET /", 
         Handler: handlers.Hello,
     })

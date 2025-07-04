@@ -6,9 +6,9 @@ Use `ReceiveForm()` to retrieve and parse forms
 when using `POST` and `PUT` http verbs.
 
 ```go
-routes.Route{Pattern: "POST /", Handler: handlers.Hello}
+web.Route{Pattern: "POST /", Handler: handlers.Hello}
 // or
-routes.Route{Pattern: "PUT /", Handler: handlers.Hello}
+web.Route{Pattern: "PUT /", Handler: handlers.Hello}
 ```
 
 ```go
