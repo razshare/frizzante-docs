@@ -33,7 +33,7 @@ Then consume the web socket on the client.
 
 ```svelte
 <script lang="ts">
-    import {source} from "$lib/utilities/scripts/source.ts";
+    import {source} from "$frizzante/scripts/source.ts";
     const messages = [] as string[]
     const con = new WebSocket("/ws") // Connects to handler.
     con.send("hello")                // Sends message.

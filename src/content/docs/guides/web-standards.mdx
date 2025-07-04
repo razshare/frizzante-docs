@@ -10,7 +10,7 @@ You can use adaptive hyperlinks with `href()` and adaptive forms with `action()`
     <TabItem label="Adaptive Hyperlinks" icon='seti:svelte'>
         ```svelte
         <script lang="ts">
-            import { href } from "$lib/utilities/scripts/href.ts"
+            import { href } from "$frizzante/scripts/href.ts"
         </script>
 
         <a {...href("/some-other-page")}> Go to some other page </a>
@@ -19,7 +19,7 @@ You can use adaptive hyperlinks with `href()` and adaptive forms with `action()`
     <TabItem label="Adaptive  Forms" icon='seti:svelte'>
         ```svelte
         <script lang="ts">
-            import { action } from "$lib/utilities/scripts/action.ts"
+            import { action } from "$frizzante/scripts/action.ts"
         </script>
 
         <form {...action("/process")}>

@@ -34,7 +34,7 @@ Then consume the stream on the client.
 
 ```svelte
 <script lang="ts">
-    import {source} from "$lib/utilities/scripts/source.ts";
+    import {source} from "$frizzante/scripts/source.ts";
     const con = source("/sse")         // Connects to the handler.
     const c1 = con.select("channel-1") // Listens to "channel-1"
     const c2 = con.select("channel-2") // Listens to "channel-2"
