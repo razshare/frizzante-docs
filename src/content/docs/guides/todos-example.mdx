@@ -167,18 +167,18 @@ the hyperlink will continue to work by falling back to its standard behavior.
 ## Todos Handler
 
 It sends the `"Todos"` view to the user, along with a list of todos, which is
-retrieved from the session `state`.
+retrieved from the session state.
 
 ```go
 //lib/handlers/todos.go
 func Todos(con *connections.Connection) {
-	state, operator := sessions.Start(con, lib.InitialState())
-	defer operator.Save(state)
+	session := sessions.Start(con, lib.InitialState())
+	defer session.Save()
 
 	con.SendView(views.View{
 		Name: "Todos", 
 		Data: map[string]any{
-			"todos": state.Todos,
+			"todos": session.State.Todos,
 		},
 	})
 }
@@ -209,7 +209,7 @@ This state is immediately overwritten by the session operator if an existing ses
 is found for the user.
 
 If the session is a fresh one instead, the initial state remains untouched,
-thus the final `state` variable will always contain the 5 todo items when initialized.
+thus the final `session.State` property will always contain the 5 todo items when initialized.
 
 ## Todos View
 
@@ -368,10 +368,10 @@ and behave like any other form, navigating away to the new path.
 ```go
 //lib/handlers/remove.go
 func Remove(con *connections.Connection) {
-	state, operator := sessions.Start(con, lib.InitialState())
-	defer operator.Save(state)
+	session := sessions.Start(con, lib.InitialState())
+	defer session.Save()
 
-	count := int64(len(state.Todos))
+	count := int64(len(session.State.Todos))
 
 	if 0 == count {
 		// No index found, ignore the request.
@@ -403,7 +403,10 @@ func Remove(con *connections.Connection) {
 		return
 	}
 
-	state.Todos = append(state.Todos[:index], state.Todos[index+1:]...)
+	session.State.Todos = append(
+		session.State.Todos[:index], 
+		session.State.Todos[index+1:]...,
+	)
 
 	con.SendNavigate("/todos")
 }
@@ -475,8 +478,8 @@ Checking is handled by the `Check` handler.
 ```go
 //lib/handlers/check.go
 func Check(con *connections.Connection) {
-	state, operator := sessions.Start(con, lib.InitialState())
-	defer operator.Save(state)
+	session := sessions.Start(con, lib.InitialState())
+	defer session.Save()
 
 	indexString := con.ReceiveQuery("index")
 	if "" == indexString {
@@ -496,14 +499,14 @@ func Check(con *connections.Connection) {
 		return
 	}
 
-	count := int64(len(state.Todos))
+	count := int64(len(session.State.Todos))
 	if index >= count {
 		// Index is out of bounds, ignore the request.
 		con.SendNavigate("/todos")
 		return
 	}
 
-	state.Todos[index].Checked = true
+	session.State.Todos[index].Checked = true
 
 	con.SendNavigate("/todos")
 }
@@ -515,7 +518,7 @@ as `Check`, except it sets `.Checked` to `false` instead of `true`.
 ```go
 //lib/handlers/uncheck.go
 // ...
-state.Todos[id].Checked = false
+session.State.Todos[id].Checked = false
 // ...
 ```
 
@@ -538,8 +541,8 @@ This form is then captured by the `Add` handler.
 ```go
 //lib/handlers/add.go
 func Add(con *connections.Connection) {
-	state, operator := sessions.Start(con, lib.InitialState())
-	defer operator.Save(state)
+	session := sessions.Start(con, lib.InitialState())
+	defer operator.Save(session.State)
 
 	description := con.ReceiveQuery("description")
 
@@ -547,17 +550,20 @@ func Add(con *connections.Connection) {
 		con.SendView(views.View{
 			Name: "Todos", 
 			Data: map[string]any{
-				"todos": state.Todos,
+				"todos": session.State.Todos,
 				"error": "todo description cannot be empty",
 			},
 		})
 		return
 	}
 
-	state.Todos = append(state.Todos, lib.Todo{
-		Checked: false, 
-		Description: description,
-	})
+	session.State.Todos = append(
+		session.State.Todos,
+		lib.Todo{
+			Checked: false,
+			Description: description,
+		},
+	)
 
 	con.SendNavigate("/todos")
 }
