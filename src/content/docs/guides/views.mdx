@@ -179,7 +179,7 @@ You can choose how to render views with the `RenderMode` property.
 
 <Tabs>
     <TabItem label='RenderModeFull'>
-        The view is rendered on both the server and the client.<br/>
+        Using `RenderModeFull`, the view is rendered on both the server and the client.<br/>
         This is the **default** mode.
         ```go
         //lib/handlers/hello.go
@@ -200,7 +200,7 @@ You can choose how to render views with the `RenderMode` property.
         ```
     </TabItem>
     <TabItem label='RenderModeServer'>
-        The view is rendered only on the server.<br/>
+        Using `RenderModeServer`, the view is rendered only on the server.<br/>
         You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
         your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
         ```go
@@ -231,7 +231,7 @@ You can choose how to render views with the `RenderMode` property.
         :::
     </TabItem>
     <TabItem label='RenderModeClient'>
-        The view is rendered only on the client by loading a JavaScript bundle asynchronously.
+        Using `RenderModeClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
         ```go
         //lib/handlers/hello.go
         package lib
