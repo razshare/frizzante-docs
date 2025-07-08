@@ -15,10 +15,12 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-type State struct{}
+type State struct{
+    Name string
+}
 
 func Hello(con *connections.Connection) {
-    state, operator := sessions.Start(con, State{})
+    session := sessions.Start(con, State{})
 }
 ```
 
@@ -38,13 +40,36 @@ the order in which data is sent to the user matters.
 Read more about [order of operations](../order-of-operations).
 :::
 
-## State & Operator
+## Load
 
-Session state and session operations are handled separately.
+Sessions are loaded automatically when invoking `session.Start()`, however, 
+you can also reload them manually with `Load()`.
 
-When invoking `sessions.Start()`, you're given back a `state` and an `operator`.
+```go
+//lib/handlers/hello.go
+package handlers
 
-Use the `operator` to save, reload or destroy the `state`.
+import (
+    "github.com/razshare/frizzante/connections"
+    "github.com/razshare/frizzante/sessions"
+    "time"
+)
+
+type State struct{
+    Name string
+}
+
+func Hello(con *connections.Connection) {
+    session := sessions.Start(con, State{})
+    time.Sleep(60 * time.Second)
+    session.Load()
+    con.SendMessage("Hello " + session.State.Name)
+}
+```
+
+## Save
+
+Use `Save()` to save the session's state.
 
 ```go
 //lib/handlers/hello.go
@@ -60,21 +85,43 @@ type State struct{
 }
 
 func Hello(con *connections.Connection) {
-    state, operator := sessions.Start(con, State{})
-    defer operator.Save(state)
-    state.Name = "world"
+    session := sessions.Start(con, State{})
+    defer session.Save()
+    session.Name = "World"
+}
+```
+
+## Destroy
+
+Use `Destroy()` to destroy a session.
+
+```go
+//lib/handlers/hello.go
+package handlers
+
+import (
+    "github.com/razshare/frizzante/connections"
+    "github.com/razshare/frizzante/sessions"
+)
+
+type State struct{
+    Name string
+}
+
+func Hello(con *connections.Connection) {
+    session := sessions.Start(con, State{})
+    session.Destroy()
 }
 ```
 
 ## Custom Archive
 
-Sessions are managed through the operator's `Archive` and 
+Sessions are managed through an `Archive` and 
 you can overwrite the default `Archive` using `sessions.WithArchive()`.
 
 
 ```go
 //main.go
-
 import "github.com/razshare/frizzante/sessions"
 
 func main(){
