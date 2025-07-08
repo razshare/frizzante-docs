@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
-import starlightThemeFlexoki from 'starlight-theme-flexoki'
+import starlightThemeFlexoki from "starlight-theme-flexoki";
 
 // https://astro.build/config
 export default defineConfig({
@@ -28,6 +28,10 @@ export default defineConfig({
             { label: "Path", slug: "guides/path" },
             { label: "Status", slug: "guides/status" },
             { label: "Header", slug: "guides/header" },
+            {
+              label: "Order of Operations",
+              slug: "guides/order-of-operations",
+            },
             { label: "Query", slug: "guides/query" },
             { label: "Forms", slug: "guides/forms" },
             { label: "Json", slug: "guides/json" },
@@ -40,10 +44,6 @@ export default defineConfig({
             { label: "Views", slug: "guides/views" },
             { label: "Embedding Assets", slug: "guides/embedding-assets" },
             { label: "Web Standards", slug: "guides/web-standards" },
-            {
-              label: "Order of Operations",
-              slug: "guides/order-of-operations",
-            },
             { label: "Todos Example", slug: "guides/todos-example" },
           ],
         },
