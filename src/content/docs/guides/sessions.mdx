@@ -40,36 +40,9 @@ the order in which data is sent to the user matters.
 Read more about [order of operations](../order-of-operations).
 :::
 
-## Load
+## State
 
-Sessions are loaded automatically when invoking `session.Start()`, however, 
-you can also reload them manually with `Load()`.
-
-```go
-//lib/handlers/hello.go
-package handlers
-
-import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/sessions"
-    "time"
-)
-
-type State struct{
-    Name string
-}
-
-func Hello(con *connections.Connection) {
-    session := sessions.Start(con, State{})
-    time.Sleep(60 * time.Second)
-    session.Load()
-    con.SendMessage("Hello " + session.State.Name)
-}
-```
-
-## Save
-
-Use `Save()` to save the session's state.
+Use `Save()` to save the session state.
 
 ```go
 //lib/handlers/hello.go
