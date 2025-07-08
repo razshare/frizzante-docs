@@ -18,7 +18,7 @@ Views are **svelte components** exported by
 
 <Tabs>
     <TabItem icon='seti:typescript' label='Server exports'>
-    Views that are meant to be rendered on the server should be exported by this file.
+    Views that are meant to be rendered on the server should be exported by `app/exports/server.ts`.
     ```ts
     //app/exports/server.ts
     import Welcome from '$lib/views/Welcome.svelte'
@@ -31,7 +31,7 @@ Views are **svelte components** exported by
     ```
     </TabItem>
     <TabItem icon='seti:typescript' label='Client exports'>
-    Views that are meant to be rendered on the client should be exported by this file.
+    Views that are meant to be rendered on the client should be exported by `app/exports/client.ts`.
     ```ts
     //app/exports/client.ts
     export const views = {
