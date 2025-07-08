@@ -40,7 +40,7 @@ the order in which data is sent to the user matters.
 Read more about [order of operations](../order-of-operations).
 :::
 
-## State
+## Save
 
 Use `Save()` to save the session state.
 
@@ -63,6 +63,37 @@ func Hello(con *connections.Connection) {
     session.Name = "World"
 }
 ```
+
+## Load
+
+Use `Load()` to load the session state.
+
+```go
+//lib/handlers/hello.go
+package handlers
+
+import (
+    "github.com/razshare/frizzante/connections"
+    "github.com/razshare/frizzante/sessions"
+)
+
+type State struct{
+    Name string
+}
+
+func Hello(con *connections.Connection) {
+    session := sessions.Start(con, State{})
+    session.Load()
+    con.SendMessage("Hello " + session.State.Name)
+}
+```
+
+:::tip
+Session state is automatically loaded when invoking `sessions.Start()`.\
+Generally speaking you wouldn't load the session state more than once per handler,
+but there are some cases where it can be useful to do so, for example when handling
+long running [server sent events](../server-sent-events) or [web socket](../web-sockets) connections.
+:::
 
 ## Destroy
 
