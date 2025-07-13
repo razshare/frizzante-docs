@@ -5,12 +5,12 @@ title: Header
 Use `ReceiveHeader()` to retrieve header fields and `SendHeader()` to send them.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     accept := con.ReceiveHeader("Accept")  // Retrieves field "Accept".
     con.SendHeader("Content-Type", accept) // Sends it back.
 }

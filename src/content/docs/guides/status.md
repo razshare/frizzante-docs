@@ -5,12 +5,12 @@ title: Status
 Use `SendStatus()` to send the status of the response.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     con.SendStatus(404)                    // Sends status 404.
     con.SendMessage("Resource not found.") // Sends text.
 }

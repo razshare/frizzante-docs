@@ -5,13 +5,13 @@ title: Json
 Use `ReceiveJson()` to parse incoming content as json and `SendJson()` to send data as json when using `POST` and `PUT` http verbs.
 
 ```go
-web.Route{Pattern: "POST /", Handler: handlers.Hello}
+web.Route{Pattern: "POST /", Handler: handlers.Welcome}
 // or
-web.Route{Pattern: "PUT /", Handler: handlers.Hello}
+web.Route{Pattern: "PUT /", Handler: handlers.Welcome}
 ```
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import "github.com/razshare/frizzante/connections"
@@ -20,7 +20,7 @@ type GreetingDetails struct {
     Name string `json:"name"`
 }
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     var value *GreetingDetails // Prepares empty value.
     con.ReceiveJson(value)     // Parses the content into value.
     con.SendJson(value)        // Sends it back.

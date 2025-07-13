@@ -11,12 +11,12 @@ For example, sending the status code with `SendStatus()` **after** you've alread
 with `SendMessage()` is not allowed.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     con.SendMessage("Hello.") // Sends text. (Succeeds)
     con.SendStatus(404)       // Sends status. (Fails)
 }

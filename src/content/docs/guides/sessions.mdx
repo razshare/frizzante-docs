@@ -7,7 +7,7 @@ import { FileTree } from '@astrojs/starlight/components'
 Use `sessions.Start()` to start a session.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import (
@@ -19,7 +19,7 @@ type State struct{
     Name string
 }
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     session := sessions.Start(con, State{})
 }
 ```
@@ -45,7 +45,7 @@ Read more about [order of operations](../order-of-operations).
 Use `Save()` to save the session state.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import (
@@ -57,7 +57,7 @@ type State struct{
     Name string
 }
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     session := sessions.Start(con, State{})
     defer session.Save()
     session.Name = "World"
@@ -69,7 +69,7 @@ func Hello(con *connections.Connection) {
 Use `Load()` to load the session state.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import (
@@ -81,7 +81,7 @@ type State struct{
     Name string
 }
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     session := sessions.Start(con, State{})
     session.Load()
     con.SendMessage("Hello " + session.State.Name)
@@ -100,7 +100,7 @@ long running [server sent events](../server-sent-events) or [web socket](../web-
 Use `Destroy()` to destroy a session.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import (
@@ -112,7 +112,7 @@ type State struct{
     Name string
 }
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     session := sessions.Start(con, State{})
     session.Destroy()
 }

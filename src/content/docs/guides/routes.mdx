@@ -15,26 +15,25 @@ import (
     "main/lib/handlers"
 )
 
-var server = web.NewServer()
-
-var hello = web.Route{
-    Pattern: "GET /", 
-    Handler: handlers.Hello,
-}
 
 func main() {
-    server.AddRoute(hello) // Adds route.
-    server.Start()
+    web.
+        NewServer().
+        AddRoute(web.Route{
+            Pattern: "GET /", 
+            Handler: handlers.welcome,
+        }). // Adds route.
+        Start()
 }
 ```
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     con.SendMessage("Hello") // Sends text.
 }
 ```

@@ -8,18 +8,18 @@ Request handlers can define dynamic fields within the **pattern** using `{}` syn
 
 
 ```go
-web.Route{Pattern: "GET /{name}", Handler: handlers.Hello}
+web.Route{Pattern: "GET /{name}", Handler: handlers.Welcome}
 ```
 
 Path fields can then be retrieved with `ReceivePath()`.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     name := con.ReceivePath("name")  // Retrieves field "name".
     con.SendMessage("Hello " + name) // Sends text.
 }

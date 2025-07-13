@@ -63,7 +63,7 @@ Views are **svelte components** exported by
 Use `SendView()` to send a view from a route handler.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package lib
 
 import (
@@ -71,9 +71,9 @@ import (
     "github.com/razshare/frizzante/views"
 )
 
-func Hello(con *connections.Connection) {
-    // Sends file "app/lib/components/views/Hello.svelte"
-    con.SendView(views.View{Name: "Hello"}) 
+func Welcome(con *connections.Connection) {
+    // Sends file "app/lib/components/views/Welcome.svelte"
+    con.SendView(views.View{Name: "Welcome"}) 
 }
 ```
 
@@ -86,7 +86,7 @@ There is no way to specify a "**default view**".
 However, you can use `SendFileOrElse()` in order to send a file or run custom logic if it doesn't exist.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package lib
 
 import (
@@ -94,9 +94,9 @@ import (
     "github.com/razshare/frizzante/views"
 )
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     con.SendFileOrElse(func () {
-        con.SendView(views.View{Name: "Hello"})
+        con.SendView(views.View{Name: "Welcome"})
     })
 }
 ```
@@ -120,7 +120,7 @@ func main() {
     server.Efs = efs
     server.AddRoute(web.Route{
         Pattern: "GET /", 
-        Handler: handlers.Hello,
+        Handler: handlers.Welcome,
     })
     server.Start()
 }
@@ -131,7 +131,7 @@ func main() {
 Optionally, you can send data along with the views by adding a `Data` property to your `View`.
 
 ```go
-//lib/handlers/hello.go
+//lib/handlers/welcome.go
 package lib
 
 import (
@@ -139,9 +139,9 @@ import (
     "github.com/razshare/frizzante/views"
 )
 
-func Hello(con *connections.Connection) {
+func Welcome(con *connections.Connection) {
     con.SendView(views.View{ 
-        Name: "Hello",
+        Name: "Welcome",
         Data: map[string]string{
             "name": "world",
         },
@@ -182,7 +182,7 @@ You can choose how to render views with the `RenderMode` property.
         Using `RenderModeFull`, the view is rendered on both the server and the client.<br/>
         This is the **default** mode.
         ```go
-        //lib/handlers/hello.go
+        //lib/handlers/welcome.go
         package lib
 
         import (
@@ -190,9 +190,9 @@ You can choose how to render views with the `RenderMode` property.
             "github.com/razshare/frizzante/views"
         )
 
-        func Hello(con *connections.Connection) {
+        func Welcome(con *connections.Connection) {
             con.SendView(views.View{
-                Name: "Hello",
+                Name: "Welcome",
                 RenderMode: views.RenderModeFull, // Renders on server 
                                                   // and client.
             })
@@ -204,7 +204,7 @@ You can choose how to render views with the `RenderMode` property.
         You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
         your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
         ```go
-        //lib/handlers/hello.go
+        //lib/handlers/welcome.go
         package lib
 
         import (
@@ -212,9 +212,9 @@ You can choose how to render views with the `RenderMode` property.
             "github.com/razshare/frizzante/views"
         )
 
-        func Hello(con *connections.Connection) {
+        func Welcome(con *connections.Connection) {
             con.SendView(views.View{
-                Name: "Hello",
+                Name: "Welcome",
                 RenderMode: views.RenderModeServer, // Renders on server.
             })
         }
@@ -233,7 +233,7 @@ You can choose how to render views with the `RenderMode` property.
     <TabItem label='RenderModeClient'>
         Using `RenderModeClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
         ```go
-        //lib/handlers/hello.go
+        //lib/handlers/welcome.go
         package lib
 
         import (
@@ -241,9 +241,9 @@ You can choose how to render views with the `RenderMode` property.
             "github.com/razshare/frizzante/views"
         )
 
-        func Hello(con *connections.Connection) {
+        func Welcome(con *connections.Connection) {
             con.SendView(views.View{
-                Name: "Hello",
+                Name: "Welcome",
                 RenderMode: views.RenderModeClient, // Renders on client.
             })
         }
