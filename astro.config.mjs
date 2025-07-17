@@ -12,6 +12,11 @@ export default defineConfig({
       title: "Frizzante Docs",
       social: [
         {
+          icon: "discord",
+          label: "Discord",
+          href: "https://discord.gg/qgetCNUJ",
+        },
+        {
           icon: "github",
           label: "GitHub",
           href: "https://github.com/razshare/frizzante",
