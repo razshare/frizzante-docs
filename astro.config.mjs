@@ -42,6 +42,7 @@ export default defineConfig({
             { label: "Web Sockets", slug: "guides/web-sockets" },
             { label: "Server Sent Events", slug: "guides/server-sent-events" },
             { label: "Sessions", slug: "guides/sessions" },
+            { label: "Guards", slug: "guides/guards" },
             { label: "Views", slug: "guides/views" },
             { label: "Embedding Assets", slug: "guides/embedding-assets" },
             { label: "Web Standards", slug: "guides/web-standards" },

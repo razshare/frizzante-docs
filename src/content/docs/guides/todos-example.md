@@ -22,15 +22,15 @@ var efs embed.FS
 var server = servers.New()
 
 func main() {
-	server.Efs = efs
-	server.AddRoute(routes.Route{Pattern: "GET /", Handler: handlers.Default})
-	server.AddRoute(routes.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
-	server.AddRoute(routes.Route{Pattern: "GET /todos", Handler: handlers.Todos})
-	server.AddRoute(routes.Route{Pattern: "GET /check", Handler: handlers.Check})
-	server.AddRoute(routes.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
-	server.AddRoute(routes.Route{Pattern: "GET /add", Handler: handlers.Add})
-	server.AddRoute(routes.Route{Pattern: "GET /remove", Handler: handlers.Remove})
-	server.Start()
+	servers.Efs = efs
+	servers.AddRoute(server, routes.Route{Pattern: "GET /", Handler: handlers.Default})
+	servers.AddRoute(server, routes.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
+	servers.AddRoute(server, routes.Route{Pattern: "GET /todos", Handler: handlers.Todos})
+	servers.AddRoute(server, routes.Route{Pattern: "GET /check", Handler: handlers.Check})
+	servers.AddRoute(server, routes.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
+	servers.AddRoute(server, routes.Route{Pattern: "GET /add", Handler: handlers.Add})
+	servers.AddRoute(server, routes.Route{Pattern: "GET /remove", Handler: handlers.Remove})
+	servers.Start(server)
 }
 ```
 
@@ -44,12 +44,12 @@ which acts as a fallback handler.
 ![](image200.svg)
 
 It is for that reason that this handler tries to send a matching file
-with `SendFileOrElse()` before doing anything else.
+with `connections.SendFileOrElse()` before doing anything else.
 
 ```go
 //lib/handlers/default.go
 func Default(con *connections.Connection) {
-	con.SendFileOrElse(func() { Welcome(con) })
+	connections.SendFileOrElse(con, func() { Welcome(con) })
 }
 ```
 
@@ -59,12 +59,12 @@ This handler essentially acts as a file server and falls back to `Welcome`.
 
 ## Welcome Handler
 
-All this handler does is send the `"Welcome"` view to the user with `SendView()`.
+All this handler does is send the `"Welcome"` view to the user with `connections.SendView()`.
 
 ```go
 //lib/handlers/welcome.go
 func Welcome(con *connections.Connection) {
-	con.SendView(views.View{Name: "Welcome"})
+	connections.SendView(con, views.View{Name: "Welcome"})
 }
 ```
 
@@ -155,7 +155,8 @@ The server itself could choose to not serve a JavaScript bundle to the user.
 ```go
 views.View{
 	Name: "Welcome",
-	RenderMode: views.RenderModeServer, // This will disable JavaScript.
+	// This will disable JavaScript.
+	RenderMode: views.RenderModeServer,
 }
 ```
 
@@ -172,10 +173,10 @@ retrieved from the session state.
 ```go
 //lib/handlers/todos.go
 func Todos(con *connections.Connection) {
-	session := sessions.Start(con, lib.InitialState())
-	defer session.Save()
+	session := sessions.StartWith(con, lib.InitialState())
+	defer sessions.Save(session)
 
-	con.SendView(views.View{
+	connections.SendView(con, views.View{
 		Name: "Todos", 
 		Data: map[string]any{
 			"todos": session.State.Todos,
@@ -225,8 +226,8 @@ This `"Todos"` view does quite a few things.
 //app/lib/views/Todos.svelte
 <script lang="ts">
     import Layout from "$lib/components/Layout.svelte"
-    import { action } from "$frizzante/scripts/action.ts"
-    import { href } from "$frizzante/scripts/href.ts"
+    import { href } from "$frizzante/core/scripts/href.ts"
+    import {action} from "$frizzante/core/scripts/action.ts";
 
     type Todo = {
         Checked: boolean
@@ -234,11 +235,11 @@ This `"Todos"` view does quite a few things.
     }
 
     type Props = {
-        todos: Todo[],
-        error: string,
+        todos: Todo[]
+        error: string
     }
 
-    let {todos, error}:Props = $props()
+    let { todos, error }: Props = $props()
 </script>
 
 <Layout title="Todos">
@@ -251,7 +252,11 @@ This `"Todos"` view does quite a few things.
                 </form>
                 {#if todo.Checked}
                     <form {...action("/uncheck")}>
-                        <input type="hidden" name="index" value={index} />
+                        <input
+                            type="hidden"
+                            name="index"
+                            value={index}
+                        />
                         <button class="link">
                             <!---->
                             (x) {todo.Description}
@@ -260,7 +265,11 @@ This `"Todos"` view does quite a few things.
                     </form>
                 {:else}
                     <form {...action("/check")}>
-                        <input type="hidden" name="index" value={index} />
+                        <input
+                            type="hidden"
+                            name="index"
+                            value={index}
+                        />
                         <button class="link">
                             <!---->
                             (&nbsp;&nbsp;) {todo.Description}
@@ -309,7 +318,11 @@ which is then iterated upon to render the items
 		</form>
 		{#if todo.Checked}
 			<form {...action("/uncheck")}>
-				<input type="hidden" name="index" value={index} />
+				<input
+					type="hidden"
+					name="index"
+					value={index}
+				/>
 				<button class="link">
 					<!---->
 					(x) {todo.Description}
@@ -318,7 +331,11 @@ which is then iterated upon to render the items
 			</form>
 		{:else}
 			<form {...action("/check")}>
-				<input type="hidden" name="index" value={index} />
+				<input
+					type="hidden"
+					name="index"
+					value={index}
+				/>
 				<button class="link">
 					<!---->
 					(&nbsp;&nbsp;) {todo.Description}
@@ -345,8 +362,9 @@ index of the item, which is hidden.
 </form>
 ```
 
-This action is then captured by the `Remove` handler, which does some basic validation
-and error handling and then finally removes the item from the session.
+This action is then captured by the `Remove` handler,
+which does some basic validation, error handling 
+and then finally removes the item from the session.
 
 :::tip
 Similarly to `href()`, the `action()` function adapts the form.
@@ -368,38 +386,35 @@ and behave like any other form, navigating away to the new path.
 ```go
 //lib/handlers/remove.go
 func Remove(con *connections.Connection) {
-	session := sessions.Start(con, lib.InitialState())
-	defer session.Save()
+	session := sessions.StartWith(con, lib.InitialState())
+	defer sessions.Save(session)
 
 	count := int64(len(session.State.Todos))
 
 	if 0 == count {
-		// No index found, ignore the request.
-		con.SendNavigate("/todos")
+		// No todos found, ignore the request.
+		connections.SendNavigate(con, "/todos")
 		return
 	}
 
-	indexString := con.ReceiveQuery("index")
+	indexString := connections.ReceiveQuery(con, "index")
 	if "" == indexString {
 		// No index found, ignore the request.
-		con.SendNavigate("/todos")
+		connections.SendNavigate(con, "/todos")
 		return
 	}
 
 	index, indexError := strconv.ParseInt(indexString, 10, 64)
 	if nil != indexError {
-		con.SendView(views.View{
-			Name: "Todos", 
-			Data: map[string]any{
-				"error": indexError.Error(),
-			},
-		})
+		connections.SendView(con, views.View{Name: "Todos", Data: map[string]any{
+			"error": indexError.Error(),
+		}})
 		return
 	}
 
 	if index >= count {
 		// Index is out of bounds, ignore the request.
-		con.SendNavigate("/todos")
+		connections.SendNavigate(con, "/todos")
 		return
 	}
 
@@ -408,12 +423,12 @@ func Remove(con *connections.Connection) {
 		session.State.Todos[index+1:]...,
 	)
 
-	con.SendNavigate("/todos")
+	connections.SendNavigate(con, "/todos")
 }
 ```
 
 :::caution
-Notice the use of `con.ReceiveQuery("index")`.
+Notice the use of `connections.ReceiveQuery(con, "index")`.
 
 This is a reminder that, if not specified otherwise, 
 forms prefer using the `GET` verb.
@@ -431,7 +446,7 @@ The equivalent using the `POST` verb would be
 ```go
 //lib/handlers/remove.go
 // ...
-form := con.ReceiveForm()
+form := connections.ReceiveForm(con)
 indexString := form.Get("index")
 // ...
 ```
@@ -541,14 +556,14 @@ This form is then captured by the `Add` handler.
 ```go
 //lib/handlers/add.go
 func Add(con *connections.Connection) {
-	session := sessions.Start(con, lib.InitialState())
-	defer operator.Save(session.State)
+	session := sessions.StartWith(con, lib.InitialState())
+	defer sessions.Save(session)
 
-	description := con.ReceiveQuery("description")
+	description := connections.ReceiveQuery(con, "description")
 
 	if "" == description {
-		con.SendView(views.View{
-			Name: "Todos", 
+		connections.SendView(con, views.View{
+			Name: "Todos",
 			Data: map[string]any{
 				"todos": session.State.Todos,
 				"error": "todo description cannot be empty",
@@ -557,15 +572,12 @@ func Add(con *connections.Connection) {
 		return
 	}
 
-	session.State.Todos = append(
-		session.State.Todos,
-		lib.Todo{
-			Checked: false,
-			Description: description,
-		},
-	)
+	session.State.Todos = append(session.State.Todos, lib.Todo{
+		Checked:     false,
+		Description: description,
+	})
 
-	con.SendNavigate("/todos")
+	connections.SendNavigate(con, "/todos")
 }
 ```
 

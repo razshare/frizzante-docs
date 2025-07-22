@@ -2,7 +2,7 @@
 title: Forms
 ---
 
-Use `ReceiveForm()` to retrieve and parse forms
+Use `connections.ReceiveForm()` to retrieve and parse forms
 when using `POST` and `PUT` http verbs.
 
 ```go
@@ -18,8 +18,12 @@ package handlers
 import "github.com/razshare/frizzante/connections"
 
 func Welcome(con *connections.Connection) {
-    form := con.ReceiveForm()        // Retrieves the form.
-    name := form.Get("name")         // Retrieves field "name".
-    con.SendMessage("Hello " + name) // Sends text.
+
+    // Retrieves the form.
+    form := connections.ReceiveForm(con)
+    // Retrieves field "name".
+    name := form.Get("name")
+    // Sends text.
+    connections.SendMessage(con, "Hello " + name)
 }
 ```

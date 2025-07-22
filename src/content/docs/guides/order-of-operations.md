@@ -7,8 +7,8 @@ Order of operations matters when sending data to the client.
 **Status codes** and **headers** cannot be modified after sending out content.
 
 :::danger
-For example, sending the status code with `SendStatus()` **after** you've already sent content
-with `SendMessage()` is not allowed.
+For example, sending the status code with `connections.SendStatus()` **after** you've already sent content
+with `connections.SendMessage()` is not allowed.
 
 ```go
 //lib/handlers/welcome.go
@@ -17,12 +17,14 @@ package handlers
 import "github.com/razshare/frizzante/connections"
 
 func Welcome(con *connections.Connection) {
-    con.SendMessage("Hello.") // Sends text. (Succeeds)
-    con.SendStatus(404)       // Sends status. (Fails)
+    // Sends text. (Succeeds).
+    connections.SendMessage(con, "Hello.")
+    // Sends status. (Fails).
+    connections.SendStatus(con, 404)
 }
 ```
 
-`SendStatus(404)` will fail and the user will receive status `200` instead of `404`.
+`connections.SendStatus(404)` will fail and the user will receive status `200` instead of `404`.
 
 ```http
 HTTP/1.1 200 OK

@@ -2,8 +2,6 @@
 title: Sessions
 ---
 
-import { FileTree } from '@astrojs/starlight/components'
-
 Use `sessions.Start()` to start a session.
 
 ```go
@@ -15,11 +13,13 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
+// Defines session state.
 type State struct{
     Name string
 }
 
 func Welcome(con *connections.Connection) {
+    // Starts the session.
     session := sessions.Start(con, State{})
 }
 ```
@@ -42,7 +42,7 @@ Read more about [order of operations](../order-of-operations).
 
 ## Save
 
-Use `Save()` to save the session state.
+Use `sessions.Save()` to save the session state.
 
 ```go
 //lib/handlers/welcome.go
@@ -53,20 +53,24 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
+// Defines session state.
 type State struct{
     Name string
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start(con, State{})
-    defer session.Save()
-    session.Name = "World"
+    // Starts the session.
+    session := sessions.Start[State](con)
+    // Saves the session when out of scope.
+    defer sessions.Save(session)
+    // Modifies session state.
+    session.State.Name = "World"
 }
 ```
 
 ## Load
 
-Use `Load()` to load the session state.
+Use `sessions.Load()` to load the session state.
 
 ```go
 //lib/handlers/welcome.go
@@ -76,14 +80,17 @@ import (
     "github.com/razshare/frizzante/connections"
     "github.com/razshare/frizzante/sessions"
 )
-
+// Defines session state.
 type State struct{
     Name string
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start(con, State{})
-    session.Load()
+    // Starts the session.
+    session := sessions.Start[State](con)
+    // Loads the session state (not necessary, read below).
+    sessions.Load(session)
+    // Sends text.
     con.SendMessage("Hello " + session.State.Name)
 }
 ```
@@ -97,7 +104,7 @@ long running [server sent events](../server-sent-events) or [web socket](../web-
 
 ## Destroy
 
-Use `Destroy()` to destroy a session.
+Use `sessions.Destroy()` to destroy a session.
 
 ```go
 //lib/handlers/welcome.go
@@ -108,20 +115,24 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
+// Defines session state.
 type State struct{
     Name string
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start(con, State{})
-    session.Destroy()
+    // Starts the session.
+    session := sessions.Start[State](con)
+    // Destroys the session.
+    sessions.Destroy(session)
 }
 ```
 
-## Custom Archive
+## Customization
 
-Sessions are managed through an `Archive` and 
-you can overwrite the default `Archive` using `sessions.WithArchive()`.
+Sessions are managed through a series of function pointer defines directly under the `sessions` package.
+
+You can overwrite these default function pointers with your own.
 
 
 ```go
@@ -129,59 +140,11 @@ you can overwrite the default `Archive` using `sessions.WithArchive()`.
 import "github.com/razshare/frizzante/sessions"
 
 func main(){
-    sessions.WithArchive(&CustomArchive{})
+    sessions.Set = func(id string, key string, value []byte) error {}
+    sessions.Get = func(id string, key string) ([]byte, error) {}
+    sessions.Has = func(id string, key string) (bool, error) {}
+    sessions.Remove = func(id string, key string) error {}
+    sessions.HasId = func(id string) (bool, error) {}
+    sessions.RemoveId = func(id string) error {}
 }
 ```
-
-Where `CustomArchive` implements `Archive`.
-
-```go
-type Archive interface {
-    Get(domain string, key string) ([]byte, error)
-    Set(domain string, key string, value []byte) error
-    Has(domain string, key string) (bool, error)
-    Remove(domain string, key string) error
-    HasDomain(domain string) (bool, error)
-    RemoveDomain(domain string) error
-}
-```
-
-### Archive Details
-
-Think of an `Archive` as a repository of data separated in two layers; `domains` and `keys`.
-
-An archive contains `domains` which contain `keys`.
-
-<FileTree>
-    - archive
-        - domain-1
-            - key-a
-            - key-b
-        - domain-2
-            - key-x
-            - key-y
-</FileTree>
-
-### Default Archive
-
-The default operator archive is backed by the file system,
-more specifically, by a `.gen/sessions` directory.
-
-<FileTree>
-    - .gen
-        - sessions
-            - 0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2
-                - session.json
-            - 8a6d8cfa-2fc7-4dbb-6be9-beb823318303
-                - session.json
-</FileTree>
-
-```json
-//.gen/sessions/0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2/session.json
-{
-    "Name": "world"
-}
-```
-
-Each `subdirectory` (**domain**) takes the id of a session and it contains the state in a `session.json` file (**key**), 
-thus, there are as many subdirectories as there are sessions.

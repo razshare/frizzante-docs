@@ -20,11 +20,11 @@ var server = servers.New()
 
 func main() {
     server.Efs = efs
-    server.Start()
+    servers.Start(server)
 }
 ```
 
-Not only serving a file with `SendFileOrElse()` also takes into account the embedded file system, but
+Not only serving a file with `connections.SendFileOrElse()` also takes into account the embedded file system, but
 your views' bundles are also included in the embedded file system, which makes your final binary
 completely standalone.
 

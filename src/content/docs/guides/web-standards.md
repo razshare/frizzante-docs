@@ -2,8 +2,6 @@
 title: Web Standards
 ---
 
-import { Tabs, TabItem } from '@astrojs/starlight/components'
-
 You can use `href()` and `action()` in order to make your hyperlinks and forms adapt to the user's browser capabilities and/or the server's rendering configuration.
 
 ## Adaptive Hyperlinks
@@ -36,7 +34,7 @@ import (
 )
 
 func Welcome(con *connections.Connection)  {
-	con.SendView(views.View{
+	connections.SendView(con, views.View{
 		Name: "Welcome",
 		RenderMode: views.RenderModeServer,
 	})
@@ -104,7 +102,7 @@ import (
 )
 
 func Welcome(con *connections.Connection)  {
-	con.SendView(views.View{
+	connections.SendView(con, views.View{
 		Name: "Welcome",
 		RenderMode: views.RenderModeServer,
 	})
@@ -155,3 +153,73 @@ async function onsubmit(e: Event) {
 ```
 
 Which swaps the current state and view for new ones served by `/process`.
+
+## Form Component
+
+Frizzante provides a builtin `<Form>` component that manages
+pending requests and errors while submitting form.
+
+It is a replacement for your `<form>` elements.
+
+In your project root directory, run the following
+
+```sh
+frizzante -dform
+```
+
+This will add the `<Form>` component to your project.
+
+This component passes down `pending` and `error` states through the `children` snippet.
+
+```svelte
+<script lang="ts">
+    import Form from "$frizzante/forms/components/Form.svelte"
+</script>
+
+<From method="POST" action="/login">
+    {#snippet children({pending, error})}
+        <input type="email" name="email">
+        <input type="password" name="password">
+        <button disabled={pending} type="submit">Login</button>
+        
+        {#if error}
+            <span>Something went wrong: {error}</span>
+        {/if}
+    {/snippet}
+</Form>
+```
+
+## Link Component
+
+Frizzante provides a builtin `<Link>` component that manages
+pending requests and errors while navigating hyperlinks.
+
+It is a replacement for your `<a>` elements.
+
+In your project root directory, run the following
+
+```sh
+frizzante -dlink
+```
+
+This will add the `<Link>` component to your project.
+
+This component passes down `pending` and `error` states through the `children` snippet.
+
+```svelte
+<script lang="ts">
+    import Link from "$frizzante/links/components/Link.svelte"
+</script>
+
+<Link>
+    {#snippet children({pending, error})}
+        {#if pending}
+            <span>Loading...</span>
+        {:else if error}
+            <span>Something went wrong: {error}</span>
+        {:else}
+            <span>Click me</span>
+        {/if}
+    {/snippet}
+</Link>
+```

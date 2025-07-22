@@ -2,8 +2,6 @@
 title: Path
 ---
 
-import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
-
 Request handlers can define dynamic fields within the **pattern** using `{}` syntax.
 
 
@@ -11,7 +9,7 @@ Request handlers can define dynamic fields within the **pattern** using `{}` syn
 routes.Route{Pattern: "GET /{name}", Handler: handlers.Welcome}
 ```
 
-Path fields can then be retrieved with `ReceivePath()`.
+Path fields can then be retrieved with `connections.ReceivePath()`.
 
 ```go
 //lib/handlers/welcome.go
@@ -20,7 +18,9 @@ package handlers
 import "github.com/razshare/frizzante/connections"
 
 func Welcome(con *connections.Connection) {
-    name := con.ReceivePath("name")  // Retrieves field "name".
-    con.SendMessage("Hello " + name) // Sends text.
+    // Retrieves field "name".
+    name := connections.ReceivePath(con, "name")
+    // Sends text.
+    connections.SendMessage(con, "Hello " + name)
 }
 ```

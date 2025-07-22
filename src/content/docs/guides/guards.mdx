@@ -1,0 +1,141 @@
+---
+title: Guards
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+
+You can protect your [routes](../routes) with guards.
+
+A guard allows you to execute logic before a certain request reaches
+a designated route handler.
+
+Start by adding a guard to the server
+
+```go
+package main
+
+import (
+	"github.com/razshare/frizzante/connections"
+	"github.com/razshare/frizzante/guards"
+	"github.com/razshare/frizzante/routes"
+	"github.com/razshare/frizzante/servers"
+)
+
+var server = servers.New()
+
+func main() {
+    // Adds guard.
+    servers.AddGuard(server, guards.Guard{
+        // Names guard, this will appear in your notifier log.
+        Name: "No Json Allowed",
+        // Adds logic to guard.
+        Handler: func(con *connections.Connection, allow func()) {
+            // Rejects "application/json" requests...
+            if !connections.VerifyContentType(con, "application/json") {
+                return
+            }
+            // ...allows rest.
+            allow()
+        },
+        // Tags guard.
+        Tags: []string{"nojson", "jsonless"},
+    })
+    // Adds route.
+    servers.AddRoute(server, routes.Route{
+        // Maps route to a pattern.
+        Pattern: "GET /",
+        Handler: func(con *connections.Connection) {
+            // Sends text.
+            connections.SendMessage(con, "I hope you're not one of those Json kids.")
+        },
+        // Tags route.
+        Tags: []string{"nojson","auth"},
+    })
+
+    // Starts server.
+    servers.Start(server)
+}
+```
+
+A guard protects every route whose tags intersect with at least one of its own tags.
+
+In this case, the `GET /` route intersects with the `No Json Allowed` in `nojson` and with `Only Authorized` in `auth`.
+
+![](guards100.svg)
+
+## Composite Guards
+
+Multiple guards can intersect in order to compose more advanced restrictions.
+
+```go
+servers.AddGuard(server, guards.Guard{
+    Name: "Authorization",
+    Handler: func(con *connections.Connection, allow func()) {
+        auth := connections.ReceiveHeader(con, "Authorization")
+        if !SuperAdvancedAuthorizationCheckTM(auth) {
+            connections.SendStatus(con, 403)
+            connections.SendMessage(con, "Not authorized.")
+            return
+        }
+        allow()
+    },
+    Tags: []string{"authorization", "auth"},
+})
+```
+
+```go
+servers.AddGuard(server, guards.Guard{
+    Name: "Authentication",
+    Handler: func(con *connections.Connection, allow func()) {
+        session := sessions.Start[State](con)
+        if !session.State.SignedIn {
+            connections.SendMessage(con, "Please sign in.")
+            return
+        }
+        allow()
+    },
+    Tags: []string{"authentication", "auth"},
+})
+```
+
+```go
+servers.AddRoute(server, routes.Route{
+    Pattern: "GET /",
+    Handler: func(con *connections.Connection) {
+        connections.SendMessage(con, "Hello.")
+    },
+    Tags: []string{"auth"},
+})
+```
+
+![](guards200.svg)
+
+
+:::tip
+You can still apply each guard separately with tags `authorization` and `authentication`.
+
+<Tabs>
+    <TabItem icon='open-book' label='Authorization'>
+        ```go
+        servers.AddRoute(server, routes.Route{
+            Pattern: "GET /",
+            Handler: func(con *connections.Connection) {
+                connections.SendMessage(con, "Hello.")
+            },
+            Tags: []string{"authorization"},
+        })
+        ```
+    </TabItem>
+    <TabItem icon='open-book' label='Authentication'>
+        ```go
+        servers.AddRoute(server, routes.Route{
+            Pattern: "GET /",
+            Handler: func(con *connections.Connection) {
+                connections.SendMessage(con, "Hello.")
+            },
+            Tags: []string{"authentication"},
+        })
+        ```
+    </TabItem>
+</Tabs>
+:::

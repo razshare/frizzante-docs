@@ -2,7 +2,7 @@
 title: Views
 ---
 
-import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components'
+import { FileTree } from '@astrojs/starlight/components'
 
 Views are **svelte components** exported by 
 `app/exports/server.ts` and/or `app/exports/client.ts`.
@@ -16,51 +16,57 @@ Views are **svelte components** exported by
             - ...
 </FileTree>
 
-<Tabs>
-    <TabItem icon='seti:typescript' label='Server exports'>
-    Views that are meant to be rendered on the server should be exported by `app/exports/server.ts`.
-    ```ts
-    //app/exports/server.ts
-    import Welcome from '$lib/views/Welcome.svelte'
-    import Profile from '$lib/views/Profile.svelte'
+### Server Exports
 
-    export const views = {
-        "Welcome": Welcome,
-        "Profile": Profile,
-    }
-    ```
-    </TabItem>
-    <TabItem icon='seti:typescript' label='Client exports'>
-    Views that are meant to be rendered on the client should be exported by `app/exports/client.ts`.
-    ```ts
-    //app/exports/client.ts
-    export const views = {
-        "Welcome": import('$lib/views/Welcome.svelte'),
-        "Profile": import('$lib/views/Profile.svelte'),
-    }
-    ```
-    
-    These views are being imported asynchronously in order to split them 
-    in different bundles, however you can simply create fake promises
-    in order to bundle them all together and eliminate network latency
-    when transitioning between views.
-    
-    ```ts
-    //app/exports/client.ts
-    import Welcome from '$lib/views/Welcome.svelte'
-    import Profile from '$lib/views/Profile.svelte'
+Views that are meant to be rendered on the server should be exported by `app/exports/server.ts`.
+```ts
+//app/exports/server.ts
+import Welcome from '$lib/views/Welcome.svelte'
+import Profile from '$lib/views/Profile.svelte'
 
-    export const views = {
-        "Welcome": Promise.resolve(Welcome),
-        "Profile": Promise.resolve(Profile),
-    }
-    ```
-    </TabItem>
-</Tabs>
+// Defines that components "Welcome" and "Profile"
+// can be rendered on the server when 
+// sent with `connections.SendView()`.
+export const views = {
+    "Welcome": Welcome,
+    "Profile": Profile,
+}
+```
+
+### Client Exports
+
+Views that are meant to be rendered on the client should be exported by `app/exports/client.ts`.
+```ts
+//app/exports/client.ts
+
+// Defines that components "Welcome" and "Profile"
+// can be bundled and rendered on the client when
+// sent with `connections.SendView()`.
+export const views = {
+    "Welcome": import('$lib/views/Welcome.svelte'),
+    "Profile": import('$lib/views/Profile.svelte'),
+}
+```
+
+These views are being imported asynchronously in order to split them 
+in different bundles, however you can simply create fake promises
+in order to bundle them all together and eliminate network latency
+when transitioning between views.
+
+```ts
+//app/exports/client.ts
+import Welcome from '$lib/views/Welcome.svelte'
+import Profile from '$lib/views/Profile.svelte'
+
+export const views = {
+    "Welcome": Promise.resolve(Welcome),
+    "Profile": Promise.resolve(Profile),
+}
+```
 
 ## Send Views
 
-Use `SendView()` to send a view from a route handler.
+Use `connections.SendView()` to send a view from a route handler.
 
 ```go
 //lib/handlers/welcome.go
@@ -72,8 +78,8 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    // Sends file "app/lib/components/views/Welcome.svelte"
-    con.SendView(views.View{Name: "Welcome"}) 
+    // Sends view "Welcome".
+    connections.SendView(con, views.View{Name: "Welcome"}) 
 }
 ```
 
@@ -83,7 +89,7 @@ The **Name** of the view will be used to lookup the view component exported by *
 
 There is no way to specify a "**default view**".
 
-However, you can use `SendFileOrElse()` in order to send a file or run custom logic if it doesn't exist.
+However, you can use `connections.SendFileOrElse()` in order to send a file or run custom logic if it doesn't exist.
 
 ```go
 //lib/handlers/welcome.go
@@ -95,8 +101,11 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    con.SendFileOrElse(func () {
-        con.SendView(views.View{Name: "Welcome"})
+    // Attempts to send file requested 
+    // by the user, or else...
+    connections.SendFileOrElse(con, func () {
+        // ... sends view "Welcome".
+        connections.SendView(con, views.View{Name: "Welcome"})
     })
 }
 ```
@@ -115,14 +124,15 @@ import (
 //go:embed app/dist
 var efs embed.FS
 var server = servers.New()
+var route = routes.Route{
+    Pattern: "GET /",
+    Handler: handlers.Welcome,
+}
 
 func main() {
     server.Efs = efs
-    server.AddRoute(routes.Route{
-        Pattern: "GET /", 
-        Handler: handlers.Welcome,
-    })
-    server.Start()
+    servers.AddRoute(server, route)
+    servers.Start(server)
 }
 ```
 
@@ -140,9 +150,12 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    con.SendView(views.View{ 
+    // Sends view "Welcome".
+    connections.SendView(con, views.View{ 
         Name: "Welcome",
         Data: map[string]string{
+            // Adds property "name" 
+            // with value "world".
             "name": "world",
         },
     }) 
@@ -177,79 +190,85 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 
 You can choose how to render views with the `RenderMode` property.
 
-<Tabs>
-    <TabItem label='RenderModeFull'>
-        Using `RenderModeFull`, the view is rendered on both the server and the client.<br/>
-        This is the **default** mode.
-        ```go
-        //lib/handlers/welcome.go
-        package lib
+### RenderModeFull
 
-        import (
-            "github.com/razshare/frizzante/connections"
-            "github.com/razshare/frizzante/views"
-        )
+Using `RenderModeFull`, the view is rendered on both the server and the client.<br/>
+This is the **default** mode.
+```go
+//lib/handlers/welcome.go
+package lib
 
-        func Welcome(con *connections.Connection) {
-            con.SendView(views.View{
-                Name: "Welcome",
-                RenderMode: views.RenderModeFull, // Renders on server 
-                                                  // and client.
-            })
-        }
-        ```
-    </TabItem>
-    <TabItem label='RenderModeServer'>
-        Using `RenderModeServer`, the view is rendered only on the server.<br/>
-        You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
-        your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
-        ```go
-        //lib/handlers/welcome.go
-        package lib
+import (
+    "github.com/razshare/frizzante/connections"
+    "github.com/razshare/frizzante/views"
+)
 
-        import (
-            "github.com/razshare/frizzante/connections"
-            "github.com/razshare/frizzante/views"
-        )
+func Welcome(con *connections.Connection) {
+    // Sends view "Welcome".
+    connections.SendView(con, views.View{
+        Name: "Welcome",
+        // Renders view on server and client.
+        RenderMode: views.RenderModeFull,
+    })
+}
+```
 
-        func Welcome(con *connections.Connection) {
-            con.SendView(views.View{
-                Name: "Welcome",
-                RenderMode: views.RenderModeServer, // Renders on server.
-            })
-        }
-        ```
-        :::tip
-        While using `RenderModeServer` the view won't serve a JavaScript bundle,
-        but you can still use the `<svelte:head>` special
-        tag in order to load scripts dynamically.
-        ```svelte
-        <svelte:head>
-            <script type="text/javascript" src="https://some.cdn/file.js" />
-        </svelte:head>
-        ```
-        :::
-    </TabItem>
-    <TabItem label='RenderModeClient'>
-        Using `RenderModeClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
-        ```go
-        //lib/handlers/welcome.go
-        package lib
+### RenderModeServer
 
-        import (
-            "github.com/razshare/frizzante/connections"
-            "github.com/razshare/frizzante/views"
-        )
+Using `RenderModeServer`, the view is rendered only on the server.<br/>
+You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
+your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
+```go
+//lib/handlers/welcome.go
+package lib
 
-        func Welcome(con *connections.Connection) {
-            con.SendView(views.View{
-                Name: "Welcome",
-                RenderMode: views.RenderModeClient, // Renders on client.
-            })
-        }
-        ```
-    </TabItem>
-</Tabs>
+import (
+    "github.com/razshare/frizzante/connections"
+    "github.com/razshare/frizzante/views"
+)
+
+func Welcome(con *connections.Connection) {
+    // Sends view "Welcome".
+    connections.SendView(con, views.View{
+        Name: "Welcome",
+        // Renders view on server.
+        RenderMode: views.RenderModeServer,
+    })
+}
+```
+:::tip
+While using `RenderModeServer` the view won't serve a JavaScript bundle,
+but you can still use the `<svelte:head>` special
+tag in order to load scripts dynamically.
+```svelte
+<svelte:head>
+    <script type="text/javascript" src="https://some.cdn/file.js" />
+</svelte:head>
+```
+:::
+
+
+### RenderModeClient
+
+Using `RenderModeClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
+```go
+//lib/handlers/welcome.go
+package lib
+
+import (
+    "github.com/razshare/frizzante/connections"
+    "github.com/razshare/frizzante/views"
+)
+
+func Welcome(con *connections.Connection) {
+    // Sends view "Welcome".
+    connections.SendView(con, views.View{
+        Name: "Welcome",
+        // Renders view on client.
+        RenderMode: views.RenderModeClient,
+    })
+}
+```
 
 :::tip
 You can combine any of these render modes with adaptive hyperlinks and forms.

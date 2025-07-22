@@ -2,7 +2,7 @@
 title: Status
 ---
 
-Use `SendStatus()` to send the status of the response.
+Use `connections.SendStatus()` to send the status of the response.
 
 ```go
 //lib/handlers/welcome.go
@@ -11,8 +11,10 @@ package handlers
 import "github.com/razshare/frizzante/connections"
 
 func Welcome(con *connections.Connection) {
-    con.SendStatus(404)                    // Sends status 404.
-    con.SendMessage("Resource not found.") // Sends text.
+    // Sends status 404.
+    connections.SendStatus(con, 404)
+    // Sends text.
+    connections.SendMessage(con, "Resource not found.")
 }
 ```
 
