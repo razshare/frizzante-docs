@@ -21,7 +21,7 @@ func main() {
         New().
         AddRoute(routes.Route{
             Pattern: "GET /", 
-            Handler: handlers.welcome,
+            Handler: handlers.Welcome,
         }). // Adds route.
         Start()
 }
