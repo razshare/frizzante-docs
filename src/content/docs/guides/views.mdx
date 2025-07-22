@@ -114,11 +114,11 @@ import (
 
 //go:embed app/dist
 var efs embed.FS
-var server = web.NewServer()
+var server = servers.New()
 
 func main() {
     server.Efs = efs
-    server.AddRoute(web.Route{
+    server.AddRoute(routes.Route{
         Pattern: "GET /", 
         Handler: handlers.Welcome,
     })

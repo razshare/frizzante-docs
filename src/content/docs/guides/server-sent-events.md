@@ -5,7 +5,7 @@ title: Server Sent Events
 Use `SendSseUpgrade()` to upgrade the connection to server sent events.
 
 ```go
-web.Route{Pattern: "GET /sse", Handler: handlers.Welcome}
+routes.Route{Pattern: "GET /sse", Handler: handlers.Welcome}
 ```
 
 ```go

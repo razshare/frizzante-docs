@@ -5,9 +5,9 @@ title: Json
 Use `ReceiveJson()` to parse incoming content as json and `SendJson()` to send data as json when using `POST` and `PUT` http verbs.
 
 ```go
-web.Route{Pattern: "POST /", Handler: handlers.Welcome}
+routes.Route{Pattern: "POST /", Handler: handlers.Welcome}
 // or
-web.Route{Pattern: "PUT /", Handler: handlers.Welcome}
+routes.Route{Pattern: "PUT /", Handler: handlers.Welcome}
 ```
 
 ```go

@@ -16,7 +16,7 @@ import (
 
 //go:embed app/dist
 var efs embed.FS
-var server = web.NewServer()
+var server = servers.New()
 
 func main() {
     server.Efs = efs

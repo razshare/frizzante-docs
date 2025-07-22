@@ -1,8 +1,8 @@
----
+---Route
 title: Start server
 ---
 
-Use `web.NewServer().Start()` to create and start a server.
+Use `servers.New().Start()` to create and start a server.
 
 ```go
 //main.go
@@ -11,6 +11,6 @@ package main
 import "github.com/razshare/frizzante/web"
 
 func main() {
-    web.NewServer().Start()
+    servers.New().Start()
 }
 ```

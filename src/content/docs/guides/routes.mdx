@@ -17,9 +17,9 @@ import (
 
 
 func main() {
-    web.
-        NewServer().
-        AddRoute(web.Route{
+    servers.
+        New().
+        AddRoute(routes.Route{
             Pattern: "GET /", 
             Handler: handlers.welcome,
         }). // Adds route.
