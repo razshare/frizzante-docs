@@ -2,7 +2,7 @@
 title: Web Sockets
 ---
 
-Use `connections.SendWsUpgrade()` to upgrade the connection to web sockets.
+Use `SendWsUpgrade()` to upgrade the connection to web sockets.
 
 ```go
 routes.Route{Pattern: "GET /ws", Handler: handlers.Welcome}
@@ -18,34 +18,24 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    // Tracks request status.
-    alive := connections.IsAlive(con)
-    // Sends ws upgrade.
-    connections.SendWsUpgrade(con)
-    // Loops until cancellation.
-    for *alive {
-        // Receives message.
-        name := connections.ReceiveMessage(con)
-        // Sends message.
-        connections.SendMessage(con, "hello "+name)
-        // Sleeps for 1 second.
-        time.Sleep(time.Second)
+    alive := con.IsAlive()             // Tracks request status.
+    con.SendWsUpgrade()                // Sends ws upgrade.
+    for *alive {                       // Loops until cancellation.
+        name := con.ReceiveMessage()   // Receives message.
+        con.SendMessage("hello "+name) // Sends message.
+        time.Sleep(time.Second)        // Sleeps for 1 second.
     }
 }
 ```
-
 
 Then consume the web socket on the client.
 
 ```svelte
 <script lang="ts">
     import {source} from "$frizzante/scripts/source.ts";
-    const messages = [] as string[]
-    // Connects to handler.
-    const socket = new WebSocket("/ws")
-    // Sends message.
-    socket.send("hello")
-    // Listens for messages.
+    const messages = [] as string[]     // Connects to handler.
+    const socket = new WebSocket("/ws") // Sends message.
+    socket.send("hello")                // Listens for messages.
     socket.addEventListener(
         "message", 
         function incoming(e){

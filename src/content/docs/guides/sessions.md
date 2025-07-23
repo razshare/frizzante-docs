@@ -13,14 +13,14 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-// Defines session state.
-type State struct{
-    Name string
+type State struct{ // Defines session state,
+    Name string    // which will be initialized
+                   // with a zero value.
 }
 
 func Welcome(con *connections.Connection) {
-    // Starts the session.
-    session := sessions.Start(con, State{})
+    session := sessions.Start[State](con) // Starts session
+                                          // with zero state.
 }
 ```
 
@@ -42,7 +42,7 @@ Read more about [order of operations](../order-of-operations).
 
 ## Save
 
-Use `sessions.Save()` to save the session state.
+Use `Save()` to save the session state.
 
 ```go
 //lib/handlers/welcome.go
@@ -59,18 +59,15 @@ type State struct{
 }
 
 func Welcome(con *connections.Connection) {
-    // Starts the session.
-    session := sessions.Start[State](con)
-    // Saves the session when out of scope.
-    defer sessions.Save(session)
-    // Modifies session state.
-    session.State.Name = "World"
+    session := sessions.Start[State](con) // Starts session.
+    defer sessions.Save(session)          // Saves state.
+    session.State.Name = "World"          // Modifies state.
 }
 ```
 
 ## Load
 
-Use `sessions.Load()` to load the session state.
+Use `Load()` to load the session state.
 
 ```go
 //lib/handlers/welcome.go
@@ -86,12 +83,12 @@ type State struct{
 }
 
 func Welcome(con *connections.Connection) {
-    // Starts the session.
-    session := sessions.Start[State](con)
-    // Loads the session state (not necessary, read below).
-    sessions.Load(session)
-    // Sends text.
-    con.SendMessage("Hello " + session.State.Name)
+    session := sessions.Start[State](con) // Starts session.
+    sessions.Load(session)                // Loads session state 
+                                          // (not necessary, 
+                                          // read below).
+    name := session.State.Name
+    con.SendMessage("Hello " + name)      // Sends text.
 }
 ```
 
@@ -104,7 +101,7 @@ long running [server sent events](../server-sent-events) or [web socket](../web-
 
 ## Destroy
 
-Use `sessions.Destroy()` to destroy a session.
+Use `Destroy()` to destroy a session.
 
 ```go
 //lib/handlers/welcome.go
@@ -121,18 +118,16 @@ type State struct{
 }
 
 func Welcome(con *connections.Connection) {
-    // Starts the session.
-    session := sessions.Start[State](con)
-    // Destroys the session.
-    sessions.Destroy(session)
+    session := sessions.Start[State](con) // Starts session.
+    sessions.Destroy(session)             // Destroys session.
 }
 ```
 
 ## Customization
 
-Sessions are managed through a series of function pointer defines directly under the `sessions` package.
+Sessions are managed through a series of function pointer defined directly under the `sessions` package.
 
-You can overwrite these default function pointers with your own.
+You can overwrite these function pointers with your own in order to customize sessions behavior.
 
 
 ```go

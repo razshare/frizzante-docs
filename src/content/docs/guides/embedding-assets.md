@@ -15,16 +15,17 @@ import (
 )
 
 //go:embed app/dist
-var efs embed.FS
-var server = servers.New()
+var efs embed.FS           // Creates embed fs.
+var server = servers.New() // Creates server.
 
 func main() {
-    server.Efs = efs
-    servers.Start(server)
+    server.Efs = efs       // Sets embed fs, SendFileOrElse()
+                           // will take this fs into account.
+    server.Start()         // Starts server.
 }
 ```
 
-Not only serving a file with `connections.SendFileOrElse()` also takes into account the embedded file system, but
+Not only serving a file with `SendFileOrElse()` also takes into account the embedded file system, but
 your views' bundles are also included in the embedded file system, which makes your final binary
 completely standalone.
 

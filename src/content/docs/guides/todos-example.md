@@ -23,14 +23,14 @@ var server = servers.New()
 
 func main() {
 	servers.Efs = efs
-	servers.AddRoute(server, routes.Route{Pattern: "GET /", Handler: handlers.Default})
-	servers.AddRoute(server, routes.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
-	servers.AddRoute(server, routes.Route{Pattern: "GET /todos", Handler: handlers.Todos})
-	servers.AddRoute(server, routes.Route{Pattern: "GET /check", Handler: handlers.Check})
-	servers.AddRoute(server, routes.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
-	servers.AddRoute(server, routes.Route{Pattern: "GET /add", Handler: handlers.Add})
-	servers.AddRoute(server, routes.Route{Pattern: "GET /remove", Handler: handlers.Remove})
-	servers.Start(server)
+	server.AddRoute(routes.Route{Pattern: "GET /", Handler: handlers.Default})
+	server.AddRoute(routes.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
+	server.AddRoute(routes.Route{Pattern: "GET /todos", Handler: handlers.Todos})
+	server.AddRoute(routes.Route{Pattern: "GET /check", Handler: handlers.Check})
+	server.AddRoute(routes.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
+	server.AddRoute(routes.Route{Pattern: "GET /add", Handler: handlers.Add})
+	server.AddRoute(routes.Route{Pattern: "GET /remove", Handler: handlers.Remove})
+	server.Start()
 }
 ```
 
@@ -44,12 +44,12 @@ which acts as a fallback handler.
 ![](image200.svg)
 
 It is for that reason that this handler tries to send a matching file
-with `connections.SendFileOrElse()` before doing anything else.
+with `SendFileOrElse()` before doing anything else.
 
 ```go
 //lib/handlers/default.go
 func Default(con *connections.Connection) {
-	connections.SendFileOrElse(con, func() { Welcome(con) })
+	con.SendFileOrElse(func() { Welcome(con) })
 }
 ```
 
@@ -59,12 +59,12 @@ This handler essentially acts as a file server and falls back to `Welcome`.
 
 ## Welcome Handler
 
-All this handler does is send the `"Welcome"` view to the user with `connections.SendView()`.
+All this handler does is send the `"Welcome"` view to the user with `SendView()`.
 
 ```go
 //lib/handlers/welcome.go
 func Welcome(con *connections.Connection) {
-	connections.SendView(con, views.View{Name: "Welcome"})
+	con.SendView(views.View{Name: "Welcome"})
 }
 ```
 
@@ -165,6 +165,11 @@ not compatible with the user's browser. In that case there's still a good chance
 the hyperlink will continue to work by falling back to its standard behavior.
 :::
 
+:::tip
+If you need more control over errors and pending states 
+see [Link Component](../web-standards/#link-component).
+:::
+
 ## Todos Handler
 
 It sends the `"Todos"` view to the user, along with a list of todos, which is
@@ -176,7 +181,7 @@ func Todos(con *connections.Connection) {
 	session := sessions.StartWith(con, lib.InitialState())
 	defer sessions.Save(session)
 
-	connections.SendView(con, views.View{
+	con.SendView(views.View{
 		Name: "Todos", 
 		Data: map[string]any{
 			"todos": session.State.Todos,
@@ -383,6 +388,11 @@ and behave like any other form, navigating away to the new path.
 ![](image102.gif)
 :::
 
+:::tip
+If you need more control over errors and pending states 
+see [Form Component](../web-standards/#form-component).
+:::
+
 ```go
 //lib/handlers/remove.go
 func Remove(con *connections.Connection) {
@@ -393,20 +403,20 @@ func Remove(con *connections.Connection) {
 
 	if 0 == count {
 		// No todos found, ignore the request.
-		connections.SendNavigate(con, "/todos")
+		con.SendNavigate("/todos")
 		return
 	}
 
-	indexString := connections.ReceiveQuery(con, "index")
+	indexString := con.ReceiveQuery("index")
 	if "" == indexString {
 		// No index found, ignore the request.
-		connections.SendNavigate(con, "/todos")
+		con.SendNavigate("/todos")
 		return
 	}
 
 	index, indexError := strconv.ParseInt(indexString, 10, 64)
 	if nil != indexError {
-		connections.SendView(con, views.View{Name: "Todos", Data: map[string]any{
+		con.SendView(views.View{Name: "Todos", Data: map[string]any{
 			"error": indexError.Error(),
 		}})
 		return
@@ -414,7 +424,7 @@ func Remove(con *connections.Connection) {
 
 	if index >= count {
 		// Index is out of bounds, ignore the request.
-		connections.SendNavigate(con, "/todos")
+		con.SendNavigate("/todos")
 		return
 	}
 
@@ -423,12 +433,12 @@ func Remove(con *connections.Connection) {
 		session.State.Todos[index+1:]...,
 	)
 
-	connections.SendNavigate(con, "/todos")
+	con.SendNavigate("/todos")
 }
 ```
 
 :::caution
-Notice the use of `connections.ReceiveQuery(con, "index")`.
+Notice the use of `con.ReceiveQuery("index")`.
 
 This is a reminder that, if not specified otherwise, 
 forms prefer using the `GET` verb.
@@ -446,7 +456,7 @@ The equivalent using the `POST` verb would be
 ```go
 //lib/handlers/remove.go
 // ...
-form := connections.ReceiveForm(con)
+form := con.ReceiveForm()
 indexString := form.Get("index")
 // ...
 ```
@@ -559,10 +569,10 @@ func Add(con *connections.Connection) {
 	session := sessions.StartWith(con, lib.InitialState())
 	defer sessions.Save(session)
 
-	description := connections.ReceiveQuery(con, "description")
+	description := con.ReceiveQuery("description")
 
 	if "" == description {
-		connections.SendView(con, views.View{
+		con.SendView(views.View{
 			Name: "Todos",
 			Data: map[string]any{
 				"todos": session.State.Todos,
@@ -577,7 +587,7 @@ func Add(con *connections.Connection) {
 		Description: description,
 	})
 
-	connections.SendNavigate(con, "/todos")
+	con.SendNavigate("/todos")
 }
 ```
 

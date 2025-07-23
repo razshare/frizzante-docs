@@ -2,7 +2,7 @@
 title: Header
 ---
 
-Use `connections.ReceiveHeader()` to retrieve header fields and `connections.SendHeader()` to send them.
+Use `ReceiveHeader()` to retrieve header fields and `SendHeader()` to send them.
 
 ```go
 //lib/handlers/welcome.go
@@ -11,11 +11,9 @@ package handlers
 import "github.com/razshare/frizzante/connections"
 
 func Welcome(con *connections.Connection) {
-
-    // Retrieves field "Accept".
-    accept := connections.ReceiveHeader(con, "Accept")
-    // Sends it back.
-    connections.SendHeader(con, "Content-Type", accept)
+    accept := con.ReceiveHeader("Accept")  // Retrieves field 
+                                           // "Accept".
+    con.SendHeader("Content-Type", accept) // Sends it back.
 }
 ```
 

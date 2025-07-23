@@ -21,17 +21,18 @@ import (
 	"github.com/razshare/frizzante/servers"
 )
 
+// Creates server.
 var server = servers.New()
 
 func main() {
     // Adds guard.
-    servers.AddGuard(server, guards.Guard{
+    server.AddGuard(guards.Guard{
         // Names guard, this will appear in your notifier log.
         Name: "No Json Allowed",
         // Adds logic to guard.
         Handler: func(con *connections.Connection, allow func()) {
             // Rejects "application/json" requests...
-            if !connections.VerifyContentType(con, "application/json") {
+            if !con.VerifyContentType("application/json") {
                 return
             }
             // ...allows rest.
@@ -41,19 +42,19 @@ func main() {
         Tags: []string{"nojson", "jsonless"},
     })
     // Adds route.
-    servers.AddRoute(server, routes.Route{
+    server.AddRoute(routes.Route{
         // Maps route to a pattern.
         Pattern: "GET /",
         Handler: func(con *connections.Connection) {
             // Sends text.
-            connections.SendMessage(con, "I hope you're not one of those Json kids.")
+            con.SendMessage("I hope you're not one of those Json kids.")
         },
         // Tags route.
         Tags: []string{"nojson","auth"},
     })
 
     // Starts server.
-    servers.Start(server)
+    server.Start()
 }
 ```
 
@@ -68,13 +69,13 @@ In this case, the `GET /` route intersects with the `No Json Allowed` in `nojson
 Multiple guards can intersect in order to compose more advanced restrictions.
 
 ```go
-servers.AddGuard(server, guards.Guard{
+server.AddGuard(guards.Guard{
     Name: "Authorization",
     Handler: func(con *connections.Connection, allow func()) {
-        auth := connections.ReceiveHeader(con, "Authorization")
+        auth := con.ReceiveHeader("Authorization")
         if !SuperAdvancedAuthorizationCheckTM(auth) {
-            connections.SendStatus(con, 403)
-            connections.SendMessage(con, "Not authorized.")
+            con.SendStatus(403)
+            con.SendMessage("Not authorized.")
             return
         }
         allow()
@@ -84,12 +85,12 @@ servers.AddGuard(server, guards.Guard{
 ```
 
 ```go
-servers.AddGuard(server, guards.Guard{
+server.AddGuard(guards.Guard{
     Name: "Authentication",
     Handler: func(con *connections.Connection, allow func()) {
         session := sessions.Start[State](con)
         if !session.State.SignedIn {
-            connections.SendMessage(con, "Please sign in.")
+            con.SendMessage("Please sign in.")
             return
         }
         allow()
@@ -99,10 +100,10 @@ servers.AddGuard(server, guards.Guard{
 ```
 
 ```go
-servers.AddRoute(server, routes.Route{
+server.AddRoute(routes.Route{
     Pattern: "GET /",
     Handler: func(con *connections.Connection) {
-        connections.SendMessage(con, "Hello.")
+        con.SendMessage("Hello.")
     },
     Tags: []string{"auth"},
 })
@@ -117,10 +118,10 @@ You can still apply each guard separately with tags `authorization` and `authent
 <Tabs>
     <TabItem icon='open-book' label='Authorization'>
         ```go
-        servers.AddRoute(server, routes.Route{
+        server.AddRoute(routes.Route{
             Pattern: "GET /",
             Handler: func(con *connections.Connection) {
-                connections.SendMessage(con, "Hello.")
+                con.SendMessage("Hello.")
             },
             Tags: []string{"authorization"},
         })
@@ -128,10 +129,10 @@ You can still apply each guard separately with tags `authorization` and `authent
     </TabItem>
     <TabItem icon='open-book' label='Authentication'>
         ```go
-        servers.AddRoute(server, routes.Route{
+        server.AddRoute(routes.Route{
             Pattern: "GET /",
             Handler: func(con *connections.Connection) {
-                connections.SendMessage(con, "Hello.")
+                con.SendMessage("Hello.")
             },
             Tags: []string{"authentication"},
         })

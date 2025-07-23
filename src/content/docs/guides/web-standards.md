@@ -34,7 +34,7 @@ import (
 )
 
 func Welcome(con *connections.Connection)  {
-	connections.SendView(con, views.View{
+	con.SendView(views.View{
 		Name: "Welcome",
 		RenderMode: views.RenderModeServer,
 	})
@@ -102,7 +102,7 @@ import (
 )
 
 func Welcome(con *connections.Connection)  {
-	connections.SendView(con, views.View{
+	con.SendView(views.View{
 		Name: "Welcome",
 		RenderMode: views.RenderModeServer,
 	})
@@ -154,40 +154,6 @@ async function onsubmit(e: Event) {
 
 Which swaps the current state and view for new ones served by `/process`.
 
-## Form Component
-
-Frizzante provides a builtin `<Form>` component that manages
-pending requests and errors while submitting form.
-
-It is a replacement for your `<form>` elements.
-
-In your project root directory, run the following
-
-```sh
-frizzante -dform
-```
-
-This will add the `<Form>` component to your project.
-
-This component passes down `pending` and `error` states through the `children` snippet.
-
-```svelte
-<script lang="ts">
-    import Form from "$frizzante/forms/components/Form.svelte"
-</script>
-
-<From method="POST" action="/login">
-    {#snippet children({pending, error})}
-        <input type="email" name="email">
-        <input type="password" name="password">
-        <button disabled={pending} type="submit">Login</button>
-        
-        {#if error}
-            <span>Something went wrong: {error}</span>
-        {/if}
-    {/snippet}
-</Form>
-```
 
 ## Link Component
 
@@ -222,4 +188,39 @@ This component passes down `pending` and `error` states through the `children` s
         {/if}
     {/snippet}
 </Link>
+```
+
+## Form Component
+
+Frizzante provides a builtin `<Form>` component that manages
+pending requests and errors while submitting form.
+
+It is a replacement for your `<form>` elements.
+
+In your project root directory, run the following
+
+```sh
+frizzante -dform
+```
+
+This will add the `<Form>` component to your project.
+
+This component passes down `pending` and `error` states through the `children` snippet.
+
+```svelte
+<script lang="ts">
+    import Form from "$frizzante/forms/components/Form.svelte"
+</script>
+
+<From method="POST" action="/login">
+    {#snippet children({pending, error})}
+        <input type="email" name="email">
+        <input type="password" name="password">
+        <button disabled={pending} type="submit">Login</button>
+        
+        {#if error}
+            <span>Something went wrong: {error}</span>
+        {/if}
+    {/snippet}
+</Form>
 ```

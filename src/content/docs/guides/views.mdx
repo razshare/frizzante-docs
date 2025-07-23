@@ -26,7 +26,7 @@ import Profile from '$lib/views/Profile.svelte'
 
 // Defines that components "Welcome" and "Profile"
 // can be rendered on the server when 
-// sent with `connections.SendView()`.
+// sent with `SendView()`.
 export const views = {
     "Welcome": Welcome,
     "Profile": Profile,
@@ -41,7 +41,7 @@ Views that are meant to be rendered on the client should be exported by `app/exp
 
 // Defines that components "Welcome" and "Profile"
 // can be bundled and rendered on the client when
-// sent with `connections.SendView()`.
+// sent with `SendView()`.
 export const views = {
     "Welcome": import('$lib/views/Welcome.svelte'),
     "Profile": import('$lib/views/Profile.svelte'),
@@ -66,7 +66,7 @@ export const views = {
 
 ## Send Views
 
-Use `connections.SendView()` to send a view from a route handler.
+Use `SendView()` to send a view from a route handler.
 
 ```go
 //lib/handlers/welcome.go
@@ -79,7 +79,7 @@ import (
 
 func Welcome(con *connections.Connection) {
     // Sends view "Welcome".
-    connections.SendView(con, views.View{Name: "Welcome"}) 
+    con.SendView(views.View{Name: "Welcome"}) 
 }
 ```
 
@@ -89,7 +89,7 @@ The **Name** of the view will be used to lookup the view component exported by *
 
 There is no way to specify a "**default view**".
 
-However, you can use `connections.SendFileOrElse()` in order to send a file or run custom logic if it doesn't exist.
+However, you can use `SendFileOrElse()` in order to send a file or run custom logic if it doesn't exist.
 
 ```go
 //lib/handlers/welcome.go
@@ -103,9 +103,9 @@ import (
 func Welcome(con *connections.Connection) {
     // Attempts to send file requested 
     // by the user, or else...
-    connections.SendFileOrElse(con, func () {
+    con.SendFileOrElse(func () {
         // ... sends view "Welcome".
-        connections.SendView(con, views.View{Name: "Welcome"})
+        con.SendView(views.View{Name: "Welcome"})
     })
 }
 ```
@@ -122,17 +122,15 @@ import (
 )
 
 //go:embed app/dist
-var efs embed.FS
-var server = servers.New()
-var route = routes.Route{
+var server = servers.New() // Creates server.
+var route = routes.Route{  // Creates route.
     Pattern: "GET /",
     Handler: handlers.Welcome,
 }
 
 func main() {
-    server.Efs = efs
-    servers.AddRoute(server, route)
-    servers.Start(server)
+    server.AddRoute(route) // Adds route.
+    server.Start()         // Starts server.
 }
 ```
 
@@ -151,7 +149,7 @@ import (
 
 func Welcome(con *connections.Connection) {
     // Sends view "Welcome".
-    connections.SendView(con, views.View{ 
+    con.SendView(views.View{ 
         Name: "Welcome",
         Data: map[string]string{
             // Adds property "name" 
@@ -205,7 +203,7 @@ import (
 
 func Welcome(con *connections.Connection) {
     // Sends view "Welcome".
-    connections.SendView(con, views.View{
+    con.SendView(views.View{
         Name: "Welcome",
         // Renders view on server and client.
         RenderMode: views.RenderModeFull,
@@ -229,7 +227,7 @@ import (
 
 func Welcome(con *connections.Connection) {
     // Sends view "Welcome".
-    connections.SendView(con, views.View{
+    con.SendView(views.View{
         Name: "Welcome",
         // Renders view on server.
         RenderMode: views.RenderModeServer,
@@ -262,7 +260,7 @@ import (
 
 func Welcome(con *connections.Connection) {
     // Sends view "Welcome".
-    connections.SendView(con, views.View{
+    con.SendView(views.View{
         Name: "Welcome",
         // Renders view on client.
         RenderMode: views.RenderModeClient,

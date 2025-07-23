@@ -2,7 +2,7 @@
 title: Routes
 ---
 
-You can add a new route to the server with `servers.AddRoute()`.
+You can add a new route to the server with `AddRoute()`.
 
 ```go
 //main.go
@@ -13,20 +13,16 @@ import (
     "main/lib/handlers"
 )
 
-// Creates server.
-var server = servers.New()
+var server = servers.New()  // Creates server.
 
-// Creates route.
-var route = routes.Route{
+var route = routes.Route{   // Creates route.
     Pattern: "GET /", 
     Handler: handlers.Welcome,
 }
 
 func main() {
-     // Adds route.
-    servers.AddRoute(server, route)
-    // Starts server.
-    servers.Start(server)
+    server.AddRoute(route) // Adds route.
+    server.Start()         // Starts server.
 }
 ```
 
@@ -39,7 +35,6 @@ package handlers
 import "github.com/razshare/frizzante/connections"
 
 func Welcome(con *connections.Connection) {
-    // Sends text.
-    connections.SendMessage(con, "Hello")
+    con.SendMessage("Hello") // Sends text.
 }
 ```

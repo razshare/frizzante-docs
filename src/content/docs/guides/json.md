@@ -2,7 +2,7 @@
 title: Json
 ---
 
-Use `connections.ReceiveJson()` to parse incoming content as json and `connections.SendJson()` to send data as json when using `POST` and `PUT` http verbs.
+Use `ReceiveJson()` to parse incoming content as json and `SendJson()` to send data as json when using `POST` and `PUT` http verbs.
 
 ```go
 routes.Route{Pattern: "POST /", Handler: handlers.Welcome}
@@ -16,15 +16,14 @@ package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-// Defines a struct in which to store the json content.
-type GreetingDetails struct {
-    Name string `json:"name"`
-}
+type GreetingDetails struct { // Defines a struct in 
+    Name string `json:"name"` // which to store the 
+}                             // json content.
 
 func Welcome(con *connections.Connection) {
-    // Parses the content and stores it in value.
-    value := connections.ReceiveJson[GreetingDetails](con, value)
-    // Sends it back.
-    connections.SendJson(con, value)
+    var value GreetingDetails // Create a zero value.
+    con.ReceiveJson(&value)   // Parses the content 
+                              // and stores it in value.
+    con.SendJson(value)       // Sends it back.
 }
 ```
