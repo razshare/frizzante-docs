@@ -10,6 +10,10 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Frizzante Docs",
+      favicon: "./src/assets/frizz-octo-round.ico",
+      logo: {
+        src: "./src/assets/frizz-octo-round.webp",
+      },
       social: [
         {
           icon: "discord",
