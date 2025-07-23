@@ -125,7 +125,7 @@ func Welcome(con *connections.Connection) {
 
 ## Customization
 
-Sessions are managed through a series of function pointer defined directly under the `sessions` package.
+Sessions are managed through a series of function pointers defined directly under the `sessions` package.
 
 You can overwrite these function pointers with your own in order to customize sessions behavior.
 
