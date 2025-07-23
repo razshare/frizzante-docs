@@ -32,10 +32,10 @@ func main() {
         // Adds logic to guard.
         Handler: func(con *connections.Connection, allow func()) {
             // Rejects "application/json" requests...
-            if !con.VerifyContentType("application/json") {
+            if con.VerifyContentType("application/json") {
                 return
             }
-            // ...allows rest.
+            // ...allows other requests.
             allow()
         },
         // Tags guard.
