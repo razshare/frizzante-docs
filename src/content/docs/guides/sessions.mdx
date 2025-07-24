@@ -2,6 +2,8 @@
 title: Sessions
 ---
 
+import { FileTree } from '@astrojs/starlight/components'
+
 Use `sessions.Start()` to start a session.
 
 ```go
@@ -123,23 +125,72 @@ func Welcome(con *connections.Connection) {
 }
 ```
 
-## Customization
 
-Sessions are managed through a series of function pointers defined directly under the `sessions` package.
+## Custom Archive
 
-You can overwrite these function pointers with your own in order to customize sessions behavior.
-
+Sessions are managed through the servers's session archive which you can freely overwrite.
 
 ```go
 //main.go
-import "github.com/razshare/frizzante/sessions"
+package main
 
-func main(){
-    sessions.Set = func(id string, key string, value []byte) error {}
-    sessions.Get = func(id string, key string) ([]byte, error) {}
-    sessions.Has = func(id string, key string) (bool, error) {}
-    sessions.Remove = func(id string, key string) error {}
-    sessions.HasId = func(id string) (bool, error) {}
-    sessions.RemoveId = func(id string) error {}
+import "github.com/razshare/frizzante/servers"
+
+func main() {
+	server := servers.New()
+	server.SessionArchive = &CustomArchive{}
 }
 ```
+
+Where `CustomArchive` implements `archives.Archive`.
+
+```go
+type Archive interface {
+    Get(domain string, key string) ([]byte, error)
+    Set(domain string, key string, value []byte) error
+    Has(domain string, key string) (bool, error)
+    Remove(domain string, key string) error
+    HasDomain(domain string) (bool, error)
+    RemoveDomain(domain string) error
+}
+```
+
+### Archive Details
+
+Think of an archive as a repository of data separated in two layers; `domains` and `keys`.
+
+An archive contains `domains` which contains `keys`.
+
+<FileTree>
+    - archive
+        - domain-1
+            - key-a
+            - key-b
+        - domain-2
+            - key-x
+            - key-y
+</FileTree>
+
+### Default Session Archive
+
+The default server session archive is backed by the file system,
+more specifically, by a `.gen/sessions` directory.
+
+<FileTree>
+    - .gen
+        - sessions
+            - 0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2
+                - session.json
+            - 8a6d8cfa-2fc7-4dbb-6be9-beb823318303
+                - session.json
+</FileTree>
+
+```json
+//.gen/sessions/0d0d0c2f-6bb9-405f-6a41-d4fe9acf3dd2/session.json
+{
+    "Name": "world"
+}
+```
+
+Each `subdirectory` (**domain**) takes the id of a session and it contains the state in a `session.json` file (**key**), 
+thus, there are as many subdirectories as there are sessions.
