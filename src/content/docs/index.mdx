@@ -1,7 +1,7 @@
 ---
 title: Welcome to Frizzante
 description: Get started building your docs site with Starlight.
-template: splash
+template: doc
 hero:
   tagline: An opinionated web server framework written in Go that uses Svelte to render web pages.
   image:
@@ -15,7 +15,6 @@ hero:
       icon: external
       variant: minimal
 ---
-
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 <CardGrid stagger>
@@ -29,6 +28,37 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   </Card>
   <Card title='Render Modes' icon='biome'>
     Switch between rendering on the server, client or both at runtime.
+    ```go
+    con.SendView(views.View{
+        Name: "Welcome",
+        RenderMode: views.RenderFull,
+        // RenderMode: views.RenderMode,
+        // RenderMode: views.RenderModeClient,
+    })
+    ```
     <LinkCard title='Read More' href="/frizzante-docs/guides/views/#render-modes"/>
+  </Card>
+  <Card title='Web Sockets' icon='heart'>
+    Simple Web Sockets api.
+    ```go
+    con.SendWsUpgrade()
+    for {
+        name := con.ReceiveMessage()
+        con.SendMessage("Hello " + name)
+        time.Sleep(time.Second)
+    }
+    ```
+    <LinkCard title='Read More' href="/frizzante-docs/guides/web-sockets"/>
+  </Card>
+  <Card title='Server Sent Events' icon='heart'>
+    Simple Server Sent Events api.
+    ```go
+    con.SendSseUpgrade()
+    for {
+        con.SendMessage("Hello.")
+        time.Sleep(time.Second)
+    }
+    ```
+    <LinkCard title='Read More' href="/frizzante-docs/guides/web-sockets"/>
   </Card>
 </CardGrid>
