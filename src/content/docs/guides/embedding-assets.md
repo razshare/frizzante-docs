@@ -15,12 +15,18 @@ import (
 )
 
 //go:embed app/dist
-var efs embed.FS           // Creates embed fs.
+var efs embed.FS           // Creates an embedded file system
+                           // from the "app/dist" directory.
+                           // This directory contains your
+                           // JavaScript bundles.
+
 var server = servers.New() // Creates server.
 
 func main() {
-    server.Efs = efs       // Sets embed fs, SendFileOrElse()
-                           // will take this fs into account.
+    server.Efs = efs       // Sets the embedded file system.
+                           // SendFileOrElse() will take this 
+                           // file system into account.
+
     server.Start()         // Starts server.
 }
 ```

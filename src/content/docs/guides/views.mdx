@@ -151,9 +151,8 @@ func Welcome(con *connections.Connection) {
     con.SendView(views.View{ 
         Name: "Welcome",
         Data: map[string]string{
-            // Adds property "name" 
-            // with value "world".
-            "name": "world",
+            "name": "world", // Adds property "name" 
+                             // with value "world".
         },
     }) 
 }
