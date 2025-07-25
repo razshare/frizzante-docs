@@ -12,7 +12,10 @@ You can use `href()` and `action()` in order to make your hyperlinks and forms a
     import { href } from "$frizzante/scripts/href.ts"
 </script>
 
-<a {...href("/some-other-page")}> Go to some other page </a>
+<a {...href("/some-other-page")}> Go to some other page </a> <!-- Defines a link, which when triggered will either 
+                                                                  directly navigate to the given path, or do so 
+                                                                  through an http request, depending on wether 
+                                                                  JavaScript is enabled or not. -->
 ```
 
 When JavaScript is disabled, `<a>` will render as a traditional anchor, which by default
@@ -29,15 +32,16 @@ For example, given the following handler using `views.RenderModeServer`
 package handlers
 
 import (
-	"github.com/razshare/frizzante/connections"
-	"github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/connections"
+    "github.com/razshare/frizzante/views"
 )
 
 func Welcome(con *connections.Connection)  {
-	con.SendView(views.View{
-		Name: "Welcome",
-		RenderMode: views.RenderModeServer,
-	})
+    con.SendView(views.View{                // Sends a view.
+        Name: "Welcome",                    // Sets the view's name.
+        RenderMode: views.RenderModeServer, // Renders the view only on the server, 
+                                            // meaning the view won't contain any JavaScript code.
+    })
 }
 ```
 
@@ -56,15 +60,33 @@ But using `views.RenderModeFull` will instead render
 Where `onclick` is defined as 
 
 ```ts
-import type { View } from "$frizzante/types.ts"
-import { swaps } from "$frizzante/scripts/swaps.ts"
+//app/frizzante/core/scripts/href.ts
+import { getContext } from "svelte"
+import type { View } from "$frizzante/core/types.ts"
+import { route } from "$frizzante/core/scripts/route.ts"
+import { swaps } from "$frizzante/core/scripts/swaps.ts"
 
-async function onclick(e: MouseEvent) {
-    e.preventDefault()
-    const view = getContext("view") as View<unknown>
-    await swaps.swap(view).withPath(path).play(true)
-    return false
+export function href(path = ""): {
+    href: string
+    onclick: (event: MouseEvent) => Promise<boolean>
+} {
+    const view = getContext("view") as View<never>
+    route(view)
+    return {
+        href: path,
+        async onclick(event: MouseEvent) {
+            event.preventDefault()
+            await swaps
+                .swap(view)       // Sets a reference to the current view state (which is reactive).
+                .withPath(path)   // Defines the path where to send the underlying http request.
+                .withUpdate(true) // Defines wether or not to update the application state and url.
+                .play()           // Sends the http request, grabs the result, update the view 
+                                  // and also updates state and url if possible.
+            return false
+        },
+    }
 }
+
 ```
 
 Which swaps the current state and view for new ones served by `/some-other-page`.
@@ -77,9 +99,11 @@ Which swaps the current state and view for new ones served by `/some-other-page`
     import { action } from "$frizzante/scripts/action.ts"
 </script>
 
-<form {...action("/process")}>
-    <input type="text" name="name" />
-    <button type="submit">Submit</button>
+<form {...action("/process")}>            <!-- Defines a form. -->
+    <input type="text" name="name" />     <!-- Defines a text field. -->
+    <button type="submit">Submit</button> <!-- Defines a button, which when triggered will either 
+                                               directly submit the form, or do so through an http request, 
+                                               depending on wether JavaScript is enabled or not. -->
 </form>
 ```
 
@@ -97,15 +121,15 @@ For example, given the following handler using `views.RenderModeServer`
 package handlers
 
 import (
-	"github.com/razshare/frizzante/connections"
-	"github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/connections"
+    "github.com/razshare/frizzante/views"
 )
 
 func Welcome(con *connections.Connection)  {
-	con.SendView(views.View{
-		Name: "Welcome",
-		RenderMode: views.RenderModeServer,
-	})
+    con.SendView(views.View{                // Sends a view.
+        Name: "Welcome",                    // Sets the name of the view.
+        RenderMode: views.RenderModeServer, // Render the view only on the server.
+    })
 }
 ```
 
@@ -130,26 +154,41 @@ But using `views.RenderModeFull` will instead render
 Where `onsubmit` is defined as 
 
 ```ts
-import type { View } from "$frizzante/types.ts"
-import { swaps } from "$frizzante/scripts/swaps.ts"
+//app/frizzante/core/scripts/action.ts
+import { getContext } from "svelte"
+import type { View } from "$frizzante/core/types.ts"
+import { route } from "$frizzante/core/scripts/route.ts"
+import { swaps } from "$frizzante/core/scripts/swaps.ts"
 
-async function onsubmit(e: Event) {
-    e.preventDefault()
-    const view = getContext("view") as View<unknown>
-    const form = e.target as HTMLFormElement
-    const body = new FormData(form)
-    const target = e.target as HTMLFormElement
+export function action(path = ""): {
+    action: string
+    onsubmit: (event: Event) => Promise<void>
+} {
+    const view = getContext("view") as View<never>
+    route(view)
+    return {
+        action: path,
+        async onsubmit(event: Event) {
+            event.preventDefault()
+            const form = event.target as HTMLFormElement
+            const body = new FormData(form)
+            const target = event.target as HTMLFormElement
 
-    await swaps
-        .swap(view)
-        .withMethod(target.method)
-        .withPath(path)
-        .withBody(body)
-        .play(true)
-        .then(function done() {
-            form.reset()
-        })
+            await swaps
+                .swap(view)                // Sets a reference to the current view state (which is reactive).
+                .withMethod(target.method) // Sets the method for the underlying http request.
+                .withPath(path)            // Sets the path where to send the http request.
+                .withBody(body)            // Sets the body for the http request.
+                .withUpdate(true)          // Defines wether or not to update the application state and url.
+                .play()                    // Sends the http request, grabs the result, update the view 
+                                           // and application's state and url (if possible, as defined by withUpdate()).
+                .then(function done() {
+                    form.reset()           // Resets the form in order to mimic the standard form behavior.
+                })
+        },
+    }
 }
+
 ```
 
 Which swaps the current state and view for new ones served by `/process`.
@@ -177,14 +216,14 @@ This component passes down `pending` and `error` states through the `children` s
     import Link from "$frizzante/links/components/Link.svelte"
 </script>
 
-<Link>
-    {#snippet children({pending, error})}
-        {#if pending}
-            <span>Loading...</span>
-        {:else if error}
-            <span>Something went wrong: {error}</span>
-        {:else}
-            <span>Click me</span>
+<Link href="/some-path">                               <!-- Defines a link. -->
+    {#snippet children({pending, error})}              <!-- Captures the link's pending and error states. -->
+        {#if pending}                                  <!-- If the underlying http request is pending... -->
+            <span>Loading...</span>                    <!-- ...renders a loading hint. -->
+        {:else if error}                               <!-- If there's been some sort of error... -->
+            <span>Something went wrong: {error}</span> <!-- ...renders the error. -->
+        {:else}                                        <!-- If the link is idle... -->
+            <span>Click me</span>                      <!-- ...renders the link's idle content. -->
         {/if}
     {/snippet}
 </Link>
@@ -212,14 +251,14 @@ This component passes down `pending` and `error` states through the `children` s
     import Form from "$frizzante/forms/components/Form.svelte"
 </script>
 
-<From method="POST" action="/login">
-    {#snippet children({pending, error})}
-        <input type="email" name="email">
-        <input type="password" name="password">
-        <button disabled={pending} type="submit">Login</button>
+<From method="POST" action="/login">                            <!-- Defines a form. -->
+    {#snippet children({pending, error})}                       <!-- Captures the forms's pending and error states. -->
+        <input type="email" name="email">                       <!-- Defines an email field. -->
+        <input type="password" name="password">                 <!-- Defines an password field. -->
+        <button disabled={pending} type="submit">Login</button> <!-- Defines a button, which is disabled when the form request is pending. -->
         
-        {#if error}
-            <span>Something went wrong: {error}</span>
+        {#if error}                                             <!-- If there's been some sort of error... -->
+            <span>Something went wrong: {error}</span>          <!-- ...renders the error. -->
         {/if}
     {/snippet}
 </Form>

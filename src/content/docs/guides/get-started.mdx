@@ -2,27 +2,59 @@
 title: What is Frizzante?
 ---
 
-import { FileTree, Steps } from '@astrojs/starlight/components';
+import { FileTree, Steps, Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
 
 Frizzante is an opinionated web server framework written in Go that uses Svelte to render web pages.
 
 #### Prerequisites
 
-Install `build-essential` and `frizzante`.
+<Tabs>
+    <TabItem icon='linux' label='Linux'>
+        Install `build-essential` and `frizzante`.
 
-```sh
-sudo apt install build-essential
-go install github.com/razshare/frizzante@latest
-```
+        ```sh
+        sudo apt install build-essential
+        go install github.com/razshare/frizzante@latest
+        ```
 
-:::tip
-Remember to add Go binaries to your path.
+        :::tip
+        Remember to add Go binaries to your path.
 
-```sh
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
-```
-:::
+        ```sh
+        export GOPATH=$HOME/go
+        export PATH=$PATH:$GOPATH/bin
+        ```
+        :::
+    </TabItem>
+    <TabItem icon='apple' label='Darwin'>
+        Install `frizzante`.
+
+        ```sh
+        go install github.com/razshare/frizzante@latest
+        ```
+
+        :::tip
+        Remember to add Go binaries to your path.
+
+        ```sh
+        export GOPATH=$HOME/go
+        export PATH=$PATH:$GOPATH/bin
+        ```
+        :::
+    </TabItem>
+    <TabItem icon='download' label='Binaries'>
+        <LinkButton
+            href="https://github.com/razshare/frizzante/releases"
+            variant="secondary"
+            icon="external"
+            iconPlacement="start"
+        >
+        Download the latest binaries from GitHub.
+        </LinkButton>
+    </TabItem>
+</Tabs>
+
+
 
 #### Get Started
 

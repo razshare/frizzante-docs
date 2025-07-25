@@ -15,14 +15,13 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-type State struct{ // Defines session state,
-    Name string    // which will be initialized
-                   // with a zero value.
+type State struct{                          // Defines a struct which will hold the state 
+    Name string                             // of the session. This struct will later be
+                                            // initialized with a zero value.
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start[State](con) // Starts session
-                                          // with zero state.
+    session := sessions.Start[State](con)   // Starts the session with zero state.
 }
 ```
 
@@ -55,15 +54,21 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-// Defines session state.
-type State struct{
-    Name string
+type State struct{                        // Defines a struct which will hold the state 
+    Name string                           // of the session. This struct will later be
+                                          // initialized with a zero value.
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start[State](con) // Starts session.
-    defer sessions.Save(session)          // Saves state.
+    session := sessions.Start[State](con) // Starts the session.
+
+    defer sessions.Save(session)          // Saves the session's state.
+                                          // Since it's deferred, this will execute 
+                                          // when the handler terminates execution.
+
     session.State.Name = "World"          // Modifies state.
+
+                                          // <== Deferred session.Save(session) executes.
 }
 ```
 
@@ -79,18 +84,16 @@ import (
     "github.com/razshare/frizzante/connections"
     "github.com/razshare/frizzante/sessions"
 )
-// Defines session state.
-type State struct{
-    Name string
+
+type State struct{                                 // Defines a struct which will hold the state 
+    Name string                                    // of the session. This struct will later be
+                                                   // initialized with a zero value.
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start[State](con) // Starts session.
-    sessions.Load(session)                // Loads session state 
-                                          // (not necessary, 
-                                          // read below).
-    name := session.State.Name
-    con.SendMessage("Hello " + name)      // Sends text.
+    session := sessions.Start[State](con)          // Starts the session.
+    sessions.Load(session)                         // Loads the session's state (not necessary, read below).
+    con.SendMessage("Hello " + session.State.Name) // Sends text.
 }
 ```
 
@@ -114,14 +117,14 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-// Defines session state.
-type State struct{
-    Name string
+type State struct{                         // Defines a struct which will hold the state 
+    Name string                            // of the session. This struct will later be
+                                           // initialized with a zero value.
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start[State](con) // Starts session.
-    sessions.Destroy(session)             // Destroys session.
+    session := sessions.Start[State](con) // Starts the session.
+    sessions.Destroy(session)             // Destroys the session.
 }
 ```
 
@@ -137,8 +140,12 @@ package main
 import "github.com/razshare/frizzante/servers"
 
 func main() {
-	server := servers.New()
-	server.SessionArchive = &CustomArchive{}
+    server := servers.New()                  // Creates a server.
+    server.SessionArchive = &CustomArchive{} // Overwrite the default session archive.
+                                             // The default session archive saves and loads
+                                             // session from disk, you can overwrite this
+                                             // in order to save and load session, for example,
+                                             // using a database.
 }
 ```
 
@@ -154,6 +161,8 @@ type Archive interface {
     RemoveDomain(domain string) error
 }
 ```
+
+And subsequently, where `domain` is the user's session id and `key` is always set to `"session.json"`.
 
 ### Archive Details
 
@@ -194,3 +203,20 @@ more specifically, by a `.gen/sessions` directory.
 
 Each `subdirectory` (**domain**) takes the id of a session and it contains the state in a `session.json` file (**key**), 
 thus, there are as many subdirectories as there are sessions.
+
+So given the interface from above, the following would be description of what the default implementation does, at a high level.
+
+```go
+type Archive interface {
+    Get(domain string, key string) ([]byte, error)     // Gets the contents of file .gen/sessions/{domain}/{key}.
+    Set(domain string, key string, value []byte) error // Sets the contents of file .gen/sessions/{domain}/{key}.
+    Has(domain string, key string) (bool, error)       // Checks if file .gen/sessions/{domain}/{key} exists.
+    Remove(domain string, key string) error            // Removes file .gen/sessions/{domain}/{key}.
+    HasDomain(domain string) (bool, error)             // Checks if directory .gen/sessions/{domain} exists.
+    RemoveDomain(domain string) error                  // Removes directory .gen/sessions/{domain}.
+}
+```
+
+:::note
+Remember, `key` is always `"session.json"` in this context.
+:::

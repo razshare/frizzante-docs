@@ -15,46 +15,33 @@ Start by adding a guard to the server
 package main
 
 import (
-	"github.com/razshare/frizzante/connections"
-	"github.com/razshare/frizzante/guards"
-	"github.com/razshare/frizzante/routes"
-	"github.com/razshare/frizzante/servers"
+    "github.com/razshare/frizzante/connections"
+    "github.com/razshare/frizzante/guards"
+    "github.com/razshare/frizzante/routes"
+    "github.com/razshare/frizzante/servers"
 )
 
-// Creates server.
-var server = servers.New()
+var server = servers.New()                                         // Creates a server.
 
 func main() {
-    // Adds guard.
-    server.AddGuard(guards.Guard{
-        // Names guard, this will appear in your notifier log.
-        Name: "No Json Allowed",
-        // Adds logic to guard.
-        Handler: func(con *connections.Connection, allow func()) {
-            // Rejects "application/json" requests...
-            if con.VerifyContentType("application/json") {
+    server.AddGuard(guards.Guard{                                  // Adds a guard.
+        Name: "No Json Allowed",                                   // Names the guard, this will appear in your notifier log.
+        Handler: func(con *connections.Connection, allow func()) { // Adds logic to the guard.
+            if con.VerifyContentType("application/json") {         // Rejects "application/json" requests...
                 return
             }
-            // ...allows other requests.
-            allow()
+            allow()                                                // ...allows other requests.
         },
-        // Tags guard.
-        Tags: []string{"nojson", "jsonless"},
+        Tags: []string{"nojson", "jsonless"},                      // Sets the guard's tags.
     })
-    // Adds route.
-    server.AddRoute(routes.Route{
-        // Maps route to a pattern.
-        Pattern: "GET /",
+    server.AddRoute(routes.Route{                                  // Adds a route.
+        Pattern: "GET /",                                          // Maps the route to a pattern.
         Handler: func(con *connections.Connection) {
-            // Sends text.
-            con.SendMessage("I hope you're not one of those Json people.")
+            con.SendMessage("Hello.")                              // Sends text.
         },
-        // Tags route.
-        Tags: []string{"nojson"},
+        Tags: []string{"nojson"},                                  // Sets the routes's tags.
     })
-
-    // Starts server.
-    server.Start()
+    server.Start()                                                 // Starts the server.
 }
 ```
 
@@ -69,43 +56,50 @@ In this case, the `GET /` route intersects with the `No Json Allowed` guard in `
 Multiple guards can intersect in order to compose more advanced restrictions.
 
 ```go
-server.AddGuard(guards.Guard{
-    Name: "Authorization",
-    Handler: func(con *connections.Connection, allow func()) {
-        auth := con.ReceiveHeader("Authorization")
-        if !SuperAdvancedAuthorizationCheckTM(auth) {
-            con.SendStatus(403)
-            con.SendMessage("Not authorized.")
-            return
+server.AddGuard(guards.Guard{                                  // Adds a guard.
+    Name: "Authorization",                                     // Sets the guard's name. It's useful for logs.
+    Handler: func(con *connections.Connection, allow func()) { // Sets the guard's handler. If allow() is never invoked, 
+                                                               // the guard will reject the request.
+
+        auth := con.ReceiveHeader("Authorization")             // Gets the "Authorization" header from the request.
+        if !SuperAdvancedAuthorizationCheckTM(auth) {          // If user is not authorized...
+            con.SendStatus(403)                                // ...sends status 403...
+            con.SendMessage("Not authorized.")                 // ...and a short message with an explanation.
+            return                                             // Returns. This will actually terminate the connection.
         }
-        allow()
+        allow()                                                // Allows the request through.
     },
-    Tags: []string{"authorization", "auth"},
+    Tags: []string{"authorization", "auth"},                   // Sets the guard's tags.
 })
 ```
 
 ```go
-server.AddGuard(guards.Guard{
-    Name: "Authentication",
-    Handler: func(con *connections.Connection, allow func()) {
-        session := sessions.Start[State](con)
-        if !session.State.SignedIn {
-            con.SendMessage("Please sign in.")
-            return
+server.AddGuard(guards.Guard{                                  // Adds a guard.
+    Name: "Authentication",                                    // Sets the guard's name. It's useful for logs.
+    Handler: func(con *connections.Connection, allow func()) { // Sets the guard's handler. If allow() is never invoked, 
+                                                               // the guard will reject the request.
+
+        session := sessions.Start[State](con)                  // Starts the session.
+        if !session.State.SignedIn {                           // If the use is not signed in...
+            con.SendStatus(403)                                // ...sends status 403...
+            con.SendMessage("Not authenticated.")              // ...and a short message with an explanation.
+            return                                             // Returns. This will actually terminate the connection.
         }
-        allow()
+        allow()                                                // Allows the request through.
     },
-    Tags: []string{"authentication", "auth"},
+    Tags: []string{"authentication", "auth"},                  // Sets the guard's tags.
 })
 ```
 
 ```go
-server.AddRoute(routes.Route{
-    Pattern: "GET /",
-    Handler: func(con *connections.Connection) {
-        con.SendMessage("Hello.")
+server.AddRoute(routes.Route{                    // Adds a route.
+    Pattern: "GET /",                            // Sets the route's pattern.
+    Handler: func(con *connections.Connection) { // Sets the route's handler.
+        con.SendMessage("Hello.")                // Sends text.
     },
-    Tags: []string{"auth"},
+    Tags: []string{"auth"},                      // Sets the route's tags. Any guard that intersects 
+                                                 // with these tags will execute before any 
+                                                 // request reaches the route's handler.
 })
 ```
 
@@ -118,23 +112,27 @@ You can still apply each guard separately with tags `authorization` and `authent
 <Tabs>
     <TabItem icon='open-book' label='Authorization'>
         ```go
-        server.AddRoute(routes.Route{
-            Pattern: "GET /",
-            Handler: func(con *connections.Connection) {
-                con.SendMessage("Hello.")
+        server.AddRoute(routes.Route{                    // Adds a route.
+            Pattern: "GET /",                            // Sets the route's pattern.
+            Handler: func(con *connections.Connection) { // Sets the route's handler.
+                con.SendMessage("Hello.")                // Sends text.
             },
-            Tags: []string{"authorization"},
+            Tags: []string{"authorization"},            // Sets the route's tags. Any guard that intersects 
+                                                        // with these tags will execute before any 
+                                                        // request reaches the route's handler.
         })
         ```
     </TabItem>
     <TabItem icon='open-book' label='Authentication'>
         ```go
-        server.AddRoute(routes.Route{
-            Pattern: "GET /",
-            Handler: func(con *connections.Connection) {
-                con.SendMessage("Hello.")
+        server.AddRoute(routes.Route{                    // Adds a route.
+            Pattern: "GET /",                            // Sets the route's pattern.
+            Handler: func(con *connections.Connection) { // Sets the route's handler.
+                con.SendMessage("Hello.")                // Sends text.
             },
-            Tags: []string{"authentication"},
+            Tags: []string{"authentication"},           // Sets the route's tags. Any guard that intersects 
+                                                        // with these tags will execute before any 
+                                                        // request reaches the route's handler.
         })
         ```
     </TabItem>

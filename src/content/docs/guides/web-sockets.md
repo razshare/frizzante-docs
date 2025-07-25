@@ -33,19 +33,17 @@ Then consume the web socket on the client.
 ```svelte
 <script lang="ts">
     import {source} from "$frizzante/scripts/source.ts";
-    const messages = [] as string[]     // Connects to handler.
-    const socket = new WebSocket("/ws") // Sends message.
-    socket.send("hello")                // Listens for messages.
-    socket.addEventListener(
-        "message", 
-        function incoming(e){
-            messages.push(e.data)
-        },
-    )
+    const messages:string[] = []                             // Creates a list of messages.
+    const socket = new WebSocket("/ws")                      // Connects to handler.
+    socket.send("hello")                                     // Sends message.
+    socket.addEventListener("message", function incoming(e){ // Listens for incoming messages.
+        messages.push(e.data)                                // Appends the incoming messages to
+                                                             // the list of messages for later use.
+    })
 </script>
 
 <h1>Messages</h1>
-{#each messages as message, id (id)}
-    <div>{message}</div>
+{#each messages as message, id (id)}                         <!-- Iterates the list of messages. -->
+    <div>{message}</div>                                     <!-- Renders the message. -->
 {/each}
 ```

@@ -11,7 +11,7 @@ package main
 import "github.com/razshare/frizzante/web"
 
 func main() {
-    server := servers.New() // Creates server.
-    server.Start()          // Starts it.
+    server := servers.New() // Creates a server.
+    server.Start()          // Starts the server.
 }
 ```

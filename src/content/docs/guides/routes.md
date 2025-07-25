@@ -13,9 +13,8 @@ import (
     "main/lib/handlers"
 )
 
-var server = servers.New()  // Creates server.
-
-var route = routes.Route{   // Creates route.
+var server = servers.New() // Creates server.
+var route = routes.Route{  // Creates route.
     Pattern: "GET /", 
     Handler: handlers.Welcome,
 }

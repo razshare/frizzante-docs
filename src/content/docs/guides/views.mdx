@@ -24,12 +24,14 @@ Views that are meant to be rendered on the server should be exported by `app/exp
 import Welcome from '$lib/views/Welcome.svelte'
 import Profile from '$lib/views/Profile.svelte'
 
-// Defines that components "Welcome" and "Profile"
-// can be rendered on the server when 
-// sent with `SendView()`.
-export const views = {
-    "Welcome": Welcome,
-    "Profile": Profile,
+export const views = {  // Defines that components "Welcome" and "Profile"
+                        // can be rendered on the server when sent with SendView().
+
+    "Welcome": Welcome, // When SendView(views:View{Name:"Welcome"}) is invoked, 
+                        // the component will render on the server.
+
+    "Profile": Profile, // When SendView(views:View{Name:"Profile"}) is invoked, 
+                        // the component will render on the server.
 }
 ```
 
@@ -38,13 +40,15 @@ export const views = {
 Views that are meant to be rendered on the client should be exported by `app/exports/client.ts`.
 ```ts
 //app/exports/client.ts
+export const views = { // Defines that components "Welcome" and "Profile"
+                       // can be bundled and rendered on the client when
+                       // sent with SendView().
 
-// Defines that components "Welcome" and "Profile"
-// can be bundled and rendered on the client when
-// sent with `SendView()`.
-export const views = {
-    "Welcome": import('$lib/views/Welcome.svelte'),
-    "Profile": import('$lib/views/Profile.svelte'),
+    "Welcome": import('$lib/views/Welcome.svelte'), // When SendView(views:View{Name:"Welcome"}) is invoked, 
+                                                    // the component will render on the client.
+
+    "Profile": import('$lib/views/Profile.svelte'), // When SendView(views:View{Name:"Profile"}) is invoked, 
+                                                    // the component will render on the client.
 }
 ```
 
@@ -64,9 +68,15 @@ export const views = {
 }
 ```
 
+:::note
+Keys in `app/exports/server.ts` and `app/exports/client.ts` are not mutually exclusive.\
+You can render the same component on both the server and the client at the same time.\
+See [Render Modes below](#render-modes).
+:::
+
 ## Send Views
 
-Use `SendView()` to send a view from a route handler.
+Use `SendView()` to send a view.
 
 ```go
 //lib/handlers/welcome.go
@@ -78,12 +88,15 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    // Sends view "Welcome".
-    con.SendView(views.View{Name: "Welcome"}) 
+    con.SendView(views.View{Name: "Welcome"}) // Sends view "Welcome".
 }
 ```
 
-The **Name** of the view will be used to lookup the view component exported by **server.ts** and/or **client.ts**.
+The **Name** of the view will be used to lookup the view component exported by **app/exports/server.ts** and/or **app/exports/client.ts**.
+
+:::caution
+If the view **Name** is not present in neither `app/exports/server.ts` or `app/exports/client.ts`, `SendView()` will fail.
+:::
 
 ## Default View
 
@@ -101,11 +114,8 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    // Attempts to send file requested 
-    // by the user, or else...
-    con.SendFileOrElse(func () {
-        // ... sends view "Welcome".
-        con.SendView(views.View{Name: "Welcome"})
+    con.SendFileOrElse(func () {                  // Attempts to send requested file, or else...
+        con.SendView(views.View{Name: "Welcome"}) // ...sends view "Welcome".
     })
 }
 ```
@@ -121,15 +131,15 @@ import (
     "github.com/razshare/frizzante/web"
 )
 
-var server = servers.New() // Creates server.
-var route = routes.Route{  // Creates route.
-    Pattern: "GET /",
-    Handler: handlers.Welcome,
+var server = servers.New()     // Creates a server.
+var route = routes.Route{      // Creates a route.
+    Pattern: "GET /",          // Sets the route's pattern.
+    Handler: handlers.Welcome, // Sets the route's handler.
 }
 
 func main() {
-    server.AddRoute(route) // Adds route.
-    server.Start()         // Starts server.
+    server.AddRoute(route)     // Adds the route to the server.
+    server.Start()             // Starts the server.
 }
 ```
 
@@ -147,12 +157,10 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    // Sends view "Welcome".
-    con.SendView(views.View{ 
-        Name: "Welcome",
-        Data: map[string]string{
-            "name": "world", // Adds property "name" 
-                             // with value "world".
+    con.SendView(views.View{     // Sends a view.
+        Name: "Welcome",         // Sets the view's name.
+        Data: map[string]string{ // Sets the view's data, which will be injected into the svelte component.
+            "name": "world",     // Adds property "name" with value "world".
         },
     }) 
 }
@@ -164,7 +172,7 @@ These properties are passed down to your view component.
 //app/lib/views/Hello.svelte
 <script lang="ts">
     type Props = { name: string }
-    let {name}:Props = $props()
+    let {name}:Props = $props() // Retrieves server data.
 </script>
 
 <h1>Hello {name}</h1>
@@ -176,7 +184,9 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 //app/lib/views/Hello.svelte
 <script lang="ts">
     import type { View } from "$frizzante/types.ts"
-    const view = getContext("view") as View<{ name: string }>
+    const view = getContext("view") as View<{ name: string }> // Retrieves the same server data, 
+                                                              // but can be used anywhere in the project
+                                                              // regardless of the component hierarchy.
 </script>
 
 <h1>Hello {view.data.name}</h1>
@@ -200,11 +210,9 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    // Sends view "Welcome".
-    con.SendView(views.View{
-        Name: "Welcome",
-        // Renders view on server and client.
-        RenderMode: views.RenderModeFull,
+    con.SendView(views.View{              // Sends a view.
+        Name: "Welcome",                  // Sets the view's name.
+        RenderMode: views.RenderModeFull, // Renders the view on server and client.
     })
 }
 ```
@@ -224,11 +232,9 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    // Sends view "Welcome".
-    con.SendView(views.View{
-        Name: "Welcome",
-        // Renders view on server.
-        RenderMode: views.RenderModeServer,
+    con.SendView(views.View{                // Sends a view.
+        Name: "Welcome",                    // Sets the view's name.
+        RenderMode: views.RenderModeServer, // Renders the view onl on the server.
     })
 }
 ```
@@ -257,11 +263,9 @@ import (
 )
 
 func Welcome(con *connections.Connection) {
-    // Sends view "Welcome".
-    con.SendView(views.View{
-        Name: "Welcome",
-        // Renders view on client.
-        RenderMode: views.RenderModeClient,
+    con.SendView(views.View{                // Sends a view.
+        Name: "Welcome",                    // Sets the view's name.
+        RenderMode: views.RenderModeClient, // Renders the view onl on the client.
     })
 }
 ```

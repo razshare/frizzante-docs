@@ -11,7 +11,6 @@ package handlers
 import "github.com/razshare/frizzante/connections"
 
 func Welcome(con *connections.Connection) {
-    con.SendNavigate("/login") // Redirects to /login 
-                               // with status 303.
+    con.SendNavigate("/login") // Redirects to /login with status 303.
 }
 ```

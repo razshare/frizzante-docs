@@ -22,15 +22,15 @@ var efs embed.FS
 var server = servers.New()
 
 func main() {
-	servers.Efs = efs
-	server.AddRoute(routes.Route{Pattern: "GET /", Handler: handlers.Default})
-	server.AddRoute(routes.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
-	server.AddRoute(routes.Route{Pattern: "GET /todos", Handler: handlers.Todos})
-	server.AddRoute(routes.Route{Pattern: "GET /check", Handler: handlers.Check})
-	server.AddRoute(routes.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
-	server.AddRoute(routes.Route{Pattern: "GET /add", Handler: handlers.Add})
-	server.AddRoute(routes.Route{Pattern: "GET /remove", Handler: handlers.Remove})
-	server.Start()
+    servers.Efs = efs
+    server.AddRoute(routes.Route{Pattern: "GET /", Handler: handlers.Default})
+    server.AddRoute(routes.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
+    server.AddRoute(routes.Route{Pattern: "GET /todos", Handler: handlers.Todos})
+    server.AddRoute(routes.Route{Pattern: "GET /check", Handler: handlers.Check})
+    server.AddRoute(routes.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
+    server.AddRoute(routes.Route{Pattern: "GET /add", Handler: handlers.Add})
+    server.AddRoute(routes.Route{Pattern: "GET /remove", Handler: handlers.Remove})
+    server.Start()
 }
 ```
 
@@ -49,7 +49,7 @@ with `SendFileOrElse()` before doing anything else.
 ```go
 //lib/handlers/default.go
 func Default(con *connections.Connection) {
-	con.SendFileOrElse(func() { Welcome(con) })
+    con.SendFileOrElse(func() { Welcome(con) })
 }
 ```
 
@@ -64,7 +64,7 @@ All this handler does is send the `"Welcome"` view to the user with `SendView()`
 ```go
 //lib/handlers/welcome.go
 func Welcome(con *connections.Connection) {
-	con.SendView(views.View{Name: "Welcome"})
+    con.SendView(views.View{Name: "Welcome"})
 }
 ```
 
@@ -95,7 +95,7 @@ The keys are important, because they dictate the `Name` of the view, the actual 
 
 ```go
 views.View{
-	Name: "Welcome", // This.
+    Name: "Welcome", // This.
 }
 ```
 
@@ -154,9 +154,9 @@ The server itself could choose to not serve a JavaScript bundle to the user.
 
 ```go
 views.View{
-	Name: "Welcome",
-	// This will disable JavaScript.
-	RenderMode: views.RenderModeServer,
+    Name: "Welcome",
+    // This will disable JavaScript.
+    RenderMode: views.RenderModeServer,
 }
 ```
 
@@ -178,15 +178,15 @@ retrieved from the session state.
 ```go
 //lib/handlers/todos.go
 func Todos(con *connections.Connection) {
-	session := sessions.StartWith(con, lib.InitialState())
-	defer sessions.Save(session)
+    session := sessions.StartWith(con, lib.InitialState())
+    defer sessions.Save(session)
 
-	con.SendView(views.View{
-		Name: "Todos", 
-		Data: map[string]any{
-			"todos": session.State.Todos,
-		},
-	})
+    con.SendView(views.View{
+        Name: "Todos", 
+        Data: map[string]any{
+            "todos": session.State.Todos,
+        },
+    })
 }
 ```
 
@@ -199,15 +199,15 @@ By default the session state has a few items in it, initialized by
 ```go
 //lib/state.go
 func InitialState() State {
-	return State{
-		Todos: []Todo{
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Do laundry"},
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Cook"},
-			{Checked: false, Description: "Pet the cat."},
-		},
-	}
+    return State{
+        Todos: []Todo{
+            {Checked: false, Description: "Pet the cat."},
+            {Checked: false, Description: "Do laundry"},
+            {Checked: false, Description: "Pet the cat."},
+            {Checked: false, Description: "Cook"},
+            {Checked: false, Description: "Pet the cat."},
+        },
+    }
 }
 ```
 
@@ -316,39 +316,39 @@ which is then iterated upon to render the items
 ```svelte
 //app/lib/views/Todos.svelte
 {#each todos as todo, index (index)}
-	<li>
-		<form {...action("/remove")}>
-			<input type="hidden" name="index" value={index} />
-			<button class="link">[Remove]</button>
-		</form>
-		{#if todo.Checked}
-			<form {...action("/uncheck")}>
-				<input
-					type="hidden"
-					name="index"
-					value={index}
-				/>
-				<button class="link">
-					<!---->
-					(x) {todo.Description}
-					<!---->
-				</button>
-			</form>
-		{:else}
-			<form {...action("/check")}>
-				<input
-					type="hidden"
-					name="index"
-					value={index}
-				/>
-				<button class="link">
-					<!---->
-					(&nbsp;&nbsp;) {todo.Description}
-					<!---->
-				</button>
-			</form>
-		{/if}
-	</li>
+    <li>
+        <form {...action("/remove")}>
+            <input type="hidden" name="index" value={index} />
+            <button class="link">[Remove]</button>
+        </form>
+        {#if todo.Checked}
+            <form {...action("/uncheck")}>
+                <input
+                    type="hidden"
+                    name="index"
+                    value={index}
+                />
+                <button class="link">
+                    <!---->
+                    (x) {todo.Description}
+                    <!---->
+                </button>
+            </form>
+        {:else}
+            <form {...action("/check")}>
+                <input
+                    type="hidden"
+                    name="index"
+                    value={index}
+                />
+                <button class="link">
+                    <!---->
+                    (&nbsp;&nbsp;) {todo.Description}
+                    <!---->
+                </button>
+            </form>
+        {/if}
+    </li>
 {/each}
 ```
 
@@ -362,8 +362,8 @@ index of the item, which is hidden.
 ```svelte
 //app/lib/views/Todos.svelte
 <form {...action("/remove")}>
-	<input type="hidden" name="index" value={index} />
-	<button class="link">[Remove]</button>
+    <input type="hidden" name="index" value={index} />
+    <button class="link">[Remove]</button>
 </form>
 ```
 
@@ -396,44 +396,44 @@ see [Form Component](../web-standards/#form-component).
 ```go
 //lib/handlers/remove.go
 func Remove(con *connections.Connection) {
-	session := sessions.StartWith(con, lib.InitialState())
-	defer sessions.Save(session)
+    session := sessions.StartWith(con, lib.InitialState())
+    defer sessions.Save(session)
 
-	count := int64(len(session.State.Todos))
+    count := int64(len(session.State.Todos))
 
-	if 0 == count {
-		// No todos found, ignore the request.
-		con.SendNavigate("/todos")
-		return
-	}
+    if 0 == count {
+        // No todos found, ignore the request.
+        con.SendNavigate("/todos")
+        return
+    }
 
-	indexString := con.ReceiveQuery("index")
-	if "" == indexString {
-		// No index found, ignore the request.
-		con.SendNavigate("/todos")
-		return
-	}
+    indexString := con.ReceiveQuery("index")
+    if "" == indexString {
+        // No index found, ignore the request.
+        con.SendNavigate("/todos")
+        return
+    }
 
-	index, indexError := strconv.ParseInt(indexString, 10, 64)
-	if nil != indexError {
-		con.SendView(views.View{Name: "Todos", Data: map[string]any{
-			"error": indexError.Error(),
-		}})
-		return
-	}
+    index, indexError := strconv.ParseInt(indexString, 10, 64)
+    if nil != indexError {
+        con.SendView(views.View{Name: "Todos", Data: map[string]any{
+            "error": indexError.Error(),
+        }})
+        return
+    }
 
-	if index >= count {
-		// Index is out of bounds, ignore the request.
-		con.SendNavigate("/todos")
-		return
-	}
+    if index >= count {
+        // Index is out of bounds, ignore the request.
+        con.SendNavigate("/todos")
+        return
+    }
 
-	session.State.Todos = append(
-		session.State.Todos[:index], 
-		session.State.Todos[index+1:]...,
-	)
+    session.State.Todos = append(
+        session.State.Todos[:index], 
+        session.State.Todos[index+1:]...,
+    )
 
-	con.SendNavigate("/todos")
+    con.SendNavigate("/todos")
 }
 ```
 
@@ -448,8 +448,8 @@ The equivalent using the `POST` verb would be
 ```svelte
 //app/lib/views/Todos.svelte
 <form method="POST" {...action("/remove")}>
-	<input type="hidden" name="index" value={index} />
-	<button class="link">[Remove]</button>
+    <input type="hidden" name="index" value={index} />
+    <button class="link">[Remove]</button>
 </form>
 ```
 
@@ -469,23 +469,23 @@ Checking and unchecking items is also done using forms.
 ```svelte
 //app/lib/views/Todos.svelte
 {#if todo.Checked}
-	<form {...action("/uncheck")}>
-		<input type="hidden" name="index" value={index} />
-		<button class="link">
-			<!---->
-			(x) {todo.Description}
-			<!---->
-		</button>
-	</form>
+    <form {...action("/uncheck")}>
+        <input type="hidden" name="index" value={index} />
+        <button class="link">
+            <!---->
+            (x) {todo.Description}
+            <!---->
+        </button>
+    </form>
 {:else}
-	<form {...action("/check")}>
-		<input type="hidden" name="index" value={index} />
-		<button class="link">
-			<!---->
-			(&nbsp;&nbsp;) {todo.Description}
-			<!---->
-		</button>
-	</form>
+    <form {...action("/check")}>
+        <input type="hidden" name="index" value={index} />
+        <button class="link">
+            <!---->
+            (&nbsp;&nbsp;) {todo.Description}
+            <!---->
+        </button>
+    </form>
 {/if}
 ```
 
@@ -503,37 +503,37 @@ Checking is handled by the `Check` handler.
 ```go
 //lib/handlers/check.go
 func Check(con *connections.Connection) {
-	session := sessions.Start(con, lib.InitialState())
-	defer session.Save()
+    session := sessions.Start(con, lib.InitialState())
+    defer session.Save()
 
-	indexString := con.ReceiveQuery("index")
-	if "" == indexString {
-		// No index found, ignore the request.
-		con.SendNavigate("/todos")
-		return
-	}
+    indexString := con.ReceiveQuery("index")
+    if "" == indexString {
+        // No index found, ignore the request.
+        con.SendNavigate("/todos")
+        return
+    }
 
-	index, indexError := strconv.ParseInt(indexString, 10, 64)
-	if nil != indexError {
-		con.SendView(views.View{
-			Name: "Todos", 
-			Data: map[string]any{
-				"error": indexError.Error(),
-			},
-		})
-		return
-	}
+    index, indexError := strconv.ParseInt(indexString, 10, 64)
+    if nil != indexError {
+        con.SendView(views.View{
+            Name: "Todos", 
+            Data: map[string]any{
+                "error": indexError.Error(),
+            },
+        })
+        return
+    }
 
-	count := int64(len(session.State.Todos))
-	if index >= count {
-		// Index is out of bounds, ignore the request.
-		con.SendNavigate("/todos")
-		return
-	}
+    count := int64(len(session.State.Todos))
+    if index >= count {
+        // Index is out of bounds, ignore the request.
+        con.SendNavigate("/todos")
+        return
+    }
 
-	session.State.Todos[index].Checked = true
+    session.State.Todos[index].Checked = true
 
-	con.SendNavigate("/todos")
+    con.SendNavigate("/todos")
 }
 ```
 
@@ -555,9 +555,9 @@ by sending a form to `/add`.
 ```svelte
 //lib/views/Todos.svelte
 <form {...action("/add")}>
-	<span class="link">Description</span>
-	<input type="text" value="" name="description" />
-	<button class="link" type="submit">Add +</button>
+    <span class="link">Description</span>
+    <input type="text" value="" name="description" />
+    <button class="link" type="submit">Add +</button>
 </form>
 ```
 
@@ -566,28 +566,28 @@ This form is then captured by the `Add` handler.
 ```go
 //lib/handlers/add.go
 func Add(con *connections.Connection) {
-	session := sessions.StartWith(con, lib.InitialState())
-	defer sessions.Save(session)
+    session := sessions.StartWith(con, lib.InitialState())
+    defer sessions.Save(session)
 
-	description := con.ReceiveQuery("description")
+    description := con.ReceiveQuery("description")
 
-	if "" == description {
-		con.SendView(views.View{
-			Name: "Todos",
-			Data: map[string]any{
-				"todos": session.State.Todos,
-				"error": "todo description cannot be empty",
-			},
-		})
-		return
-	}
+    if "" == description {
+        con.SendView(views.View{
+            Name: "Todos",
+            Data: map[string]any{
+                "todos": session.State.Todos,
+                "error": "todo description cannot be empty",
+            },
+        })
+        return
+    }
 
-	session.State.Todos = append(session.State.Todos, lib.Todo{
-		Checked:     false,
-		Description: description,
-	})
+    session.State.Todos = append(session.State.Todos, lib.Todo{
+        Checked:     false,
+        Description: description,
+    })
 
-	con.SendNavigate("/todos")
+    con.SendNavigate("/todos")
 }
 ```
 

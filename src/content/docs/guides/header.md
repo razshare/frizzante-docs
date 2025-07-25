@@ -11,8 +11,7 @@ package handlers
 import "github.com/razshare/frizzante/connections"
 
 func Welcome(con *connections.Connection) {
-    accept := con.ReceiveHeader("Accept")  // Retrieves field 
-                                           // "Accept".
+    accept := con.ReceiveHeader("Accept")  // Retrieves field "Accept".
     con.SendHeader("Content-Type", accept) // Sends it back.
 }
 ```

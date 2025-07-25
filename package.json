@@ -14,5 +14,8 @@
     "astro": "^5.12.3",
     "sharp": "^0.32.6",
     "starlight-theme-flexoki": "^0.1.0"
+  },
+  "devDependencies": {
+    "starlight-fullview-mode": "^0.2.3"
   }
 }
