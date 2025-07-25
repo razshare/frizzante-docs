@@ -47,10 +47,10 @@ func main() {
         Pattern: "GET /",
         Handler: func(con *connections.Connection) {
             // Sends text.
-            con.SendMessage("I hope you're not one of those Json kids.")
+            con.SendMessage("I hope you're not one of those Json people.")
         },
         // Tags route.
-        Tags: []string{"nojson","auth"},
+        Tags: []string{"nojson"},
     })
 
     // Starts server.
