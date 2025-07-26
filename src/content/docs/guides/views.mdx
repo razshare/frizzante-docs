@@ -234,7 +234,7 @@ import (
 func Welcome(con *connections.Connection) {
     con.SendView(views.View{                // Sends a view.
         Name: "Welcome",                    // Sets the view's name.
-        RenderMode: views.RenderModeServer, // Renders the view onl on the server.
+        RenderMode: views.RenderModeServer, // Renders the view only on the server.
     })
 }
 ```
@@ -265,7 +265,7 @@ import (
 func Welcome(con *connections.Connection) {
     con.SendView(views.View{                // Sends a view.
         Name: "Welcome",                    // Sets the view's name.
-        RenderMode: views.RenderModeClient, // Renders the view onl on the client.
+        RenderMode: views.RenderModeClient, // Renders the view only on the client.
     })
 }
 ```
