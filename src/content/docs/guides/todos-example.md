@@ -538,7 +538,7 @@ func Check(con *connections.Connection) {
 ```
 
 While unchecking is handled by the `Uncheck` handler, which does the exact same thing
-as `Check`, except it sets `.Checked` to `false` instead of `true`.
+as `Check`, except it sets `Checked` to `false` instead of `true`.
 
 ```go
 //lib/handlers/uncheck.go

@@ -2,7 +2,7 @@
 title: Start server
 ---
 
-Use `servers.New()` to create a new server then `.Start()` it.
+Use `servers.New()` to create a new server then `Start()` it.
 
 ```go
 //main.go
