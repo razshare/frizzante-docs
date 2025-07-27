@@ -4,7 +4,7 @@ title: Sessions
 
 import { FileTree } from '@astrojs/starlight/components'
 
-Use `sessions.Start()` to start a session.
+Use `sessions.New()` to create a session then followup with `Start()` in order to start it.
 
 ```go
 //lib/handlers/welcome.go
@@ -15,27 +15,27 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-type State struct{                          // Defines a struct which will hold the state 
-    Name string                             // of the session. This struct will later be
-                                            // initialized with a zero value.
+type State struct{                                  // Defines a struct which will hold the state 
+    Name string                                     // of the session. This struct will later be
+                                                    // initialized with a zero value.
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start[State](con)   // Starts the session with zero state.
+    session := sessions.New(con, State{}).Start()   // Starts the session with zero state.
 }
 ```
 
-This will retrieve the user's session or create a new one if none is found.
+This will create and start the user's session.
 
 :::note
 The session is retrieved based on the user's `session-id` cookie.
 
-When session retrieval fails, `sessions.Start()` creates a 
-new session instead and sends a new `session-id` cookie to the user.
+If the user doesn't have a `session-id` cookie, `Start()` creates a 
+new one instead and sends it to the user.
 :::
 
 :::danger
-Since `sessions.Start()` may send a cookie, it is important to remember that
+Since `Start()` may send a cookie, it is important to remember that
 the order in which data is sent to the user matters.
 
 Read more about [order of operations](../order-of-operations).
@@ -54,21 +54,21 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-type State struct{                        // Defines a struct which will hold the state 
-    Name string                           // of the session. This struct will later be
-                                          // initialized with a zero value.
+type State struct{                                // Defines a struct which will hold the state 
+    Name string                                   // of the session. This struct will later be
+                                                  // initialized with a zero value.
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start[State](con) // Starts the session.
+    session := sessions.New(con, State{}).Start() // Starts the session.
 
-    defer sessions.Save(session)          // Saves the session's state.
-                                          // Since it's deferred, this will execute 
-                                          // when the handler terminates execution.
+    defer sessions.Save(session)                  // Saves the session's state.
+                                                  // Since it's deferred, this will execute 
+                                                  // when the handler terminates execution.
 
-    session.State.Name = "World"          // Modifies state.
+    session.State.Name = "World"                  // Modifies state.
 
-                                          // <== Deferred session.Save(session) executes.
+                                                  // <== Deferred session.Save(session) executes.
 }
 ```
 
@@ -91,7 +91,7 @@ type State struct{                                 // Defines a struct which wil
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start[State](con)          // Starts the session.
+    session := sessions.New(con, State{}).Start()  // Starts the session.
     sessions.Load(session)                         // Loads the session's state (not necessary, read below).
     con.SendMessage("Hello " + session.State.Name) // Sends text.
 }
@@ -117,14 +117,14 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-type State struct{                         // Defines a struct which will hold the state 
-    Name string                            // of the session. This struct will later be
-                                           // initialized with a zero value.
+type State struct{                                 // Defines a struct which will hold the state 
+    Name string                                    // of the session. This struct will later be
+                                                   // initialized with a zero value.
 }
 
 func Welcome(con *connections.Connection) {
-    session := sessions.Start[State](con) // Starts the session.
-    sessions.Destroy(session)             // Destroys the session.
+    session := sessions.New(con, State{}).Start() // Starts the session.
+    sessions.Destroy(session)                     // Destroys the session.
 }
 ```
 
