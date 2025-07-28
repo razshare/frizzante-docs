@@ -2,7 +2,7 @@
 title: Json
 ---
 
-Use `ReceiveJson()` to parse incoming content as json and `SendJson()` to send data as json when using `POST` and `PUT` http verbs.
+Use `ReceiveJson()` to parse incoming content as json when using `POST` and `PUT` http verbs and `SendJson()` to send data as json.
 
 ```go
 routes.Route{Pattern: "POST /", Handler: handlers.Welcome}
