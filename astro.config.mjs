@@ -11,6 +11,9 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Frizzante Docs",
+      editLink: {
+        baseUrl: "https://github.com/razshare/frizzante-docs/edit/main/",
+      },
       favicon: "/favicon.ico",
       logo: {
         src: "./src/assets/frizz-octo-round.webp",
