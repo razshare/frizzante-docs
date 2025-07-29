@@ -60,7 +60,7 @@ export default defineConfig({
             },
             { label: "Todos Example", slug: "guides/todos-example" },
             { label: "Issues", slug: "guides/issues" },
-            { label: "Contributions", slug: "guides/contributions" },
+            { label: "Contributing", slug: "guides/contributing" },
           ],
         },
       ],
