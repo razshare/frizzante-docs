@@ -59,6 +59,8 @@ export default defineConfig({
               slug: "guides/order-of-operations",
             },
             { label: "Todos Example", slug: "guides/todos-example" },
+            { label: "Issues", slug: "guides/issues" },
+            { label: "Contributions", slug: "guides/contributions" },
           ],
         },
       ],
