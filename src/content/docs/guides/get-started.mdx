@@ -30,6 +30,12 @@ Frizzante is an opinionated web server framework written in Go that uses Svelte 
         export PATH=$PATH:$GOPATH/bin
         ```
         :::
+
+        Then create a project.
+
+        ```sh
+        frizzante -c MyProject
+        ```
     </TabItem>
     <TabItem icon='apple' label='Darwin'>
         Install build tools.
@@ -52,6 +58,12 @@ Frizzante is an opinionated web server framework written in Go that uses Svelte 
         export PATH=$PATH:$GOPATH/bin
         ```
         :::
+
+        Then create a project.
+
+        ```sh
+        frizzante -c MyProject
+        ```
     </TabItem>
     <TabItem icon='seti:docker' label='Docker'>
         Build a new container.
@@ -65,21 +77,12 @@ Frizzante is an opinionated web server framework written in Go that uses Svelte 
         Then start the container.
 
         ```sh
-        docker compose up
+        docker compose up -d
         ```
 
-        :::tip
-        You can attach to this container with your IDE or directly from your shell.\
-        This will allow you to start debugging your application without [Delve](https://github.com/go-delve/delve).
+        Attach to this container with your IDE or directly from your shell.
         ```sh
-        docker exec -it <mycontainer> sh   
-        ```
-        :::
-
-        Alternatively, you can start the development server inline.
-
-        ```sh
-        DEV=1 docker compose up
+        docker exec -it frizzante-start sh
         ```
 
         :::note
@@ -95,20 +98,18 @@ Frizzante is an opinionated web server framework written in Go that uses Svelte 
         >
         Download the latest binaries from GitHub.
         </LinkButton>
+
+        Then create a project.
+
+        ```sh
+        frizzante -c MyProject
+        ```
     </TabItem>
 </Tabs>
-
-
 
 #### Get Started
 
 <Steps>
-1. Create project with
-
-    ```sh
-    frizzante -c MyProject
-    ```
-
 1. Configure project
 
     ```sh
