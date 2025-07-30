@@ -54,23 +54,36 @@ Frizzante is an opinionated web server framework written in Go that uses Svelte 
         :::
     </TabItem>
     <TabItem icon='seti:docker' label='Docker'>
-        Start a new container.
+        Build a new container.
 
         ```sh
         git clone git@github.com:cmjoseph07/frizzante-docker.git
         cd frizzante-docker
         docker compose build --pull --no-cache
-        docker compose up
         ```
         
-        You can attach to this container with your IDE or directly from your shell.
+        Then start the container.
 
         ```sh
-        docker exec -it <mycontainer> sh   
+        docker compose up
         ```
 
         :::tip
-        For more details, see [Frizzante Docker](https://github.com/cmjoseph07/frizzante-docker).
+        You can attach to this container with your IDE or directly from your shell.\
+        This will allow you to start debugging your application without [Delve](https://github.com/go-delve/delve).
+        ```sh
+        docker exec -it <mycontainer> sh   
+        ```
+        :::
+
+        Alternatively, you can start the development server inline.
+
+        ```sh
+        DEV=1 docker compose up
+        ```
+
+        :::note
+        For more details see [Frizzante Docker](https://github.com/cmjoseph07/frizzante-docker).
         :::
     </TabItem>
     <TabItem icon='download' label='Binaries'>
