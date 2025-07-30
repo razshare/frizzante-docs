@@ -98,7 +98,7 @@ Another reason for using local packages is to avoid unnecessary mirror caching i
 
 **Explanation**
 
-Whenever you request packages for you Go program, these packages are by default fetched using the GO module mirror.
+Whenever you request packages for your Go program, these packages are by default fetched from the Go module mirror.
 
 The Go module mirror automatically caches package requests for 30 minutes, regardless if the requested package or version of the package actually exists or not.
 
@@ -114,7 +114,7 @@ Into
 require github.com/razshare/frizzante v1.14.30
 ```
 
-And `v1.14.30` doesn't actually exist yet, you package request will be rejected with a `404 Not Found`.\
+And `v1.14.30` doesn't actually exist yet, your package request will be rejected with a `404 Not Found`.\
 That response is then cached for 30 minutes.
 
 This means that subsequent requests for `v1.14.30` will fail until the cached state is evicted, even if in the meantime `v1.14.30` has actually been published.
@@ -188,7 +188,7 @@ The whole test suite makes use of one single server instance, which is initializ
 
 Whenever you need to add more server related tests, make use of the same server instance.
 
-This helps keeping the test suite runtime low.
+This helps keeping the test suite execution time low.
 
 :::tip
 If you really need to start a new server instance, make sure to use a different port number.
