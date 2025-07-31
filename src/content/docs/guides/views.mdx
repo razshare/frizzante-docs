@@ -157,10 +157,10 @@ import (
 )
 
 func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{     // Sends a view.
-        Name: "Welcome",         // Sets the view's name.
-        Data: map[string]string{ // Sets the view's data, which will be injected into the svelte component.
-            "name": "world",     // Adds property "name" with value "world".
+    connection.SendView(views.View{ // Sends a view.
+        Name: "Welcome",            // Sets the view's name.
+        Data: map[string]string{    // Sets the view's data, which will be injected into the svelte component.
+            "name": "world",        // Adds property "name" with value "world".
         },
     }) 
 }
@@ -210,7 +210,7 @@ import (
 )
 
 func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{              // Sends a view.
+    connection.SendView(views.View{       // Sends a view.
         Name: "Welcome",                  // Sets the view's name.
         RenderMode: views.RenderModeFull, // Renders the view on server and client.
     })
@@ -232,7 +232,7 @@ import (
 )
 
 func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{                // Sends a view.
+    connection.SendView(views.View{         // Sends a view.
         Name: "Welcome",                    // Sets the view's name.
         RenderMode: views.RenderModeServer, // Renders the view only on the server.
     })
@@ -263,7 +263,7 @@ import (
 )
 
 func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{                // Sends a view.
+    connection.SendView(views.View{         // Sends a view.
         Name: "Welcome",                    // Sets the view's name.
         RenderMode: views.RenderModeClient, // Renders the view only on the client.
     })

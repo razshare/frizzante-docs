@@ -586,7 +586,7 @@ func Add(connection *connections.Connection) {
         return
     }
 
-    session.State.Todos = append(session.State.Todos, lib.Todo{
+    session.State.Todos = append(session.State.Todos, state.Todo{
         Checked:     false,
         Description: description,
     })
