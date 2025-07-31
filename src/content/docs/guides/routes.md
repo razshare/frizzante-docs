@@ -20,8 +20,8 @@ var route = routes.Route{  // Creates route.
 }
 
 func main() {
-    server.AddRoute(route) // Adds route.
-    server.Start()         // Starts server.
+    server.Routes = append(server.Routes, route) // Adds route.
+    server.Start()                               // Starts server.
 }
 ```
 
@@ -33,7 +33,7 @@ package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Welcome(con *connections.Connection) {
-    con.SendMessage("Hello") // Sends text.
+func Welcome(connection *connections.Connection) {
+    connection.SendMessage("Hello") // Sends text.
 }
 ```

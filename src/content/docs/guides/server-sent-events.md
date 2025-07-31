@@ -17,15 +17,15 @@ import (
     "time"
 )
 
-func Welcome(con *connections.Connection) {
-    alive := con.IsAlive()         // Tracks request status.
-    ev := con.SendSseUpgrade()     // Sends sse upgrade.
-    for *alive {                   // Loops until cancellation.
-        ev("channel-1")            // Switches to "channel-1".
-        con.SendMessage("hello 1") // Sends message.
-        ev("channel-2")            // Switches to "channel-2".
-        con.SendMessage("hello 2") // Sends message.
-        time.Sleep(time.Second)    // Sleeps for 1 second.
+func Welcome(connection *connections.Connection) {
+    alive := connection.IsAlive()         // Tracks request status.
+    ev := connection.SendSseUpgrade()     // Sends sse upgrade.
+    for *alive {                          // Loops until cancellation.
+        ev("channel-1")                   // Switches to "channel-1".
+        connection.SendMessage("hello 1") // Sends message.
+        ev("channel-2")                   // Switches to "channel-2".
+        connection.SendMessage("hello 2") // Sends message.
+        time.Sleep(time.Second)           // Sleeps for 1 second.
     }
 }
 ```
@@ -35,9 +35,9 @@ Then consume the stream on the client.
 ```svelte
 <script lang="ts">
     import {source} from "$frizzante/scripts/source.ts";
-    const con = source("/sse")         // Connects to the handler.
-    const c1 = con.select("channel-1") // Listens to "channel-1".
-    const c2 = con.select("channel-2") // Listens to "channel-2".
+    const connection = source("/sse")         // Connects to the handler.
+    const c1 = connection.select("channel-1") // Listens to "channel-1".
+    const c2 = connection.select("channel-2") // Listens to "channel-2".
 </script>
 
 <h1>Channel 1</h1>

@@ -20,10 +20,10 @@ type GreetingDetails struct { // Defines a struct in which to
     Name string `json:"name"` // store the json content.
 }
 
-func Welcome(con *connections.Connection) {
-    var value GreetingDetails // Create a zero value.
-    con.ReceiveJson(&value)   // Parses the content 
-                              // and stores it in value.
-    con.SendJson(value)       // Sends it back.
+func Welcome(connection *connections.Connection) {
+    var value *GreetingDetails     // Creates a value pointer.
+    connection.ReceiveJson(value)  // Parses the content and stores it 
+                                   // in the value pointer.
+    connection.SendJson(value)     // Sends it back.
 }
 ```

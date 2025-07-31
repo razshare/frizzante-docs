@@ -16,9 +16,9 @@ package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Welcome(con *connections.Connection) {
-    con.SendMessage("Hello.") // Sends text (Succeeds).
-    con.SendStatus(404)       // Sends status (Fails).
+func Welcome(connection *connections.Connection) {
+    connection.SendMessage("Hello.") // Sends text (Succeeds).
+    connection.SendStatus(404)       // Sends status (Fails).
 }
 ```
 

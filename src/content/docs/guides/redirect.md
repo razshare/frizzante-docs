@@ -10,7 +10,7 @@ package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Welcome(con *connections.Connection) {
-    con.SendRedirect("/login", 307) // Redirects to /login.
+func Welcome(connection *connections.Connection) {
+    connection.SendRedirect("/login", 307) // Redirects to /login.
 }
 ```

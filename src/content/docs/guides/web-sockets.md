@@ -17,13 +17,13 @@ import (
     "time"
 )
 
-func Welcome(con *connections.Connection) {
-    alive := con.IsAlive()             // Tracks request status.
-    con.SendWsUpgrade()                // Sends ws upgrade.
-    for *alive {                       // Loops until cancellation.
-        name := con.ReceiveMessage()   // Receives message.
-        con.SendMessage("hello "+name) // Sends message.
-        time.Sleep(time.Second)        // Sleeps for 1 second.
+func Welcome(connection *connections.Connection) {
+    alive := connection.IsAlive()             // Tracks request status.
+    connection.SendWsUpgrade()                // Sends ws upgrade.
+    for *alive {                              // Loops until cancellation.
+        name := connection.ReceiveMessage()   // Receives message.
+        connection.SendMessage("hello "+name) // Sends message.
+        time.Sleep(time.Second)               // Sleeps for 1 second.
     }
 }
 ```

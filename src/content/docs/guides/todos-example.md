@@ -22,15 +22,19 @@ var efs embed.FS
 var server = servers.New()
 
 func main() {
-    servers.Efs = efs
-    server.AddRoute(routes.Route{Pattern: "GET /", Handler: handlers.Default})
-    server.AddRoute(routes.Route{Pattern: "GET /welcome", Handler: handlers.Welcome})
-    server.AddRoute(routes.Route{Pattern: "GET /todos", Handler: handlers.Todos})
-    server.AddRoute(routes.Route{Pattern: "GET /check", Handler: handlers.Check})
-    server.AddRoute(routes.Route{Pattern: "GET /uncheck", Handler: handlers.Uncheck})
-    server.AddRoute(routes.Route{Pattern: "GET /add", Handler: handlers.Add})
-    server.AddRoute(routes.Route{Pattern: "GET /remove", Handler: handlers.Remove})
-    server.Start()
+    server.Efs = efs
+
+	server.Routes = []routes.Route{
+		{Pattern: "GET /", Handler: handlers.Default},
+		{Pattern: "GET /welcome", Handler: handlers.Welcome},
+		{Pattern: "GET /todos", Handler: handlers.Todos},
+		{Pattern: "GET /check", Handler: handlers.Check},
+		{Pattern: "GET /uncheck", Handler: handlers.Uncheck},
+		{Pattern: "GET /add", Handler: handlers.Add},
+		{Pattern: "GET /remove", Handler: handlers.Remove},
+	}
+
+	server.Start()
 }
 ```
 
@@ -48,8 +52,8 @@ with `SendFileOrElse()` before doing anything else.
 
 ```go
 //lib/handlers/default.go
-func Default(con *connections.Connection) {
-    con.SendFileOrElse(func() { Welcome(con) })
+func Default(connection *connections.Connection) {
+    connection.SendFileOrElse(func() { Welcome(connection) })
 }
 ```
 
@@ -63,8 +67,8 @@ All this handler does is send the `"Welcome"` view to the user with `SendView()`
 
 ```go
 //lib/handlers/welcome.go
-func Welcome(con *connections.Connection) {
-    con.SendView(views.View{Name: "Welcome"})
+func Welcome(connection *connections.Connection) {
+    connection.SendView(views.View{Name: "Welcome"})
 }
 ```
 
@@ -177,11 +181,11 @@ retrieved from the session state.
 
 ```go
 //lib/handlers/todos.go
-func Todos(con *connections.Connection) {
-    session := sessions.StartWith(con, lib.InitialState())
+func Todos(connection *connections.Connection) {
+    session := sessions.Start(connection, state.Default())
     defer sessions.Save(session)
 
-    con.SendView(views.View{
+    connection.SendView(views.View{
         Name: "Todos", 
         Data: map[string]any{
             "todos": session.State.Todos,
@@ -194,20 +198,20 @@ As mentioned in the [sessions](../../guides/sessions) section,
 the default session operator handles things in a local `sessions` directory.
 
 By default the session state has a few items in it, initialized by 
-`InitialState()`.
+`state.Default()`.
 
 ```go
-//lib/state.go
-func InitialState() State {
-    return State{
-        Todos: []Todo{
-            {Checked: false, Description: "Pet the cat."},
-            {Checked: false, Description: "Do laundry"},
-            {Checked: false, Description: "Pet the cat."},
-            {Checked: false, Description: "Cook"},
-            {Checked: false, Description: "Pet the cat."},
-        },
-    }
+//lib/state/functions.go
+func Default() State {
+	return State{
+		Todos: []Todo{
+			{Checked: false, Description: "Pet the cat."},
+			{Checked: false, Description: "Do laundry"},
+			{Checked: false, Description: "Pet the cat."},
+			{Checked: false, Description: "Cook"},
+			{Checked: false, Description: "Pet the cat."},
+		},
+	}
 }
 ```
 
@@ -395,28 +399,28 @@ see [Form Component](../web-standards/#form-component).
 
 ```go
 //lib/handlers/remove.go
-func Remove(con *connections.Connection) {
-    session := sessions.StartWith(con, lib.InitialState())
+func Remove(connection *connections.Connection) {
+    session := sessions.Start(connection, state.Default())
     defer sessions.Save(session)
 
     count := int64(len(session.State.Todos))
 
     if 0 == count {
         // No todos found, ignore the request.
-        con.SendNavigate("/todos")
+        connection.SendNavigate("/todos")
         return
     }
 
-    indexString := con.ReceiveQuery("index")
+    indexString := connection.ReceiveQuery("index")
     if "" == indexString {
         // No index found, ignore the request.
-        con.SendNavigate("/todos")
+        connection.SendNavigate("/todos")
         return
     }
 
     index, indexError := strconv.ParseInt(indexString, 10, 64)
     if nil != indexError {
-        con.SendView(views.View{Name: "Todos", Data: map[string]any{
+        connection.SendView(views.View{Name: "Todos", Data: map[string]any{
             "error": indexError.Error(),
         }})
         return
@@ -424,7 +428,7 @@ func Remove(con *connections.Connection) {
 
     if index >= count {
         // Index is out of bounds, ignore the request.
-        con.SendNavigate("/todos")
+        connection.SendNavigate("/todos")
         return
     }
 
@@ -433,12 +437,12 @@ func Remove(con *connections.Connection) {
         session.State.Todos[index+1:]...,
     )
 
-    con.SendNavigate("/todos")
+    connection.SendNavigate("/todos")
 }
 ```
 
 :::caution
-Notice the use of `con.ReceiveQuery("index")`.
+Notice the use of `connection.ReceiveQuery("index")`.
 
 This is a reminder that, if not specified otherwise, 
 forms prefer using the `GET` verb.
@@ -456,7 +460,7 @@ The equivalent using the `POST` verb would be
 ```go
 //lib/handlers/remove.go
 // ...
-form := con.ReceiveForm()
+form := connection.ReceiveForm()
 indexString := form.Get("index")
 // ...
 ```
@@ -502,20 +506,20 @@ Checking is handled by the `Check` handler.
 
 ```go
 //lib/handlers/check.go
-func Check(con *connections.Connection) {
-    session := sessions.Start(con, lib.InitialState())
+func Check(connection *connections.Connection) {
+    session := sessions.Start(connection, state.Default())
     defer session.Save()
 
-    indexString := con.ReceiveQuery("index")
+    indexString := connection.ReceiveQuery("index")
     if "" == indexString {
         // No index found, ignore the request.
-        con.SendNavigate("/todos")
+        connection.SendNavigate("/todos")
         return
     }
 
     index, indexError := strconv.ParseInt(indexString, 10, 64)
     if nil != indexError {
-        con.SendView(views.View{
+        connection.SendView(views.View{
             Name: "Todos", 
             Data: map[string]any{
                 "error": indexError.Error(),
@@ -527,13 +531,13 @@ func Check(con *connections.Connection) {
     count := int64(len(session.State.Todos))
     if index >= count {
         // Index is out of bounds, ignore the request.
-        con.SendNavigate("/todos")
+        connection.SendNavigate("/todos")
         return
     }
 
     session.State.Todos[index].Checked = true
 
-    con.SendNavigate("/todos")
+    connection.SendNavigate("/todos")
 }
 ```
 
@@ -565,14 +569,14 @@ This form is then captured by the `Add` handler.
 
 ```go
 //lib/handlers/add.go
-func Add(con *connections.Connection) {
-    session := sessions.StartWith(con, lib.InitialState())
+func Add(connection *connections.Connection) {
+    session := sessions.Start(connection, state.Default())
     defer sessions.Save(session)
 
-    description := con.ReceiveQuery("description")
+    description := connection.ReceiveQuery("description")
 
     if "" == description {
-        con.SendView(views.View{
+        connection.SendView(views.View{
             Name: "Todos",
             Data: map[string]any{
                 "todos": session.State.Todos,
@@ -587,7 +591,7 @@ func Add(con *connections.Connection) {
         Description: description,
     })
 
-    con.SendNavigate("/todos")
+    connection.SendNavigate("/todos")
 }
 ```
 

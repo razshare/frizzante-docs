@@ -36,8 +36,8 @@ import (
     "github.com/razshare/frizzante/views"
 )
 
-func Welcome(con *connections.Connection)  {
-    con.SendView(views.View{                // Sends a view.
+func Welcome(connection *connections.Connection)  {
+    connection.SendView(views.View{                // Sends a view.
         Name: "Welcome",                    // Sets the view's name.
         RenderMode: views.RenderModeServer, // Renders the view only on the server, 
                                             // meaning the view won't contain any JavaScript code.
@@ -125,8 +125,8 @@ import (
     "github.com/razshare/frizzante/views"
 )
 
-func Welcome(con *connections.Connection)  {
-    con.SendView(views.View{                // Sends a view.
+func Welcome(connection *connections.Connection)  {
+    connection.SendView(views.View{                // Sends a view.
         Name: "Welcome",                    // Sets the name of the view.
         RenderMode: views.RenderModeServer, // Render the view only on the server.
     })

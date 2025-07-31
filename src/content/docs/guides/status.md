@@ -10,9 +10,9 @@ package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Welcome(con *connections.Connection) {
-    con.SendStatus(404)           // Sends status 404.
-    con.SendMessage("Not found.") // Sends text.
+func Welcome(connection *connections.Connection) {
+    connection.SendStatus(404)           // Sends status 404.
+    connection.SendMessage("Not found.") // Sends text.
 }
 ```
 

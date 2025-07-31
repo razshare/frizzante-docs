@@ -10,8 +10,8 @@ package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Welcome(con *connections.Connection) {
-    id := con.ReceiveCookie("session-id") // Retrieves cookie.
-    con.SendCookie("session-id", id)      // Sends it back.
+func Welcome(connection *connections.Connection) {
+    id := connection.ReceiveCookie("session-id") // Retrieves cookie.
+    connection.SendCookie("session-id", id)      // Sends it back.
 }
 ```

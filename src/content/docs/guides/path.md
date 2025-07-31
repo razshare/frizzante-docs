@@ -17,8 +17,8 @@ package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Welcome(con *connections.Connection) {
-    name := con.ReceivePath("name")  // Retrieves field "name".
-    con.SendMessage("Hello " + name) // Sends text.
+func Welcome(connection *connections.Connection) {
+    name := connection.ReceivePath("name")  // Retrieves field "name".
+    connection.SendMessage("Hello " + name) // Sends text.
 }
 ```

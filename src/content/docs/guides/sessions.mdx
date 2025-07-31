@@ -20,8 +20,8 @@ type State struct{                                  // Defines a struct which wi
                                                     // initialized with a zero value.
 }
 
-func Welcome(con *connections.Connection) {
-    session := sessions.New(con, State{}).Start()   // Starts the session with zero state.
+func Welcome(connection *connections.Connection) {
+    session := sessions.Start(connection, State{})  // Starts the session with zero state.
 }
 ```
 
@@ -54,21 +54,20 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-type State struct{                                // Defines a struct which will hold the state 
-    Name string                                   // of the session. This struct will later be
-                                                  // initialized with a zero value.
+type State struct{                                 // Defines a struct which will hold the state 
+    Name string                                    // of the session. This struct will later be
+                                                   // initialized with a zero value.
 }
 
-func Welcome(con *connections.Connection) {
-    session := sessions.New(con, State{}).Start() // Starts the session.
+func Welcome(connection *connections.Connection) {
+    session := sessions.Start(connection, State{}) // Starts the session.
+    defer session.Save()                           // Saves the session's state.
+                                                   // Since it's deferred, this will execute 
+                                                   // when the handler terminates execution.
 
-    defer sessions.Save(session)                  // Saves the session's state.
-                                                  // Since it's deferred, this will execute 
-                                                  // when the handler terminates execution.
+    session.State.Name = "World"                   // Modifies state.
 
-    session.State.Name = "World"                  // Modifies state.
-
-                                                  // <== Deferred session.Save(session) executes.
+                                                   // <== Deferred session.Save(session) executes.
 }
 ```
 
@@ -85,15 +84,15 @@ import (
     "github.com/razshare/frizzante/sessions"
 )
 
-type State struct{                                 // Defines a struct which will hold the state 
-    Name string                                    // of the session. This struct will later be
-                                                   // initialized with a zero value.
+type State struct{                                        // Defines a struct which will hold the state 
+    Name string                                           // of the session. This struct will later be
+                                                          // initialized with a zero value.
 }
 
-func Welcome(con *connections.Connection) {
-    session := sessions.New(con, State{}).Start()  // Starts the session.
-    sessions.Load(session)                         // Loads the session's state (not necessary, read below).
-    con.SendMessage("Hello " + session.State.Name) // Sends text.
+func Welcome(connection *connections.Connection) {
+    session := sessions.Start(connection, State{})        // Starts the session.
+    session.Load()                                        // Loads the session's state (not necessary, read below).
+    connection.SendMessage("Hello " + session.State.Name) // Sends text.
 }
 ```
 
@@ -122,9 +121,9 @@ type State struct{                                 // Defines a struct which wil
                                                    // initialized with a zero value.
 }
 
-func Welcome(con *connections.Connection) {
-    session := sessions.New(con, State{}).Start() // Starts the session.
-    sessions.Destroy(session)                     // Destroys the session.
+func Welcome(connection *connections.Connection) {
+    session := sessions.Start(connection, State{}) // Starts the session.
+    session.Destroy()                              // Destroys the session.
 }
 ```
 

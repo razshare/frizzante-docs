@@ -17,9 +17,9 @@ package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-func Welcome(con *connections.Connection) {
-    form := con.ReceiveForm()        // Retrieves the form.
-    name := form.Get("name")         // Retrieves field "name".
-    con.SendMessage("Hello " + name) // Sends text.
+func Welcome(connection *connections.Connection) {
+    form := connection.ReceiveForm()        // Retrieves the form.
+    name := form.Get("name")                // Retrieves field "name".
+    connection.SendMessage("Hello " + name) // Sends text.
 }
 ```
