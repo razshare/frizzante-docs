@@ -81,7 +81,7 @@ server.Guards = append(server.Guards, {                               // Adds a 
     Handler: func(connection *connections.Connection, allow func()) { // Sets the guard's handler. If allow() is never invoked, 
                                                                       // the guard will reject the request.
 
-        session := sessions.Start(connection, State{})                // Starts the session.
+        session := sessions.New(connection, State{}).Start()          // Starts the session.
         if !session.State.SignedIn {                                  // If the use is not signed in...
             connection.SendStatus(403)                                // ...sends status 403...
             connection.SendMessage("Not authenticated.")              // ...and a short message with an explanation.

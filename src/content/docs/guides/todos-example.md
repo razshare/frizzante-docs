@@ -182,7 +182,7 @@ retrieved from the session state.
 ```go
 //lib/handlers/todos.go
 func Todos(connection *connections.Connection) {
-    session := sessions.Start(connection, state.Default())
+    session := sessions.New(connection, state.Default()).Start()
     defer sessions.Save(session)
 
     connection.SendView(views.View{
@@ -400,7 +400,7 @@ see [Form Component](../web-standards/#form-component).
 ```go
 //lib/handlers/remove.go
 func Remove(connection *connections.Connection) {
-    session := sessions.Start(connection, state.Default())
+    session := sessions.New(connection, state.Default()).Start()
     defer sessions.Save(session)
 
     count := int64(len(session.State.Todos))
@@ -507,7 +507,7 @@ Checking is handled by the `Check` handler.
 ```go
 //lib/handlers/check.go
 func Check(connection *connections.Connection) {
-    session := sessions.Start(connection, state.Default())
+    session := sessions.New(connection, state.Default()).Start()
     defer session.Save()
 
     indexString := connection.ReceiveQuery("index")
@@ -570,7 +570,7 @@ This form is then captured by the `Add` handler.
 ```go
 //lib/handlers/add.go
 func Add(connection *connections.Connection) {
-    session := sessions.Start(connection, state.Default())
+    session := sessions.New(connection, state.Default()).Start()
     defer sessions.Save(session)
 
     description := connection.ReceiveQuery("description")

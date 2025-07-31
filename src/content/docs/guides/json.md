@@ -16,8 +16,8 @@ package handlers
 
 import "github.com/razshare/frizzante/connections"
 
-type GreetingDetails struct { // Defines a struct in which to 
-    Name string `json:"name"` // store the json content.
+type GreetingDetails struct {      // Defines a struct in which to 
+    Name string `json:"name"`      // store the json content.
 }
 
 func Welcome(connection *connections.Connection) {

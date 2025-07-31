@@ -41,8 +41,8 @@ Then consume the stream on the client.
 </script>
 
 <h1>Channel 1</h1>
-<span>{$c1}</span>                     <!-- Renders the most recent value of channel-1. -->
+<span>{$c1}</span>                            <!-- Renders the most recent value of channel-1. -->
 
 <h1>Channel 2</h1>
-<span>{$c2}</span>                     <!-- Renders the most recent value of channel-2. -->
+<span>{$c2}</span>                            <!-- Renders the most recent value of channel-2. -->
 ```
