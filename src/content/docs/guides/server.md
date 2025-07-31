@@ -8,7 +8,7 @@ Use `servers.New()` to create a new server then `Start()` it.
 //main.go
 package main
 
-import "github.com/razshare/frizzante/web"
+import "github.com/razshare/frizzante/servers"
 
 func main() {
     server := servers.New() // Creates a server.

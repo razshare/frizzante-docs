@@ -9,7 +9,7 @@ You can add a new route to the server with `AddRoute()`.
 package main
 
 import (
-    "github.com/razshare/frizzante/web"
+    "github.com/razshare/frizzante/servers"
     "main/lib/handlers"
 )
 

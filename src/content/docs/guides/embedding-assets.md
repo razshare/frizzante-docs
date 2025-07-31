@@ -11,7 +11,7 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/web"
+    "github.com/razshare/frizzante/servers"
 )
 
 //go:embed app/dist
