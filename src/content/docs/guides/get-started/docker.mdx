@@ -1,0 +1,60 @@
+---
+title: Docker
+---
+
+#### Get Started
+
+Build a new container.
+
+```sh
+git clone git@github.com:cmjoseph07/frizzante-docker.git
+cd frizzante-docker
+docker compose build --pull --no-cache
+```
+
+Then start the container.
+
+```sh
+docker compose up -d
+```
+
+:::tip
+You can stop the container with
+```sh
+docker compose down --remove-orphans
+```
+:::
+
+Attach to this container with your IDE or directly with a shell.
+```sh
+docker exec -it frizzante-start sh
+```
+
+#### Production with Docker
+
+You have different options for deploying to the production environment using docker.
+
+1. **Build and run production binary inside container**
+
+    ```sh
+    # Inside the container
+    make build
+    ./.gen/bin/app
+    ```
+
+1. **Build production Docker image**
+
+    ```sh
+    docker build --target frizzante_prod -t my-app:prod .
+    docker run -p 8080:8080 my-app:prod
+    ```
+
+1. **Use Docker Compose for production**
+
+    ```sh
+    docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+    ```
+
+:::note
+For more details see [Frizzante Docker](https://github.com/cmjoseph07/frizzante-docker).
+:::
