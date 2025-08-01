@@ -67,7 +67,7 @@ func Welcome(connection *connections.Connection) {
 
     session.State.Name = "World"                         // Modifies state.
 
-                                                         // <== Deferred session.Save(session) executes.
+                                                         // <== Deferred session.Save() executes.
 }
 ```
 
