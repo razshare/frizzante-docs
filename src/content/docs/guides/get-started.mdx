@@ -92,6 +92,26 @@ Frizzante is an opinionated web server framework written in Go that uses Svelte 
         docker exec -it frizzante-start sh
         ```
 
+        Production with Docker:
+
+        Option 1: Build and run production binary inside container**
+        ```sh
+        # Inside the container
+        make build
+        ./.gen/bin/app
+        ```
+
+        Option 2: Build production Docker image**
+        ```sh
+        docker build --target frizzante_prod -t my-app:prod .
+        docker run -p 8080:8080 my-app:prod
+        ```
+
+        Option 3: Use Docker Compose for production**
+        ```sh
+        docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+        ```
+
         :::note
         For more details see [Frizzante Docker](https://github.com/cmjoseph07/frizzante-docker).
         :::
