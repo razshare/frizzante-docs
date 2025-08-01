@@ -77,8 +77,15 @@ Frizzante is an opinionated web server framework written in Go that uses Svelte 
         Then start the container.
 
         ```sh
-        docker compose up
+        docker compose up -d
         ```
+
+        :::tip
+        You can stop the container with
+        ```sh
+        docker compose down --remove-orphans
+        ```
+        :::
 
         Attach to this container with your IDE or directly from your shell.
         ```sh
