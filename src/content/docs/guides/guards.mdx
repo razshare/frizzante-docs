@@ -26,7 +26,7 @@ var server = servers.New()                                                // Cre
 func main() {
     server.Guards = append(server.Guards, {                               // Adds a guard.
         Name: "No Json Allowed",                                          // Sets the guard's name. It's useful for logs.
-        Handler: func(connection *connections.Connection, allow func()) { // sets the guard's handler.
+        Handler: func(connection *connections.Connection, allow func()) { // Sets the guard's handler.
             if connection.VerifyContentType("application/json") {         // If requests uses "application/json" content...
                 return                                                    // ..returns. This will actually terminate the connection.
             }
