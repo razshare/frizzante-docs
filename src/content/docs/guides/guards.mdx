@@ -105,6 +105,8 @@ server.Guards = append(server.Guards, {                 // Adds a route.
 })
 ```
 
+In this case, `GET /` is protected by both `Authentication` and `Authorization` guards because they all intersect int `auth`.
+
 ![](guards200.svg)
 
 
