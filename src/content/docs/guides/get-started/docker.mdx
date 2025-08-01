@@ -2,33 +2,58 @@
 title: Docker
 ---
 
+import { Steps, FileTree } from '@astrojs/starlight/components'
+
 #### Get Started
 
-Build a new container.
+<Steps>
+1. Create a new container.
 
-```sh
-git clone git@github.com:cmjoseph07/frizzante-docker.git
-cd frizzante-docker
-docker compose build --pull --no-cache
-```
+    ```sh
+    git clone git@github.com:cmjoseph07/frizzante-docker.git
+    cd frizzante-docker
+    docker compose build --pull --no-cache
+    ```
 
-Then start the container.
+1. Start the container.
 
-```sh
-docker compose up -d
-```
+    ```sh
+    docker compose up -d
+    ```
 
-:::tip
-You can stop the container with
-```sh
-docker compose down --remove-orphans
-```
-:::
+    :::tip
+    You can stop the container with
+    ```sh
+    docker compose down --remove-orphans
+    ```
+    :::
 
-Attach to this container with your IDE or directly with a shell.
-```sh
-docker exec -it frizzante-start sh
-```
+1. Attach to this container with your IDE or directly with a shell.
+
+    ```sh
+    docker exec -it frizzante-start sh
+    ```
+
+1. Start development.
+
+    ```sh
+    make dev
+    ```
+
+1. Build.
+
+    ```sh
+    make build
+    ```
+
+    This will create a `.gen/bin/app` standalone executable.
+
+    <FileTree>
+        - .gen
+            - bin
+                - app
+    </FileTree>
+</Steps>
 
 #### Production with Docker
 
