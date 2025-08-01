@@ -141,10 +141,9 @@ import "github.com/razshare/frizzante/servers"
 func main() {
     server := servers.New()                  // Creates a server.
     server.SessionArchive = &CustomArchive{} // Overwrites the default session archive.
-                                             // The default session archive saves and loads
-                                             // sessions from disk, you can overwrite this
-                                             // in order to save and load sessions, for example,
-                                             // using a database.
+                                             // The default session archive saves and loads sessions from disk. 
+                                             // You can overwrite this archive in order to save and load sessions, 
+                                             // for example, using a database.
 }
 ```
 
