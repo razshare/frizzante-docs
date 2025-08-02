@@ -36,6 +36,7 @@ export default defineConfig({
           items: [
             // Each item here is one entry in the navigation menu.
             { label: "Get Started", slug: "guides/get-started" },
+            { label: "Docker", slug: "guides/docker" },
             { label: "Server", slug: "guides/server" },
             { label: "Routes", slug: "guides/routes" },
             { label: "Path", slug: "guides/path" },
