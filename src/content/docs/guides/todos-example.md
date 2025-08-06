@@ -63,7 +63,7 @@ This handler essentially acts as a file server and falls back to `Welcome`.
 
 ## Welcome Handler
 
-All this handler does is send the `"Welcome"` view to the user with `SendView()`.
+All this handler does is send the `"Welcome"` view to the client with `SendView()`.
 
 ```go
 //lib/handlers/welcome.go
@@ -151,10 +151,10 @@ and it will navigate away to the given path when clicked.
 :::tip
 There are several reason as to when and why a view can't execute JavaScript code.
 
-Although rare, a user might choose to disable JavaScript altogether on your
+Although rare, a client might choose to disable JavaScript altogether on your
 website.
 
-The server itself could choose to not serve a JavaScript bundle to the user.
+The server itself could choose to not serve a JavaScript bundle to the client.
 
 ```go
 views.View{
@@ -165,7 +165,7 @@ views.View{
 ```
 
 Another reason might be if, for some reason, your JavaScript bundle is broken, or
-not compatible with the user's browser. In that case there's still a good chance that
+not compatible with the client's browser. In that case there's still a good chance that
 the hyperlink will continue to work by falling back to its standard behavior.
 :::
 
@@ -176,7 +176,7 @@ see [Link Component](../web-standards/#link-component).
 
 ## Todos Handler
 
-It sends the `"Todos"` view to the user, along with a list of todos, which is
+It sends the `"Todos"` view to the client, along with a list of todos, which is
 retrieved from the session state.
 
 ```go
@@ -216,7 +216,7 @@ func Default() State {
 ```
 
 This state is immediately overwritten by the session operator if an existing session
-is found for the user.
+is found for the client.
 
 If the session is a fresh one instead, the initial state remains untouched,
 thus the final `session.State.Todos` property will always contain the 5 todo items when initialized.

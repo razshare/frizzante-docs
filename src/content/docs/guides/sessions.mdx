@@ -25,18 +25,18 @@ func Welcome(connection *connections.Connection) {
 }
 ```
 
-This will create and start the user's session.
+This will create and start the client's session.
 
 :::note
-The session is retrieved based on the user's `session-id` cookie.
+The session is retrieved based on the client's `session-id` cookie.
 
-If the user doesn't have a `session-id` cookie, `Start()` creates a 
-new one instead and sends it to the user.
+If the client doesn't have a `session-id` cookie, `Start()` creates a 
+new one instead and sends it to the client.
 :::
 
 :::danger
 Since `Start()` may send a cookie, it is important to remember that
-the order in which data is sent to the user matters.
+the order in which data is sent to the client matters.
 
 Read more about [order of operations](../order-of-operations).
 :::
@@ -92,7 +92,7 @@ type State struct{                                        // Defines a struct wh
 func Welcome(connection *connections.Connection) {
     session := sessions.New(connection, State{}).Start()  // Starts the session.
     session.Load()                                        // Loads the session's state (not necessary, read below).
-    connection.SendMessage("Hello " + session.State.Name) // Sends text.
+    connection.SendMessage("Hello " + session.State.Name) // Sends message..
 }
 ```
 
@@ -160,7 +160,7 @@ type Archive interface {
 }
 ```
 
-And subsequently, where `domain` is the user's session id and `key` is always set to `"session.json"`.
+And subsequently, where `domain` is the client's session id and `key` is always set to `"session.json"`.
 
 ### Archive Details
 

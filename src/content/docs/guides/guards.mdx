@@ -37,7 +37,7 @@ func main() {
     server.AddRoute(routes.Route{                                         // Adds a route.
         Pattern: "GET /",                                                 // Sets the route's pattern.
         Handler: func(connection *connections.Connection) {
-            connection.SendMessage("Hello.")                              // Sends text.
+            connection.SendMessage("Hello.")                              // Sends message..
         },
         Tags: []string{"nojson"},                                         // Sets the route's tags. Any guard that intersects 
                                                                           // with these tags will execute before any 
@@ -64,7 +64,7 @@ server.Guards = append(server.Guards, {                               // Adds a 
                                                                       // the guard will reject the request.
 
         auth := connection.ReceiveHeader("Authorization")             // Gets the "Authorization" header from the request.
-        if !SuperAdvancedAuthorizationCheckTM(auth) {                 // If user is not authorized...
+        if !SuperAdvancedAuthorizationCheckTM(auth) {                 // If client is not authorized...
             connection.SendStatus(403)                                // ...sends status 403...
             connection.SendMessage("Not authorized.")                 // ...and a short message with an explanation.
             return                                                    // Returns. This will actually terminate the connection.
@@ -97,7 +97,7 @@ server.Guards = append(server.Guards, {                               // Adds a 
 server.Guards = append(server.Guards, {                 // Adds a route.
     Pattern: "GET /",                                   // Sets the route's pattern.
     Handler: func(connection *connections.Connection) { // Sets the route's handler.
-        connection.SendMessage("Hello.")                // Sends text.
+        connection.SendMessage("Hello.")                // Sends message..
     },
     Tags: []string{"auth"},                             // Sets the route's tags. Any guard that intersects 
                                                         // with these tags will execute before any 
@@ -119,7 +119,7 @@ You can still apply each guard separately with tags `authorization` and `authent
         server.Guards = append(server.Guards, {                 // Adds a route.
             Pattern: "GET /",                                   // Sets the route's pattern.
             Handler: func(connection *connections.Connection) { // Sets the route's handler.
-                connection.SendMessage("Hello.")                // Sends text.
+                connection.SendMessage("Hello.")                // Sends message..
             },
             Tags: []string{"authorization"},                    // Sets the route's tags. Any guard that intersects 
                                                                 // with these tags will execute before any 
@@ -132,7 +132,7 @@ You can still apply each guard separately with tags `authorization` and `authent
         server.Guards = append(server.Guards, {                 // Adds a route.
             Pattern: "GET /",                                   // Sets the route's pattern.
             Handler: func(connection *connections.Connection) { // Sets the route's handler.
-                connection.SendMessage("Hello.")                // Sends text.
+                connection.SendMessage("Hello.")                // Sends message..
             },
             Tags: []string{"authentication"},                   // Sets the route's tags. Any guard that intersects 
                                                                 // with these tags will execute before any 

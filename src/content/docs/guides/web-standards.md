@@ -2,7 +2,7 @@
 title: Web Standards
 ---
 
-You can use `href()` and `action()` in order to make your hyperlinks and forms adapt to the user's browser capabilities and/or the server's rendering configuration.
+You can use `href()` and `action()` in order to make your hyperlinks and forms adapt to the client's browser capabilities and/or the server's rendering configuration.
 
 ## Adaptive Hyperlinks
 
@@ -19,7 +19,7 @@ You can use `href()` and `action()` in order to make your hyperlinks and forms a
 ```
 
 When JavaScript is disabled, `<a>` will render as a traditional anchor, which by default
-will navigate the user away to `/some-other-page`.
+will navigate the client away to `/some-other-page`.
 
 On the other hand, when JavaScript is enabled, `<a>` will render to an anchor that overrides the default behavior of the browser.\
 Instead of navigating away immediately, [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is used
@@ -45,7 +45,7 @@ func Welcome(connection *connections.Connection)  {
 }
 ```
 
-The view will ultimately render the following in the user's browser
+The view will ultimately render the following in the client's browser
 
 ```html
 <a href="/some-other-page"> Go to some other page </a>
@@ -108,7 +108,7 @@ Which swaps the current state and view for new ones served by `/some-other-page`
 ```
 
 When JavaScript is disabled, `<form>` will render as a traditional form, which by default
-will submit to `/process` and navigate the user away.
+will submit to `/process` and navigate the client away.
 
 On the other hand, when JavaScript is enabled, `<form>` will render to a form that overrides the default behavior of the browser.\
 Instead of navigating away immediately, [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is used
@@ -133,7 +133,7 @@ func Welcome(connection *connections.Connection)  {
 }
 ```
 
-The view will ultimately render the following in the user's browser
+The view will ultimately render the following in the client's browser
 
 ```html
 <form action="/process">
