@@ -90,7 +90,7 @@ Use `ReceiveMessage()` to retrieve the message sent by the client.
 |---------------------------------------------|-------------------------------------|
 | Http                                        | It reads the body of the request.   |
 | [Server Sent Events](../server-sent-events) | It reads the body of the request.   |
-| [Web Sockets](.../web-sockets)              | It reads the next incoming message. |
+| [Web Sockets](../web-sockets)              | It reads the next incoming message. |
 :::
 
 ```go
@@ -113,7 +113,7 @@ Use `SendMessage()` to send a message to the client.
 |---------------------------------------------|---------------------------------------|
 | Http                                        | It sends the body of the response.    |
 | [Server Sent Events](../server-sent-events) | It sends a new message to the client using the current event name. |
-| [Web Sockets](.../web-sockets)              | It sends a new message to the client. |
+| [Web Sockets](../web-sockets)              | It sends a new message to the client. |
 :::
 
 ```go
