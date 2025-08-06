@@ -83,15 +83,6 @@ func Welcome(connection *connections.Connection) {
 
 Use `ReceiveMessage()` to retrieve messages sent by the client.
 
-:::note
-`ReceiveMessage()` behaves differently based on the type of connection.
-
-| Type of Connection                          | Description                         |
-|---------------------------------------------|-------------------------------------|
-| Http                                        | Reads the body of the request.      |
-| [Server Sent Events](../server-sent-events) | Reads the body of the request.      |
-| [Web Sockets](../web-sockets)               | Reads the next incoming message.    |
-:::
 
 ```go
 //lib/handlers/welcome.go
@@ -106,15 +97,6 @@ func Welcome(connection *connections.Connection) {
 
 Use `SendMessage()` to send a message to the client.
 
-:::note
-`SendMessage()` behaves differently based on the type of connection.
-
-| Type of Connection                          | Description                                                     |
-|---------------------------------------------|-----------------------------------------------------------------|
-| Http                                        | Sends the body of the response.                                 |
-| [Server Sent Events](../server-sent-events) | Sends a new message to the client using the current event name. |
-| [Web Sockets](../web-sockets)               | Sends a new message to the client.                              |
-:::
 
 ```go
 //lib/handlers/welcome.go
@@ -240,8 +222,8 @@ func Welcome(connection *connections.Connection) {
 
 ## Forms
 
-Use `ReceiveForm()` to retrieve and parse forms
-when using `POST` and `PUT` http verbs.
+Use `ReceiveForm()` to retrieve and parse forms when using `POST` and `PUT` http verbs.
+
 
 ```go
 routes.Route{Pattern: "POST /", Handler: handlers.Welcome}
@@ -265,8 +247,8 @@ func Welcome(connection *connections.Connection) {
 
 ## Json
 
+Use `ReceiveJson()` to parse incoming content as json when using `POST` and `PUT` http verbs.
 
-Use `ReceiveJson()` to parse incoming content as json when using `POST` and `PUT` http verbs and `SendJson()` to send data as json.
 
 ```go
 routes.Route{Pattern: "POST /", Handler: handlers.Welcome}
