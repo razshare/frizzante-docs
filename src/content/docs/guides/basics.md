@@ -81,16 +81,16 @@ func Welcome(connection *connections.Connection) {
 
 ## Messages
 
-Use `ReceiveMessage()` to retrieve the message sent by the client.
+Use `ReceiveMessage()` to retrieve messages sent by the client.
 
 :::note
 `ReceiveMessage()` behaves differently based on the type of connection.
 
 | Type of Connection                          | Description                         |
 |---------------------------------------------|-------------------------------------|
-| Http                                        | It reads the body of the request.   |
-| [Server Sent Events](../server-sent-events) | It reads the body of the request.   |
-| [Web Sockets](../web-sockets)              | It reads the next incoming message. |
+| Http                                        | Reads the body of the request.      |
+| [Server Sent Events](../server-sent-events) | Reads the body of the request.      |
+| [Web Sockets](../web-sockets)               | Reads the next incoming message.    |
 :::
 
 ```go
@@ -109,11 +109,11 @@ Use `SendMessage()` to send a message to the client.
 :::note
 `SendMessage()` behaves differently based on the type of connection.
 
-| Type of Connection                          | Description                           |
-|---------------------------------------------|---------------------------------------|
-| Http                                        | It sends the body of the response.    |
-| [Server Sent Events](../server-sent-events) | It sends a new message to the client using the current event name. |
-| [Web Sockets](../web-sockets)              | It sends a new message to the client. |
+| Type of Connection                          | Description                                                     |
+|---------------------------------------------|-----------------------------------------------------------------|
+| Http                                        | Sends the body of the response.                                 |
+| [Server Sent Events](../server-sent-events) | Sends a new message to the client using the current event name. |
+| [Web Sockets](../web-sockets)               | Sends a new message to the client.                              |
 :::
 
 ```go
