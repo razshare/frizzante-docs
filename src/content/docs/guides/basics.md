@@ -20,15 +20,16 @@ func main() {
 
 ## Routes
 
-Each server has a list of **routes** that it exposes, which you can freely modify.
+Each server exposes a slice of **Routes** which you can freely modify.
 
-Adding a route is as simple as appending a new `Route` to `server.Routes`.
+You can add a new route by appending a new `Route` to `server.Routes`
 
 ```go
 //main.go
 package main
 
 import (
+    "github.com/razshare/frizzante/routes"
     "github.com/razshare/frizzante/servers"
     "main/lib/handlers"
 )
@@ -42,6 +43,28 @@ var route = routes.Route{                        // Creates route.
 func main() {
     server.Routes = append(server.Routes, route) // Adds route.
     server.Start()                               // Starts server.
+}
+```
+
+Or even overwrite the whole slice of routes
+
+```go
+//main.go
+package main
+
+import (
+    "github.com/razshare/frizzante/routes"
+    "github.com/razshare/frizzante/servers"
+    "main/lib/handlers"
+)
+
+var server = servers.New()                             // Creates server.
+
+func main() {
+    server.Routes = []routes.Route{                    // Overwrites all routes.
+        {Pattern: "GET /", Handler: handlers.Welcome}, // Adds route.
+    }
+    server.Start()                                     // Starts server.
 }
 ```
 
