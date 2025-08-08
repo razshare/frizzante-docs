@@ -19,22 +19,20 @@ First of all every interaction happens through a `GET` verb.
 //main.go
 //go:embed app/dist
 var efs embed.FS
-var server = servers.New()
+var conf = server.Default()
 
 func main() {
-    server.Efs = efs
-
-	server.Routes = []routes.Route{
-		{Pattern: "GET /", Handler: handlers.Default},
-		{Pattern: "GET /welcome", Handler: handlers.Welcome},
-		{Pattern: "GET /todos", Handler: handlers.Todos},
-		{Pattern: "GET /check", Handler: handlers.Check},
-		{Pattern: "GET /uncheck", Handler: handlers.Uncheck},
-		{Pattern: "GET /add", Handler: handlers.Add},
-		{Pattern: "GET /remove", Handler: handlers.Remove},
-	}
-
-	server.Start()
+    defer server.Start(conf)
+    conf.Container.Efs = efs
+    conf.Routes = []route.Route{
+       {Pattern: "GET /", Handler: handlers.Default},
+       {Pattern: "GET /welcome", Handler: handlers.Welcome},
+       {Pattern: "GET /todos", Handler: handlers.Todos},
+       {Pattern: "GET /check", Handler: handlers.Check},
+       {Pattern: "GET /uncheck", Handler: handlers.Uncheck},
+       {Pattern: "GET /add", Handler: handlers.Add},
+       {Pattern: "GET /remove", Handler: handlers.Remove},
+    }
 }
 ```
 
@@ -48,12 +46,12 @@ which acts as a fallback handler.
 ![](image200.svg)
 
 It is for that reason that this handler tries to send a matching file
-with `SendFileOrElse()` before doing anything else.
+with `send.FileOrElse()` before doing anything else.
 
 ```go
-//lib/handlers/default.go
-func Default(connection *connections.Connection) {
-    connection.SendFileOrElse(func() { Welcome(connection) })
+//lib/routes/handlers/default.go
+func Default(c *client.Client) {
+    send.FileOrElse(c, func() { Welcome(c) })
 }
 ```
 
@@ -63,12 +61,12 @@ This handler essentially acts as a file server and falls back to `Welcome`.
 
 ## Welcome Handler
 
-All this handler does is send the `"Welcome"` view to the client with `SendView()`.
+All this handler does is send the `"Welcome"` view to the client with `send.View()`.
 
 ```go
-//lib/handlers/welcome.go
-func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{Name: "Welcome"})
+//lib/routes/handlers/welcome.go
+func Welcome(c *client.Client) {
+    send.View(c, view.View{Name: "Welcome"})
 }
 ```
 
@@ -98,7 +96,7 @@ These are key/value records.
 The keys are important, because they dictate the `Name` of the view, the actual property `Name` of the view.
 
 ```go
-views.View{
+view.View{
     Name: "Welcome", // This.
 }
 ```
@@ -157,10 +155,10 @@ website.
 The server itself could choose to not serve a JavaScript bundle to the client.
 
 ```go
-views.View{
+view.View{
     Name: "Welcome",
     // This will disable JavaScript.
-    RenderMode: views.RenderModeServer,
+    RenderMode: view.RenderModeServer,
 }
 ```
 
@@ -180,50 +178,44 @@ It sends the `"Todos"` view to the client, along with a list of todos, which is
 retrieved from the session state.
 
 ```go
-//lib/handlers/todos.go
-func Todos(connection *connections.Connection) {
-    session := sessions.New(connection, state.Default()).Start()
-    defer sessions.Save(session)
-
-    connection.SendView(views.View{
-        Name: "Todos", 
-        Data: map[string]any{
-            "todos": session.State.Todos,
-        },
+//lib/routes/handlers/todos.go
+func Todos(c *client.Client) {
+    s := session.Start(receive.SessionId(c))
+    send.View(c, view.View{
+       Name: "Todos",
+       Data: map[string]any{
+          "todos": s.Todos,
+       },
     })
 }
 ```
 
-As mentioned in the [sessions](../../guides/sessions) section,
-the default session operator handles things in a local `sessions` directory.
-
-By default the session state has a few items in it, initialized by 
-`state.Default()`.
+By default the session state has a few items in it.
 
 ```go
-//lib/state/functions.go
-func Default() State {
-	return State{
-		Todos: []Todo{
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Do laundry"},
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Cook"},
-			{Checked: false, Description: "Pet the cat."},
-		},
-	}
+//lib/session/start.go
+var Sessions = map[string]*Session{}
+
+func Start(id string) *Session {
+    v, ok := Sessions[id]
+    if !ok {
+       Sessions[id] = &Session{Todos: []Todo{
+          {Checked: false, Description: "Pet the cat."},
+          {Checked: false, Description: "Do laundry"},
+          {Checked: false, Description: "Pet the cat."},
+          {Checked: false, Description: "Cook"},
+          {Checked: false, Description: "Pet the cat."},
+       }}
+       return Sessions[id]
+    }
+    return v
 }
+
 ```
-
-This state is immediately overwritten by the session operator if an existing session
-is found for the client.
-
-If the session is a fresh one instead, the initial state remains untouched,
-thus the final `session.State.Todos` property will always contain the 5 todo items when initialized.
 
 ## Todos View
 
-This `"Todos"` view does quite a few things.
+The `"Todos"` view does quite a few things.
 
 1. Lists Items
 1. Removes items.
@@ -239,13 +231,13 @@ This `"Todos"` view does quite a few things.
     import {action} from "$frizzante/core/scripts/action.ts";
 
     type Todo = {
-        Checked: boolean
-        Description: string
+       Checked: boolean
+       Description: string
     }
 
     type Props = {
-        todos: Todo[]
-        error: string
+       todos: Todo[]
+       error: string
     }
 
     let { todos, error }: Props = $props()
@@ -253,51 +245,51 @@ This `"Todos"` view does quite a few things.
 
 <Layout title="Todos">
     <ol>
-        {#each todos as todo, index (index)}
-            <li>
-                <form {...action("/remove")}>
-                    <input type="hidden" name="index" value={index} />
-                    <button class="link">[Remove]</button>
+       {#each todos as todo, index (index)}
+          <li>
+             <form {...action("/remove")}>
+                <input type="hidden" name="index" value={index} />
+                <button class="link">[Remove]</button>
+             </form>
+             {#if todo.Checked}
+                <form {...action("/uncheck")}>
+                    <input
+                       type="hidden"
+                       name="index"
+                       value={index}
+                    />
+                    <button class="link">
+                       <!---->
+                       (x) {todo.Description}
+                       <!---->
+                    </button>
                 </form>
-                {#if todo.Checked}
-                    <form {...action("/uncheck")}>
-                        <input
-                            type="hidden"
-                            name="index"
-                            value={index}
-                        />
-                        <button class="link">
-                            <!---->
-                            (x) {todo.Description}
-                            <!---->
-                        </button>
-                    </form>
-                {:else}
-                    <form {...action("/check")}>
-                        <input
-                            type="hidden"
-                            name="index"
-                            value={index}
-                        />
-                        <button class="link">
-                            <!---->
-                            (&nbsp;&nbsp;) {todo.Description}
-                            <!---->
-                        </button>
-                    </form>
-                {/if}
-            </li>
-        {/each}
+             {:else}
+                <form {...action("/check")}>
+                    <input
+                       type="hidden"
+                       name="index"
+                       value={index}
+                    />
+                    <button class="link">
+                       <!---->
+                       (&nbsp;&nbsp;) {todo.Description}
+                       <!---->
+                    </button>
+                </form>
+             {/if}
+          </li>
+       {/each}
     </ol>
     <form {...action("/add")}>
-        <span class="link">Description</span>
-        <input type="text" value="" name="description" />
-        <button class="link" type="submit">Add +</button>
+       <span class="link">Description</span>
+       <input type="text" value="" name="description" />
+       <button class="link" type="submit">Add +</button>
     </form>
 
     {#if error}
-        <br />
-        <span class="error">{error}</span>
+       <br />
+       <span class="error">{error}</span>
     {/if}
 
     <br />
@@ -321,37 +313,37 @@ which is then iterated upon to render the items
 //app/lib/views/Todos.svelte
 {#each todos as todo, index (index)}
     <li>
-        <form {...action("/remove")}>
-            <input type="hidden" name="index" value={index} />
-            <button class="link">[Remove]</button>
-        </form>
-        {#if todo.Checked}
-            <form {...action("/uncheck")}>
-                <input
-                    type="hidden"
-                    name="index"
-                    value={index}
-                />
-                <button class="link">
-                    <!---->
-                    (x) {todo.Description}
-                    <!---->
-                </button>
-            </form>
-        {:else}
-            <form {...action("/check")}>
-                <input
-                    type="hidden"
-                    name="index"
-                    value={index}
-                />
-                <button class="link">
-                    <!---->
-                    (&nbsp;&nbsp;) {todo.Description}
-                    <!---->
-                </button>
-            </form>
-        {/if}
+       <form {...action("/remove")}>
+          <input type="hidden" name="index" value={index} />
+          <button class="link">[Remove]</button>
+       </form>
+       {#if todo.Checked}
+          <form {...action("/uncheck")}>
+             <input
+                type="hidden"
+                name="index"
+                value={index}
+             />
+             <button class="link">
+                <!---->
+                (x) {todo.Description}
+                <!---->
+             </button>
+          </form>
+       {:else}
+          <form {...action("/check")}>
+             <input
+                type="hidden"
+                name="index"
+                value={index}
+             />
+             <button class="link">
+                <!---->
+                (&nbsp;&nbsp;) {todo.Description}
+                <!---->
+             </button>
+          </form>
+       {/if}
     </li>
 {/each}
 ```
@@ -398,51 +390,51 @@ see [Form Component](../web-standards/#form-component).
 :::
 
 ```go
-//lib/handlers/remove.go
-func Remove(connection *connections.Connection) {
-    session := sessions.New(connection, state.Default()).Start()
-    defer sessions.Save(session)
+//lib/routes/handlers/remove.go
+func Remove(c *client.Client) {
+	s := session.Start(receive.SessionId(c))
 
-    count := int64(len(session.State.Todos))
+	l := int64(len(s.Todos))
+	if 0 == l {
+		// No index found, ignore the request.
+		send.Navigate(c, "/todos")
+		return
+	}
 
-    if 0 == count {
-        // No todos found, ignore the request.
-        connection.SendNavigate("/todos")
-        return
-    }
+	is := receive.Query(c, "index")
+	if is == "" {
+		// No index found, ignore the request.
+		send.Navigate(c, "/todos")
+		return
+	}
 
-    indexString := connection.ReceiveQuery("index")
-    if "" == indexString {
-        // No index found, ignore the request.
-        connection.SendNavigate("/todos")
-        return
-    }
+	i, e := strconv.ParseInt(is, 10, 64)
+	if nil != e {
+		send.View(c, view.View{
+			Name: "Todos",
+			Data: map[string]any{
+				"error": e.Error(),
+			},
+		})
+		return
+	}
+	if i >= l {
+		// Index is out of bounds, ignore the request.
+		send.Navigate(c, "/todos")
+		return
+	}
 
-    index, indexError := strconv.ParseInt(indexString, 10, 64)
-    if nil != indexError {
-        connection.SendView(views.View{Name: "Todos", Data: map[string]any{
-            "error": indexError.Error(),
-        }})
-        return
-    }
+	s.Todos = append(
+		s.Todos[:i],
+		s.Todos[i+1:]...,
+	)
 
-    if index >= count {
-        // Index is out of bounds, ignore the request.
-        connection.SendNavigate("/todos")
-        return
-    }
-
-    session.State.Todos = append(
-        session.State.Todos[:index], 
-        session.State.Todos[index+1:]...,
-    )
-
-    connection.SendNavigate("/todos")
+	send.Navigate(c, "/todos")
 }
 ```
 
 :::caution
-Notice the use of `connection.ReceiveQuery("index")`.
+Notice the use of `receive.Query(c, "index")`.
 
 This is a reminder that, if not specified otherwise, 
 forms prefer using the `GET` verb.
@@ -458,10 +450,10 @@ The equivalent using the `POST` verb would be
 ```
 
 ```go
-//lib/handlers/remove.go
+//lib/routes/handlers/remove.go
 // ...
-form := connection.ReceiveForm()
-indexString := form.Get("index")
+f := receive.Form(c)
+is := f.Get("index")
 // ...
 ```
 :::
@@ -474,21 +466,21 @@ Checking and unchecking items is also done using forms.
 //app/lib/views/Todos.svelte
 {#if todo.Checked}
     <form {...action("/uncheck")}>
-        <input type="hidden" name="index" value={index} />
-        <button class="link">
-            <!---->
-            (x) {todo.Description}
-            <!---->
-        </button>
+       <input type="hidden" name="index" value={index} />
+       <button class="link">
+          <!---->
+          (x) {todo.Description}
+          <!---->
+       </button>
     </form>
 {:else}
     <form {...action("/check")}>
-        <input type="hidden" name="index" value={index} />
-        <button class="link">
-            <!---->
-            (&nbsp;&nbsp;) {todo.Description}
-            <!---->
-        </button>
+       <input type="hidden" name="index" value={index} />
+       <button class="link">
+          <!---->
+          (&nbsp;&nbsp;) {todo.Description}
+          <!---->
+       </button>
     </form>
 {/if}
 ```
@@ -505,39 +497,38 @@ Both forms indicate the index of the item using a hidden input field.
 Checking is handled by the `Check` handler.
 
 ```go
-//lib/handlers/check.go
-func Check(connection *connections.Connection) {
-    session := sessions.New(connection, state.Default()).Start()
-    defer session.Save()
+//lib/routes/handlers/check.go
+func Check(c *client.Client) {
+	s := session.Start(receive.SessionId(c))
 
-    indexString := connection.ReceiveQuery("index")
-    if "" == indexString {
-        // No index found, ignore the request.
-        connection.SendNavigate("/todos")
-        return
-    }
+	is := receive.Query(c, "index")
+	if is == "" {
+		// No index found, ignore the request.
+		send.Navigate(c, "/todos")
+		return
+	}
 
-    index, indexError := strconv.ParseInt(indexString, 10, 64)
-    if nil != indexError {
-        connection.SendView(views.View{
-            Name: "Todos", 
-            Data: map[string]any{
-                "error": indexError.Error(),
-            },
-        })
-        return
-    }
+	i, e := strconv.ParseInt(is, 10, 64)
+	if nil != e {
+		send.View(c, view.View{
+			Name: "Todos",
+			Data: map[string]any{
+				"error": e.Error(),
+			},
+		})
+		return
+	}
 
-    count := int64(len(session.State.Todos))
-    if index >= count {
-        // Index is out of bounds, ignore the request.
-        connection.SendNavigate("/todos")
-        return
-    }
+	l := int64(len(s.Todos))
+	if i >= l {
+		// Index is out of bounds, ignore the request.
+		send.Navigate(c, "/todos")
+		return
+	}
 
-    session.State.Todos[index].Checked = true
+	s.Todos[i].Checked = true
 
-    connection.SendNavigate("/todos")
+	send.Navigate(c, "/todos")
 }
 ```
 
@@ -545,9 +536,9 @@ While unchecking is handled by the `Uncheck` handler, which does the exact same 
 as `Check`, except it sets `Checked` to `false` instead of `true`.
 
 ```go
-//lib/handlers/uncheck.go
+//lib/routes/handlers/uncheck.go
 // ...
-session.State.Todos[id].Checked = false
+s.Todos[i].Checked = false
 // ...
 ```
 
@@ -568,30 +559,27 @@ by sending a form to `/add`.
 This form is then captured by the `Add` handler.
 
 ```go
-//lib/handlers/add.go
-func Add(connection *connections.Connection) {
-    session := sessions.New(connection, state.Default()).Start()
-    defer sessions.Save(session)
+//lib/routes/handlers/add.go
+func Add(c *client.Client) {
+	s := session.Start(receive.SessionId(c))
+	d := receive.Query(c, "description")
+	if d == "" {
+		send.View(c, view.View{
+			Name: "Todos",
+			Data: map[string]any{
+				"todos": s.Todos,
+				"error": "todo description cannot be empty",
+			},
+		})
+		return
+	}
 
-    description := connection.ReceiveQuery("description")
+	s.Todos = append(s.Todos, session.Todo{
+		Checked:    false,
+		Description: d,
+	})
 
-    if "" == description {
-        connection.SendView(views.View{
-            Name: "Todos",
-            Data: map[string]any{
-                "todos": session.State.Todos,
-                "error": "todo description cannot be empty",
-            },
-        })
-        return
-    }
-
-    session.State.Todos = append(session.State.Todos, state.Todo{
-        Checked:     false,
-        Description: description,
-    })
-
-    connection.SendNavigate("/todos")
+	send.Navigate(c, "/todos")
 }
 ```
 

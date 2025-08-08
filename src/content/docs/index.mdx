@@ -8,12 +8,12 @@ hero:
     file: ../../assets/frizz-octo-round.webp
   actions:
     - text: Get Started
-      link: /frizzante-docs/guides/get-started
-      icon: right-arrow
+     link: /frizzante-docs/guides/get-started
+     icon: right-arrow
     - text: View on GitHub
-      link: https://github.com/razshare/frizzante
-      icon: external
-      variant: minimal
+     link: https://github.com/razshare/frizzante
+     icon: external
+     variant: minimal
 ---
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
@@ -29,11 +29,11 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <Card title='Render Modes' icon='biome'>
     Switch between rendering on the server, client or both at runtime.
     ```go
-    connection.SendView(views.View{
-        Name: "Welcome",
-        RenderMode: views.RenderModeFull,
-        // RenderMode: views.RenderModeServer,
-        // RenderMode: views.RenderModeClient,
+    send.View(c, view.View{
+       Name: "Welcome",
+       RenderMode: view.RenderModeFull,
+       // RenderMode: view.RenderModeServer,
+       // RenderMode: view.RenderModeClient,
     })
     ```
     <LinkCard title='Read More' href="/frizzante-docs/guides/views/#render-modes"/>
@@ -41,10 +41,10 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <Card title='Web Sockets' icon='heart'>
     Simple Web Sockets api.
     ```go
-    connection.SendWsUpgrade()
+    send.WsUpgrade(c)
     for {
-        name := connection.ReceiveMessage()
-        connection.SendMessage("Hello " + name)
+       name := receive.Message(c)
+       send.Message(c, "Hello " + name)
     }
     ```
     <LinkCard title='Read More' href="/frizzante-docs/guides/web-sockets"/>
@@ -52,10 +52,10 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <Card title='Server Sent Events' icon='heart'>
     Simple Server Sent Events api.
     ```go
-    connection.SendSseUpgrade()
+    send.SseUpgrade(c)
     for {
-        connection.SendMessage("Hello.")
-        time.Sleep(time.Second)
+       send.Message(c, "Hello.")
+       time.Sleep(time.Second)
     }
     ```
     <LinkCard title='Read More' href="/frizzante-docs/guides/web-sockets"/>

@@ -10,10 +10,10 @@ Views are **svelte components** exported by
 <FileTree>
     - main.go
     - app
-        - exports
-            - client.ts
-            - server.ts
-            - ...
+       - exports
+          - client.ts
+          - server.ts
+          - ...
 </FileTree>
 
 ### Server Exports
@@ -25,13 +25,13 @@ import Welcome from '$lib/views/Welcome.svelte'
 import Profile from '$lib/views/Profile.svelte'
 
 export const views = {  // Defines that components "Welcome" and "Profile"
-                        // can be rendered on the server when sent with SendView().
+                    // can be rendered on the server when sent with SendView().
 
     "Welcome": Welcome, // When SendView(views:View{Name:"Welcome"}) is invoked, 
-                        // the component will render on the server.
+                    // the component will render on the server.
 
     "Profile": Profile, // When SendView(views:View{Name:"Profile"}) is invoked, 
-                        // the component will render on the server.
+                    // the component will render on the server.
 }
 ```
 
@@ -41,21 +41,21 @@ Views that are meant to be rendered on the client should be exported by `app/exp
 ```ts
 //app/exports/client.ts
 export const views = { // Defines that components "Welcome" and "Profile"
-                       // can be bundled and rendered on the client when
-                       // sent with SendView().
+                   // can be bundled and rendered on the client when
+                   // sent with SendView().
 
     "Welcome": import('$lib/views/Welcome.svelte'), // When SendView(views:View{Name:"Welcome"}) is invoked, 
-                                                    // the component will render on the client.
+                                          // the component will render on the client.
 
     "Profile": import('$lib/views/Profile.svelte'), // When SendView(views:View{Name:"Profile"}) is invoked, 
-                                                    // the component will render on the client.
+                                          // the component will render on the client.
 }
 ```
 
 These views are being imported asynchronously in order to split them 
 in different bundles, however you can simply create fake promises
 in order to bundle them all together and eliminate network latency
-when transitioning between views.
+when transitioning between view.
 
 ```ts
 //app/exports/client.ts
@@ -76,46 +76,48 @@ See [Render Modes below](#render-modes).
 
 ## Send Views
 
-Use `SendView()` to send a view.
+Use `send.View()` to send a view.
 
 ```go
 //lib/handlers/welcome.go
 package lib
 
 import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/send"
+    "github.com/razshare/frizzante/view"
 )
 
-func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{Name: "Welcome"}) // Sends view "Welcome".
+func Welcome(c *client.Client) {
+    send.View(c, view.View{Name: "Welcome"}) // Sends view "Welcome".
 }
 ```
 
 The **Name** of the view will be used to lookup the view component exported by **app/exports/server.ts** and/or **app/exports/client.ts**.
 
 :::caution
-If the view **Name** is not present in neither `app/exports/server.ts` or `app/exports/client.ts`, `SendView()` will fail.
+If the view **Name** is not present in neither `app/exports/server.ts` or `app/exports/client.ts`, `send.View()` will fail.
 :::
 
 ## Default View
 
 There is no way to specify a "**default view**".
 
-However, you can use `SendFileOrElse()` in order to send a file or run custom logic if it doesn't exist.
+However, you can use `send.FileOrElse()` in order to send a file or run custom logic if it doesn't exist.
 
 ```go
 //lib/handlers/welcome.go
 package lib
 
 import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/send"
+    "github.com/razshare/frizzante/view"
 )
 
-func Welcome(connection *connections.Connection) {
-    connection.SendFileOrElse(func () {                  // Attempts to send requested file, or else...
-        connection.SendView(views.View{Name: "Welcome"}) // ...sends view "Welcome".
+func Welcome(c *client.Client) {
+    send.FileOrElse(c, func () {              // Attempts to send requested file, or else...
+       send.View(c, view.View{Name: "Welcome"}) // ...sends view "Welcome".
     })
 }
 ```
@@ -128,18 +130,19 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/servers"
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/server"
 )
 
-var server = servers.New()     // Creates a server.
-var route = routes.Route{      // Creates a route.
-    Pattern: "GET /",          // Sets the route's pattern.
-    Handler: handlers.Welcome, // Sets the route's handler.
+var conf = server.Default()               // Creates server config.
+var route = route.Route{                 // Creates route.
+    Pattern: "GET /",                    // Sets route pattern.
+    Handler: handlers.Welcome,            // Sets route handler.
 }
 
 func main() {
-    server.AddRoute(route)     // Adds the route to the server.
-    server.Start()             // Starts the server.
+    defer server.Start(conf)              // Starts the server.
+    conf.Routes = append(conf.Routes, route) // Adds the route to the server.
 }
 ```
 
@@ -152,16 +155,17 @@ Optionally, you can send data along with the views by adding a `Data` property t
 package lib
 
 import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/send"
+    "github.com/razshare/frizzante/view"
 )
 
-func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{ // Sends a view.
-        Name: "Welcome",            // Sets the view's name.
-        Data: map[string]string{    // Sets the view's data, which will be injected into the svelte component.
-            "name": "world",        // Adds property "name" with value "world".
-        },
+func Welcome(c *client.Client) {
+    send.View(c, view.View{     // Sends view.
+       Name: "Welcome",        // Sets view name.
+       Data: map[string]string{ // Sets view data, which will be injected into the svelte component.
+          "name": "world",    // Adds property "name" with value "world".
+       },
     }) 
 }
 ```
@@ -185,8 +189,8 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 <script lang="ts">
     import type { View } from "$frizzante/types.ts"
     const view = getContext("view") as View<{ name: string }> // Retrieves the same server data, 
-                                                              // but can be used anywhere in the project
-                                                              // regardless of the component hierarchy.
+                                                  // but can be used anywhere in the project
+                                                  // regardless of the component hierarchy.
 </script>
 
 <h1>Hello {view.data.name}</h1>
@@ -205,14 +209,15 @@ This is the **default** mode.
 package lib
 
 import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/send"
+    "github.com/razshare/frizzante/view"
 )
 
-func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{       // Sends a view.
-        Name: "Welcome",                  // Sets the view's name.
-        RenderMode: views.RenderModeFull, // Renders the view on server and client.
+func Welcome(c *client.Client) {
+    send.View(c, view.View{            // Sends view.
+       Name: "Welcome",              // Sets view name.
+       RenderMode: view.RenderModeFull, // Renders view on server and client.
     })
 }
 ```
@@ -227,14 +232,15 @@ your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML
 package lib
 
 import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/send"
+    "github.com/razshare/frizzante/view"
 )
 
-func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{         // Sends a view.
-        Name: "Welcome",                    // Sets the view's name.
-        RenderMode: views.RenderModeServer, // Renders the view only on the server.
+func Welcome(c *client.Client) {
+    send.View(c, view.View{             // Sends view.
+       Name: "Welcome",                // Sets view name.
+       RenderMode: view.RenderModeServer, // Renders view only on server.
     })
 }
 ```
@@ -258,14 +264,15 @@ Using `RenderModeClient`, the view is rendered only on the client by loading a J
 package lib
 
 import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/send"
+    "github.com/razshare/frizzante/view"
 )
 
-func Welcome(connection *connections.Connection) {
-    connection.SendView(views.View{         // Sends a view.
-        Name: "Welcome",                    // Sets the view's name.
-        RenderMode: views.RenderModeClient, // Renders the view only on the client.
+func Welcome(c *client.Client) {
+    send.View(c, view.View{             // Sends view.
+       Name: "Welcome",                // Sets view name.
+       RenderMode: view.RenderModeClient, // Renders view only on client.
     })
 }
 ```

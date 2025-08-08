@@ -13,9 +13,9 @@ You can use `href()` and `action()` in order to make your hyperlinks and forms a
 </script>
 
 <a {...href("/some-other-page")}> Go to some other page </a> <!-- Defines a link, which when triggered will either 
-                                                                  directly navigate to the given path, or do so 
-                                                                  through an http request, depending on wether 
-                                                                  JavaScript is enabled or not. -->
+                                                     directly navigate to the given path, or do so 
+                                                     through an http request, depending on wether 
+                                                     JavaScript is enabled or not. -->
 ```
 
 When JavaScript is disabled, `<a>` will render as a traditional anchor, which by default
@@ -25,22 +25,22 @@ On the other hand, when JavaScript is enabled, `<a>` will render to an anchor th
 Instead of navigating away immediately, [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is used
 to retrieve the contents of `/some-other-page` and update the current state and view based on the server's response.
 
-For example, given the following handler using `views.RenderModeServer`
+For example, given the following handler using `view.RenderModeServer`
 
 ```go
 //lib/handlers/welcome.go
 package handlers
 
 import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/send"
+    "github.com/razshare/frizzante/view"
 )
 
-func Welcome(connection *connections.Connection)  {
-    connection.SendView(views.View{         // Sends a view.
-        Name: "Welcome",                    // Sets the view's name.
-        RenderMode: views.RenderModeServer, // Renders the view only on the server, 
-                                            // meaning the view won't contain any JavaScript code.
+func Welcome(c *client.Client)  {
+    send.View(c, view.View{             // Sends view.
+       Name: "Welcome",                // Sets name of the view.
+       RenderMode: view.RenderModeServer, // Renders view only on the server.
     })
 }
 ```
@@ -51,7 +51,7 @@ The view will ultimately render the following in the client's browser
 <a href="/some-other-page"> Go to some other page </a>
 ```
 
-But using `views.RenderModeFull` will instead render
+But using `view.RenderModeFull` will instead render
 
 ```html
 <a href="/some-other-page" onclick="onclick"> Go to some other page </a>
@@ -73,17 +73,17 @@ export function href(path = ""): {
     const view = getContext("view") as View<never>
     route(view)
     return {
-        href: path,
-        async onclick(event: MouseEvent) {
-            event.preventDefault()
-            await swaps
-                .swap(view)       // Sets a reference to the current view state (which is reactive).
-                .withPath(path)   // Defines the path where to send the underlying http request.
-                .withUpdate(true) // Defines wether or not to update the application state and url.
-                .play()           // Sends the http request, grabs the result, update the view 
-                                  // and also updates state and url if possible.
-            return false
-        },
+       href: path,
+       async onclick(event: MouseEvent) {
+          event.preventDefault()
+          await swaps
+             .swap(view)      // Sets a reference to the current view state (which is reactive).
+             .withPath(path)   // Defines the path where to send the underlying http request.
+             .withUpdate(true) // Defines wether or not to update the application state and url.
+             .play()         // Sends the http request, grabs the result, update the view 
+                            // and also updates state and url if possible.
+          return false
+       },
     }
 }
 
@@ -99,11 +99,11 @@ Which swaps the current state and view for new ones served by `/some-other-page`
     import { action } from "$frizzante/scripts/action.ts"
 </script>
 
-<form {...action("/process")}>            <!-- Defines a form. -->
-    <input type="text" name="name" />     <!-- Defines a text field. -->
+<form {...action("/process")}>          <!-- Defines a form. -->
+    <input type="text" name="name" />    <!-- Defines a text field. -->
     <button type="submit">Submit</button> <!-- Defines a button, which when triggered will either 
-                                               directly submit the form, or do so through an http request, 
-                                               depending on wether JavaScript is enabled or not. -->
+                                      directly submit the form, or do so through an http request, 
+                                      depending on wether JavaScript is enabled or not. -->
 </form>
 ```
 
@@ -114,21 +114,22 @@ On the other hand, when JavaScript is enabled, `<form>` will render to a form th
 Instead of navigating away immediately, [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is used
 to submit the form to `/process` and update the current state and view based on the server's response.
 
-For example, given the following handler using `views.RenderModeServer`
+For example, given the following handler using `view.RenderModeServer`
 
 ```go
 //lib/handlers/welcome.go
 package handlers
 
 import (
-    "github.com/razshare/frizzante/connections"
-    "github.com/razshare/frizzante/views"
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/send"
+    "github.com/razshare/frizzante/view"
 )
 
-func Welcome(connection *connections.Connection)  {
-    connection.SendView(views.View{         // Sends a view.
-        Name: "Welcome",                    // Sets the name of the view.
-        RenderMode: views.RenderModeServer, // Render the view only on the server.
+func Welcome(c *client.Client)  {
+    send.View(c, view.View{             // Sends view.
+       Name: "Welcome",                // Sets name of the view.
+       RenderMode: view.RenderModeServer, // Renders view only on the server.
     })
 }
 ```
@@ -142,7 +143,7 @@ The view will ultimately render the following in the client's browser
 </form>
 ```
 
-But using `views.RenderModeFull` will instead render
+But using `view.RenderModeFull` will instead render
 
 ```html
 <form action="/process" onsubmit="onsubmit">
@@ -167,25 +168,25 @@ export function action(path = ""): {
     const view = getContext("view") as View<never>
     route(view)
     return {
-        action: path,
-        async onsubmit(event: Event) {
-            event.preventDefault()
-            const form = event.target as HTMLFormElement
-            const body = new FormData(form)
-            const target = event.target as HTMLFormElement
+       action: path,
+       async onsubmit(event: Event) {
+          event.preventDefault()
+          const form = event.target as HTMLFormElement
+          const body = new FormData(form)
+          const target = event.target as HTMLFormElement
 
-            await swaps
-                .swap(view)                // Sets a reference to the current view state (which is reactive).
-                .withMethod(target.method) // Sets the method for the underlying http request.
-                .withPath(path)            // Sets the path where to send the http request.
-                .withBody(body)            // Sets the body for the http request.
-                .withUpdate(true)          // Defines wether or not to update the application state and url.
-                .play()                    // Sends the http request, grabs the result, update the view 
-                                           // and application's state and url (if possible, as defined by withUpdate()).
-                .then(function done() {
-                    form.reset()           // Resets the form in order to mimic the standard form behavior.
-                })
-        },
+          await swaps
+             .swap(view)             // Sets a reference to the current view state (which is reactive).
+             .withMethod(target.method) // Sets method for the underlying http request.
+             .withPath(path)          // Sets path where to send the http request.
+             .withBody(body)          // Sets body for the http request.
+             .withUpdate(true)        // Defines wether or not to update the application state and url.
+             .play()                // Sends the http request, grabs the result, update the view 
+                                   // and application's state and url (if possible, as defined by withUpdate()).
+             .then(function done() {
+                form.reset()         // Resets the form in order to mimic the standard form behavior.
+             })
+       },
     }
 }
 
@@ -204,7 +205,7 @@ It is a replacement for your `<a>` elements.
 In your project root directory, run the following
 
 ```sh
-frizzante -dlink
+frizzante -alink
 ```
 
 This will add the `<Link>` component to your project.
@@ -216,15 +217,15 @@ This component passes down `pending` and `error` states through the `children` s
     import Link from "$frizzante/links/components/Link.svelte"
 </script>
 
-<Link href="/some-path">                               <!-- Defines a link. -->
-    {#snippet children({pending, error})}              <!-- Captures the link's pending and error states. -->
-        {#if pending}                                  <!-- If the underlying http request is pending... -->
-            <span>Loading...</span>                    <!-- ...renders a loading hint. -->
-        {:else if error}                               <!-- If there's been some sort of error... -->
-            <span>Something went wrong: {error}</span> <!-- ...renders the error. -->
-        {:else}                                        <!-- If the link is idle... -->
-            <span>Click me</span>                      <!-- ...renders the link's idle content. -->
-        {/if}
+<Link href="/some-path">                         <!-- Defines a link. -->
+    {#snippet children({pending, error})}            <!-- Captures the link's pending and error states. -->
+       {#if pending}                            <!-- If the underlying http request is pending... -->
+          <span>Loading...</span>                <!-- ...renders a loading hint. -->
+       {:else if error}                         <!-- If there's been some sort of error... -->
+          <span>Something went wrong: {error}</span> <!-- ...renders the error. -->
+       {:else}                                <!-- If the link is idle... -->
+          <span>Click me</span>                  <!-- ...renders the link's idle content. -->
+       {/if}
     {/snippet}
 </Link>
 ```
@@ -239,7 +240,7 @@ It is a replacement for your `<form>` elements.
 In your project root directory, run the following
 
 ```sh
-frizzante -dform
+frizzante -aform
 ```
 
 This will add the `<Form>` component to your project.
@@ -251,15 +252,15 @@ This component passes down `pending` and `error` states through the `children` s
     import Form from "$frizzante/forms/components/Form.svelte"
 </script>
 
-<From method="POST" action="/login">                            <!-- Defines a form. -->
-    {#snippet children({pending, error})}                       <!-- Captures the forms's pending and error states. -->
-        <input type="email" name="email">                       <!-- Defines an email field. -->
-        <input type="password" name="password">                 <!-- Defines an password field. -->
-        <button disabled={pending} type="submit">Login</button> <!-- Defines a button, which is disabled when the form request is pending. -->
-        
-        {#if error}                                             <!-- If there's been some sort of error... -->
-            <span>Something went wrong: {error}</span>          <!-- ...renders the error. -->
-        {/if}
+<From method="POST" action="/login">                       <!-- Defines a form. -->
+    {#snippet children({pending, error})}                   <!-- Captures the forms's pending and error states. -->
+       <input type="email" name="email">                   <!-- Defines an email field. -->
+       <input type="password" name="password">              <!-- Defines an password field. -->
+       <button disabled={pending} type="submit">Login</button> <!-- Defines a button, which is disabled when the form request is pending. -->
+       
+       {#if error}                                    <!-- If there's been some sort of error... -->
+          <span>Something went wrong: {error}</span>        <!-- ...renders the error. -->
+       {/if}
     {/snippet}
 </Form>
 ```

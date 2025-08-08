@@ -140,53 +140,11 @@ git checkout -b feature/some-feature
 
 Submitted code must follow a few rules.
 
-### Functions and Types
-
-Each package must contain a `functions.go` file and/or a `types.go` file.
-Functions must be placed in `functions.go` and types must be placed in `types.go`.
-
-<FileTree>
-  - package1
-    - functions.go
-    - types.go
-</FileTree>
-
-### Package Nesting
-
-Packages must not be nested deeper than 1 level.
-<FileTree>
-  - package1
-    - functions.go
-    - types.go
-  - package2
-    - functions.go
-    - types.go
-  - package3
-    - functions.go
-    - types.go
-  - package4
-    - functions.go
-    - types.go
-</FileTree>
-
-### Tests Positioning
-
-Tests must be located at the root of the repository and must reflect the name of the package.
-
-<FileTree>
-  - package1
-    - functions.go
-    - types.go
-  - test_package1.go
-</FileTree>
-
 ### Testing Servers
 
-Do not start multiple instances of `*servers.Server` when testing server features.
+Do not start multiple servers when testing features.
 
 The whole test suite makes use of one single server instance, which is initialized in [init_test.go](https://github.com/razshare/frizzante/blob/main/init_test.go).
-
-Whenever you need to add more server related tests, make use of the same server instance.
 
 This helps keeping the test suite execution time low.
 

@@ -1,0 +1,44 @@
+---
+title: Frequently Asked Questions
+---
+
+### How do I completely disable SSR?
+
+Configure your container to use `0` parallels.
+
+```go
+package main
+
+import (
+    "embed"
+    "github.com/razshare/frizzante/server"
+)
+
+//go:embed app/dist
+var efs embed.FS
+var conf = server.Default()
+
+func main() {
+    defer server.Start(conf)
+    server.Container.Efs = efs
+    server.Container.Parallels = 0
+}
+```
+
+Then make sure your views are automatically set to use client side rendering only, for example, 
+by creating your own view constructor.
+
+```go
+package views
+
+import "github.com/razshare/frizzante/view"
+
+// New creates a new view.
+func New(name string, data map[string]any) view.View {
+    return view.View{
+       Name:      name,
+       Data:      data,
+       RenderMode: view.RenderModeClient,
+    }
+}
+```
