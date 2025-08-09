@@ -26,7 +26,7 @@ func main() {
     conf.Container.Efs = efs
     conf.Routes = []route.Route{
        {Pattern: "GET /", Handler: handlers.Default},
-       {Pattern: "GET /welcome", Handler: handlers.Welcome},
+       {Pattern: "GET /welcome", Handler: welcome.View},
        {Pattern: "GET /todos", Handler: handlers.Todos},
        {Pattern: "GET /check", Handler: handlers.Check},
        {Pattern: "GET /uncheck", Handler: handlers.Uncheck},
@@ -51,7 +51,7 @@ with `send.FileOrElse()` before doing anything else.
 ```go
 //lib/routes/handlers/default.go
 func Default(c *client.Client) {
-    send.FileOrElse(c, func() { Welcome(c) })
+    send.FileOrElse(c, func() { View(c) })
 }
 ```
 
@@ -64,8 +64,8 @@ This handler essentially acts as a file server and falls back to `Welcome`.
 All this handler does is send the `"Welcome"` view to the client with `send.View()`.
 
 ```go
-//lib/routes/handlers/welcome.go
-func Welcome(c *client.Client) {
+//lib/routes/handlers/welcome/view.go
+func View(c *client.Client) {
     send.View(c, view.View{Name: "Welcome"})
 }
 ```

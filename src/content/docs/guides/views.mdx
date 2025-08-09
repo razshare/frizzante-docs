@@ -79,7 +79,7 @@ See [Render Modes below](#render-modes).
 Use `send.View()` to send a view.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package lib
 
 import (
@@ -88,7 +88,7 @@ import (
     "github.com/razshare/frizzante/view"
 )
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.View(c, view.View{Name: "Welcome"}) // Sends view "Welcome".
 }
 ```
@@ -106,7 +106,7 @@ There is no way to specify a "**default view**".
 However, you can use `send.FileOrElse()` in order to send a file or run custom logic if it doesn't exist.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package lib
 
 import (
@@ -115,7 +115,7 @@ import (
     "github.com/razshare/frizzante/view"
 )
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.FileOrElse(c, func () {                // Attempts to send requested file, or else...
        send.View(c, view.View{Name: "Welcome"}) // ...sends view "Welcome".
     })
@@ -137,7 +137,7 @@ import (
 var conf = server.Default()                  // Creates server config.
 var route = route.Route{                     // Creates route.
     Pattern: "GET /",                        // Sets route pattern.
-    Handler: handlers.Welcome,               // Sets route handler.
+    Handler: welcome.View,                   // Sets route handler.
 }
 
 func main() {
@@ -151,7 +151,7 @@ func main() {
 Optionally, you can send data along with the views by adding a `Data` property to your `View`.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package lib
 
 import (
@@ -160,7 +160,7 @@ import (
     "github.com/razshare/frizzante/view"
 )
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.View(c, view.View{     // Sends view.
        Name: "Welcome",         // Sets view name.
        Data: map[string]string{ // Sets view data, which will be injected into the svelte component.
@@ -205,7 +205,7 @@ You can choose how to render views with the `RenderMode` property.
 Using `RenderModeFull`, the view is rendered on both the server and the client.<br/>
 This is the **default** mode.
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package lib
 
 import (
@@ -214,7 +214,7 @@ import (
     "github.com/razshare/frizzante/view"
 )
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.View(c, view.View{             // Sends view.
        Name: "Welcome",                 // Sets view name.
        RenderMode: view.RenderModeFull, // Renders view on server and client.
@@ -228,7 +228,7 @@ Using `RenderModeServer`, the view is rendered only on the server.<br/>
 You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
 your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package lib
 
 import (
@@ -237,7 +237,7 @@ import (
     "github.com/razshare/frizzante/view"
 )
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.View(c, view.View{               // Sends view.
        Name: "Welcome",                   // Sets view name.
        RenderMode: view.RenderModeServer, // Renders view only on server.
@@ -260,7 +260,7 @@ tag in order to load scripts dynamically.
 
 Using `RenderModeClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package lib
 
 import (
@@ -269,7 +269,7 @@ import (
     "github.com/razshare/frizzante/view"
 )
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.View(c, view.View{               // Sends view.
        Name: "Welcome",                   // Sets view name.
        RenderMode: view.RenderModeClient, // Renders view only on client.

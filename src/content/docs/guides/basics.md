@@ -41,25 +41,25 @@ import (
     "main/lib/handlers"
 )
 
-var conf = server.Default()                           // Creates server config.
+var conf = server.Default()                       // Creates server config.
 
 func main() {
-    defer server.Start(conf)                          // Starts server.
-    conf.Routes = []route.Route{                      // Overwrites routes.
-       {Pattern: "GET /", Handler: handlers.Welcome}, // Adds route.
+    defer server.Start(conf)                      // Starts server.
+    conf.Routes = []route.Route{                  // Overwrites routes.
+       {Pattern: "GET /", Handler: welcome.View}, // Adds route.
     }
 }
 ```
 
-Where `handlers.Welcome` is a function pointer.
+Where `welcome.View` is a function pointer.
 
 ```go
-//lib/routes/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     // [...]
 }
 ```
@@ -69,19 +69,19 @@ func Welcome(c *client.Client) {
 Route patterns can define dynamic **path fields** using `{}` syntax.
 
 ```go
-route.Route{Pattern: "GET /{name}", Handler: handlers.Welcome}
+route.Route{Pattern: "GET /{name}", Handler: welcome.View}
 ```
 
 Path fields can then be retrieved with `receive.Path()`.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/receive"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     _ = receive.Path(c, "name") // Retrieves field "name".
 }
 ```
@@ -92,13 +92,13 @@ Use `receive.Message()` to retrieve messages sent by the client.
 
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/receive"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     _ = receive.Message(c) // Retrieves message.
 }
 ```
@@ -107,13 +107,13 @@ Use `send.Message()` to send a message to the client.
 
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/send"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.Message(c, "Hello.") // Sends message.
 }
 ```
@@ -123,13 +123,13 @@ func Welcome(c *client.Client) {
 Use `receive.Header()` to retrieve header fields sent by the client.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/receive"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     _ = receive.Header(c, "Accept") // Retrieves field "Accept".
 }
 ```
@@ -137,14 +137,14 @@ func Welcome(c *client.Client) {
 Use `send.Header()` to send header fields to the client.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/receive"
 import "github.com/razshare/frizzante/send"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     a := receive.Header(c, "Accept")  // Retrieves field "Accept".
     send.Header(c, "Content-Type", a) // Sends it back.
 }
@@ -155,13 +155,13 @@ func Welcome(c *client.Client) {
 Use `send.Status()` to send the status of the response to the client.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/send"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.Status(c, 404)         // Sends status 404.
     send.Message(c, "Not found.") // Sends message..
 }
@@ -184,14 +184,14 @@ For example, sending the status code with `send.Status()` **after** you've alrea
 with `send.Message()` is not allowed.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/send"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.Message(c, "Hello.") // Sends message. (Succeeds).
     send.Status(c, 404)       // Sends status (Fails).
 }
@@ -224,7 +224,7 @@ status is locked
 Use `receive.Query()` to retrieve query fields.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 
@@ -232,7 +232,7 @@ import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/receive"
 import "github.com/razshare/frizzante/send"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     n := receive.Query(c, "name") // Retrieves field "name".
     send.Message(c, "Hello " + n) // Sends message..
 }
@@ -244,20 +244,20 @@ Use `receive.Form()` to retrieve and parse forms when using `POST` and `PUT` htt
 
 
 ```go
-route.Route{Pattern: "POST /", Handler: handlers.Welcome}
+route.Route{Pattern: "POST /", Handler: welcome.View}
 // or
-route.Route{Pattern: "PUT /", Handler: handlers.Welcome}
+route.Route{Pattern: "PUT /", Handler: welcome.View}
 ```
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/receive"
 import "github.com/razshare/frizzante/send"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     f := receive.Form(c)          // Retrieves the form.
     n := f.Get("name")            // Retrieves field "name".
     send.Message(c, "Hello " + n) // Sends message..
@@ -271,13 +271,13 @@ Use `receive.Json()` to parse incoming content as json when using `POST` and `PU
 
 
 ```go
-route.Route{Pattern: "POST /", Handler: handlers.Welcome}
+route.Route{Pattern: "POST /", Handler: welcome.View}
 // or
-route.Route{Pattern: "PUT /", Handler: handlers.Welcome}
+route.Route{Pattern: "PUT /", Handler: welcome.View}
 ```
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
@@ -288,7 +288,7 @@ type GreetingDetails struct {             // Defines a struct in which to
     Name string `json:"name"`             // store the json content.
 }
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     v := receive.Json[GreetingDetails](c) // Marshals the content and returns it.
     send.Json(c, v)                       // Sends it back.
 }
@@ -299,14 +299,14 @@ func Welcome(c *client.Client) {
 Use `receive.Cookie()` to retrieve cookies and `send.Cookie()` to send them.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/receive"
 import "github.com/razshare/frizzante/send"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     n := receive.Cookie(c, "nickname") // Retrieves cookie.
     send.Cookie(c, "nickname", n)      // Sends it back.
 }
@@ -324,13 +324,13 @@ creates a new session id and sends the cookie to the client.
 
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/receive"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     _ = receive.SessionId(c) // Retrieves session id.
 }
 ```
@@ -340,13 +340,13 @@ func Welcome(c *client.Client) {
 Use `send.Redirect()` to redirect to a different location.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/send"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.Redirect(c, "/login", 307) // Redirects to /login.
 }
 ```
@@ -356,13 +356,13 @@ func Welcome(c *client.Client) {
 Use `send.Navigate()` to redirect to a different location with status `303`.
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/send"
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     send.Navigate(c, "/login") // Redirects to /login with status 303.
 }
 ```

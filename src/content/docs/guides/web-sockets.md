@@ -5,11 +5,11 @@ title: Web Sockets
 Use `send.WsUpgrade()` to upgrade the connection to web sockets.
 
 ```go
-route.Route{Pattern: "GET /ws", Handler: handlers.Welcome}
+route.Route{Pattern: "GET /ws", Handler: welcome.View}
 ```
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import (
@@ -19,7 +19,7 @@ import (
     "time"
 )
 
-func Welcome(c *client.Client) {
+func View(c *client.Client) {
     a := receive.IsAlive(c)        // Tracks request status.
     send.WsUpgrade(c)              // Sends ws upgrade.
     for *a {                       // Loops until cancellation.

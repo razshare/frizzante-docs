@@ -28,7 +28,7 @@ to retrieve the contents of `/some-other-page` and update the current state and 
 For example, given the following handler using `view.RenderModeServer`
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import (
@@ -37,7 +37,7 @@ import (
     "github.com/razshare/frizzante/view"
 )
 
-func Welcome(c *client.Client)  {
+func View(c *client.Client)  {
     send.View(c, view.View{               // Sends view.
        Name: "Welcome",                   // Sets name of the view.
        RenderMode: view.RenderModeServer, // Renders view only on the server.
@@ -117,7 +117,7 @@ to submit the form to `/process` and update the current state and view based on 
 For example, given the following handler using `view.RenderModeServer`
 
 ```go
-//lib/handlers/welcome.go
+//lib/routes/handlers/welcome/view.go
 package handlers
 
 import (
@@ -126,7 +126,7 @@ import (
     "github.com/razshare/frizzante/view"
 )
 
-func Welcome(c *client.Client)  {
+func View(c *client.Client)  {
     send.View(c, view.View{               // Sends view.
        Name: "Welcome",                   // Sets name of the view.
        RenderMode: view.RenderModeServer, // Renders view only on the server.
