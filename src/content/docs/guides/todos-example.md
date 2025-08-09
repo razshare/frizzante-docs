@@ -49,7 +49,7 @@ func main() {
 
 As you can see, all handlers are exposed with a `GET /...` pattern.
 
-## Default
+## fallback.View
 
 The `fallback.View` handler is exposed with a `GET /` pattern, 
 which acts as a fallback handler.
@@ -67,7 +67,7 @@ func View(c *client.Client) {
 }
 ```
 
-## Welcome Handler
+## welcome.View
 
 All this handler does is send the `"Welcome"` view to the client with `send.View()`.
 
@@ -109,7 +109,7 @@ view.View{
 }
 ```
 
-## Welcome View
+## Welcome.svelte
 
 The `"Welcome"` view is simply laying down a header message and a link pointing 
 to `"/todos"`.
@@ -180,7 +180,7 @@ If you need more control over errors and pending states
 see [Link Component](../web-standards/#link-component).
 :::
 
-## Todos Handler
+## todos.View
 
 It sends the `"Todos"` view to the client, along with a list of todos, which is
 retrieved from the session state.
@@ -221,7 +221,7 @@ func Start(id string) *Session {
 
 ```
 
-## Todos View
+## Todos.svelte
 
 The `"Todos"` view does quite a few things.
 
