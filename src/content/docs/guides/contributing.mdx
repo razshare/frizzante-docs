@@ -104,7 +104,7 @@ Into
 require github.com/razshare/frizzante v1.17.3
 ```
 
-And `v1.17.3` doesn't actually exist yet, your package request will be rejected with a `404 Not Found`.\
+And `v1.17.3` doesn't actually exist yet, your package request will be rejected.\
 That response is then cached for 30 minutes.
 
 This means that subsequent requests for `v1.17.3` will fail until the cached state is evicted, even if in the meantime `v1.17.3` has actually been published.
