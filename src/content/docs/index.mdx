@@ -43,8 +43,8 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
     ```go
     send.WsUpgrade(c)
     for {
-       name := receive.Message(c)
-       send.Message(c, "Hello " + name)
+       n := receive.Message(c)
+       send.Message(c, "Hello " + n)
     }
     ```
     <LinkCard title='Read More' href="/frizzante-docs/guides/web-sockets"/>
