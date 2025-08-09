@@ -16,13 +16,13 @@ import (
 )
 
 //go:embed app/dist
-var efs embed.FS            // Creates embedded file system.
+var efs embed.FS               // Creates embedded file system.
 var conf = server.Default()    // Creates server configuration.
 
 func main() {
     defer server.Start(conf)   // Starts server.
     server.Container.Efs = efs // Assigns the embedded file system
-                         // to the server container.
+                               // to the server container.
 }
 ```
 
@@ -41,11 +41,11 @@ import (
     "main/lib/handlers"
 )
 
-var conf = server.Default()                       // Creates server config.
+var conf = server.Default()                           // Creates server config.
 
 func main() {
-    defer server.Start(conf)                      // Starts server.
-    conf.Routes = []route.Route{                   // Overwrites routes.
+    defer server.Start(conf)                          // Starts server.
+    conf.Routes = []route.Route{                      // Overwrites routes.
        {Pattern: "GET /", Handler: handlers.Welcome}, // Adds route.
     }
 }
@@ -193,7 +193,7 @@ import "github.com/razshare/frizzante/send"
 
 func Welcome(c *client.Client) {
     send.Message(c, "Hello.") // Sends message. (Succeeds).
-    send.Status(c, 404)      // Sends status (Fails).
+    send.Status(c, 404)       // Sends status (Fails).
 }
 ```
 
@@ -258,8 +258,8 @@ import "github.com/razshare/frizzante/receive"
 import "github.com/razshare/frizzante/send"
 
 func Welcome(c *client.Client) {
-    f := receive.Form(c)        // Retrieves the form.
-    n := f.Get("name")          // Retrieves field "name".
+    f := receive.Form(c)          // Retrieves the form.
+    n := f.Get("name")            // Retrieves field "name".
     send.Message(c, "Hello " + n) // Sends message..
 }
 ```
@@ -284,13 +284,13 @@ import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/receive"
 import "github.com/razshare/frizzante/send"
 
-type GreetingDetails struct {           // Defines a struct in which to 
-    Name string `json:"name"`           // store the json content.
+type GreetingDetails struct {             // Defines a struct in which to 
+    Name string `json:"name"`             // store the json content.
 }
 
 func Welcome(c *client.Client) {
     v := receive.Json[GreetingDetails](c) // Marshals the content and returns it.
-    send.Json(c, v)                   // Sends it back.
+    send.Json(c, v)                       // Sends it back.
 }
 ```
 
@@ -308,7 +308,7 @@ import "github.com/razshare/frizzante/send"
 
 func Welcome(c *client.Client) {
     n := receive.Cookie(c, "nickname") // Retrieves cookie.
-    send.Cookie(c, "nickname", n)     // Sends it back.
+    send.Cookie(c, "nickname", n)      // Sends it back.
 }
 ```
 

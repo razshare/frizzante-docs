@@ -21,11 +21,11 @@ import (
 
 func Welcome(c *client.Client) {
     a := receive.IsAlive(c)        // Tracks request status.
-    send.WsUpgrade(c)            // Sends ws upgrade.
-    for *a {                    // Loops until cancellation.
-       n := receive.Message(c)    // Receives message.
+    send.WsUpgrade(c)              // Sends ws upgrade.
+    for *a {                       // Loops until cancellation.
+       n := receive.Message(c)     // Receives message.
        send.Message(c, "Hello "+n) // Sends message.
-       time.Sleep(time.Second)    // Sleeps for 1 second.
+       time.Sleep(time.Second)     // Sleeps for 1 second.
     }
 }
 ```
@@ -35,17 +35,17 @@ Then consume the web socket on the client.
 ```svelte
 <script lang="ts">
     import {source} from "$frizzante/scripts/source.ts";
-    const messages:string[] = []                        // Createslist of messages.
-    const socket = new WebSocket("/ws")                  // Connects to handler.
-    socket.send("Hello")                              // Sends message.
+    const messages:string[] = []                             // Creates list of messages.
+    const socket = new WebSocket("/ws")                      // Connects to handler.
+    socket.send("Hello")                                     // Sends message.
     socket.addEventListener("message", function incoming(e){ // Listens for incoming messages.
-       messages.push(e.data)                          // Appends the incoming messages to
-                                                 // the list of messages for later use.
+       messages.push(e.data)                                 // Appends the incoming messages to
+                                                             // the list of messages for later use.
     })
 </script>
 
 <h1>Messages</h1>
-{#each messages as message, id (id)}                    <!-- Iterates the list of messages. -->
-    <div>{message}</div>                              <!-- Renders message. -->
+{#each messages as message, id (id)}                         <!-- Iterates the list of messages. -->
+    <div>{message}</div>                                     <!-- Renders message. -->
 {/each}
 ```

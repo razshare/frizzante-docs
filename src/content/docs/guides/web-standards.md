@@ -38,8 +38,8 @@ import (
 )
 
 func Welcome(c *client.Client)  {
-    send.View(c, view.View{             // Sends view.
-       Name: "Welcome",                // Sets name of the view.
+    send.View(c, view.View{               // Sends view.
+       Name: "Welcome",                   // Sets name of the view.
        RenderMode: view.RenderModeServer, // Renders view only on the server.
     })
 }
@@ -77,11 +77,11 @@ export function href(path = ""): {
        async onclick(event: MouseEvent) {
           event.preventDefault()
           await swaps
-             .swap(view)      // Sets a reference to the current view state (which is reactive).
+             .swap(view)       // Sets a reference to the current view state (which is reactive).
              .withPath(path)   // Defines the path where to send the underlying http request.
              .withUpdate(true) // Defines wether or not to update the application state and url.
-             .play()         // Sends the http request, grabs the result, update the view 
-                            // and also updates state and url if possible.
+             .play()           // Sends the http request, grabs the result, update the view 
+                               // and also updates state and url if possible.
           return false
        },
     }
@@ -99,11 +99,11 @@ Which swaps the current state and view for new ones served by `/some-other-page`
     import { action } from "$frizzante/scripts/action.ts"
 </script>
 
-<form {...action("/process")}>          <!-- Defines a form. -->
-    <input type="text" name="name" />    <!-- Defines a text field. -->
+<form {...action("/process")}>            <!-- Defines a form. -->
+    <input type="text" name="name" />     <!-- Defines a text field. -->
     <button type="submit">Submit</button> <!-- Defines a button, which when triggered will either 
-                                      directly submit the form, or do so through an http request, 
-                                      depending on wether JavaScript is enabled or not. -->
+                                            directly submit the form, or do so through an http request, 
+                                            depending on wether JavaScript is enabled or not. -->
 </form>
 ```
 
@@ -127,8 +127,8 @@ import (
 )
 
 func Welcome(c *client.Client)  {
-    send.View(c, view.View{             // Sends view.
-       Name: "Welcome",                // Sets name of the view.
+    send.View(c, view.View{               // Sends view.
+       Name: "Welcome",                   // Sets name of the view.
        RenderMode: view.RenderModeServer, // Renders view only on the server.
     })
 }
@@ -176,15 +176,15 @@ export function action(path = ""): {
           const target = event.target as HTMLFormElement
 
           await swaps
-             .swap(view)             // Sets a reference to the current view state (which is reactive).
+             .swap(view)                // Sets a reference to the current view state (which is reactive).
              .withMethod(target.method) // Sets method for the underlying http request.
-             .withPath(path)          // Sets path where to send the http request.
-             .withBody(body)          // Sets body for the http request.
-             .withUpdate(true)        // Defines wether or not to update the application state and url.
-             .play()                // Sends the http request, grabs the result, update the view 
-                                   // and application's state and url (if possible, as defined by withUpdate()).
+             .withPath(path)            // Sets path where to send the http request.
+             .withBody(body)            // Sets body for the http request.
+             .withUpdate(true)          // Defines wether or not to update the application state and url.
+             .play()                    // Sends the http request, grabs the result, update the view 
+                                        // and application's state and url (if possible, as defined by withUpdate()).
              .then(function done() {
-                form.reset()         // Resets the form in order to mimic the standard form behavior.
+                form.reset()            // Resets the form in order to mimic the standard form behavior.
              })
        },
     }
@@ -217,14 +217,14 @@ This component passes down `pending` and `error` states through the `children` s
     import Link from "$frizzante/links/components/Link.svelte"
 </script>
 
-<Link href="/some-path">                         <!-- Defines a link. -->
+<Link href="/some-path">                             <!-- Defines a link. -->
     {#snippet children({pending, error})}            <!-- Captures the link's pending and error states. -->
-       {#if pending}                            <!-- If the underlying http request is pending... -->
-          <span>Loading...</span>                <!-- ...renders a loading hint. -->
-       {:else if error}                         <!-- If there's been some sort of error... -->
+       {#if pending}                                 <!-- If the underlying http request is pending... -->
+          <span>Loading...</span>                    <!-- ...renders a loading hint. -->
+       {:else if error}                              <!-- If there's been some sort of error... -->
           <span>Something went wrong: {error}</span> <!-- ...renders the error. -->
-       {:else}                                <!-- If the link is idle... -->
-          <span>Click me</span>                  <!-- ...renders the link's idle content. -->
+       {:else}                                       <!-- If the link is idle... -->
+          <span>Click me</span>                      <!-- ...renders the link's idle content. -->
        {/if}
     {/snippet}
 </Link>
@@ -252,14 +252,14 @@ This component passes down `pending` and `error` states through the `children` s
     import Form from "$frizzante/forms/components/Form.svelte"
 </script>
 
-<From method="POST" action="/login">                       <!-- Defines a form. -->
-    {#snippet children({pending, error})}                   <!-- Captures the forms's pending and error states. -->
-       <input type="email" name="email">                   <!-- Defines an email field. -->
-       <input type="password" name="password">              <!-- Defines an password field. -->
+<From method="POST" action="/login">                           <!-- Defines a form. -->
+    {#snippet children({pending, error})}                      <!-- Captures the forms's pending and error states. -->
+       <input type="email" name="email">                       <!-- Defines an email field. -->
+       <input type="password" name="password">                 <!-- Defines an password field. -->
        <button disabled={pending} type="submit">Login</button> <!-- Defines a button, which is disabled when the form request is pending. -->
        
-       {#if error}                                    <!-- If there's been some sort of error... -->
-          <span>Something went wrong: {error}</span>        <!-- ...renders the error. -->
+       {#if error}                                             <!-- If there's been some sort of error... -->
+          <span>Something went wrong: {error}</span>           <!-- ...renders the error. -->
        {/if}
     {/snippet}
 </Form>

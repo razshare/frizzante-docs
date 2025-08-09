@@ -34,21 +34,11 @@ Install the frizzante cli using the go cli
 go install github.com/razshare/frizzante@latest
 ```
 
-Or by [downloading the binaries directly from GitHub](https://github.com/razshare/frizzante/releases).
-
-One way or another, make sure the frizzante cli is on your path.
-
-If you're installing it using the go cli, make sure that go binaries are on your path
+Make sure that Go binaries are on your path.
 
 ```sh
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
-```
-
-If you're using a precompiled binary, make sure that's on your path
-
-```sh
-export PATH=$PATH:/path/to/frizzante
 ```
 
 ## Configure Projects
@@ -140,56 +130,75 @@ git checkout -b feature/some-feature
 
 Submitted code must follow a few rules.
 
-### Testing Servers
 
-Do not start multiple servers when testing features.
+### Export Everything
 
-The whole test suite makes use of one single server instance, which is initialized in [init_test.go](https://github.com/razshare/frizzante/blob/main/init_test.go).
-
-This helps keeping the test suite execution time low.
-
-:::tip
-If you really need to start a new server instance, make sure to use a different port number.
-:::
-
-### Encapsulation
-
-Structures and packages **must not** declare private members. 
-
-All package functions, variables and structure properties **must always be public**.
+All package functions, variables and structure fields **must always be exported**.
 
 ```go
 //package1/types.go
 type MyStruct struct {
-  Property1 string
-  Property2 int
-  Property3 bool
-  Property4 any
+  Field1 string
+  Field2 int
+  Field3 bool
+  Field4 any
+}
+func MyFunction(){}
+const Planet = "Earth"
+var Name = "World"
+```
+
+### Data & Logic
+
+Data and logic must be separated, don't **define receiver functions** unless you're forced
+to by some third party package.
+
+This type of code should be avoided
+
+```go
+type MyStruct struct {
+  field1 string
+}
+
+func (str *MyStruct) MyFunction(){
+  str.field1 = "Hello!"
 }
 ```
 
+and be instead converted into
+
 ```go
-//package1/functions.go
-func (str *MyStruct) MyFunction1() {}
-func (str *MyStruct) MyFunction2() {}
+type MyStruct struct {
+  Field1 string
+}
+
+func MyFunction(str *MyStruct){
+  str.Field1 = "Hello!"
+}
 ```
 
 ## Pull Requests
 
 When you're done with your changes you can submit a pull request in order to implement them into `frizzante` (or `frizzante-starter`).
 
-## Tests Triggers
+## Testing
+
+### Automation
 
 Tests will automatically run through GitHub actions when pushing into main or when pull requests are opened into main.
 
-That being said, if you don't want to wait for GitHub actions to make sure tests pass, you can also run them locally using the provided git hooks, see next section.
-
-### 
-
-## Git Hooks
-
-You can apply pre-commit git hooks to you local repository by running
+:::tip
+If you want to make sure tests pass before pushing anything, you can run them locally.
 
 ```sh
-make hooks
+make test
 ```
+:::
+
+### Servers
+
+Do not start multiple servers when testing features.
+
+The whole test suite makes use of one single server, which is initialized in [init_test.go](https://github.com/razshare/frizzante/blob/main/init_test.go).
+
+This keeps the test suite fast.
