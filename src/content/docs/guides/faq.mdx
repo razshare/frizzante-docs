@@ -36,8 +36,8 @@ import "github.com/razshare/frizzante/view"
 // New creates a new view.
 func New(name string, data map[string]any) view.View {
     return view.View{
-       Name:      name,
-       Data:      data,
+       Name:       name,
+       Data:       data,
        RenderMode: view.RenderModeClient,
     }
 }
