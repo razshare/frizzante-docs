@@ -57,18 +57,15 @@ which acts as a fallback handler.
 ![](image200.svg)
 
 It is for that reason that this handler tries to send a matching file
-with `send.FileOrElse()` before doing anything else.
+with `send.FileOrElse()` before doing anything else, in doing so it 
+acts as a file server and falls back to `welcome.View`.
 
 ```go
 //lib/routes/handlers/fallback/view.go
 func View(c *client.Client) {
-    send.FileOrElse(c, func() { View(c) })
+	send.FileOrElse(c, func() { welcome.View(c) })
 }
 ```
-
-:::note
-This handler essentially acts as a file server and falls back to `Welcome`.
-:::
 
 ## Welcome Handler
 
