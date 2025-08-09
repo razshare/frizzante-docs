@@ -25,7 +25,7 @@ func main() {
     conf.Guards = append(conf.Guards, {                     // Adds guard.
        Name: "No Json Allowed",                             // Sets guard name. It's useful for logs.
        Handler: func(c *client.Client, allow func()) {      // Sets guard handler.
-          if receive.ContentType(c) == "application/json" { // If requests uses "application/json" content...
+          if receive.ContentType(c) == "application/json" { // If content is of type "application/json"...
              return                                         // ..returns. This will actually terminate the connection.
           }
           allow()                                           // Allows request through.
