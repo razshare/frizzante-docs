@@ -17,6 +17,17 @@ First of all every interaction happens through a `GET` verb.
 
 ```go
 //main.go
+package main
+
+import (
+	"embed"
+	"github.com/razshare/frizzante/route"
+	"github.com/razshare/frizzante/server"
+	"main/lib/routes/handlers/fallback"
+	"main/lib/routes/handlers/todos"
+	"main/lib/routes/handlers/welcome"
+)
+
 //go:embed app/dist
 var efs embed.FS
 var conf = server.Default()
