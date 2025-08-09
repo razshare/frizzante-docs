@@ -51,7 +51,7 @@ As you can see, all handlers are exposed with a `GET /...` pattern.
 
 ## Default
 
-The `Default` handler is exposed with a `GET /` pattern, 
+The `fallback.View` handler is exposed with a `GET /` pattern, 
 which acts as a fallback handler.
 
 ![](image200.svg)
