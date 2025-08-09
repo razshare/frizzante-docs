@@ -22,17 +22,17 @@ var efs embed.FS
 var conf = server.Default()
 
 func main() {
-    defer server.Start(conf)
-    conf.Container.Efs = efs
-    conf.Routes = []route.Route{
-       {Pattern: "GET /", Handler: handlers.Default},
-       {Pattern: "GET /welcome", Handler: welcome.View},
-       {Pattern: "GET /todos", Handler: handlers.Todos},
-       {Pattern: "GET /check", Handler: handlers.Check},
-       {Pattern: "GET /uncheck", Handler: handlers.Uncheck},
-       {Pattern: "GET /add", Handler: handlers.Add},
-       {Pattern: "GET /remove", Handler: handlers.Remove},
-    }
+	defer server.Start(conf)
+	conf.Container.Efs = efs
+	conf.Routes = []route.Route{
+		{Pattern: "GET /", Handler: fallback.View},
+		{Pattern: "GET /welcome", Handler: welcome.View},
+		{Pattern: "GET /todos", Handler: todos.View},
+		{Pattern: "GET /check", Handler: todos.Check},
+		{Pattern: "GET /uncheck", Handler: todos.Uncheck},
+		{Pattern: "GET /add", Handler: todos.Add},
+		{Pattern: "GET /remove", Handler: todos.Remove},
+	}
 }
 ```
 
@@ -49,8 +49,8 @@ It is for that reason that this handler tries to send a matching file
 with `send.FileOrElse()` before doing anything else.
 
 ```go
-//lib/routes/handlers/default.go
-func Default(c *client.Client) {
+//lib/routes/handlers/fallback/view.go
+func View(c *client.Client) {
     send.FileOrElse(c, func() { View(c) })
 }
 ```
@@ -178,8 +178,8 @@ It sends the `"Todos"` view to the client, along with a list of todos, which is
 retrieved from the session state.
 
 ```go
-//lib/routes/handlers/todos.go
-func Todos(c *client.Client) {
+//lib/routes/handlers/todos/view.go
+func View(c *client.Client) {
     s := session.Start(receive.SessionId(c))
     send.View(c, view.View{
        Name: "Todos",
@@ -390,7 +390,7 @@ see [Form Component](../web-standards/#form-component).
 :::
 
 ```go
-//lib/routes/handlers/remove.go
+//lib/routes/handlers/todos/remove.go
 func Remove(c *client.Client) {
 	s := session.Start(receive.SessionId(c))
 
@@ -450,7 +450,7 @@ The equivalent using the `POST` verb would be
 ```
 
 ```go
-//lib/routes/handlers/remove.go
+//lib/routes/handlers/todos/Remove.go
 // ...
 f := receive.Form(c)
 is := f.Get("index")
@@ -497,7 +497,7 @@ Both forms indicate the index of the item using a hidden input field.
 Checking is handled by the `Check` handler.
 
 ```go
-//lib/routes/handlers/check.go
+//lib/routes/handlers/todos/check.go
 func Check(c *client.Client) {
 	s := session.Start(receive.SessionId(c))
 
@@ -536,7 +536,7 @@ While unchecking is handled by the `Uncheck` handler, which does the exact same 
 as `Check`, except it sets `Checked` to `false` instead of `true`.
 
 ```go
-//lib/routes/handlers/uncheck.go
+//lib/routes/handlers/todos/uncheck.go
 // ...
 s.Todos[i].Checked = false
 // ...
@@ -559,7 +559,7 @@ by sending a form to `/add`.
 This form is then captured by the `Add` handler.
 
 ```go
-//lib/routes/handlers/add.go
+//lib/routes/handlers/todos/add.go
 func Add(c *client.Client) {
 	s := session.Start(receive.SessionId(c))
 	d := receive.Query(c, "description")
