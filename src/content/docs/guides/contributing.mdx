@@ -77,7 +77,7 @@ go 1.24
 
 // ...
 replace github.com/razshare/frizzante => /home/user1/path/to/frizzante
-require github.com/razshare/frizzante v1.14.29
+require github.com/razshare/frizzante v1.17.2
 // ...
 ```
 
@@ -95,19 +95,19 @@ The Go module mirror automatically caches package requests for 30 minutes, regar
 This means that if you modify, for example
 
 ```go
-require github.com/razshare/frizzante v1.14.29
+require github.com/razshare/frizzante v1.17.2
 ```
 
 Into
 
 ```go
-require github.com/razshare/frizzante v1.14.30
+require github.com/razshare/frizzante v1.17.3
 ```
 
-And `v1.14.30` doesn't actually exist yet, your package request will be rejected with a `404 Not Found`.\
+And `v1.17.3` doesn't actually exist yet, your package request will be rejected with a `404 Not Found`.\
 That response is then cached for 30 minutes.
 
-This means that subsequent requests for `v1.14.30` will fail until the cached state is evicted, even if in the meantime `v1.14.30` has actually been published.
+This means that subsequent requests for `v1.17.3` will fail until the cached state is evicted, even if in the meantime `v1.17.3` has actually been published.
 
 Some IDEs will save your `go.mod` file and try update the package version **automatically**!
 
