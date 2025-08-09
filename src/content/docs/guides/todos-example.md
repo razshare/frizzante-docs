@@ -570,6 +570,7 @@ This form is then captured by the `Add` handler.
 //lib/routes/handlers/todos/add.go
 func Add(c *client.Client) {
     s := session.Start(receive.SessionId(c))
+    
     d := receive.Query(c, "description")
     if d == "" {
         send.View(c, view.View{
