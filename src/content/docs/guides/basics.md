@@ -175,7 +175,7 @@ import (
 )
 
 func View(c *client.Client) {
-    send.Status(c, 404)         // Sends status 404.
+    send.Status(c, 404)           // Sends status 404.
     send.Message(c, "Not found.") // Sends message..
 }
 ```

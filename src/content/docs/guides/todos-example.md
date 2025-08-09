@@ -20,12 +20,12 @@ First of all every interaction happens through a `GET` verb.
 package main
 
 import (
-	"embed"
-	"github.com/razshare/frizzante/route"
-	"github.com/razshare/frizzante/server"
-	"main/lib/routes/handlers/fallback"
-	"main/lib/routes/handlers/todos"
-	"main/lib/routes/handlers/welcome"
+    "embed"
+    "github.com/razshare/frizzante/route"
+    "github.com/razshare/frizzante/server"
+    "main/lib/routes/handlers/fallback"
+    "main/lib/routes/handlers/todos"
+    "main/lib/routes/handlers/welcome"
 )
 
 //go:embed app/dist
@@ -33,17 +33,17 @@ var efs embed.FS
 var conf = server.Default()
 
 func main() {
-	defer server.Start(conf)
-	conf.Container.Efs = efs
-	conf.Routes = []route.Route{
-		{Pattern: "GET /", Handler: fallback.View},
-		{Pattern: "GET /welcome", Handler: welcome.View},
-		{Pattern: "GET /todos", Handler: todos.View},
-		{Pattern: "GET /check", Handler: todos.Check},
-		{Pattern: "GET /uncheck", Handler: todos.Uncheck},
-		{Pattern: "GET /add", Handler: todos.Add},
-		{Pattern: "GET /remove", Handler: todos.Remove},
-	}
+    defer server.Start(conf)
+    conf.Container.Efs = efs
+    conf.Routes = []route.Route{
+        {Pattern: "GET /", Handler: fallback.View},
+        {Pattern: "GET /welcome", Handler: welcome.View},
+        {Pattern: "GET /todos", Handler: todos.View},
+        {Pattern: "GET /check", Handler: todos.Check},
+        {Pattern: "GET /uncheck", Handler: todos.Uncheck},
+        {Pattern: "GET /add", Handler: todos.Add},
+        {Pattern: "GET /remove", Handler: todos.Remove},
+    }
 }
 ```
 
@@ -63,7 +63,7 @@ acts as a file server and falls back to `welcome.View`.
 ```go
 //lib/routes/handlers/fallback/view.go
 func View(c *client.Client) {
-	send.FileOrElse(c, func() { welcome.View(c) })
+    send.FileOrElse(c, func() { welcome.View(c) })
 }
 ```
 
@@ -400,44 +400,44 @@ see [Form Component](../web-standards/#form-component).
 ```go
 //lib/routes/handlers/todos/remove.go
 func Remove(c *client.Client) {
-	s := session.Start(receive.SessionId(c))
+    s := session.Start(receive.SessionId(c))
 
-	l := int64(len(s.Todos))
-	if 0 == l {
-		// No index found, ignore the request.
-		send.Navigate(c, "/todos")
-		return
-	}
+    l := int64(len(s.Todos))
+    if 0 == l {
+        // No index found, ignore the request.
+        send.Navigate(c, "/todos")
+        return
+    }
 
-	is := receive.Query(c, "index")
-	if is == "" {
-		// No index found, ignore the request.
-		send.Navigate(c, "/todos")
-		return
-	}
+    is := receive.Query(c, "index")
+    if is == "" {
+        // No index found, ignore the request.
+        send.Navigate(c, "/todos")
+        return
+    }
 
-	i, e := strconv.ParseInt(is, 10, 64)
-	if nil != e {
-		send.View(c, view.View{
-			Name: "Todos",
-			Data: map[string]any{
-				"error": e.Error(),
-			},
-		})
-		return
-	}
-	if i >= l {
-		// Index is out of bounds, ignore the request.
-		send.Navigate(c, "/todos")
-		return
-	}
+    i, e := strconv.ParseInt(is, 10, 64)
+    if nil != e {
+        send.View(c, view.View{
+            Name: "Todos",
+            Data: map[string]any{
+                "error": e.Error(),
+            },
+        })
+        return
+    }
+    if i >= l {
+        // Index is out of bounds, ignore the request.
+        send.Navigate(c, "/todos")
+        return
+    }
 
-	s.Todos = append(
-		s.Todos[:i],
-		s.Todos[i+1:]...,
-	)
+    s.Todos = append(
+        s.Todos[:i],
+        s.Todos[i+1:]...,
+    )
 
-	send.Navigate(c, "/todos")
+    send.Navigate(c, "/todos")
 }
 ```
 
@@ -507,36 +507,36 @@ Checking is handled by the `Check` handler.
 ```go
 //lib/routes/handlers/todos/check.go
 func Check(c *client.Client) {
-	s := session.Start(receive.SessionId(c))
+    s := session.Start(receive.SessionId(c))
 
-	is := receive.Query(c, "index")
-	if is == "" {
-		// No index found, ignore the request.
-		send.Navigate(c, "/todos")
-		return
-	}
+    is := receive.Query(c, "index")
+    if is == "" {
+        // No index found, ignore the request.
+        send.Navigate(c, "/todos")
+        return
+    }
 
-	i, e := strconv.ParseInt(is, 10, 64)
-	if nil != e {
-		send.View(c, view.View{
-			Name: "Todos",
-			Data: map[string]any{
-				"error": e.Error(),
-			},
-		})
-		return
-	}
+    i, e := strconv.ParseInt(is, 10, 64)
+    if nil != e {
+        send.View(c, view.View{
+            Name: "Todos",
+            Data: map[string]any{
+                "error": e.Error(),
+            },
+        })
+        return
+    }
 
-	l := int64(len(s.Todos))
-	if i >= l {
-		// Index is out of bounds, ignore the request.
-		send.Navigate(c, "/todos")
-		return
-	}
+    l := int64(len(s.Todos))
+    if i >= l {
+        // Index is out of bounds, ignore the request.
+        send.Navigate(c, "/todos")
+        return
+    }
 
-	s.Todos[i].Checked = true
+    s.Todos[i].Checked = true
 
-	send.Navigate(c, "/todos")
+    send.Navigate(c, "/todos")
 }
 ```
 
@@ -569,25 +569,25 @@ This form is then captured by the `Add` handler.
 ```go
 //lib/routes/handlers/todos/add.go
 func Add(c *client.Client) {
-	s := session.Start(receive.SessionId(c))
-	d := receive.Query(c, "description")
-	if d == "" {
-		send.View(c, view.View{
-			Name: "Todos",
-			Data: map[string]any{
-				"todos": s.Todos,
-				"error": "todo description cannot be empty",
-			},
-		})
-		return
-	}
+    s := session.Start(receive.SessionId(c))
+    d := receive.Query(c, "description")
+    if d == "" {
+        send.View(c, view.View{
+            Name: "Todos",
+            Data: map[string]any{
+                "todos": s.Todos,
+                "error": "todo description cannot be empty",
+            },
+        })
+        return
+    }
 
-	s.Todos = append(s.Todos, session.Todo{
-		Checked:    false,
-		Description: d,
-	})
+    s.Todos = append(s.Todos, session.Todo{
+        Checked:    false,
+        Description: d,
+    })
 
-	send.Navigate(c, "/todos")
+    send.Navigate(c, "/todos")
 }
 ```
 

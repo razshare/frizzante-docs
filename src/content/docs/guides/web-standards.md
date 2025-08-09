@@ -13,9 +13,9 @@ You can use `href()` and `action()` in order to make your hyperlinks and forms a
 </script>
 
 <a {...href("/some-other-page")}> Go to some other page </a> <!-- Defines a link, which when triggered will either 
-                                                     directly navigate to the given path, or do so 
-                                                     through an http request, depending on wether 
-                                                     JavaScript is enabled or not. -->
+                                                                  directly navigate to the given path, or do so 
+                                                                  through an http request, depending on wether 
+                                                                  JavaScript is enabled or not. -->
 ```
 
 When JavaScript is disabled, `<a>` will render as a traditional anchor, which by default
