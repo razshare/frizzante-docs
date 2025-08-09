@@ -411,7 +411,7 @@ func Remove(c *client.Client) {
 
     is := receive.Query(c, "index")
     if is == "" {
-        // No todos found, ignore the request.
+        // No index provided, ignore the request.
         send.Navigate(c, "/todos")
         return
     }
@@ -511,7 +511,7 @@ func Check(c *client.Client) {
 
     is := receive.Query(c, "index")
     if is == "" {
-        // No todos found, ignore the request.
+        // No index provided, ignore the request.
         send.Navigate(c, "/todos")
         return
     }
