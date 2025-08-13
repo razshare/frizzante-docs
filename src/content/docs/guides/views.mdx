@@ -47,12 +47,12 @@ import Welcome from '$lib/views/Welcome.svelte'
 import Profile from '$lib/views/Profile.svelte'
 
 export const views = {  // Defines that components "Welcome" and "Profile"
-                        // can be rendered on the server when sent with SendView().
+                        // can be rendered on the server when sent with send.View().
 
-    "Welcome": Welcome, // When SendView(views:View{Name:"Welcome"}) is invoked, 
+    "Welcome": Welcome, // When send.View(view.View{Name:"Welcome"}) is invoked, 
                         // the component will render on the server.
 
-    "Profile": Profile, // When SendView(views:View{Name:"Profile"}) is invoked, 
+    "Profile": Profile, // When send.View(view.View{Name:"Profile"}) is invoked, 
                         // the component will render on the server.
 }
 ```
@@ -64,12 +64,12 @@ Views that are meant to be rendered on the client should be exported by `app/exp
 //app/exports/client.ts
 export const views = { // Defines that components "Welcome" and "Profile"
                        // can be bundled and rendered on the client when
-                       // sent with SendView().
+                       // sent with send.View().
 
-    "Welcome": import('$lib/views/Welcome.svelte'), // When SendView(views:View{Name:"Welcome"}) is invoked, 
+    "Welcome": import('$lib/views/Welcome.svelte'), // When send.View(view.View{Name:"Welcome"}) is invoked, 
                                                     // the component will render on the client.
 
-    "Profile": import('$lib/views/Profile.svelte'), // When SendView(views:View{Name:"Profile"}) is invoked, 
+    "Profile": import('$lib/views/Profile.svelte'), // When send.View(view.View{Name:"Profile"}) is invoked, 
                                                     // the component will render on the client.
 }
 ```
