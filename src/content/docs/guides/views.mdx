@@ -4,6 +4,28 @@ title: Views
 
 import { FileTree } from '@astrojs/starlight/components'
 
+Before rendering views you need to replace your **server** with a **container server**.
+
+```go
+package main
+
+import (
+	"embed"
+	"github.com/razshare/frizzante/svelte/container/server"
+)
+
+//go:embed app/dist
+var efs embed.FS            // Creates embedded file system.
+var srv = server.New(efs)   // Creates container server.
+
+func main() {
+    defer server.Start(srv) // Starts server.
+    srv.Server.Routes = []route.Route{}
+}
+```
+
+## What are views?
+
 Views are **svelte components** exported by 
 `app/exports/server.ts` and/or `app/exports/client.ts`.
 
@@ -16,7 +38,7 @@ Views are **svelte components** exported by
           - ...
 </FileTree>
 
-### Server Exports
+## Server Exports
 
 Views that are meant to be rendered on the server should be exported by `app/exports/server.ts`.
 ```ts
@@ -35,7 +57,7 @@ export const views = {  // Defines that components "Welcome" and "Profile"
 }
 ```
 
-### Client Exports
+## Client Exports
 
 Views that are meant to be rendered on the client should be exported by `app/exports/client.ts`.
 ```ts
@@ -131,18 +153,20 @@ package main
 import (
     "embed"
     "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/server"
+    "github.com/razshare/frizzante/svelte/container/server"
 )
 
-var conf = server.Default()                  // Creates server config.
-var route = route.Route{                     // Creates route.
-    Pattern: "GET /",                        // Sets route pattern.
-    Handler: welcome.View,                   // Sets route handler.
+//go:embed app/dist
+var efs embed.FS
+var srv = server.Default(efs)               // Creates server config.
+var route = route.Route{                    // Creates route.
+    Pattern: "GET /",                       // Sets route pattern.
+    Handler: welcome.View,                  // Sets route handler.
 }
 
 func main() {
-    defer server.Start(conf)                 // Starts the server.
-    conf.Routes = append(conf.Routes, route) // Adds the route to the server.
+    defer server.Start(srv)                // Starts the server.
+    srv.Routes = append(srv.Routes, route) // Adds the route to the server.
 }
 ```
 

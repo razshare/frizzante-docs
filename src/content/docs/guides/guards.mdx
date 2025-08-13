@@ -18,11 +18,11 @@ import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/route"
 import "github.com/razshare/frizzante/server"
 
-var conf = server.Default()                                 // Creates server config.
+var srv = server.Default()                                  // Creates server config.
 
 func main() {
-    defer server.Start(conf)                                // Starts server.
-    conf.Guards = append(conf.Guards, {                     // Adds guard.
+    defer server.Start(srv)                                 // Starts server.
+    srv.Guards = append(srv.Guards, {                       // Adds guard.
        Name: "No Json Allowed",                             // Sets guard name. It's useful for logs.
        Handler: func(c *client.Client, allow func()) {      // Sets guard handler.
           if receive.ContentType(c) == "application/json" { // If content is of type "application/json"...
@@ -32,7 +32,7 @@ func main() {
        },
        Tags: []string{"nojson", "jsonless"},                // Sets guard tags.
     })
-    conf.Routes = append(conf.Routes, route.Route{          // Adds route.
+    srv.Routes = append(srv.Routes, route.Route{            // Adds route.
        Pattern: "GET /",                                    // Sets route pattern.
        Handler: func(c *client.Client) {
           send.Message(c, "Hello.")                         // Sends message..
@@ -55,7 +55,7 @@ In this case, the `GET /` route intersects with the `No Json Allowed` guard in `
 Multiple guards can intersect in order to compose more advanced restrictions.
 
 ```go
-conf.Guards = append(conf.Guards, {                 // Adds guard.
+srv.Guards = append(srv.Guards, {                   // Adds guard.
     Name: "Authorization",                          // Sets guard name. It's useful for logs.
     Handler: func(c *client.Client, allow func()) { // Sets guard handler. If allow() is never invoked, 
                                                     // the guard will reject the request.
@@ -72,7 +72,7 @@ conf.Guards = append(conf.Guards, {                 // Adds guard.
 ```
 
 ```go
-conf.Guards = append(conf.Guards, {                   // Adds guard.
+srv.Guards = append(srv.Guards, {                     // Adds guard.
     Name: "Authentication",                           // Sets guard name. It's useful for logs.
     Handler: func(c *client.Client, allow func()) {   // Sets guard handler. If allow() is never invoked, 
                                                       // the guard will reject the request.
@@ -89,7 +89,7 @@ conf.Guards = append(conf.Guards, {                   // Adds guard.
 ```
 
 ```go
-conf.Guards = append(conf.Guards, {   // Adds route.
+srv.Guards = append(srv.Guards, {     // Adds route.
     Pattern: "GET /",                 // Sets route pattern.
     Handler: func(c *client.Client) { // Sets route handler.
        send.Message(c, "Hello.")      // Sends message..
@@ -111,7 +111,7 @@ You can still apply each guard separately with tags `authorization` and `authent
 <Tabs>
     <TabItem icon='open-book' label='Authorization'>
        ```go
-       conf.Guards = append(conf.Guards, {  // Adds route.
+       srv.Guards = append(srv.Guards, {    // Adds route.
           Pattern: "GET /",                 // Sets route pattern.
           Handler: func(c *client.Client) { // Sets route handler.
              send.Message(c, "Hello.")      // Sends message..
@@ -124,7 +124,7 @@ You can still apply each guard separately with tags `authorization` and `authent
     </TabItem>
     <TabItem icon='open-book' label='Authentication'>
        ```go
-       conf.Guards = append(conf.Guards, {  // Adds route.
+       srv.Guards = append(srv.Guards, {    // Adds route.
           Pattern: "GET /",                 // Sets route pattern.
           Handler: func(c *client.Client) { // Sets route handler.
              send.Message(c, "Hello.")      // Sends message..

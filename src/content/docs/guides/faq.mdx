@@ -4,41 +4,28 @@ title: Frequently Asked Questions
 
 ### How do I completely disable SSR?
 
-Configure your container to use `0` parallels.
+Use an **index server** instead of a **container server**.
 
 ```go
 package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/server"
+    "github.com/razshare/frizzante/svelte/index/server"
 )
 
 //go:embed app/dist
 var efs embed.FS
-var conf = server.Default()
+var srv = server.Default(efs)
 
 func main() {
-    defer server.Start(conf)
-    server.Container.Efs = efs
-    server.Container.Parallels = 0
+    defer server.Start(srv)
 }
 ```
 
-Then make sure your views are automatically set to use client side rendering only, for example, 
-by defining your own view constructor.
+This will completely drop the server side JavaScript engine and also shrink the 
+size of your final binary from a minimum of 24MB to a minimum of 10MB.
 
-```go
-package view
-
-import "github.com/razshare/frizzante/view"
-
-// New creates a new view.
-func New(name string, data map[string]any) view.View {
-    return view.View{
-       Name:       name,
-       Data:       data,
-       RenderMode: view.RenderModeClient,
-    }
-}
-```
+:::note
+[Render modes](../views#render-modes) configurations will be completely ignored and calls to `send.View()` will always render as [view.RenderModeClient](../views#rendermodeclient).
+:::

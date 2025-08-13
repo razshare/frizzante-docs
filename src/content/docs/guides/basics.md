@@ -10,19 +10,12 @@ Create a new server configuration with `server.Default()`, then followup with `s
 //main.go
 package main
 
-import (
-    "embed"
-    "github.com/razshare/frizzante/server"
-)
+import "github.com/razshare/frizzante/server"
 
-//go:embed app/dist
-var efs embed.FS               // Creates embedded file system.
-var conf = server.Default()    // Creates server configuration.
+var srv = server.Default()  // Creates server config.
 
 func main() {
-    defer server.Start(conf)   // Starts server.
-    server.Container.Efs = efs // Assigns the embedded file system
-                               // to the server container.
+    defer server.Start(srv) // Starts server.
 }
 ```
 
@@ -30,7 +23,7 @@ func main() {
 
 Each server exposes a slice of **Routes** which you can freely modify.
 
-You can add a new route by appending to or overwriting `conf.Routes`.
+You can add a new route by appending to or overwriting `srv.Routes`.
 
 ```go
 //main.go
@@ -41,11 +34,11 @@ import (
     "main/lib/routes/handlers/welcome"
 )
 
-var conf = server.Default()                       // Creates server config.
+var srv = server.Default()                        // Creates server config.
 
 func main() {
-    defer server.Start(conf)                      // Starts server.
-    conf.Routes = []route.Route{                  // Overwrites routes.
+    defer server.Start(srv)                       // Starts server.
+    srv.Routes = []route.Route{                   // Overwrites routes.
        {Pattern: "GET /", Handler: welcome.View}, // Adds route.
     }
 }
