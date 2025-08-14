@@ -284,6 +284,11 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 
 You can choose how to render views with the `RenderMode` property.
 
+:::caution
+Some modes are only available while using a specific rendering function, for example `RenderModeFull` and `RenderModeServer` 
+are only supported by the [ssr function](#ssr-function).
+:::
+
 ### RenderModeFull
 
 Using `RenderModeFull`, the view is rendered on both the server and the client.<br/>
@@ -378,3 +383,12 @@ Requires a [csr](#csr-function) or [ssr](#ssr-function) function.
 You can combine any of these render modes with adaptive hyperlinks and forms.
 Read more about [web standards](../web-standards).
 :::
+
+## Why use Csr Function at all?
+
+Since the [ssr function](#ssr-function) supports all rendering modes, you might ask yourself why not just use it at all times?
+
+The main reason you would want to switch to a [csr function](#csr-function) is because of the binary size.\
+While it's true that you can simply choose to only use `RenderModeClient` when using an [ssr function](#ssr-function), your binary will still bundle the required JavaScript engine, even if you're not making use of it.
+
+But using a [csr function](#csr-function), the JavaScript engines gets dropped completely from your binary, which lowers the minimum binary size from 24MB to 10MB in size.
