@@ -18,7 +18,7 @@ import "github.com/razshare/frizzante/client"
 import "github.com/razshare/frizzante/route"
 import "github.com/razshare/frizzante/server"
 
-var srv = server.Default()                                  // Creates server config.
+var srv = server.New()                                      // Creates server.
 
 func main() {
     defer server.Start(srv)                                 // Starts server.

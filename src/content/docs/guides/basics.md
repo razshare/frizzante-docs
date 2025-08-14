@@ -4,7 +4,7 @@ title: Basics
 
 Before doing anything you need to start a server.
 
-Create a new server configuration with `server.Default()`, then followup with `server.Start()` in order to start a server.
+Create a new server with `server.New()`, then followup with `server.Start()` in order to start a server.
 
 ```go
 //main.go
@@ -12,7 +12,7 @@ package main
 
 import "github.com/razshare/frizzante/server"
 
-var srv = server.Default()  // Creates server config.
+var srv = server.New()      // Creates server.
 
 func main() {
     defer server.Start(srv) // Starts server.
@@ -34,7 +34,7 @@ import (
     "main/lib/routes/handlers/welcome"
 )
 
-var srv = server.Default()                        // Creates server config.
+var srv = server.New()                            // Creates server.
 
 func main() {
     defer server.Start(srv)                       // Starts server.

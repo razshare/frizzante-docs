@@ -4,25 +4,85 @@ title: Views
 
 import { FileTree } from '@astrojs/starlight/components'
 
-Before rendering views you need to replace your **server** with a **container server**.
+Before rendering views you need to assign a **rendering function** to your server.\
+This rendering function is used to render views when invoking `send.View()`.
+
+You can choose between two types of rendering functions: `csr` and `ssr`.
+
+### Csr Function
+
+The csr function simply reads the contents of your `index.html`, injects the view properties into the document and returns the result.
+
+You can create a csr function using `csr.New()`.
 
 ```go
+//main.go
 package main
 
 import (
 	"embed"
-	"github.com/razshare/frizzante/svelte/container/server"
+	"github.com/razshare/frizzante/server"
+	"github.com/razshare/frizzante/svelte/csr"
+	"os"
 )
 
 //go:embed app/dist
-var efs embed.FS            // Creates embedded file system.
-var srv = server.New(efs)   // Creates container server.
+var efs embed.FS
+var srv = server.New()
+var dev = os.Getenv("DEV") == "1"
+var render = csr.New(csr.Config{Efs: efs, Disk: dev})
 
 func main() {
-    defer server.Start(srv) // Starts server.
-    srv.Server.Routes = []route.Route{}
+	defer server.Start(srv)
+	srv.Efs = efs
+	srv.Render = render
 }
 ```
+
+:::tip
+Csr functions default to reading from the given embedded file system (`Efs`).\
+You can force the function to read from the disk instead by setting `Disk: true`.
+
+This can be helpful while developing in order to get instant feedback from Vite.
+:::
+
+
+### Ssr Function
+
+The ssr function uses a JavaScript engine in order to render svelte components on the fly and returns the result.
+
+You can create an ssr function using `ssr.New()`.
+
+```go
+//main.go
+package main
+
+import (
+	"embed"
+	"github.com/razshare/frizzante/server"
+	"github.com/razshare/frizzante/svelte/ssr"
+	"os"
+)
+
+//go:embed app/dist
+var efs embed.FS
+var srv = server.New()
+var dev = os.Getenv("DEV") == "1"
+var render = ssr.New(ssr.Config{Efs: efs, Disk: dev})
+
+func main() {
+	defer server.Start(srv)
+	srv.Efs = efs
+	srv.Render = render
+}
+```
+
+:::tip
+Ssr functions default to reading from the given embedded file system (`Efs`).\
+You can force the function to read from the disk instead by setting `Disk: true`.
+
+This can be helpful while developing in order to get instant feedback from Vite.
+:::
 
 ## What are views?
 
@@ -246,6 +306,10 @@ func View(c *client.Client) {
 }
 ```
 
+:::note
+Requires an ssr [render function](#overview).
+:::
+
 ### RenderModeServer
 
 Using `RenderModeServer`, the view is rendered only on the server.<br/>
@@ -268,6 +332,11 @@ func View(c *client.Client) {
     })
 }
 ```
+
+:::note
+Requires an ssr [render function](#overview).
+:::
+
 :::tip
 While using `RenderModeServer` the view won't serve a JavaScript bundle,
 but you can still use the `<svelte:head>` special
@@ -300,6 +369,10 @@ func View(c *client.Client) {
     })
 }
 ```
+
+:::note
+Requires a csr or ssr [render function](#overview).
+:::
 
 :::tip
 You can combine any of these render modes with adaptive hyperlinks and forms.
