@@ -46,7 +46,6 @@ export default defineConfig({
             { label: "Docker", slug: "guides/docker" },
             { label: "Issues", slug: "guides/issues" },
             { label: "Contributing", slug: "guides/contributing" },
-            { label: "FAQ", slug: "guides/faq" },
           ],
         },
       ],
