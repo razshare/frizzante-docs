@@ -25,7 +25,7 @@ On the other hand, when JavaScript is enabled, `<a>` will render to an anchor th
 Instead of navigating away immediately, [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is used
 to retrieve the contents of `/some-other-page` and update the current state and view based on the server's response.
 
-For example, given the following handler using `view.RenderModeServer`
+For example, given the following handler using `view.RenderServer`
 
 ```go
 //lib/routes/handlers/welcome/view.go
@@ -38,9 +38,9 @@ import (
 )
 
 func View(c *client.Client)  {
-    send.View(c, view.View{               // Sends view.
-       Name: "Welcome",                   // Sets name of the view.
-       RenderMode: view.RenderModeServer, // Renders view only on the server.
+    send.View(c, view.View{       // Sends view.
+       Name: "Welcome",           // Sets name of the view.
+       Render: view.RenderServer, // Renders view only on the server.
     })
 }
 ```
@@ -51,7 +51,7 @@ The view will ultimately render the following in the client's browser
 <a href="/some-other-page"> Go to some other page </a>
 ```
 
-But using `view.RenderModeFull` will instead render
+But using `view.RenderFull` will instead render
 
 ```html
 <a href="/some-other-page" onclick="onclick"> Go to some other page </a>
@@ -114,7 +114,7 @@ On the other hand, when JavaScript is enabled, `<form>` will render to a form th
 Instead of navigating away immediately, [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is used
 to submit the form to `/process` and update the current state and view based on the server's response.
 
-For example, given the following handler using `view.RenderModeServer`
+For example, given the following handler using `view.RenderServer`
 
 ```go
 //lib/routes/handlers/welcome/view.go
@@ -127,9 +127,9 @@ import (
 )
 
 func View(c *client.Client)  {
-    send.View(c, view.View{               // Sends view.
-       Name: "Welcome",                   // Sets name of the view.
-       RenderMode: view.RenderModeServer, // Renders view only on the server.
+    send.View(c, view.View{       // Sends view.
+       Name: "Welcome",           // Sets name of the view.
+       Render: view.RenderServer, // Renders view only on the server.
     })
 }
 ```
@@ -143,7 +143,7 @@ The view will ultimately render the following in the client's browser
 </form>
 ```
 
-But using `view.RenderModeFull` will instead render
+But using `view.RenderFull` will instead render
 
 ```html
 <form action="/process" onsubmit="onsubmit">

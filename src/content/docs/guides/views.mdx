@@ -230,10 +230,69 @@ func main() {
 }
 ```
 
-## Data
+## Props
 
-Optionally, you can send data along with the views by adding a `Data` property to your `View`.
+Optionally, you can send Props along with the views by adding a `Props` field to your `View`.
 
+```go
+//lib/routes/handlers/welcome/view.go
+package lib
+
+import (
+    "github.com/razshare/frizzante/client"
+    "github.com/razshare/frizzante/send"
+    "github.com/razshare/frizzante/view"
+)
+
+func View(c *client.Client) {
+    send.View(c, view.View{      // Sends view.
+       Name: "Welcome",          // Sets view name.
+       Props: map[string]string{ // Sets view props, which will be injected into the svelte component.
+          "name": "world",       // Adds property "name" with value "world".
+       },
+    }) 
+}
+```
+
+These properties are passed down to your view component.
+
+```svelte
+//app/lib/views/Hello.svelte
+<script lang="ts">
+    type Props = { name: string }
+    let {name}:Props = $props() // Retrieves server props.
+</script>
+
+<h1>Hello {name}</h1>
+```
+
+You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to retrieve your props.
+
+```svelte
+//app/lib/views/Hello.svelte
+<script lang="ts">
+    import type { View } from "$frizzante/types.ts"
+    const view = getContext("view") as View<{ name: string }> // Retrieves the same server props, 
+                                                              // but can be used anywhere in the project
+                                                              // regardless of the component hierarchy.
+</script>
+
+<h1>Hello {view.props.name}</h1>
+```
+
+## Render Modes
+
+You can choose how to render views with the `Render` property.
+
+:::caution
+Some modes are only available while using a specific rendering function, for example `RenderFull` and `RenderServer` 
+are only supported by the [ssr function](#ssr-function).
+:::
+
+### RenderFull
+
+Using `RenderFull`, the view is rendered on both the server and the client.<br/>
+This is the **default** mode.
 ```go
 //lib/routes/handlers/welcome/view.go
 package lib
@@ -247,66 +306,7 @@ import (
 func View(c *client.Client) {
     send.View(c, view.View{     // Sends view.
        Name: "Welcome",         // Sets view name.
-       Data: map[string]string{ // Sets view data, which will be injected into the svelte component.
-          "name": "world",      // Adds property "name" with value "world".
-       },
-    }) 
-}
-```
-
-These properties are passed down to your view component.
-
-```svelte
-//app/lib/views/Hello.svelte
-<script lang="ts">
-    type Props = { name: string }
-    let {name}:Props = $props() // Retrieves server data.
-</script>
-
-<h1>Hello {name}</h1>
-```
-
-You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to retrieve your data.
-
-```svelte
-//app/lib/views/Hello.svelte
-<script lang="ts">
-    import type { View } from "$frizzante/types.ts"
-    const view = getContext("view") as View<{ name: string }> // Retrieves the same server data, 
-                                                              // but can be used anywhere in the project
-                                                              // regardless of the component hierarchy.
-</script>
-
-<h1>Hello {view.data.name}</h1>
-```
-
-## Render Modes
-
-You can choose how to render views with the `RenderMode` property.
-
-:::caution
-Some modes are only available while using a specific rendering function, for example `RenderModeFull` and `RenderModeServer` 
-are only supported by the [ssr function](#ssr-function).
-:::
-
-### RenderModeFull
-
-Using `RenderModeFull`, the view is rendered on both the server and the client.<br/>
-This is the **default** mode.
-```go
-//lib/routes/handlers/welcome/view.go
-package lib
-
-import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
-    "github.com/razshare/frizzante/view"
-)
-
-func View(c *client.Client) {
-    send.View(c, view.View{             // Sends view.
-       Name: "Welcome",                 // Sets view name.
-       RenderMode: view.RenderModeFull, // Renders view on server and client.
+       Render: view.RenderFull, // Renders view on server and client.
     })
 }
 ```
@@ -315,9 +315,9 @@ func View(c *client.Client) {
 Requires an [ssr function](#ssr-function).
 :::
 
-### RenderModeServer
+### RenderServer
 
-Using `RenderModeServer`, the view is rendered only on the server.<br/>
+Using `RenderServer`, the view is rendered only on the server.<br/>
 You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
 your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
 ```go
@@ -331,9 +331,9 @@ import (
 )
 
 func View(c *client.Client) {
-    send.View(c, view.View{               // Sends view.
-       Name: "Welcome",                   // Sets view name.
-       RenderMode: view.RenderModeServer, // Renders view only on server.
+    send.View(c, view.View{       // Sends view.
+       Name: "Welcome",           // Sets view name.
+       Render: view.RenderServer, // Renders view only on server.
     })
 }
 ```
@@ -343,7 +343,7 @@ Requires an [ssr function](#ssr-function).
 :::
 
 :::tip
-While using `RenderModeServer` the view won't serve a JavaScript bundle,
+While using `RenderServer` the view won't serve a JavaScript bundle,
 but you can still use the `<svelte:head>` special
 tag in order to load scripts dynamically.
 ```svelte
@@ -354,9 +354,9 @@ tag in order to load scripts dynamically.
 :::
 
 
-### RenderModeClient
+### RenderClient
 
-Using `RenderModeClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
+Using `RenderClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
 ```go
 //lib/routes/handlers/welcome/view.go
 package lib
@@ -368,9 +368,9 @@ import (
 )
 
 func View(c *client.Client) {
-    send.View(c, view.View{               // Sends view.
-       Name: "Welcome",                   // Sets view name.
-       RenderMode: view.RenderModeClient, // Renders view only on client.
+    send.View(c, view.View{       // Sends view.
+       Name: "Welcome",           // Sets view name.
+       Render: view.RenderClient, // Renders view only on client.
     })
 }
 ```
@@ -389,6 +389,6 @@ Read more about [web standards](../web-standards).
 Since the [ssr function](#ssr-function) supports all rendering modes, you might ask yourself why not just use it at all times?
 
 The main reason you would want to switch to a [csr function](#csr-function) is because of the binary size.\
-While it's true that you can simply choose to only use `RenderModeClient` when using an [ssr function](#ssr-function), your binary will still bundle the required JavaScript engine, even if you're not making use of it.
+While it's true that you can simply choose to only use `RenderClient` when using an [ssr function](#ssr-function), your binary will still bundle the required JavaScript engine, even if you're not making use of it.
 
 But using a [csr function](#csr-function), the JavaScript engines gets dropped completely from your binary, which lowers the minimum binary size from 24MB to 10MB in size.

@@ -171,7 +171,7 @@ The server itself could choose to not serve a JavaScript bundle to the client.
 view.View{
     Name: "Welcome",
     // This will disable JavaScript.
-    RenderMode: view.RenderModeServer,
+    Render: view.RenderServer,
 }
 ```
 
