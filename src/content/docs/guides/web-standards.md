@@ -102,8 +102,8 @@ Which swaps the current state and view for new ones served by `/some-other-page`
 <form {...action("/process")}>            <!-- Defines a form. -->
     <input type="text" name="name" />     <!-- Defines a text field. -->
     <button type="submit">Submit</button> <!-- Defines a button, which when triggered will either 
-                                            directly submit the form, or do so through an http request, 
-                                            depending on wether JavaScript is enabled or not. -->
+                                               directly submit the form, or do so through an http request, 
+                                               depending on wether JavaScript is enabled or not. -->
 </form>
 ```
 
