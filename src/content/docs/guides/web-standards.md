@@ -197,7 +197,7 @@ Which swaps the current state and view for new ones served by `/process`.
 
 ## Link Component
 
-Frizzante provides `<Link>` component that manages
+Frizzante provides a `<Link>` component that manages
 pending requests and errors while navigating hyperlinks.
 
 It is a replacement for your `<a>` elements.
@@ -208,7 +208,7 @@ In your project root directory, run the following
 frizzante -alink
 ```
 
-This will add the a `<Link>` component to your project.
+This will add the `<Link>` component to your project.
 
 This component passes down `pending` and `error` states through the `children` snippet.
 
