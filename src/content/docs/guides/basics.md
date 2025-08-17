@@ -215,9 +215,9 @@ Content-Type: text/plain; charset=utf-8
 Hello.
 ```
 
-The failure is notified to the server notifier.
+The failure is logged to the server's error logger.
 
-Assuming you're using the error logger, you'll see an error of sorts in your **console**
+Assuming you're using the default error logger, you'll see an error of sorts in your **console**
 
 ```sh
 listening for requests at http://127.0.0.1:8080
