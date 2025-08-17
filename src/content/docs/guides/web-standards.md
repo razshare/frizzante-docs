@@ -208,7 +208,7 @@ In your project root directory, run the following
 frizzante -alink
 ```
 
-This will add the `<Link>` component to your project.
+This will add the a `<Link>` component to your project.
 
 This component passes down `pending` and `error` states through the `children` snippet.
 
@@ -232,7 +232,7 @@ This component passes down `pending` and `error` states through the `children` s
 
 ## Form Component
 
-Frizzante provides `<Form>` component that manages
+Frizzante provides a `<Form>` component that manages
 pending requests and errors while submitting form.
 
 It is a replacement for your `<form>` elements.
