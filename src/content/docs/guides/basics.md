@@ -336,6 +336,11 @@ If the client doesn't provide such cookie, `receive.SessionId()`
 creates a new session id and sends the cookie to the client.
 :::
 
+:::caution
+Since `receive.SessionId()` might **send** a cookie to the client,
+it is important to remember that [order of operations matters](#order-of-operations).
+:::
+
 
 ```go
 //lib/routes/handlers/welcome/view.go
