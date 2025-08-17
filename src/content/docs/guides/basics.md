@@ -217,7 +217,7 @@ Hello.
 
 The failure is notified to the server notifier.
 
-Assuming you're using the default notifier, you'll see an error of sorts in your **console**
+Assuming you're using the error logger, you'll see an error of sorts in your **console**
 
 ```sh
 listening for requests at http://127.0.0.1:8080
