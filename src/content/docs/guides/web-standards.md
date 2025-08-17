@@ -197,7 +197,7 @@ Which swaps the current state and view for new ones served by `/process`.
 
 ## Link Component
 
-Frizzante provides a builtin `<Link>` component that manages
+Frizzante provides `<Link>` component that manages
 pending requests and errors while navigating hyperlinks.
 
 It is a replacement for your `<a>` elements.
@@ -232,7 +232,7 @@ This component passes down `pending` and `error` states through the `children` s
 
 ## Form Component
 
-Frizzante provides a builtin `<Form>` component that manages
+Frizzante provides `<Form>` component that manages
 pending requests and errors while submitting form.
 
 It is a replacement for your `<form>` elements.
