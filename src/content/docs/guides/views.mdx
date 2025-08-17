@@ -380,9 +380,8 @@ Read more about [web standards](../web-standards).
 
 ## Why use Csr Function at all?
 
-Since the [ssr function](#ssr-function) supports all rendering modes, you might ask yourself why not just use it at all times?
+Since the [ssr function](#ssr-function) supports all rendering modes, you might ask yourself why bother
+using a [csr function](#csr-function) at all?
 
-The main reason you would want to switch to a [csr function](#csr-function) is because of the binary size.\
-While it's true that you can simply choose to only use `RenderClient` when using an [ssr function](#ssr-function), your binary will still bundle the required JavaScript engine, even if you're not making use of it.
-
-But using a [csr function](#csr-function), the JavaScript engines gets dropped completely from your binary, which lowers the minimum binary size from 24MB to 10MB in size.
+When using a [csr function](#csr-function), the server-side JavaScript engine is completely
+eliminated from your final binary, reducing its size from a minimum if 24MB, to a minimum of 10MB.
