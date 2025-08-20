@@ -196,7 +196,7 @@ func View(c *client.Client) {
     s := session.Start(receive.SessionId(c))
     send.View(c, view.View{
        Name: "Todos",
-       Data: map[string]any{
+       Props: map[string]any{
           "todos": s.Todos,
        },
     })
@@ -425,7 +425,7 @@ func Remove(c *client.Client) {
     if nil != e {
         send.View(c, view.View{
             Name: "Todos",
-            Data: map[string]any{
+            Props: map[string]any{
                 "error": e.Error(),
             },
         })
@@ -525,7 +525,7 @@ func Check(c *client.Client) {
     if nil != e {
         send.View(c, view.View{
             Name: "Todos",
-            Data: map[string]any{
+            Props: map[string]any{
                 "error": e.Error(),
             },
         })
@@ -580,7 +580,7 @@ func Add(c *client.Client) {
     if d == "" {
         send.View(c, view.View{
             Name: "Todos",
-            Data: map[string]any{
+            Props: map[string]any{
                 "todos": s.Todos,
                 "error": "todo description cannot be empty",
             },
