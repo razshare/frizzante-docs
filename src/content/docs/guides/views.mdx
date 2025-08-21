@@ -84,6 +84,21 @@ You can force the function to read from the disk instead by setting `Disk: true`
 This can be helpful while developing in order to get instant feedback from Vite.
 :::
 
+:::tip
+You can configure how many JavaScript runtimes are executed in parallel by setting the `Limit` field on your ssr configuration.
+```go
+var render = ssr.New(ssr.Config{Efs: efs, Disk: dev, Limit: 3})
+```
+:::caution
+Settings this limit too high could lead to large memory usage by your JavaScript runtimes.\
+For 99% of use cases a limit of 1 runtime (the default) is more than enough, after all, the Svelte compiler
+is simply concatenating strings together when rendering pages on the server.
+
+
+Make sure you modify this field based on actual performance measurements.
+:::
+:::
+
 ## What are views?
 
 Views are **svelte components** exported by 
