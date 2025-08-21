@@ -6,22 +6,16 @@ import { FileTree } from '@astrojs/starlight/components'
 
 This document describes the full process of setting up a fully working local development environment and submitting your first contribution.
 
-## Clone Repositories
+## Clone Repository
 
-Clone `frizzante`.
+Clone the `frizzante` repository from GitHub.
 
 ```go
 git clone https://github.com/razshare/frizzante
 ```
 
-Clone `frizzante-starter`.
-
-```go
-git clone https://github.com/razshare/frizzante-starter
-```
-
 :::tip
-If you don't have direct access to these repositories you will need to fork your own `frizzante` and `frizzante-starter` repositories and clone those instead.
+If you don't have direct access to it you will need to fork your own `frizzante` repository.
 
 Then when you're done with your changes you will need to submit a pull request.
 :::
@@ -51,22 +45,16 @@ make configure
 
 This will install `bun` and `air` in `.gen`.
 
-Navigate to your `frizzante-starter` local repository and configure the project with make.
+## Local Development
 
-```sh
-make configure
-```
-
-This will install `bun` and `air` in `.gen`.
-
-## Local Frizzante Package
+The frizzante repository comes with a starter template project, located at `template/project`, which is used for both local development and it is also embedded into the CLI for generating new projects interactively.
 
 You most likely will want to try out your `frizzante` changes locally.
 
-By default, your local `frizzante-starter` will pull the `frizzante` package from the public remote repository.\
-You can link your local `frizzante-starter` to your local version of `frizzante` instead, in order to have immediate feedback.
+By default, your local template project will pull the `frizzante` package from the public remote repository.\
+You can link the template project to your local version of `frizzante` instead, in order to have immediate feedback.
 
-Navigate to your `frizzante-starter` repository and modify your `go.mod` file to replace the remote `frizzante` dependency with the local one using `replace` syntax.
+Navigate to your `template/project` directory and modify `template/project/go.mod` to replace the remote `frizzante` dependency with the local one using `replace` syntax.
 
 
 ```go
@@ -81,7 +69,7 @@ require github.com/razshare/frizzante v1.17.2
 // ...
 ```
 
-This will make it so that changes to your local `frizzante` project are immediately picked up when building your local `frizzante-starter`.
+This will make it so that changes to your local `frizzante` project are immediately picked up when building your local template project.
 
 :::note
 Another reason for using local packages is to avoid unnecessary mirror caching in https://proxy.golang.org/.
@@ -179,7 +167,7 @@ func MyFunction(str *MyStruct){
 
 ## Pull Requests
 
-When you're done with your changes you can submit a pull request in order to implement them into `frizzante` (or `frizzante-starter`).
+When you're done with your changes you can submit a pull request in order to implement them into `frizzante`.
 
 ## Testing
 
