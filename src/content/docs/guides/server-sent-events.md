@@ -10,7 +10,7 @@ route.Route{Pattern: "GET /sse", Handler: welcome.View}
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -37,14 +37,14 @@ Then consume the stream on the client.
 ```svelte
 <script lang="ts">
     import {source} from "$frizzante/scripts/source.ts";
-    const connection = source("/sse")         // Connects to the handler.
-    const c1 = connection.select("channel-1") // Listens to "channel-1".
-    const c2 = connection.select("channel-2") // Listens to "channel-2".
+    const con = source("/sse")        // Connects to the handler.
+    const ch1 = c.select("channel-1") // Listens to "channel-1".
+    const ch2 = c.select("channel-2") // Listens to "channel-2".
 </script>
 
 <h1>Channel 1</h1>
-<span>{$c1}</span>                            <!-- Renders most recent value of channel-1. -->
+<span>{$ch1}</span>                            <!-- Renders most recent value of channel-1. -->
 
 <h1>Channel 2</h1>
-<span>{$c2}</span>                            <!-- Renders most recent value of channel-2. -->
+<span>{$ch2}</span>                            <!-- Renders most recent value of channel-2. -->
 ```

@@ -29,7 +29,7 @@ For example, given the following handler using `view.RenderServer`
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -118,7 +118,7 @@ For example, given the following handler using `view.RenderServer`
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"

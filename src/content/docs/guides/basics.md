@@ -48,7 +48,7 @@ Where `welcome.View` is a function pointer.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import "github.com/razshare/frizzante/client"
 
@@ -69,7 +69,7 @@ Path fields can then be retrieved with `receive.Path()`.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -89,7 +89,7 @@ Use `receive.Message()` to retrieve messages sent by the client.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -106,7 +106,7 @@ Use `send.Message()` to send a message to the client.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -124,7 +124,7 @@ Use `receive.Header()` to retrieve header fields sent by the client.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -140,7 +140,7 @@ Use `send.Header()` to send header fields to the client.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -160,7 +160,7 @@ Use `send.Status()` to send the status of the response to the client.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -191,7 +191,7 @@ with `send.Message()` is not allowed.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -232,7 +232,7 @@ Use `receive.Query()` to retrieve query fields.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -259,7 +259,7 @@ route.Route{Pattern: "PUT /", Handler: welcome.View}
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -288,7 +288,7 @@ route.Route{Pattern: "PUT /", Handler: welcome.View}
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -312,7 +312,7 @@ Use `receive.Cookie()` to retrieve cookies and `send.Cookie()` to send them.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -344,7 +344,7 @@ it is important to remember that [order of operations matters](#order-of-operati
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -362,7 +362,7 @@ Use `send.Redirect()` to redirect to a different location.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
@@ -380,7 +380,7 @@ Use `send.Navigate()` to redirect to a different location with status `303`.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"

@@ -10,7 +10,7 @@ route.Route{Pattern: "GET /ws", Handler: welcome.View}
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package handlers
+package welcome
 
 import (
     "github.com/razshare/frizzante/client"
