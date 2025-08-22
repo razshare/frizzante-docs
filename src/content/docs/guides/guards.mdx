@@ -9,14 +9,20 @@ You can protect your [routes](../basics#routes) with guards.
 A guard allows you to execute logic before a certain request reaches
 a designated route handler.
 
-Start by adding a guard to the server
+Start by adding a guard to the server.
 
 ```go
 package main
 
-import "github.com/razshare/frizzante/client"
-import "github.com/razshare/frizzante/route"
-import "github.com/razshare/frizzante/server"
+import (
+   "github.com/razshare/frizzante/client"
+   "github.com/razshare/frizzante/route"
+   "github.com/razshare/frizzante/server"
+	"github.com/razshare/frizzante/tag"
+)
+
+const nojson tag.Tag = 0                                    // Creates tag.
+const jsonless tag.Tag = 1                                  // Creates tag.
 
 var srv = server.New()                                      // Creates server.
 
@@ -30,14 +36,14 @@ func main() {
           }
           allow()                                           // Allows request through.
        },
-       Tags: []string{"nojson", "jsonless"},                // Sets guard tags.
+       Tags: []tag.Tag{nojson, jsonless},                   // Sets guard tags.
     })
     srv.Routes = append(srv.Routes, route.Route{            // Adds route.
        Pattern: "GET /",                                    // Sets route pattern.
        Handler: func(c *client.Client) {
           send.Message(c, "Hello.")                         // Sends message..
        },
-       Tags: []string{"nojson"},                            // Sets route tags. Any guard that intersects 
+       Tags: []tag.Tag{nojson},                             // Sets route tags. Any guard that intersects 
                                                             // with these tags will execute before any 
                                                             // request reaches the route's handler.
     })
@@ -46,13 +52,19 @@ func main() {
 
 A guard protects every route whose tags intersect with at least one of its own tags.
 
-In this case, the `GET /` route intersects with the `No Json Allowed` guard in `nojson`, which means `GET /` is protected by `No Json Allowed`.
+In this case, the `GET /` route intersects with the `No Json Allowed` guard in tag `nojson`, which means `GET /` is protected by `No Json Allowed`.
 
 ![](guards100.svg)
 
 ## Composition
 
 Multiple guards can intersect in order to compose more advanced restrictions.
+
+```go
+const authorization tag.Tag = 0
+const authentication tag.Tag = 1
+const auth tag.Tag = 3
+```
 
 ```go
 srv.Guards = append(srv.Guards, {                   // Adds guard.
@@ -67,7 +79,7 @@ srv.Guards = append(srv.Guards, {                   // Adds guard.
        }
        allow()                                      // Allows request through.
     },
-    Tags: []string{"authorization", "auth"},        // Sets guard tags.
+    Tags: []tag.Tag{authorization, auth},           // Sets guard tags.
 })
 ```
 
@@ -84,7 +96,7 @@ srv.Guards = append(srv.Guards, {                     // Adds guard.
        }
        allow()                                        // Allows request through.
     },
-    Tags: []string{"authentication", "auth"},         // Sets guard tags.
+    Tags: []tag.Tag{authentication, auth},            // Sets guard tags.
 })
 ```
 
@@ -94,7 +106,7 @@ srv.Guards = append(srv.Guards, {     // Adds route.
     Handler: func(c *client.Client) { // Sets route handler.
        send.Message(c, "Hello.")      // Sends message..
     },
-    Tags: []string{"auth"},           // Sets route tags. Any guard that intersects 
+    Tags: []tag.Tag{auth},            // Sets route tags. Any guard that intersects 
                                       // with these tags will execute before any 
                                       // request reaches the route's handler.
 })
@@ -116,7 +128,7 @@ You can still apply each guard separately with tags `authorization` and `authent
           Handler: func(c *client.Client) { // Sets route handler.
              send.Message(c, "Hello.")      // Sends message..
           },
-          Tags: []string{"authorization"},  // Sets route tags. Any guard that intersects 
+          Tags: []tag.Tag{authorization},   // Sets route tags. Any guard that intersects 
                                             // with these tags will execute before any 
                                             // request reaches the route's handler.
        })
@@ -129,7 +141,7 @@ You can still apply each guard separately with tags `authorization` and `authent
           Handler: func(c *client.Client) { // Sets route handler.
              send.Message(c, "Hello.")      // Sends message..
           },
-          Tags: []string{"authentication"}, // Sets route tags. Any guard that intersects 
+          Tags: []tag.Tag{authentication},  // Sets route tags. Any guard that intersects 
                                             // with these tags will execute before any 
                                             // request reaches the route's handler.
        })
