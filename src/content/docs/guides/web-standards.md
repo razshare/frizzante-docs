@@ -252,7 +252,7 @@ This component passes down `pending` and `error` states through the `children` s
     import Form from "$frizzante/forms/components/Form.svelte"
 </script>
 
-<From method="POST" action="/login">                           <!-- Defines a form. -->
+<Form method="POST" action="/login">                           <!-- Defines a form. -->
     {#snippet children({pending, error})}                      <!-- Captures the forms's pending and error states. -->
        <input type="email" name="email">                       <!-- Defines an email field. -->
        <input type="password" name="password">                 <!-- Defines an password field. -->
