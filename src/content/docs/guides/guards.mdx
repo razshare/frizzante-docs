@@ -101,7 +101,7 @@ srv.Guards = append(srv.Guards, {                     // Adds guard.
 ```
 
 ```go
-srv.Guards = append(srv.Guards, {     // Adds route.
+srv.Routes = append(srv.Routes, {     // Adds route.
     Pattern: "GET /",                 // Sets route pattern.
     Handler: func(c *client.Client) { // Sets route handler.
        send.Message(c, "Hello.")      // Sends message..
