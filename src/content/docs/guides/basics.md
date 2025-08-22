@@ -301,7 +301,7 @@ type GreetingDetails struct {             // Defines a struct in which to
 }
 
 func View(c *client.Client) {
-    v := receive.Json[GreetingDetails](c) // Marshals the content and returns it.
+    v := receive.Json[GreetingDetails](c) // Unmarshals the content and returns it.
     send.Json(c, v)                       // Sends it back.
 }
 ```
