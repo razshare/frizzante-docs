@@ -205,7 +205,7 @@ It is a replacement for your `<a>` elements.
 In your project root directory, run the following
 
 ```sh
-frizzante -alink
+frizzante -glink
 ```
 
 This will add the `<Link>` component to your project.
@@ -240,7 +240,7 @@ It is a replacement for your `<form>` elements.
 In your project root directory, run the following
 
 ```sh
-frizzante -aform
+frizzante -gform
 ```
 
 This will add the `<Form>` component to your project.
