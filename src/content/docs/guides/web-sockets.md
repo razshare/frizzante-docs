@@ -35,7 +35,7 @@ Then consume the web socket on the client.
 ```svelte
 <script lang="ts">
     import {source} from "$frizzante/scripts/source.ts";
-    const messages:string[] = []                             // Creates list of messages.
+    const messages:string[] = $state([])                     // Creates reactive list of messages.
     const socket = new WebSocket("/ws")                      // Connects to handler.
     socket.send("Hello")                                     // Sends message.
     socket.addEventListener("message", function incoming(e){ // Listens for incoming messages.
