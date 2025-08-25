@@ -41,7 +41,7 @@ func main() {
     srv.Routes = append(srv.Routes, route.Route{            // Adds route.
        Pattern: "GET /",                                    // Sets route pattern.
        Handler: func(c *client.Client) {
-          send.Message(c, "Hello.")                         // Sends message..
+          send.Message(c, "Hello.")                         // Sends message.
        },
        Tags: []tag.Tag{nojson},                             // Sets route tags. Any guard that intersects 
                                                             // with these tags will execute before any 
@@ -104,7 +104,7 @@ srv.Guards = append(srv.Guards, {                     // Adds guard.
 srv.Routes = append(srv.Routes, {     // Adds route.
     Pattern: "GET /",                 // Sets route pattern.
     Handler: func(c *client.Client) { // Sets route handler.
-       send.Message(c, "Hello.")      // Sends message..
+       send.Message(c, "Hello.")      // Sends message.
     },
     Tags: []tag.Tag{auth},            // Sets route tags. Any guard that intersects 
                                       // with these tags will execute before any 
@@ -126,7 +126,7 @@ You can still apply each guard separately with tags `authorization` and `authent
        srv.Guards = append(srv.Guards, {    // Adds route.
           Pattern: "GET /",                 // Sets route pattern.
           Handler: func(c *client.Client) { // Sets route handler.
-             send.Message(c, "Hello.")      // Sends message..
+             send.Message(c, "Hello.")      // Sends message.
           },
           Tags: []tag.Tag{authorization},   // Sets route tags. Any guard that intersects 
                                             // with these tags will execute before any 
@@ -139,7 +139,7 @@ You can still apply each guard separately with tags `authorization` and `authent
        srv.Guards = append(srv.Guards, {    // Adds route.
           Pattern: "GET /",                 // Sets route pattern.
           Handler: func(c *client.Client) { // Sets route handler.
-             send.Message(c, "Hello.")      // Sends message..
+             send.Message(c, "Hello.")      // Sends message.
           },
           Tags: []tag.Tag{authentication},  // Sets route tags. Any guard that intersects 
                                             // with these tags will execute before any 

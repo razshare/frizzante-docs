@@ -169,7 +169,7 @@ import (
 
 func View(c *client.Client) {
     send.Status(c, 404)           // Sends status 404.
-    send.Message(c, "Not found.") // Sends message..
+    send.Message(c, "Not found.") // Sends message.
 }
 ```
 
@@ -242,7 +242,7 @@ import (
 
 func View(c *client.Client) {
     n := receive.Query(c, "name") // Retrieves field "name".
-    send.Message(c, "Hello " + n) // Sends message..
+    send.Message(c, "Hello " + n) // Sends message.
 }
 ```
 
@@ -270,7 +270,7 @@ import (
 func View(c *client.Client) {
     f := receive.Form(c)          // Retrieves the form.
     n := f.Get("name")            // Retrieves field "name".
-    send.Message(c, "Hello " + n) // Sends message..
+    send.Message(c, "Hello " + n) // Sends message.
 }
 ```
 
