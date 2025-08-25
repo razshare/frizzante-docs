@@ -422,7 +422,7 @@ func Remove(c *client.Client) {
     }
 
     i, e := strconv.ParseInt(is, 10, 64)
-    if nil != e {
+    if e != nil {
         send.View(c, view.View{
             Name: "Todos",
             Props: map[string]any{
@@ -522,7 +522,7 @@ func Check(c *client.Client) {
     }
 
     i, e := strconv.ParseInt(is, 10, 64)
-    if nil != e {
+    if e != nil {
         send.View(c, view.View{
             Name: "Todos",
             Props: map[string]any{
