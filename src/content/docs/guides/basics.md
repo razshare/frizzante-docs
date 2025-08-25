@@ -376,7 +376,7 @@ func View(c *client.Client) {
 
 ## Navigate
 
-Use `send.Navigate()` to redirect to a different location with status `303`.
+Use `send.Navigate()` to redirect to a different location with status `302`.
 
 ```go
 //lib/routes/handlers/welcome/view.go
