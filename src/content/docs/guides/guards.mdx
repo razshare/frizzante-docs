@@ -22,7 +22,6 @@ import (
 )
 
 const nojson tag.Tag = 0                                    // Creates tag.
-const jsonless tag.Tag = 1                                  // Creates tag.
 
 var srv = server.New()                                      // Creates server.
 
@@ -36,7 +35,7 @@ func main() {
           }
           allow()                                           // Allows request through.
        },
-       Tags: []tag.Tag{nojson, jsonless},                   // Sets guard tags.
+       Tags: []tag.Tag{nojson},                             // Sets guard tags.
     })
     srv.Routes = append(srv.Routes, route.Route{            // Adds route.
        Pattern: "GET /",                                    // Sets route pattern.
