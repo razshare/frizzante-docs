@@ -92,24 +92,14 @@ frizzante -p
 frizzante --package
 ```
 
-Packages your application for distribution. This command:
-- Builds the production binary
-- Bundles all required assets
-- Creates a distributable package in `app/dist`
-- Includes all necessary runtime files
+Builds the Svelte frontend project using Vite and outputs the result to `app/dist`. This command:
+- Runs Vite build process through Bun
+- Compiles and bundles all Svelte components
+- Outputs static assets to `app/dist`
 
-Use the `--platform` flag to target specific platforms:
-```sh
-frizzante --package --platform linux/amd64
-```
-
-Supported platforms:
-- `linux/amd64`
-- `linux/arm64`
-- `darwin/amd64`
-- `darwin/arm64`
-- `windows/amd64`
-- `windows/arm64`
+:::note
+Frizzante uses Bun specifically to execute Vite, as Vite requires WebAssembly binaries that aren't supported by Frizzante's JavaScript runtime.
+:::
 
 ## Package Watch
 
@@ -117,11 +107,11 @@ Supported platforms:
 frizzante --package-watch
 ```
 
-Continuously watches for changes and automatically repackages your application. This is useful during development when you need to:
-- Test packaging configurations
-- Verify asset bundling
-- Debug production builds
-- Monitor package output
+Continuously watches for changes in your Svelte code and automatically rebuilds the frontend. This command:
+- Monitors Svelte component changes
+- Automatically triggers Vite rebuilds
+- Updates output in `app/dist` in real-time
+- Useful for frontend development workflow
 
 Results are continuously updated in `app/dist`.
 
@@ -174,11 +164,11 @@ Run this before your first build if you're using embedded assets.
 frizzante --clean-project
 ```
 
-Removes generated files and build artifacts from your project, including:
-- Build output directories
-- Cached dependencies
-- Temporary files
-- Generated code
+Removes generated files and build artifacts from your project. Specifically deletes:
+- `.gen` directory (contains installed binaries and build outputs)
+- `.vite` directory (Vite cache)
+- `app/dist` directory (built frontend assets)
+- `app/node_modules` directory (JavaScript dependencies)
 
 Use this when you want to:
 - Resolve build issues
@@ -230,7 +220,7 @@ frizzante -v
 frizzante --version
 ```
 
-Displays the current Frizzante version.
+Displays the current Frizzante binary installed.
 
 ### Help
 
