@@ -187,4 +187,4 @@ srv.Routes = []route.Route{
 }
 ```
 
-For more details on guards and composition, see the [Guards documentation](./guards#composition).
+For more details on guards and composition, see the [Guards documentation](../guards#composition).
