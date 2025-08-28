@@ -20,10 +20,10 @@ You can create a csr function using `csr.New()`.
 package main
 
 import (
-	"embed"
-	"github.com/razshare/frizzante/server"
-	"github.com/razshare/frizzante/svelte/csr"
-	"os"
+    "embed"
+    "github.com/razshare/frizzante/server"
+    "github.com/razshare/frizzante/svelte/csr"
+    "os"
 )
 
 //go:embed app/dist
@@ -33,9 +33,9 @@ var dev = os.Getenv("DEV") == "1"
 var render = csr.New(csr.Config{Efs: efs, Disk: dev})
 
 func main() {
-	defer server.Start(srv)
-	srv.Efs = efs
-	srv.Render = render
+    defer server.Start(srv)
+    srv.Efs = efs
+    srv.Render = render
 }
 ```
 
@@ -58,10 +58,10 @@ You can create an ssr function using `ssr.New()`.
 package main
 
 import (
-	"embed"
-	"github.com/razshare/frizzante/server"
-	"github.com/razshare/frizzante/svelte/ssr"
-	"os"
+    "embed"
+    "github.com/razshare/frizzante/server"
+    "github.com/razshare/frizzante/svelte/ssr"
+    "os"
 )
 
 //go:embed app/dist
@@ -71,9 +71,9 @@ var dev = os.Getenv("DEV") == "1"
 var render = ssr.New(ssr.Config{Efs: efs, Disk: dev})
 
 func main() {
-	defer server.Start(srv)
-	srv.Efs = efs
-	srv.Render = render
+    defer server.Start(srv)
+    srv.Efs = efs
+    srv.Render = render
 }
 ```
 

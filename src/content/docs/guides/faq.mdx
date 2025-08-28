@@ -1,0 +1,278 @@
+---
+title: FAQ
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Why doesn't Frizzante have middleware?
+
+Frizzante intentionally uses Guards instead of traditional middleware. Here's why:
+
+### The Problem with Middleware
+
+Traditional middleware has several limitations:
+- All middleware must be invoked for each request
+- You need to memorize which middleware takes into account which paths
+- The middleware itself must contain path-checking logic
+- Managing execution order across different routes is complex
+
+### The Guards Solution
+
+Instead of middleware that runs on every request, create guards that only run when needed.
+
+```go
+const sessionAuth tag.Tag = 0
+
+srv.Guards = append(srv.Guards, guard.Guard{
+    Name: "Session Verification",
+    Handler: func(c *client.Client, allow func()) {
+        // Your guard logic here
+        allow()
+    },
+    Tags: []tag.Tag{sessionAuth},
+})
+
+// Only routes tagged with sessionAuth will use this guard
+srv.Routes = append(srv.Routes, route.Route{
+    Pattern: "GET /dashboard",
+    Handler: dashboardHandler,
+    Tags: []tag.Tag{sessionAuth}, // This route needs authentication.
+})
+
+srv.Routes = append(srv.Routes, route.Route{
+    Pattern: "GET /public",
+    Handler: publicHandler,
+    // No tags - this route doesn't need authentication.
+})
+```
+
+### Creating Middleware-like Behavior
+
+If you need middleware-like behavior, you can easily implement it in your own project.
+
+<Tabs>
+    <TabItem label='Implementation'>
+    ```go
+    //lib/middleware/types.go
+    package middleware
+
+    import "github.com/razshare/frizzante/client"
+
+    type Hook func(c *client.Client, next func())
+
+    type Middleware struct {
+        Hooks []Hook
+    }
+    ```
+
+    ```go
+    //lib/middleware/apply.go
+    package middleware
+
+    import (
+        "github.com/razshare/frizzante/client"
+        "github.com/razshare/frizzante/route"
+    )
+
+    func Apply(mid *Middleware, routes []route.Route) {
+        for _, _route := range routes {
+            handler := _route.Handler
+            _route.Handler = func(c *client.Client) {
+                var quit = true
+                for _, hook := range mid.Hooks {
+                    quit = true
+                    hook(c, func() { quit = false })
+                    if quit {
+                        return
+                    }
+                }
+                handler(c)
+            }
+        }
+    }
+    ```
+    </TabItem>
+    <TabItem label='Usage'>
+    ```go
+    //main.go
+    package main
+
+    import (
+        "embed"
+        "github.com/razshare/frizzante/client"
+        "github.com/razshare/frizzante/route"
+        "github.com/razshare/frizzante/server"
+        "github.com/razshare/frizzante/svelte/ssr"
+        "main/lib/middleware"
+        "main/lib/routes/handlers/fallback"
+        "main/lib/routes/handlers/todos"
+        "main/lib/routes/handlers/welcome"
+        "os"
+    )
+
+    //go:embed app/dist
+    var efs embed.FS
+    var srv = server.New()
+    var dev = os.Getenv("DEV") == "1"
+    var render = ssr.New(ssr.Config{Efs: efs, Disk: dev})
+
+    // Creates middleware.
+    var mid = &middleware.Middleware{
+        Hooks: []middleware.Hook{
+            func(c *client.Client, next func()) {
+                // Middleware logic goes here.
+            },
+        },
+    }
+
+    func main() {
+        defer server.Start(srv)
+        defer middleware.Apply(mid, srv.Routes) // Applies middleware hooks to given routes.
+                                                // Remember that deferred functions are executed in reverse,
+                                                // so this line will execute before the server starts.
+        srv.Efs = efs
+        srv.Render = render
+        srv.Routes = []route.Route{
+            {Pattern: "GET /", Handler: fallback.View},
+            {Pattern: "GET /welcome", Handler: welcome.View},
+            {Pattern: "GET /todos", Handler: todos.View},
+            {Pattern: "GET /check", Handler: todos.Check},
+            {Pattern: "GET /uncheck", Handler: todos.Uncheck},
+            {Pattern: "GET /add", Handler: todos.Add},
+            {Pattern: "GET /remove", Handler: todos.Remove},
+        }
+    }
+    ```
+    </TabItem>
+</Tabs>
+
+:::note
+Your implementation may vary, but note how this implementation doesn't directly invoke the next hook, instead it sets a flag.
+This should keep you stack size smaller and thus your traces more readable.
+:::
+
+### Benefits of Guards over Middleware
+
+1. **Explicit**: You can see exactly which routes use which guards by looking at their tags
+2. **Efficient**: Guards only execute when their tags match - no wasted computation
+3. **Composable**: Easy to manage execution order per route
+4. **Clear**: No need to memorize or guess which middleware affects which paths
+
+## How do I implement authentication and authorization?
+
+Authentication and authorization in Frizzante are implemented using guard tags and composition.
+
+### Basic Authentication Pattern
+
+```go
+const authentication tag.Tag = 0
+
+// Create an authentication guard.
+srv.Guards = append(srv.Guards, guard.Guard{
+    Name: "Authentication",
+    Handler: func(c *client.Client, allow func()) {
+        s := session.Start(receive.SessionId(c))
+
+        if !s.Verified {
+            send.Status(c, 401)
+            send.Message(c, "not authenticated")
+            return
+        }
+
+        // Check if session is not expired.
+        if s.Expired {
+            send.Status(c, 401)
+            send.Message(c, "session expired")
+            return
+        }
+
+        allow()
+    },
+    Tags: []tag.Tag{authentication},
+})
+
+// Apply to routes that need authentication
+srv.Routes = append(srv.Routes, route.Route{
+    Pattern: "GET /profile",
+    Handler: profileHandler,
+    Tags: []tag.Tag{authentication}, // Requires authentication
+})
+```
+
+### Composing Multiple Guards
+
+You can compose different guards for more complex authorization scenarios:
+
+```go
+const authentication tag.Tag = 0
+const authorization tag.Tag = 1
+const adminOnly tag.Tag = 2
+
+// Authentication guard - checks if user is logged in
+srv.Guards = append(srv.Guards, guard.Guard{
+    Name: "Verify Session",
+    Handler: func(c *client.Client, allow func()) {
+        if s := session.Start(receive.SessionId(c)); !s.Verified {
+            send.Status(c, 401)
+            send.Message(c, "please log in")
+            return
+        }
+        allow()
+    },
+    Tags: []tag.Tag{authentication},
+})
+
+// Authorization guard - checks user permissions
+srv.Guards = append(srv.Guards, guard.Guard{
+    Name: "Check Permissions",
+    Handler: func(c *client.Client, allow func()) {
+        if s := session.Start(receive.SessionId(c)); !s.HasPermission {
+            send.Status(c, 403)
+            send.Message(c, "insufficient permissions")
+            return
+        }
+        allow()
+    },
+    Tags: []tag.Tag{authorization},
+})
+
+// Admin-only guard
+srv.Guards = append(srv.Guards, guard.Guard{
+    Name: "Admin Only",
+    Handler: func(c *client.Client, allow func()) {
+        if s := session.Start(receive.SessionId(c)); s.Role != "admin" {
+            send.Status(c, 403)
+            send.Message(c, "admin access required")
+            return
+        }
+        allow()
+    },
+    Tags: []tag.Tag{adminOnly},
+})
+
+// Different routes with different authorization requirements
+srv.Routes = []route.Route{
+    {
+        Pattern: "GET /public",
+        Handler: publicHandler,
+        // No tags - publicly accessible
+    },
+    {
+        Pattern: "GET /dashboard",
+        Handler: dashboardHandler,
+        Tags: []tag.Tag{authentication}, // Only needs login
+    },
+    {
+        Pattern: "POST /api/data",
+        Handler: dataHandler,
+        Tags: []tag.Tag{authentication, authorization}, // Needs login + permissions
+    },
+    {
+        Pattern: "DELETE /api/user/{id}",
+        Handler: deleteUserHandler,
+        Tags: []tag.Tag{authentication, adminOnly}, // Needs login + admin role
+    },
+}
+```
+
+For more details on guards and composition, see the [Guards documentation](../guards#composition).
