@@ -296,13 +296,14 @@ import (
     "github.com/razshare/frizzante/send"
 )
 
-type GreetingDetails struct {             // Defines a struct in which to 
-    Name string `json:"name"`             // store the json content.
+type GreetingDetails struct { // Defines a struct in which to 
+    Name string `json:"name"` // store the json content.
 }
 
 func View(c *client.Client) {
-    v := receive.Json[GreetingDetails](c) // Unmarshals the content and returns it.
-    send.Json(c, v)                       // Sends it back.
+    var v GreetingDetails     // Creates a zero value.
+    receive.Json(c, &v)       // Unmarshals the content and returns it.
+    send.Json(c, v)           // Sends it back.
 }
 ```
 
