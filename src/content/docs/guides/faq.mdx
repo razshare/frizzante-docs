@@ -8,46 +8,13 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Frizzante intentionally uses **guards** instead of middleware.
 
-Middleware has some limitations.
+Middleware have some limitations.
 
 - All middleware must be invoked for each request
 - Some middleware may contain path-checking logic while others may not, which introduces ambiguity and more details to remember as a developer
 - Managing middleware execution order across different routes is complex
 
-### Guards
-
-Instead of middleware that run on every request, create tagged guards.
-
-```go
-const authentication tag.Tag = 0
-
-srv.Guards = []guard.Guard{
-    {                                                   // Adds guard.
-        Name: "Authentication",                         // Sets guard name (useful for logs).
-        Handler: func(c *client.Client, allow func()) { // Sets guard handler. If this handler returns without calling allow(), 
-                                                        // it will block the request.
-                                                        // Your guard logic here.
-            allow()                                     // Allows the request through.
-        },
-        Tags: []tag.Tag{authentication},                // Tags the guard. Use this tag on any route in order to apply it.
-    },
-}
-
-srv.Routes = []route.Route{
-    {                                                   // Adds route.
-        Pattern: "GET /dashboard",                      // Sets route pattern.
-        Handler: dashboardHandler,                      // Sets route handler.
-        Tags: []tag.Tag{authentication},                // Tags the route. This will apply the "Authentication" guard.
-    },
-    {                                                   // Adds route.
-        Pattern: "GET /public",                         // Sets route pattern.
-        Handler: publicHandler,                         // Sets route handler.
-                                                        // No tags - this route is not protected by any guard.
-    },
-}
-```
-
-### Benefits of Guards
+While guards have some advantages.
 
 - **Explicit** - you can see exactly which routes use which guards by looking at their tags
 - **Efficient** - guards only execute when their tags match - no wasted computation
@@ -67,7 +34,7 @@ import "github.com/razshare/frizzante/client"
 
 type Hook func(c *client.Client, next func()) // Defines a hook function type which will be used by the middleware.
 
-type Middleware struct {                      // Defines a structure, which holds multiple hooks.
+type Middleware struct {                      // Defines a structure holds multiple hooks.
     Hooks []Hook                              // Defines the actual hooks slice.
 }
 ```
@@ -132,15 +99,15 @@ var render = ssr.New(ssr.Config{Efs: efs, Disk: dev})
 
 var mid = &middleware.Middleware{             // Creates middleware.
     Hooks: []middleware.Hook{                 // Creates hooks.
-        func(c *client.Client, next func()) { // Handle hook.
-                                              // Middleware logic goes here.
+        func(c *client.Client, next func()) { // Adds hook.
+                                              // Logic goes here.
         },
     },
 }
 
 func main() {
     defer server.Start(srv)
-    defer middleware.Apply(mid, srv.Routes)   // Applies middleware hooks to given routes.
+    defer middleware.Apply(mid, srv.Routes)   // Applies middleware to server routes.
                                               // Remember that deferred functions are executed in reverse,
                                               // so this line will execute before the server starts.
     srv.Efs = efs

@@ -6,10 +6,13 @@ import { Tabs, TabItem } from '@astrojs/starlight/components'
 
 You can protect your [routes](../basics#routes) with guards.
 
-A guard allows you to execute logic before a certain request reaches
-a designated route handler.
+A guard is an object that is composed of an optional name, a required handler and slice of **tags**.
 
-Start by adding a guard to the server.
+Just like guards, routes can also be **tagged**.
+
+When a route's tags intersect with a guard's tags, said guard is applied to the route.
+
+You can add guards to the server by appending to or overwriting the `srv.Guards` field.
 
 ```go
 package main
@@ -28,7 +31,7 @@ var srv = server.New()                                           // Creates serv
 func main() {
     defer server.Start(srv)                                      // Starts server.
     srv.Guards = []srv.Guards{
-        {                                                        // Adds nojson guard.
+        {                                                        // Adds guard.
             Name: "NoJson",                                      // Sets guard name (It's useful for logs).
             Handler: func(c *client.Client, allow func()) {      // Sets guard handler.
                if receive.ContentType(c) == "application/json" { // Checks content type.
@@ -44,9 +47,7 @@ func main() {
         {                                                        // Adds route.
             Pattern: "GET /api/xml/data",                        // Sets route pattern.
             Handler: data.Get,                                   // Sets route handler.
-            Tags: []tag.Tag{nojson},                             // Sets route tags. Any guard that intersects 
-                                                                 // with these tags will execute before any 
-                                                                 // request reaches the route's handler.
+            Tags: []tag.Tag{nojson},                             // Sets route tags.
         },
     }
 }
@@ -87,7 +88,7 @@ src.Guards = []guard.Guards{
             send.Message(c, "not authenticated")              // Sends a readable hint message.
             return                                            // At this point allow() has not been called, so the request is blocked.
         },
-        Tags: []tag.Tag{authentication, auth},                // Tags the guard - use any of these tags to apply this guard to any route.
+        Tags: []tag.Tag{authentication, auth},                // Sets the guard tags - use any of these tags to apply this guard to any route.
     },
     {                                                         // Adds authorization guard.
         Name: "Authorization",                                // Sets guard name (useful for logs).
@@ -101,7 +102,7 @@ src.Guards = []guard.Guards{
             send.Message(c, "not authorized")                 // Sends a readable hint message.
             return                                            // At this point allow() has not been called, so the request is blocked.
         },
-        Tags: []tag.Tag{authorization, auth},                 // Tags the guard - use any of these tags to apply this guard to any route.
+        Tags: []tag.Tag{authorization, auth},                 // Sets the guard tags - use any of these tags to apply this guard to any route.
     },
 }
 
