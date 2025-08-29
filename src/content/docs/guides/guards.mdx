@@ -18,40 +18,45 @@ import (
    "github.com/razshare/frizzante/client"
    "github.com/razshare/frizzante/route"
    "github.com/razshare/frizzante/server"
-    "github.com/razshare/frizzante/tag"
+   "github.com/razshare/frizzante/tag"
+   "main/lib/routes/api/xml/data"
 )
 
-const nojson tag.Tag = 0                                    // Creates tag.
-
-var srv = server.New()                                      // Creates server.
+const nojson tag.Tag = 0                                         // Creates tag.
+var srv = server.New()                                           // Creates server.
 
 func main() {
-    defer server.Start(srv)                                 // Starts server.
-    srv.Guards = append(srv.Guards, {                       // Adds guard.
-       Name: "No Json Allowed",                             // Sets guard name. It's useful for logs.
-       Handler: func(c *client.Client, allow func()) {      // Sets guard handler.
-          if receive.ContentType(c) == "application/json" { // If content is of type "application/json"...
-             return                                         // ..returns. This will actually terminate the connection.
-          }
-          allow()                                           // Allows request through.
-       },
-       Tags: []tag.Tag{nojson},                             // Sets guard tags.
-    })
-    srv.Routes = append(srv.Routes, route.Route{            // Adds route.
-       Pattern: "GET /",                                    // Sets route pattern.
-       Handler: func(c *client.Client) {
-          send.Message(c, "Hello.")                         // Sends message.
-       },
-       Tags: []tag.Tag{nojson},                             // Sets route tags. Any guard that intersects 
-                                                            // with these tags will execute before any 
-                                                            // request reaches the route's handler.
-    })
+    defer server.Start(srv)                                      // Starts server.
+    srv.Guards = []srv.Guards{
+        {                                                        // Adds nojson guard.
+            Name: "NoJson",                                      // Sets guard name (It's useful for logs).
+            Handler: func(c *client.Client, allow func()) {      // Sets guard handler.
+               if receive.ContentType(c) == "application/json" { // Checks content type.
+                   return                                        // Returns - this will actually terminate the connection.
+               }
+               allow()                                           // Allows request through.
+            },
+            Tags: []tag.Tag{nojson},                             // Sets guard tags.
+        },
+    }
+
+    srv.Routes = []route.Route{
+        {                                                        // Adds route.
+            Pattern: "GET /api/xml/data",                        // Sets route pattern.
+            Handler: data.Get,                                   // Sets route handler.
+            Tags: []tag.Tag{nojson},                             // Sets route tags. Any guard that intersects 
+                                                                 // with these tags will execute before any 
+                                                                 // request reaches the route's handler.
+        },
+    }
 }
 ```
 
-A guard protects every route whose tags intersect with at least one of its own tags.
+Guards tags and routes tags can intersect.
 
-In this case, the `GET /` route intersects with the `No Json Allowed` guard in tag `nojson`, which means `GET /` is protected by `No Json Allowed`.
+When a route intersects with a guard tag, that guard is applied to the route.
+
+In this case, the `GET /` route intersects with the `NoJson` guard, which means route `GET /` is protected by `NoJson`.
 
 ![](guards100.svg)
 
@@ -60,91 +65,70 @@ In this case, the `GET /` route intersects with the `No Json Allowed` guard in t
 Multiple guards can intersect in order to compose more advanced restrictions.
 
 ```go
-const authorization tag.Tag = 0
-const authentication tag.Tag = 1
-const auth tag.Tag = 2
+const auth tag.Tag = 0           // Creates tag.
+const authentication tag.Tag = 1 // Creates tag.
+const authorization tag.Tag = 2  // Creates tag.
 ```
 
 ```go
-srv.Guards = append(srv.Guards, {                   // Adds guard.
-    Name: "Authorization",                          // Sets guard name. It's useful for logs.
-    Handler: func(c *client.Client, allow func()) { // Sets guard handler. If allow() is never invoked, 
-                                                    // the guard will reject the request.
-       a := receive.Header(c, "Authorization")      // Gets "Authorization" header from the request.
-       if !SuperAdvancedAuthorizationCheckTM(a) {   // If client is not authorized...
-          send.Status(c, 403)                       // ...sends status 403...
-          send.Message(c, "Not authorized.")        // ...and a short message with an explanation.
-          return                                    // Returns. This will actually terminate the connection.
-       }
-       allow()                                      // Allows request through.
+src.Guards = []guard.Guards{
+   {                                                          // Adds authentication guard.
+        Name: "Authentication",                               // Sets guard name (useful for logs).
+        Handler: func(c *client.Client, allow func()) {       // Sets guard handler. Call allow() in order to permit the request to
+                                                              // advance to the next guard or to the route handler.
+            s := session.Start(receive.SessionId(c))          // Starts session.
+            if s.Verified &&                                  // Checks if client is verified. This "Verified" field is
+                                                              // usually set by a public route, like a /login page.
+               time.Since(s.LastActivity) <= 30*time.Minute { // Checks if client has been active in the past 30 minutes.
+               allow()                                        // Allows the request through.
+               return
+            }
+            send.Status(c, 401)                               // Hints to client that authentication is missing.
+            send.Message(c, "not authenticated")              // Sends a readable hint message.
+            return                                            // At this point allow() has not been called, so the request is blocked.
+        },
+        Tags: []tag.Tag{authentication, auth},                // Tags the guard - use any of these tags to apply this guard to any route.
     },
-    Tags: []tag.Tag{authorization, auth},           // Sets guard tags.
-})
+    {                                                         // Adds authorization guard.
+        Name: "Authorization",                                // Sets guard name (useful for logs).
+        Handler: func(c *client.Client, allow func()) {       // Sets guard handler.
+            s := session.Start(receive.SessionId(c))          // Starts session.
+            if s.UserId == receive.path("user_id") {          // Checks if session user id matches requested user id.
+               allow()                                        // Allows the request through.
+               return
+            }
+            send.Status(c, 401)                               // Hints to client that authorization is missing.
+            send.Message(c, "not authorized")                 // Sends a readable hint message.
+            return                                            // At this point allow() has not been called, so the request is blocked.
+        },
+        Tags: []tag.Tag{authorization, auth},                 // Tags the guard - use any of these tags to apply this guard to any route.
+    },
+}
+
+srv.Routes = []route.Route{     
+    {                                                         // Adds route.
+        Pattern: "GET /public",                               // Sets route pattern.
+        Handler: publicHandler,                               // Sets route handler.
+                                                              // No requirements - it's public.
+    },
+    {                                                         // Adds route.
+        Pattern: "GET /dashboard",                            // Sets route pattern.
+        Handler: dashboardHandler,                            // Sets route handler.
+        Tags: []tag.Tag{authentication},                      // Requires authentication.
+    },
+    {                                                         // Adds route.
+        Pattern: "GET /user/{user_id}/settings",              // Sets route pattern.
+        Handler: userSettingsHandler,                         // Sets route handler.
+        Tags: []tag.Tag{auth},                                // Requires auth, meaning both authentication and authorization.
+    },
+    {                                                         // Adds route.
+        Pattern: "DELETE /user/{user_id}",                    // Sets route pattern.
+        Handler: deleteUserHandler,                           // Sets route handler.
+        Tags: []tag.Tag{auth},                                // Requires auth, meaning both authentication and authorization.
+    },
+}
 ```
 
-```go
-srv.Guards = append(srv.Guards, {                     // Adds guard.
-    Name: "Authentication",                           // Sets guard name. It's useful for logs.
-    Handler: func(c *client.Client, allow func()) {   // Sets guard handler. If allow() is never invoked, 
-                                                      // the guard will reject the request.
-       session := session.Start(receive.SessionId(c)) // Starts session.
-       if !session.SignedIn {                         // If the user is not signed in...
-          send.Status(c, 403)                         // ...sends status 403...
-          send.Message(c, "Not authenticated.")       // ...and a short message with an explanation.
-          return                                      // Returns. This will actually terminate the connection.
-       }
-       allow()                                        // Allows request through.
-    },
-    Tags: []tag.Tag{authentication, auth},            // Sets guard tags.
-})
-```
-
-```go
-srv.Routes = append(srv.Routes, {     // Adds route.
-    Pattern: "GET /",                 // Sets route pattern.
-    Handler: func(c *client.Client) { // Sets route handler.
-       send.Message(c, "Hello.")      // Sends message.
-    },
-    Tags: []tag.Tag{auth},            // Sets route tags. Any guard that intersects 
-                                      // with these tags will execute before any 
-                                      // request reaches the route's handler.
-})
-```
-
-In this case, `GET /` is protected by both `Authentication` and `Authorization` guards because they all intersect int `auth`.
+In this example `GET /dashboard` is protected by `authentication`, while `GET /user/{user_id}/settings` and `DELETE /user/{user_id}` are protected by `auth`, which includes both `authentication` and `authorization`.
 
 ![](guards200.svg)
-
-
-:::tip
-You can still apply each guard separately with tags `authorization` and `authentication`.
-
-<Tabs>
-    <TabItem icon='open-book' label='Authorization'>
-       ```go
-       srv.Guards = append(srv.Guards, {    // Adds route.
-          Pattern: "GET /",                 // Sets route pattern.
-          Handler: func(c *client.Client) { // Sets route handler.
-             send.Message(c, "Hello.")      // Sends message.
-          },
-          Tags: []tag.Tag{authorization},   // Sets route tags. Any guard that intersects 
-                                            // with these tags will execute before any 
-                                            // request reaches the route's handler.
-       })
-       ```
-    </TabItem>
-    <TabItem icon='open-book' label='Authentication'>
-       ```go
-       srv.Guards = append(srv.Guards, {    // Adds route.
-          Pattern: "GET /",                 // Sets route pattern.
-          Handler: func(c *client.Client) { // Sets route handler.
-             send.Message(c, "Hello.")      // Sends message.
-          },
-          Tags: []tag.Tag{authentication},  // Sets route tags. Any guard that intersects 
-                                            // with these tags will execute before any 
-                                            // request reaches the route's handler.
-       })
-       ```
-    </TabItem>
-</Tabs>
-:::
