@@ -6,9 +6,9 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Why doesn't Frizzante have middleware?
 
-Frizzante intentionally uses Guards instead of traditional middleware.
+Frizzante intentionally uses **guards** instead of middleware.
 
-Traditional middleware has several limitations
+Middleware has some limitations.
 
 - All middleware must be invoked for each request
 - Some middleware may contain path-checking logic while others may not, which introduces ambiguity and more details to remember as a developer
