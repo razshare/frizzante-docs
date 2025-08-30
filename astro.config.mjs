@@ -37,7 +37,7 @@ export default defineConfig({
             // Each item here is one entry in the navigation menu.
             { label: "Get Started", slug: "guides/get-started" },
             { label: "Basics", slug: "guides/basics" },
-            { label: "CLI", slug: "guides/cli" },
+            { label: "Cli", slug: "guides/cli" },
             { label: "Web Sockets", slug: "guides/web-sockets" },
             { label: "Server Sent Events", slug: "guides/server-sent-events" },
             { label: "Guards", slug: "guides/guards" },
@@ -47,7 +47,7 @@ export default defineConfig({
             { label: "Docker", slug: "guides/docker" },
             { label: "Issues", slug: "guides/issues" },
             { label: "Contributing", slug: "guides/contributing" },
-            { label: "FAQ", slug: "guides/faq" },
+            { label: "Faq", slug: "guides/faq" },
           ],
         },
       ],
