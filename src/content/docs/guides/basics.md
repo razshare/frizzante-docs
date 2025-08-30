@@ -389,6 +389,6 @@ import (
 )
 
 func View(c *client.Client) {
-    send.Navigate(c, "/login") // Redirects to /login with status 303.
+    send.Navigate(c, "/login") // Redirects to /login with status 302.
 }
 ```
