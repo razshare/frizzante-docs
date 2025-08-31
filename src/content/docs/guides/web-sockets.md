@@ -13,9 +13,9 @@ route.Route{Pattern: "GET /ws", Handler: welcome.View}
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/receive"
+    "main/lib/core/send"
     "time"
 )
 
@@ -34,7 +34,7 @@ Then consume the web socket on the client.
 
 ```svelte
 <script lang="ts">
-    import {source} from "$frizzante/scripts/source.ts";
+    import {source} from "$lib/scripts/core/source.ts";
     const messages:string[] = $state([])                     // Creates reactive list of messages.
     const socket = new WebSocket("/ws")                      // Connects to handler.
     socket.send("Hello")                                     // Sends message.

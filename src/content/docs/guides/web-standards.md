@@ -9,7 +9,7 @@ You can use `href()` and `action()` in order to make your hyperlinks and forms a
 ```svelte
 //app/lib/views/Hello.svelte
 <script lang="ts">
-    import { href } from "$frizzante/scripts/href.ts"
+    import { href } from "$lib/scripts/core/href.ts"
 </script>
 
 <a {...href("/some-other-page")}> Go to some other page </a> <!-- Defines a link, which when triggered will either 
@@ -32,9 +32,9 @@ For example, given the following handler using `view.RenderServer`
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
-    "github.com/razshare/frizzante/view"
+    "main/lib/core/client"
+    "main/lib/core/send"
+    "main/lib/core/view"
 )
 
 func View(c *client.Client)  {
@@ -62,9 +62,9 @@ Where `onclick` is defined as
 ```ts
 //app/frizzante/core/scripts/href.ts
 import { getContext } from "svelte"
-import type { View } from "$frizzante/core/types.ts"
-import { route } from "$frizzante/core/scripts/route.ts"
-import { swaps } from "$frizzante/core/scripts/swaps.ts"
+import type { View } from "$lib/scripts/core/types.ts"
+import { route } from "$lib/scripts/core/route.ts"
+import { swaps } from "$lib/scripts/core/swaps.ts"
 
 export function href(path = ""): {
     href: string
@@ -96,7 +96,7 @@ Which swaps the current state and view for new ones served by `/some-other-page`
 ```svelte
 //lib/views/Hello.svelte
 <script lang="ts">
-    import { action } from "$frizzante/scripts/action.ts"
+    import { action } from "$lib/scripts/core/action.ts"
 </script>
 
 <form {...action("/process")}>            <!-- Defines a form. -->
@@ -121,9 +121,9 @@ For example, given the following handler using `view.RenderServer`
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
-    "github.com/razshare/frizzante/view"
+    "main/lib/core/client"
+    "main/lib/core/send"
+    "main/lib/core/view"
 )
 
 func View(c *client.Client)  {
@@ -157,9 +157,9 @@ Where `onsubmit` is defined as
 ```ts
 //app/frizzante/core/scripts/action.ts
 import { getContext } from "svelte"
-import type { View } from "$frizzante/core/types.ts"
-import { route } from "$frizzante/core/scripts/route.ts"
-import { swaps } from "$frizzante/core/scripts/swaps.ts"
+import type { View } from "$lib/scripts/core/types.ts"
+import { route } from "$lib/scripts/core/route.ts"
+import { swaps } from "$lib/scripts/core/swaps.ts"
 
 export function action(path = ""): {
     action: string
@@ -214,7 +214,7 @@ This component passes down `pending` and `error` states through the `children` s
 
 ```svelte
 <script lang="ts">
-    import Link from "$frizzante/links/components/Link.svelte"
+    import Link from "$lib/components/links/Link.svelte"
 </script>
 
 <Link href="/some-path">                             <!-- Defines a link. -->
@@ -249,7 +249,7 @@ This component passes down `pending` and `error` states through the `children` s
 
 ```svelte
 <script lang="ts">
-    import Form from "$frizzante/forms/components/Form.svelte"
+    import Form from "$lib/components/forms/Form.svelte"
 </script>
 
 <Form method="POST" action="/login">                           <!-- Defines a form. -->

@@ -21,8 +21,8 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/server"
-    "github.com/razshare/frizzante/svelte/csr"
+    "main/lib/core/server"
+    "main/lib/core/svelte/csr"
     "os"
 )
 
@@ -30,12 +30,12 @@ import (
 var efs embed.FS
 var srv = server.New()
 var dev = os.Getenv("DEV") == "1"
-var render = csr.New(csr.Config{Efs: efs, Disk: dev})
+var render = ssr.New(ssr.Config{ Efs:  efs, Disk: dev })
 
 func main() {
-    defer server.Start(srv)
-    srv.Efs = efs
-    srv.Render = render
+	defer server.Start(srv)
+	srv.Render = render
+	srv.Efs = efs
 }
 ```
 
@@ -59,8 +59,8 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/server"
-    "github.com/razshare/frizzante/svelte/ssr"
+    "main/lib/core/server"
+    "main/lib/core/svelte/ssr"
     "os"
 )
 
@@ -72,8 +72,8 @@ var render = ssr.New(ssr.Config{Efs: efs, Disk: dev})
 
 func main() {
     defer server.Start(srv)
-    srv.Efs = efs
     srv.Render = render
+    srv.Efs = efs
 }
 ```
 
@@ -99,22 +99,20 @@ Modify this field based on actual performance measurements.
 ## What are views?
 
 Views are **svelte components** exported by 
-`app/exports/server.ts` and/or `app/exports/client.ts`.
+`app/exports.server.ts` and/or `app/exports.client.ts`.
 
 <FileTree>
-    - main.go
     - app
-       - exports
-          - client.ts
-          - server.ts
-          - ...
+        - exports.client.ts
+        - exports.server.ts
+        - ...
 </FileTree>
 
 ## Server Exports
 
-Views that are meant to be rendered on the server should be exported by `app/exports/server.ts`.
+Views that are meant to be rendered on the server should be exported by `app/exports.server.ts`.
 ```ts
-//app/exports/server.ts
+//app/exports.server.ts
 import Welcome from '$lib/views/Welcome.svelte'
 import Profile from '$lib/views/Profile.svelte'
 
@@ -127,9 +125,9 @@ export const views = {  // Defines that components "Welcome" and "Profile"
 
 ## Client Exports
 
-Views that are meant to be rendered on the client should be exported by `app/exports/client.ts`.
+Views that are meant to be rendered on the client should be exported by `app/exports.client.ts`.
 ```ts
-//app/exports/client.ts
+//app/exports.client.ts
 export const views = { // Defines that components "Welcome" and "Profile"
                        // can be bundled and rendered on the client when
                        // sent with send.View().
@@ -144,7 +142,7 @@ in order to bundle them all together and eliminate network latency
 when transitioning between view.
 
 ```ts
-//app/exports/client.ts
+//app/exports.client.ts
 import Welcome from '$lib/views/Welcome.svelte'
 import Profile from '$lib/views/Profile.svelte'
 
@@ -155,7 +153,7 @@ export const views = {
 ```
 
 :::note
-Keys in `app/exports/server.ts` and `app/exports/client.ts` are not mutually exclusive.\
+Keys in `app/exports.server.ts` and `app/exports.client.ts` are not mutually exclusive.\
 You can render the same component on both the server and the client at the same time.\
 See [Render Modes below](#render-modes).
 :::
@@ -169,9 +167,9 @@ Use `send.View()` to send a view.
 package lib
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
-    "github.com/razshare/frizzante/view"
+    "main/lib/core/client"
+    "main/lib/core/send"
+    "main/lib/core/view"
 )
 
 func View(c *client.Client) {
@@ -179,13 +177,13 @@ func View(c *client.Client) {
 }
 ```
 
-The **Name** of the view will be used to lookup the view component exported by **app/exports/server.ts** and/or **app/exports/client.ts**.
+The **Name** of the view will be used to lookup the view component exported by **app/exports.server.ts** and/or **app/exports.client.ts**.
 
 :::tip
-If the view **Name** is not present in neither `app/exports/server.ts` or `app/exports/client.ts`, `send.View()` will resolve into a **Noop**.
+If the view **Name** is not present in neither `app/exports.server.ts` or `app/exports.client.ts`, `send.View()` will resolve into a **Noop**.
 
 The default starter template comes with a client and server routing configuration 
-out of the box, which you can find in [app/frizzante/core/components/*](https://github.com/razshare/frizzante/tree/main/template/project/app/frizzante/core/components).
+out of the box, which you can find in [app/frizzante/core/components/*](https://main/lib/core/tree/main/template/project/app/frizzante/core/components).
 
 Although it's discouraged to do so, you can modify this configuration in order to customize what happens when the view is not found
 and thus avoid **Noops**.
@@ -202,9 +200,9 @@ However, you can use `send.FileOrElse()` in order to send the requested file or 
 package lib
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
-    "github.com/razshare/frizzante/view"
+    "main/lib/core/client"
+    "main/lib/core/send"
+    "main/lib/core/view"
 )
 
 func View(c *client.Client) {
@@ -222,8 +220,8 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/svelte/container/server"
+    "main/lib/core/client"
+    "main/lib/core/svelte/container/server"
 )
 
 //go:embed app/dist
@@ -249,9 +247,9 @@ Optionally, you can send props along with the views by adding a `Props` field to
 package lib
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
-    "github.com/razshare/frizzante/view"
+    "main/lib/core/client"
+    "main/lib/core/send"
+    "main/lib/core/view"
 )
 
 func View(c *client.Client) {
@@ -281,7 +279,7 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 ```svelte
 //app/lib/views/Hello.svelte
 <script lang="ts">
-    import type { View } from "$frizzante/types.ts"
+    import type { View } from "$lib/scripts/core/types.ts"
     const view = getContext("view") as View<{ name: string }> // Retrieves the same server props, 
                                                               // but can be used anywhere in the project
                                                               // regardless of the component hierarchy.
@@ -303,9 +301,9 @@ This is the **default** mode.
 package lib
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
-    "github.com/razshare/frizzante/view"
+    "main/lib/core/client"
+    "main/lib/core/send"
+    "main/lib/core/view"
 )
 
 func View(c *client.Client) {
@@ -330,9 +328,9 @@ your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML
 package lib
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
-    "github.com/razshare/frizzante/view"
+    "main/lib/core/client"
+    "main/lib/core/send"
+    "main/lib/core/view"
 )
 
 func View(c *client.Client) {
@@ -367,9 +365,9 @@ Using `RenderClient`, the view is rendered only on the client by loading a JavaS
 package lib
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
-    "github.com/razshare/frizzante/view"
+    "main/lib/core/client"
+    "main/lib/core/send"
+    "main/lib/core/view"
 )
 
 func View(c *client.Client) {

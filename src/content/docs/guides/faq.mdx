@@ -30,7 +30,7 @@ If you really want middleware-like behavior, you can easily implement it in your
 //lib/middleware/types.go
 package middleware
 
-import "github.com/razshare/frizzante/client"
+import "main/lib/core/client"
 
 type Hook func(c *client.Client, next func()) // Defines a hook function type which will be used by the middleware.
 
@@ -44,8 +44,8 @@ type Middleware struct {                      // Defines a structure holds multi
 package middleware
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/route"
+    "main/lib/core/client"
+    "main/lib/core/route"
 )
 
 func Apply(mid *Middleware, routes []route.Route) {
@@ -79,10 +79,10 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/route"
-    "github.com/razshare/frizzante/server"
-    "github.com/razshare/frizzante/svelte/ssr"
+    "main/lib/core/client"
+    "main/lib/core/route"
+    "main/lib/core/server"
+    "main/lib/core/svelte/ssr"
     "main/lib/middleware"
     "main/lib/routes/handlers/fallback"
     "main/lib/routes/handlers/todos"

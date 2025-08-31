@@ -10,7 +10,7 @@ Create a new server with `server.New()`, then followup with `server.Start()` in 
 //main.go
 package main
 
-import "github.com/razshare/frizzante/server"
+import "main/lib/core/server"
 
 var srv = server.New()      // Creates server.
 
@@ -30,7 +30,7 @@ You can add a new route by appending to or overwriting `srv.Routes`.
 package main
 
 import (
-    "github.com/razshare/frizzante/server"
+    "main/lib/core/server"
     "main/lib/routes/handlers/welcome"
 )
 
@@ -50,7 +50,7 @@ Where `welcome.View` is a function pointer.
 //lib/routes/handlers/welcome/view.go
 package welcome
 
-import "github.com/razshare/frizzante/client"
+import "main/lib/core/client"
 
 func View(c *client.Client) {
     // [...]
@@ -72,8 +72,8 @@ Path fields can then be retrieved with `receive.Path()`.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
+    "main/lib/core/client"
+    "main/lib/core/receive"
 )
 
 
@@ -92,8 +92,8 @@ Use `receive.Message()` to retrieve messages sent by the client.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
+    "main/lib/core/client"
+    "main/lib/core/receive"
 )
 
 func View(c *client.Client) {
@@ -109,8 +109,8 @@ Use `send.Message()` to send a message to the client.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/send"
 )
 
 func View(c *client.Client) {
@@ -127,8 +127,8 @@ Use `receive.Header()` to retrieve header fields sent by the client.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
+    "main/lib/core/client"
+    "main/lib/core/receive"
 )
 
 func View(c *client.Client) {
@@ -143,9 +143,9 @@ Use `send.Header()` to send header fields to the client.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/receive"
+    "main/lib/core/send"
 )
 
 func View(c *client.Client) {
@@ -163,8 +163,8 @@ Use `send.Status()` to send the status of the response to the client.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/send"
 )
 
 func View(c *client.Client) {
@@ -194,8 +194,8 @@ with `send.Message()` is not allowed.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/send"
 )
 
 func View(c *client.Client) {
@@ -235,9 +235,9 @@ Use `receive.Query()` to retrieve query fields.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/receive"
+    "main/lib/core/send"
 )
 
 func View(c *client.Client) {
@@ -262,9 +262,9 @@ route.Route{Pattern: "PUT /", Handler: welcome.View}
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/receive"
+    "main/lib/core/send"
 )
 
 func View(c *client.Client) {
@@ -291,9 +291,9 @@ route.Route{Pattern: "PUT /", Handler: welcome.View}
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/receive"
+    "main/lib/core/send"
 )
 
 type GreetingDetails struct { // Defines a struct in which to 
@@ -316,9 +316,9 @@ Use `receive.Cookie()` to retrieve cookies and `send.Cookie()` to send them.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/receive"
+    "main/lib/core/send"
 )
 
 func View(c *client.Client) {
@@ -348,8 +348,8 @@ it is important to remember that [order of operations matters](#order-of-operati
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/receive"
+    "main/lib/core/client"
+    "main/lib/core/receive"
 )
 
 func View(c *client.Client) {
@@ -366,8 +366,8 @@ Use `send.Redirect()` to redirect to a different location.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/send"
 )
 
 func View(c *client.Client) {
@@ -384,8 +384,8 @@ Use `send.Navigate()` to redirect to a different location with status `302`.
 package welcome
 
 import (
-    "github.com/razshare/frizzante/client"
-    "github.com/razshare/frizzante/send"
+    "main/lib/core/client"
+    "main/lib/core/send"
 )
 
 func View(c *client.Client) {

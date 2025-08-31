@@ -4,7 +4,7 @@ title: Todos Example
 
 The starter template comes with a todos application.
 
-You can find this example at https://github.com/razshare/frizzante-starter.
+You can find this example at https://main/lib/core-starter.
 
 ![alt text](image100.png)
 
@@ -21,9 +21,9 @@ package main
 
 import (
     "embed"
-    "github.com/razshare/frizzante/route"
-    "github.com/razshare/frizzante/server"
-    "github.com/razshare/frizzante/svelte/ssr"
+    "main/lib/core/route"
+    "main/lib/core/server"
+    "main/lib/core/svelte/ssr"
     "main/lib/routes/handlers/fallback"
     "main/lib/routes/handlers/todos"
     "main/lib/routes/handlers/welcome"
@@ -123,7 +123,7 @@ to `"/todos"`.
 //app/lib/views/Welcome.svelte
 <script lang="ts">
     import Layout from "$lib/components/Layout.svelte"
-    import { href } from "$frizzante/scripts/href.ts"
+    import { href } from "$lib/scripts/core/href.ts"
 </script>
 
 <Layout title="Welcome">
@@ -240,8 +240,8 @@ The `"Todos"` view does quite a few things.
 //app/lib/views/Todos.svelte
 <script lang="ts">
     import Layout from "$lib/components/Layout.svelte"
-    import { href } from "$frizzante/core/scripts/href.ts"
-    import {action} from "$frizzante/core/scripts/action.ts";
+    import { href } from "$lib/scripts/core/href.ts"
+    import {action} from "$lib/scripts/core/action.ts";
 
     type Todo = {
        Checked: boolean
@@ -601,5 +601,5 @@ func Add(c *client.Client) {
 
 | Description | Hyperlink |
 |-------------|-----------|
-| A live chat application | https://github.com/razshare/frizzante-example-chat |
-| A blog application with login and registration forms | https://github.com/razshare/frizzante-example-blog |
+| A live chat application | https://main/lib/core-example-chat |
+| A blog application with login and registration forms | https://main/lib/core-example-blog |

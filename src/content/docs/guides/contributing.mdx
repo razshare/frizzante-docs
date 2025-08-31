@@ -11,7 +11,7 @@ This document describes the full process of setting up a fully working local dev
 Clone the `frizzante` repository from GitHub.
 
 ```go
-git clone https://github.com/razshare/frizzante
+git clone https://main/lib/core
 ```
 
 :::tip
@@ -25,7 +25,7 @@ Then when you're done with your changes you will need to submit a pull request.
 Install the frizzante cli using the go cli
 
 ```go
-go install github.com/razshare/frizzante@latest
+go install main/lib/core@latest
 ```
 
 Make sure that Go binaries are on your path.
@@ -64,8 +64,8 @@ module main
 go 1.24
 
 // ...
-replace github.com/razshare/frizzante => /home/user1/path/to/frizzante
-require github.com/razshare/frizzante v1.17.2
+replace main/lib/core => /home/user1/path/to/frizzante
+require main/lib/core v1.17.2
 // ...
 ```
 
@@ -83,13 +83,13 @@ The Go module mirror automatically caches package requests for 30 minutes, regar
 This means that if you modify, for example
 
 ```go
-require github.com/razshare/frizzante v1.17.2
+require main/lib/core v1.17.2
 ```
 
 Into
 
 ```go
-require github.com/razshare/frizzante v1.17.3
+require main/lib/core v1.17.3
 ```
 
 And `v1.17.3` doesn't actually exist yet, your package request will be rejected.\
@@ -187,6 +187,6 @@ make test
 
 Do not start multiple servers when testing features.
 
-The whole test suite makes use of one single server, which is initialized in [init_test.go](https://github.com/razshare/frizzante/blob/main/init_test.go).
+The whole test suite makes use of one single server, which is initialized in [init_test.go](https://main/lib/core/blob/main/init_test.go).
 
 This keeps the test suite fast.
