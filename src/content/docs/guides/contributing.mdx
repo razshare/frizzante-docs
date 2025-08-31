@@ -11,7 +11,7 @@ This document describes the full process of setting up a fully working local dev
 Clone the `frizzante` repository from GitHub.
 
 ```go
-git clone https://main/lib/core
+git clone https://github.com/razshare/frizzante
 ```
 
 :::tip
@@ -20,20 +20,25 @@ If you don't have direct access to it you will need to fork your own `frizzante`
 Then when you're done with your changes you will need to submit a pull request.
 :::
 
-## Install Frizzante Cli
+## Download Frizzante Cli
 
-Install the frizzante cli using the go cli
+Download the latest frizzante binary [from github](https://github.com/razshare/frizzante/releases).
 
-```go
-go install main/lib/core@latest
+:::tip
+Or build it yourself
+```sh
+git clone https://github.com/razshare/frizzante --depth=1
+cd frizzante && make zip && go build -o frizzante
 ```
+:::
 
-Make sure that Go binaries are on your path.
+:::tip
+Remember to add the binary to your path.
 
 ```sh
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
+export PATH="/path/to/frizzante:$PATH"
 ```
+:::
 
 ## Configure Projects
 
@@ -174,19 +179,3 @@ When you're done with your changes you can submit a pull request in order to imp
 ### Automation
 
 Tests will automatically run through GitHub actions when pushing into main or when pull requests are opened into main.
-
-:::tip
-If you want to make sure tests pass before pushing anything, you can run them locally.
-
-```sh
-make test
-```
-:::
-
-### Servers
-
-Do not start multiple servers when testing features.
-
-The whole test suite makes use of one single server, which is initialized in [init_test.go](https://main/lib/core/blob/main/init_test.go).
-
-This keeps the test suite fast.

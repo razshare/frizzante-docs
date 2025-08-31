@@ -179,16 +179,6 @@ func View(c *client.Client) {
 
 The **Name** of the view will be used to lookup the view component exported by **app/exports.server.ts** and/or **app/exports.client.ts**.
 
-:::tip
-If the view **Name** is not present in neither `app/exports.server.ts` or `app/exports.client.ts`, `send.View()` will resolve into a **Noop**.
-
-The default starter template comes with a client and server routing configuration 
-out of the box, which you can find in [app/frizzante/core/components/*](https://main/lib/core/tree/main/template/project/app/frizzante/core/components).
-
-Although it's discouraged to do so, you can modify this configuration in order to customize what happens when the view is not found
-and thus avoid **Noops**.
-:::
-
 ## Default View
 
 There is no way to specify a "**default view**".

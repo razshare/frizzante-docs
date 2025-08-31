@@ -4,8 +4,6 @@ title: Todos Example
 
 The starter template comes with a todos application.
 
-You can find this example at https://main/lib/core-starter.
-
 ![alt text](image100.png)
 
 Although the application itself is simple, there are many 
@@ -601,5 +599,5 @@ func Add(c *client.Client) {
 
 | Description | Hyperlink |
 |-------------|-----------|
-| A live chat application | https://main/lib/core-example-chat |
-| A blog application with login and registration forms | https://main/lib/core-example-blog |
+| A live chat application | https://github.com/razshare/frizzante-example-chat |
+| A blog application with login and registration forms | https://github.com/razshare/frizzante-example-blog |
