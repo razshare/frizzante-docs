@@ -8,21 +8,18 @@ Frizzante is an opinionated web server framework written in Go that uses Svelte 
 
 #### Prerequisites
 
-Download the latest frizzante binary [from github](https://github.com/razshare/frizzante/releases).
+Install frizzante.
 
-:::tip
-Or build it yourself.
 ```sh
-git clone https://github.com/razshare/frizzante --depth=1
-cd frizzante && make zip && go build -o frizzante
+go run github.com/razshare/frizzante/install@latest
 ```
-:::
 
 :::tip
-Remember to add the binary to your path.
+Remember to add Go binaries to your path.
 
 ```sh
-export PATH="/path/to/frizzante:$PATH"
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
 ```
 :::
 
