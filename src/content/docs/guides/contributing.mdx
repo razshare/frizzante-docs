@@ -20,23 +20,20 @@ If you don't have direct access to it you will need to fork your own `frizzante`
 Then when you're done with your changes you will need to submit a pull request.
 :::
 
-## Download Frizzante Cli
+## Install Frizzante
 
-Download the latest frizzante binary [from github](https://github.com/razshare/frizzante/releases).
+Install frizzante.
 
-:::tip
-Or build it yourself
 ```sh
-git clone https://github.com/razshare/frizzante --depth=1
-cd frizzante && make zip && go build -o frizzante
+go run github.com/razshare/frizzante/install@v1.26.6
 ```
-:::
 
 :::tip
-Remember to add the binary to your path.
+Remember to add Go binaries to your path.
 
 ```sh
-export PATH="/path/to/frizzante:$PATH"
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
 ```
 :::
 
