@@ -161,10 +161,10 @@ Runs `vite build` and `vite build --ssr` in order to package the the `app` direc
                     - index-\{hash\}.js
                     - ...
                 - index.html
-            - server.js
+            - app.server.js
 </FileTree>
 
-The output contains a `client` directory which can be simply served as is to the client and a `server.js` file that can be executed on the server in order to render the contents of the application in advanced.
+The output contains a `client` directory which can be simply served as is to the client and a `app.server.js` file that can be executed on the server in order to render the contents of the application in advanced.
 
 :::note
 Your app directory is packaged using [.gen/bun/bin](#configure) by default.
