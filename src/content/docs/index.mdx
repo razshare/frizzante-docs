@@ -31,9 +31,9 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
     ```go
     send.View(c, view.View{
        Name: "Welcome",
-       Render: view.RenderFull,
-       // Render: view.RenderServer,
-       // Render: view.RenderClient,
+       RenderMode: view.RenderModeFull,
+       // RenderMode: view.RenderModeServer,
+       // RenderMode: view.RenderModeClient,
     })
     ```
     <LinkCard title='Read More' href="/frizzante-docs/guides/views/#render-modes"/>

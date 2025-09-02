@@ -280,7 +280,7 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 
 ## Render Modes
 
-You can choose how to render views with the `Render` property.
+You can choose how to render views with the `RenderMode` property.
 
 ### RenderFull
 
@@ -297,9 +297,9 @@ import (
 )
 
 func View(c *client.Client) {
-    send.View(c, view.View{     // Sends view.
-       Name: "Welcome",         // Sets view name.
-       Render: view.RenderFull, // Renders view on server and client.
+    send.View(c, view.View{             // Sends view.
+       Name: "Welcome",                 // Sets view name.
+       RenderMode: view.RenderModeFull, // Renders view on server and client.
     })
 }
 ```
@@ -324,9 +324,9 @@ import (
 )
 
 func View(c *client.Client) {
-    send.View(c, view.View{       // Sends view.
-       Name: "Welcome",           // Sets view name.
-       Render: view.RenderServer, // Renders view only on server.
+    send.View(c, view.View{               // Sends view.
+       Name: "Welcome",                   // Sets view name.
+       RenderMode: view.RenderModeServer, // Renders view only on server.
     })
 }
 ```
@@ -361,9 +361,9 @@ import (
 )
 
 func View(c *client.Client) {
-    send.View(c, view.View{       // Sends view.
-       Name: "Welcome",           // Sets view name.
-       Render: view.RenderClient, // Renders view only on client.
+    send.View(c, view.View{               // Sends view.
+       Name: "Welcome",                   // Sets view name.
+       RenderMode: view.RenderModeClient, // Renders view only on client.
     })
 }
 ```
