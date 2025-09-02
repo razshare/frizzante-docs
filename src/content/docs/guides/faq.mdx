@@ -34,7 +34,7 @@ import "main/lib/core/client"
 
 type Hook func(c *client.Client, next func()) // Defines a hook function type which will be used by the middleware.
 
-type Middleware struct {                      // Defines a structure holds multiple hooks.
+type Middleware struct {                      // Defines a structure holding multiple hooks.
     Hooks []Hook                              // Defines the actual hooks slice.
 }
 ```
