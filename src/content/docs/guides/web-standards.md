@@ -60,33 +60,35 @@ But using `view.RenderModeFull` will instead render
 Where `onclick` is defined as 
 
 ```ts
-//app/frizzante/core/scripts/href.ts
+//app/lib/scripts/core/href.ts
 import { getContext } from "svelte"
 import type { View } from "$lib/scripts/core/types.ts"
 import { route } from "$lib/scripts/core/route.ts"
-import { swaps } from "$lib/scripts/core/swaps.ts"
+import { swap } from "$lib/scripts/core/swap.ts"
+import { IS_BROWSER } from "$lib/scripts/core/constants.ts"
 
-export function href(path = ""): {
-    href: string
-    onclick: (event: MouseEvent) => Promise<boolean>
+export function action(path = ""): {
+    action: string
+    onsubmit: (event: Event) => Promise<void>
 } {
+    if (!IS_BROWSER) {
+        return { action: path, async onsubmit() {} }
+    }
+
     const view = getContext("view") as View<never>
     route(view)
     return {
-       href: path,
-       async onclick(event: MouseEvent) {
-          event.preventDefault()
-          await swaps
-             .swap(view)       // Sets a reference to the current view state (which is reactive).
-             .withPath(path)   // Defines the path where to send the underlying http request.
-             .withUpdate(true) // Defines wether or not to update the application state and url.
-             .play()           // Sends the http request, grabs the result, update the view 
-                               // and also updates state and url if possible.
-          return false
-       },
+        action: path,
+        async onsubmit(event: Event) {
+            event.preventDefault()
+            const form = event.target as HTMLFormElement
+            await swap(form, view).then(function done(record) {
+                record()
+                form.reset()
+            })
+        },
     }
 }
-
 ```
 
 Which swaps the current state and view for new ones served by `/some-other-page`.
@@ -155,41 +157,35 @@ But using `view.RenderModeFull` will instead render
 Where `onsubmit` is defined as 
 
 ```ts
-//app/frizzante/core/scripts/action.ts
+//app/lib/scripts/core/action.ts
 import { getContext } from "svelte"
 import type { View } from "$lib/scripts/core/types.ts"
 import { route } from "$lib/scripts/core/route.ts"
-import { swaps } from "$lib/scripts/core/swaps.ts"
+import { swap } from "$lib/scripts/core/swap.ts"
+import { IS_BROWSER } from "$lib/scripts/core/constants.ts"
 
 export function action(path = ""): {
     action: string
     onsubmit: (event: Event) => Promise<void>
 } {
+    if (!IS_BROWSER) {
+        return { action: path, async onsubmit() {} }
+    }
+
     const view = getContext("view") as View<never>
     route(view)
     return {
-       action: path,
-       async onsubmit(event: Event) {
-          event.preventDefault()
-          const form = event.target as HTMLFormElement
-          const body = new FormData(form)
-          const target = event.target as HTMLFormElement
-
-          await swaps
-             .swap(view)                // Sets a reference to the current view state (which is reactive).
-             .withMethod(target.method) // Sets method for the underlying http request.
-             .withPath(path)            // Sets path where to send the http request.
-             .withBody(body)            // Sets body for the http request.
-             .withUpdate(true)          // Defines wether or not to update the application state and url.
-             .play()                    // Sends the http request, grabs the result, update the view 
-                                        // and application's state and url (if possible, as defined by withUpdate()).
-             .then(function done() {
-                form.reset()            // Resets the form in order to mimic the standard form behavior.
-             })
-       },
+        action: path,
+        async onsubmit(event: Event) {
+            event.preventDefault()
+            const form = event.target as HTMLFormElement
+            await swap(form, view).then(function done(record) {
+                record()
+                form.reset()
+            })
+        },
     }
 }
-
 ```
 
 Which swaps the current state and view for new ones served by `/process`.
