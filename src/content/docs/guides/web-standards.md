@@ -67,25 +67,30 @@ import { route } from "$lib/scripts/core/route.ts"
 import { swap } from "$lib/scripts/core/swap.ts"
 import { IS_BROWSER } from "$lib/scripts/core/constants.ts"
 
-export function action(path = ""): {
-    action: string
-    onsubmit: (event: Event) => Promise<void>
+export function href(path = ""): {
+    href: string
+    onclick: (event: MouseEvent) => Promise<boolean>
 } {
     if (!IS_BROWSER) {
-        return { action: path, async onsubmit() {} }
+        return {
+            href: path,
+            async onclick() {
+                return true
+            },
+        }
     }
 
+    const anchor = document.createElement("a")
+    anchor.href = path
     const view = getContext("view") as View<never>
     route(view)
     return {
-        action: path,
-        async onsubmit(event: Event) {
+        href: path,
+        async onclick(event: MouseEvent) {
             event.preventDefault()
-            const form = event.target as HTMLFormElement
-            await swap(form, view).then(function done(record) {
-                record()
-                form.reset()
-            })
+            const record = await swap(anchor, view)
+            record()
+            return false
         },
     }
 }
