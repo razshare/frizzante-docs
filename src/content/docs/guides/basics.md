@@ -76,7 +76,6 @@ import (
     "main/lib/core/receive"
 )
 
-
 func View(c *client.Client) {
     _ = receive.Path(c, "name") // Retrieves field "name".
 }
