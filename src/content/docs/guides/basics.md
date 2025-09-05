@@ -53,7 +53,7 @@ package welcome
 import "main/lib/core/client"
 
 func View(c *client.Client) {
-    // [...]
+    
 }
 ```
 

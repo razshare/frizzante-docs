@@ -33,9 +33,9 @@ var dev = os.Getenv("DEV") == "1"
 var render = ssr.New(ssr.Config{ Efs:  efs, Disk: dev })
 
 func main() {
-	defer server.Start(srv)
-	srv.Render = render
-	srv.Efs = efs
+    defer server.Start(srv)
+    srv.Render = render
+    srv.Efs = efs
 }
 ```
 
