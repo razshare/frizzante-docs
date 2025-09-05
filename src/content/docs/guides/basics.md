@@ -57,7 +57,7 @@ func View(c *client.Client) {
 }
 ```
 
-## Route Patterns
+## Path Fields
 
 Route patterns can define dynamic **path fields** using `{}` syntax.
 
@@ -277,7 +277,7 @@ func View(c *client.Client) {
 
 ## Json
 
-Use `receive.Json()` to parse incoming content as json when using `POST` and `PUT` http verbs.
+Use `receive.Json()` to parse incoming content as json when using `POST` and `PUT` http verbs and `send.Json()` to send json content.
 
 
 ```go
