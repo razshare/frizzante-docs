@@ -53,13 +53,13 @@ srv.Routes = []route.Route{
 }
 ```
 
-In this case, the `GET /api/xml/data` route intersects with the `NoJson` guard, which means route `GET /` is protected by `NoJson`.
+In this case `"GET /api/xml/data"` is tagged with `nojson`, which means it's protected by `"NoJson"`.
 
 ![](guards100.svg)
 
 ## Composition
 
-Multiple guards can intersect in order to compose more advanced restrictions.
+You can compose multiple tags in order to create more advanced restrictions.
 
 ```go
 const auth tag.Tag = 0           // Creates tag.
@@ -126,6 +126,6 @@ srv.Routes = []route.Route{
 }
 ```
 
-In this example `GET /dashboard` is protected by `authentication`, while `GET /user/{user_id}/settings` and `DELETE /user/{user_id}` are protected by `auth`, which includes both `authentication` and `authorization`.
+In this example `"GET /dashboard"` is protected by `"Authentication"`, while `"GET /user/{user_id}/settings"` and `"DELETE /user/{user_id}"` are protected by both `"Authentication"` and `"Authorization"`.
 
 ![](guards200.svg)
