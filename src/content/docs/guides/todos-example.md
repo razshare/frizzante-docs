@@ -84,7 +84,7 @@ func View(c *client.Client) {
 This `"Welcome"` view is exported by the application for both the client and the server.
 
 ```ts
-//app/exports/server.ts
+//app/exports.server.ts
 import Welcome from "$lib/views/Welcome.svelte"
 import Todos from "$lib/views/Todos.svelte"
 
@@ -95,7 +95,7 @@ export const views = {
 ```
 
 ```ts
-//app/exports/client.ts
+//app/exports.client.ts
 export const views = {
     "Welcome": import("$lib/views/Welcome.svelte"), // Exporting "Welcome".
     "Todos": import("$lib/views/Todos.svelte"),
@@ -138,7 +138,7 @@ Instead it uses the `href()` function to set said attribute.
 This is because in reality `href()` also returns a `onclick` handler.
 
 ```ts
-//frizzante/scripts/href.ts
+//lib/scripts/core/href.ts
 export function href(path = ""): {
     href: string
     onclick: (e: MouseEvent) => void
@@ -204,7 +204,7 @@ func View(c *client.Client) {
 By default the session state has a few items in it.
 
 ```go
-//lib/session/start.go
+//lib/session/memory/start.go
 var Sessions = map[string]*Session{}
 
 func Start(id string) *Session {
