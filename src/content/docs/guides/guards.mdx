@@ -8,10 +8,6 @@ You can protect your [routes](../basics#routes) with guards.
 
 A guard is an object that is composed of an optional name, a required handler and slice of **tags**.
 
-Just like guards, routes can also be **tagged**.
-
-When a route's tags intersect with a guard's tags, said guard is applied to the route.
-
 You can add guards to the server by appending to or overwriting the `srv.Guards` field.
 
 ```go
@@ -52,6 +48,8 @@ func main() {
     }
 }
 ```
+
+Just like guards, routes can also be **tagged**.
 
 Guards tags and routes tags can intersect.
 
