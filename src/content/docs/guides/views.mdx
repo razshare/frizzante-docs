@@ -228,9 +228,9 @@ func main() {
 }
 ```
 
-## Props
+## View Properties
 
-Optionally, you can send props along the `View` by specifying a `Props` field.
+Optionally, you can specify properties for your `View` with the `Props` field.
 
 ```go
 //lib/routes/handlers/welcome/view.go
@@ -258,13 +258,18 @@ These properties are passed down to your view component.
 //app/lib/views/Hello.svelte
 <script lang="ts">
     type Props = { name: string }
-    let {name}:Props = $props() // Retrieves server props.
+    let {name}:Props = $props() // Retrieves view props.
 </script>
 
 <h1>Hello {name}</h1>
 ```
 
-You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to retrieve your props.
+:::note
+View properties are initialized with [$state()](https://svelte.dev/docs/svelte/$state) and thus are reactive by default.
+:::
+
+:::tip
+You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to retrieve your properties.
 
 ```svelte
 //app/lib/views/Hello.svelte
@@ -277,6 +282,9 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 
 <h1>Hello {view.props.name}</h1>
 ```
+:::note
+`view` is initialized with [$state()](https://svelte.dev/docs/svelte/$state) and thus is reactive.
+:::
 
 ## Render Modes
 
