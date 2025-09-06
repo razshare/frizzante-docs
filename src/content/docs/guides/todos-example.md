@@ -21,7 +21,7 @@ import (
     "embed"
     "main/lib/core/route"
     "main/lib/core/server"
-    "main/lib/core/svelte/ssr"
+    "main/lib/core/view/ssr"
     "main/lib/routes/handlers/fallback"
     "main/lib/routes/handlers/todos"
     "main/lib/routes/handlers/welcome"
