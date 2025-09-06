@@ -41,7 +41,7 @@ func main() {
 }
 ```
 
-Just like guards, routes can also be **tagged**, and in order to guard a route, you need to tag it.
+You can protect a route by **tagging** it.
 
 ```go
 srv.Routes = []route.Route{
@@ -53,7 +53,7 @@ srv.Routes = []route.Route{
 }
 ```
 
-In this case, the `GET /` route intersects with the `NoJson` guard, which means route `GET /` is protected by `NoJson`.
+In this case, the `GET /api/xml/data"` route intersects with the `NoJson` guard, which means route `GET /` is protected by `NoJson`.
 
 ![](guards100.svg)
 
