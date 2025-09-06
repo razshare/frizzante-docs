@@ -38,22 +38,20 @@ func main() {
             Tags: []tag.Tag{nojson},                             // Sets guard tags.
         },
     }
-
-    srv.Routes = []route.Route{
-        {                                                        // Adds route.
-            Pattern: "GET /api/xml/data",                        // Sets route pattern.
-            Handler: data.Get,                                   // Sets route handler.
-            Tags: []tag.Tag{nojson},                             // Sets route tags.
-        },
-    }
 }
 ```
 
-Just like guards, routes can also be **tagged**.
+Just like guards, routes can also be **tagged**, and in order to guard a route, you need to tag it.
 
-Guards tags and routes tags can intersect.
-
-When a route intersects with a guard tag, that guard is applied to the route.
+```go
+srv.Routes = []route.Route{
+    {                                                        // Adds route.
+        Pattern: "GET /api/xml/data",                        // Sets route pattern.
+        Handler: data.Get,                                   // Sets route handler.
+        Tags: []tag.Tag{nojson},                             // Sets route tags.
+    },
+}
+```
 
 In this case, the `GET /` route intersects with the `NoJson` guard, which means route `GET /` is protected by `NoJson`.
 
