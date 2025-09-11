@@ -290,9 +290,9 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 
 You can choose how to render views by setting the `RenderMode` field in your `View`.
 
-### RenderFull
+### RenderModeFull
 
-Using `RenderFull`, the view is rendered on both the server and the client.<br/>
+Using `RenderModeFull`, the view is rendered on both the server and the client.<br/>
 This is the **default** mode.
 ```go
 //lib/routes/handlers/welcome/view.go
@@ -316,9 +316,9 @@ func View(c *client.Client) {
 Requires an [ssr function](#ssr-function).
 :::
 
-### RenderServer
+### RenderModeServer
 
-Using `RenderServer`, the view is rendered only on the server.<br/>
+Using `RenderModeServer`, the view is rendered only on the server.<br/>
 You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
 your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
 ```go
@@ -344,7 +344,7 @@ Requires an [ssr function](#ssr-function).
 :::
 
 :::tip
-While using `RenderServer` the view won't serve a JavaScript bundle,
+While using `RenderModeServer` the view won't serve a JavaScript bundle,
 but you can still use the `<svelte:head>` special
 tag in order to load scripts dynamically.
 ```svelte
@@ -355,9 +355,9 @@ tag in order to load scripts dynamically.
 :::
 
 
-### RenderClient
+### RenderModeClient
 
-Using `RenderClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
+Using `RenderModeClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
 ```go
 //lib/routes/handlers/welcome/view.go
 package lib
