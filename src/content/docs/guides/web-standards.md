@@ -80,13 +80,14 @@ export function href(path = ""): {
         }
     }
 
+    const anchor = document.createElement("a")
+    anchor.href = path
     const view = getContext("view") as View<never>
     route(view)
     return {
         href: path,
         async onclick(event: MouseEvent) {
             event.preventDefault()
-            const anchor = event.target as HTMLAnchorElement
             const record = await swap(anchor, view)
             record()
             return false
