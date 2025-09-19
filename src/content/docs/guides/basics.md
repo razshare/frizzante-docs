@@ -201,7 +201,7 @@ func View(c *client.Client) {
 }
 ```
 
-`send.Status(404)` will fail and the client will receive status `200` instead of `404`.
+`send.Status(c, 404)` will fail and the client will receive status `200` instead of `404`.
 
 ```http
 HTTP/1.1 200 OK
