@@ -2,7 +2,7 @@
 title: Type Definitions
 ---
 
-import { FileTree, Steps } from '@astrojs/starlight/components'
+import { Steps } from '@astrojs/starlight/components'
 
 It is possible, but not required, to generate TypeScript type definitions from Go structs with `types.Generate[T]()`, where `T` is the type you wish to generate.
 
@@ -10,12 +10,27 @@ It is possible, but not required, to generate TypeScript type definitions from G
 <Steps>
 1. Define your Go types.
     ```go
-    //lib/routes/handlers/welcome/types.go
+    //lib/routes/handlers/welcome/view.go
     package welcome
+
+    import (
+        "main/lib/core/client"
+        "main/lib/core/send"
+        "main/lib/core/view"
+    )
 
     type Props struct {
         Message string `json:"message"`
-        Error string   `json:"error"`
+        Error   string `json:"error"`
+    }
+
+    func View(c *client.Client) {
+        send.View(c, view.View{
+            Name: "Welcome",
+            Props: Props{
+                Message: "hello",
+            },
+        })
     }
     ```
     
@@ -23,9 +38,9 @@ It is possible, but not required, to generate TypeScript type definitions from G
     Struct `json` tags are not required, but if present, they will be taken into account when generating type definitions.
     :::
 
-1. Create a new `init.go` file and define the `init()` function in it.
+1. Create a new `types.go` file and define the `init()` function in it.
     ```go
-    //init.go
+    //types.go
     //go:build types
 
     package main
@@ -38,7 +53,7 @@ It is possible, but not required, to generate TypeScript type definitions from G
     :::
 1. Call `types.Generate[T]()` in the `init()` function.
     ```go
-    //init.go
+    //types.go
     //go:build types
 
     package main
@@ -56,11 +71,7 @@ It is possible, but not required, to generate TypeScript type definitions from G
     ```sh
     frizzante -gtypes
     ```
-    This will generate types at `app/types/gen`.
-    <FileTree>
-    - app/types/gen/main/lib/routes/handlers/welcome
-        - Props.d.ts
-    </FileTree>
+    This will generate your type definitions in `app/types/gen`.
 
     ```ts
     //app/types/gen/main/lib/routes/handlers/welcome/Props.d.ts
