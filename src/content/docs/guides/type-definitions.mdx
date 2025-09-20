@@ -12,8 +12,8 @@ It is possible, but not required, to generate TypeScript type definitions from G
     :::tip
     Defined your types in `lib/routes/handlers/{handler}/types.go` file.
     ```go
-    //lib/routes/handlers/todos/types.go
-    package todos
+    //lib/routes/handlers/handler1/types.go
+    package handler1
 
     type Props struct {
         Message string `json:"message"`
@@ -28,7 +28,7 @@ It is possible, but not required, to generate TypeScript type definitions from G
     Define the `init()` function in a `init.go` file, nearby your `types.go` file.
 
     <FileTree>
-        - lib/routes/handlers/\{handler\}
+        - lib/routes/handlers/handler1
             - init.go
             - types.go
     </FileTree>
@@ -36,20 +36,20 @@ It is possible, but not required, to generate TypeScript type definitions from G
     :::caution
     Make sure to exclude this file from the build process by tagging it with `//go:build types`.
     ```go
-    //lib/routes/handlers/todos/init.go
+    //lib/routes/handlers/handler1/init.go
     //go:build types
 
-    package todos
+    package handler1
 
     func init() {}
     ```
     :::
 1. Call `types.Generate[T]()` in the `init()` function.
     ```go
-    //lib/routes/handlers/todos/init.go
+    //lib/routes/handlers/handler1/init.go
     //go:build types
 
-    package todos
+    package handler1
 
     import "main/lib/core/types"
 
@@ -63,12 +63,12 @@ It is possible, but not required, to generate TypeScript type definitions from G
     ```
     This will generate types at `app/types/gen`.
     <FileTree>
-    - app/types/gen/main/lib/routes/handlers/todos
+    - app/types/gen/main/lib/routes/handlers/handler1
         - Props.d.ts
     </FileTree>
 
     ```ts
-    //app/types/gen/main/lib/routes/handlers/todos/Props.d.ts
+    //app/types/gen/main/lib/routes/handlers/handler1/Props.d.ts
     export type Props = {
         message: string
         error: string
