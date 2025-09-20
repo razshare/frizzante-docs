@@ -8,12 +8,10 @@ It is possible, but not required, to generate TypeScript type definitions from G
 
 
 <Steps>
-1. Create a new file and define your Go types in it.
-    :::tip
-    Defined your types in `lib/routes/handlers/{handler}/types.go` file.
+1. Define your Go types.
     ```go
-    //lib/routes/handlers/handler1/types.go
-    package handler1
+    //lib/routes/handlers/welcome/types.go
+    package welcome
 
     type Props struct {
         Message string `json:"message"`
@@ -22,39 +20,34 @@ It is possible, but not required, to generate TypeScript type definitions from G
     ```
     
     Struct `json` tags are not required, but if present, they will be taken into account when generating type definitions.
-    :::
-1. Create a new file and define the `init()` function in it.
-    :::tip
-    Define the `init()` function in a `init.go` file, nearby your `types.go` file.
 
-    <FileTree>
-        - lib/routes/handlers/handler1
-            - init.go
-            - types.go
-    </FileTree>
-    :::
-    :::caution
-    Make sure to exclude this file from the build process by tagging it with `//go:build types`.
+1. Create a new `init.go` file and define the `init()` function in it.
     ```go
-    //lib/routes/handlers/handler1/init.go
+    //init.go
     //go:build types
 
-    package handler1
+    package main
 
     func init() {}
     ```
+
+    :::caution
+    Make sure to exclude this file from the build process by tagging it with `//go:build types`.
     :::
 1. Call `types.Generate[T]()` in the `init()` function.
     ```go
-    //lib/routes/handlers/handler1/init.go
+    //init.go
     //go:build types
 
-    package handler1
+    package main
 
-    import "main/lib/core/types"
+    import (
+        "main/lib/core/types"
+        "main/lib/routes/handlers/welcome"
+    )
 
     func init() {
-        types.Generate[Props]()
+        types.Generate[welcome.Props]()
     }
     ```
 1. Generate type definitions.
@@ -63,12 +56,12 @@ It is possible, but not required, to generate TypeScript type definitions from G
     ```
     This will generate types at `app/types/gen`.
     <FileTree>
-    - app/types/gen/main/lib/routes/handlers/handler1
+    - app/types/gen/main/lib/routes/handlers/welcome
         - Props.d.ts
     </FileTree>
 
     ```ts
-    //app/types/gen/main/lib/routes/handlers/handler1/Props.d.ts
+    //app/types/gen/main/lib/routes/handlers/welcome/Props.d.ts
     export type Props = {
         message: string
         error: string
