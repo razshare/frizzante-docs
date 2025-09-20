@@ -1,0 +1,77 @@
+---
+title: Type Definitions
+---
+
+import { FileTree, Steps } from '@astrojs/starlight/components'
+
+It is possible, but not required, to generate TypeScript type definitions from Go structs with `types.Generate[T]()`, where `T` is the type you wish to generate.
+
+
+<Steps>
+1. Create a new file and define your Go types in it.
+    :::tip
+    Defined your types in `lib/routes/handlers/{handler}/types.go` file.
+    ```go
+    //lib/routes/handlers/todos/types.go
+    package todos
+
+    type Props struct {
+        Message string `json:"message"`
+        Error string   `json:"error"`
+    }
+    ```
+    
+    Struct `json` tags are not required, but if present, they will be taken into account when generating type definitions.
+    :::
+1. Create a new file and define the `init()` function in it.
+    :::tip
+    Define the `init()` function in a `init.go` file, nearby your `types.go` file.
+
+    <FileTree>
+        - lib/routes/handlers/\{handler\}
+            - init.go
+            - types.go
+    </FileTree>
+    :::
+    :::caution
+    Make sure to exclude this file from the build process by tagging it with `//go:build types`.
+    ```go
+    //lib/routes/handlers/todos/init.go
+    //go:build types
+
+    package todos
+
+    func init() {}
+    ```
+    :::
+1. Call `types.Generate[T]()` in the `init()` function.
+    ```go
+    //lib/routes/handlers/todos/init.go
+    //go:build types
+
+    package todos
+
+    import "main/lib/core/types"
+
+    func init() {
+        types.Generate[Props]()
+    }
+    ```
+1. Generate type definitions.
+    ```sh
+    frizzante -gtypes
+    ```
+    This will generate types at `app/types/gen`.
+    <FileTree>
+    - app/types/gen/main/lib/routes/handlers/todos
+        - Props.d.ts
+    </FileTree>
+
+    ```ts
+    //app/types/gen/main/lib/routes/handlers/todos/Props.d.ts
+    export type Props = {
+        message: string
+        error: string
+    }
+    ```
+</Steps>

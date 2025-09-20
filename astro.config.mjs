@@ -42,6 +42,7 @@ export default defineConfig({
             { label: "Guards", slug: "guides/guards" },
             { label: "Views", slug: "guides/views" },
             { label: "Web Standards", slug: "guides/web-standards" },
+            { label: "Type Definitions", slug: "guides/type-definitions" },
             { label: "Todos Example", slug: "guides/todos-example" },
             { label: "Cli", slug: "guides/cli" },
             { label: "Docker", slug: "guides/docker" },
