@@ -7,7 +7,7 @@ You can use `href()` and `action()` in order to make your hyperlinks and forms a
 ## Adaptive Hyperlinks
 
 ```svelte
-//app/lib/views/Hello.svelte
+//app/lib/views/Welcome.svelte
 <script lang="ts">
     import { href } from "$lib/scripts/core/href.ts"
 </script>
@@ -101,7 +101,7 @@ Which swaps the current state and view for new ones served by `/some-other-page`
 ## Adaptive Forms
 
 ```svelte
-//lib/views/Hello.svelte
+//lib/views/Welcome.svelte
 <script lang="ts">
     import { action } from "$lib/scripts/core/action.ts"
 </script>
