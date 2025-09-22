@@ -30,7 +30,7 @@ import (
 var efs embed.FS
 var srv = server.New()
 var dev = os.Getenv("DEV") == "1"
-var render = csr.New(ssr.Config{ Efs:  efs, Disk: dev })
+var render = csr.New(ssr.Config{ Efs: efs, Disk: dev })
 
 func main() {
     defer server.Start(srv)
