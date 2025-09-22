@@ -223,7 +223,7 @@ status is locked
 
 `status is locked`, meaning the status code has already been sent to the client and there's nothing you can do about it.
 
-## Queries
+## Query Fields
 
 Use `receive.Query()` to retrieve query fields.
 
@@ -243,7 +243,7 @@ func View(client *client.Client) {
 }
 ```
 
-## Forms
+## Form Values
 
 Use `receive.FormValue()` to retrieve and parse form values when using `POST` and `PUT` http verbs.
 
