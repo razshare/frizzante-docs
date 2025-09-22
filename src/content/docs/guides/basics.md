@@ -223,9 +223,9 @@ status is locked
 
 `status is locked`, meaning the status code has already been sent to the client and there's nothing you can do about it.
 
-## Query Values
+## Query Strings
 
-Use `receive.Query()` to retrieve query values.
+Use `receive.Query()` to retrieve query strings.
 
 ```go
 //lib/routes/handlers/welcome/view.go
