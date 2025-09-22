@@ -57,46 +57,7 @@ But using `view.RenderModeFull` will instead render
 <a href="/some-other-page" onclick="onclick"> Go to some other page </a>
 ```
 
-Where `onclick` is defined as 
-
-```ts
-//app/lib/scripts/core/href.ts
-import { getContext } from "svelte"
-import type { View } from "$lib/scripts/core/types.ts"
-import { route } from "$lib/scripts/core/route.ts"
-import { swap } from "$lib/scripts/core/swap.ts"
-import { IS_BROWSER } from "$lib/scripts/core/constants.ts"
-
-export function href(path = ""): {
-    href: string
-    onclick: (event: MouseEvent) => Promise<boolean>
-} {
-    if (!IS_BROWSER) {
-        return {
-            href: path,
-            async onclick() {
-                return true
-            },
-        }
-    }
-
-    const anchor = document.createElement("a")
-    anchor.href = path
-    const view = getContext("view") as View<never>
-    route(view)
-    return {
-        href: path,
-        async onclick(event: MouseEvent) {
-            event.preventDefault()
-            const record = await swap(anchor, view)
-            record()
-            return false
-        },
-    }
-}
-```
-
-Which swaps the current state and view for new ones served by `/some-other-page`.
+Where `onclick` takes care of fetching the new state and view from `/some-other-page`.
 
 ## Adaptive Forms
 
@@ -159,42 +120,7 @@ But using `view.RenderModeFull` will instead render
 </form>
 ```
 
-Where `onsubmit` is defined as 
-
-```ts
-//app/lib/scripts/core/action.ts
-import { getContext } from "svelte"
-import type { View } from "$lib/scripts/core/types.ts"
-import { route } from "$lib/scripts/core/route.ts"
-import { swap } from "$lib/scripts/core/swap.ts"
-import { IS_BROWSER } from "$lib/scripts/core/constants.ts"
-
-export function action(path = ""): {
-    action: string
-    onsubmit: (event: Event) => Promise<void>
-} {
-    if (!IS_BROWSER) {
-        return { action: path, async onsubmit() {} }
-    }
-
-    const view = getContext("view") as View<never>
-    route(view)
-    return {
-        action: path,
-        async onsubmit(event: Event) {
-            event.preventDefault()
-            const form = event.target as HTMLFormElement
-            await swap(form, view).then(function done(record) {
-                record()
-                form.reset()
-            })
-        },
-    }
-}
-```
-
-Which swaps the current state and view for new ones served by `/process`.
-
+Where `onsubmit` takes care of submitting the form and fetching the new state and view from `/process`.
 
 ## Link Component
 
