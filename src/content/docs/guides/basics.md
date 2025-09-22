@@ -245,7 +245,7 @@ func View(client *client.Client) {
 
 ## Forms
 
-Use `receive.Value()` to retrieve and parse form values when using `POST` and `PUT` http verbs.
+Use `receive.FormValue()` to retrieve and parse form values when using `POST` and `PUT` http verbs.
 
 
 ```go
@@ -265,8 +265,8 @@ import (
 )
 
 func View(client *client.Client) {
-    name := receive.Value(client, "name") // Retrieves field "name".
-    send.Message(client, "Hello " + name) // Sends message.
+    name := receive.FormValue(client, "name") // Retrieves field "name".
+    send.Message(client, "Hello " + name)     // Sends message.
 }
 ```
 
