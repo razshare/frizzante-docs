@@ -104,7 +104,7 @@ export const views = {
 
 These are key/value records.
 
-The keys are important, because they dictate the `Name` of the view, the actual property `Name` of the view.
+The keys are important, because they dictate the `Name` of the view, the actual `Name` field of the view.
 
 ```go
 view.View{
