@@ -266,7 +266,7 @@ import (
 
 func View(client *client.Client) {
     form := receive.Form(client)          // Retrieves the form.
-    nname := f.Get("name")                // Retrieves field "name".
+    name := form.Get("name")              // Retrieves field "name".
     send.Message(client, "Hello " + name) // Sends message.
 }
 ```
