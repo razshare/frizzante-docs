@@ -69,59 +69,59 @@ const authorization tag.Tag = 2  // Creates tag.
 
 ```go
 src.Guards = []guard.Guards{
-   {                                                          // Adds authentication guard.
-        Name: "Authentication",                               // Sets guard name (useful for logs).
-        Handler: func(client *client.Client, allow func()) {  // Sets guard handler. Call allow() in order to permit the request to
-                                                              // advance to the next guard or to the route handler.
-            s := session.Start(receive.SessionId(client))     // Starts session.
-            if s.Verified &&                                  // Checks if client is verified. This "Verified" field is
-                                                              // usually set by a public route, like a /login page.
-               time.Since(s.LastActivity) <= 30*time.Minute { // Checks if client has been active in the past 30 minutes.
-               allow()                                        // Allows the request through.
+   {                                                              // Adds authentication guard.
+        Name: "Authentication",                                   // Sets guard name (useful for logs).
+        Handler: func(client *client.Client, allow func()) {      // Sets guard handler. Call allow() in order to permit the request to
+                                                                  // advance to the next guard or to the route handler.
+            state := session.Start(receive.SessionId(client))     // Starts session.
+            if state.Verified &&                                  // Checks if client is verified. This "Verified" field is
+                                                                  // usually set by a public route, like a /login page.
+               time.Since(state.LastActivity) <= 30*time.Minute { // Checks if client has been active in the past 30 minutes.
+               allow()                                            // Allows the request through.
                return
             }
-            send.Status(client, 401)                          // Hints to client that authentication is missing.
-            send.Message(client, "not authenticated")         // Sends a readable hint message.
-            return                                            // At this point allow() has not been called, so the request is blocked.
+            send.Status(client, 401)                              // Hints to client that authentication is missing.
+            send.Message(client, "not authenticated")             // Sends a readable hint message.
+            return                                                // At this point allow() has not been called, so the request is blocked.
         },
-        Tags: []tag.Tag{authentication, auth},                // Sets the guard tags - use any of these tags to apply this guard to any route.
+        Tags: []tag.Tag{authentication, auth},                    // Sets the guard tags - use any of these tags to apply this guard to any route.
     },
-    {                                                         // Adds authorization guard.
-        Name: "Authorization",                                // Sets guard name (useful for logs).
-        Handler: func(client *client.Client, allow func()) {  // Sets guard handler.
-            s := session.Start(receive.SessionId(client))     // Starts session.
-            if s.UserId == receive.path("user_id") {          // Checks if session user id matches requested user id.
-               allow()                                        // Allows the request through.
+    {                                                             // Adds authorization guard.
+        Name: "Authorization",                                    // Sets guard name (useful for logs).
+        Handler: func(client *client.Client, allow func()) {      // Sets guard handler.
+            state := session.Start(receive.SessionId(client))     // Starts session.
+            if state.UserId == receive.path("user_id") {          // Checks if session user id matches requested user id.
+               allow()                                            // Allows the request through.
                return
             }
-            send.Status(client, 401)                          // Hints to client that authorization is missing.
-            send.Message(client, "not authorized")            // Sends a readable hint message.
-            return                                            // At this point allow() has not been called, so the request is blocked.
+            send.Status(client, 401)                              // Hints to client that authorization is missing.
+            send.Message(client, "not authorized")                // Sends a readable hint message.
+            return                                                // At this point allow() has not been called, so the request is blocked.
         },
-        Tags: []tag.Tag{authorization, auth},                 // Sets the guard tags - use any of these tags to apply this guard to any route.
+        Tags: []tag.Tag{authorization, auth},                     // Sets the guard tags - use any of these tags to apply this guard to any route.
     },
 }
 
 srv.Routes = []route.Route{     
-    {                                                         // Adds route.
-        Pattern: "GET /public",                               // Sets route pattern.
-        Handler: publicHandler,                               // Sets route handler.
-                                                              // No requirements - it's public.
+    {                                                             // Adds route.
+        Pattern: "GET /public",                                   // Sets route pattern.
+        Handler: publicHandler,                                   // Sets route handler.
+                                                                  // No requirements - it's public.
     },
-    {                                                         // Adds route.
-        Pattern: "GET /dashboard",                            // Sets route pattern.
-        Handler: dashboardHandler,                            // Sets route handler.
-        Tags: []tag.Tag{authentication},                      // Requires authentication.
+    {                                                             // Adds route.
+        Pattern: "GET /dashboard",                                // Sets route pattern.
+        Handler: dashboardHandler,                                // Sets route handler.
+        Tags: []tag.Tag{authentication},                          // Requires authentication.
     },
-    {                                                         // Adds route.
-        Pattern: "GET /user/{user_id}/settings",              // Sets route pattern.
-        Handler: userSettingsHandler,                         // Sets route handler.
-        Tags: []tag.Tag{auth},                                // Requires auth, meaning both authentication and authorization.
+    {                                                             // Adds route.
+        Pattern: "GET /user/{user_id}/settings",                  // Sets route pattern.
+        Handler: userSettingsHandler,                             // Sets route handler.
+        Tags: []tag.Tag{auth},                                    // Requires auth, meaning both authentication and authorization.
     },
-    {                                                         // Adds route.
-        Pattern: "DELETE /user/{user_id}",                    // Sets route pattern.
-        Handler: deleteUserHandler,                           // Sets route handler.
-        Tags: []tag.Tag{auth},                                // Requires auth, meaning both authentication and authorization.
+    {                                                             // Adds route.
+        Pattern: "DELETE /user/{user_id}",                        // Sets route pattern.
+        Handler: deleteUserHandler,                               // Sets route handler.
+        Tags: []tag.Tag{auth},                                    // Requires auth, meaning both authentication and authorization.
     },
 }
 ```
