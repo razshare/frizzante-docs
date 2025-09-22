@@ -298,7 +298,7 @@ type GreetingDetails struct {      // Defines a struct in which to
 
 func View(client *client.Client) {
     var details GreetingDetails    // Creates a zero value.
-    receive.Json(client, &details) // Unmarshals the content into v.
+    receive.Json(client, &details) // Unmarshals the content into details.
     send.Json(client, details)     // Sends content back as json.
 }
 ```
