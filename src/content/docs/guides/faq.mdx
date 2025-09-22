@@ -32,7 +32,7 @@ package middleware
 
 import "main/lib/core/client"
 
-type Hook func(c *client.Client, next func()) // Defines a hook function type which will be used by the middleware.
+type Hook func(client *client.Client, next func()) // Defines a hook function type which will be used by the middleware.
 
 type Middleware struct {                      // Defines a structure holding multiple hooks.
     Hooks []Hook                              // Defines the actual hooks slice.
@@ -51,16 +51,16 @@ import (
 func Apply(mid *Middleware, routes []route.Route) {
     for _, r := range routes {                      // For each route...
         handler := r.Handler                        // ...saves the route handler for later use.
-        r.Handler = func(c *client.Client) {        // Assigns a new wrapper route handler.
+        r.Handler = func(client *client.Client) {        // Assigns a new wrapper route handler.
             var quit = true                         // Creates flag used to interrupt the chain.
             for _, hook := range mid.Hooks {        // For each hook...
                 quit = true                         // ...prepares to quit...
-                hook(c, func() { quit = false })    // ...invokes the hook...
+                hook(client, func() { quit = false })    // ...invokes the hook...
                 if quit {                           // Checks if route should quit.
                     return                          // Quits.
                 }
             }
-            handler(c)                              // Invokes the actual route handler.
+            handler(client)                              // Invokes the actual route handler.
         }
     }
 }
@@ -98,7 +98,7 @@ var render = ssr.New(ssr.Config{Efs: efs, Disk: dev})
 
 var mid = &middleware.Middleware{             // Creates middleware.
     Hooks: []middleware.Hook{                 // Creates hooks.
-        func(c *client.Client, next func()) { // Adds hook.
+        func(client *client.Client, next func()) { // Adds hook.
                                               // Logic goes here.
         },
     },

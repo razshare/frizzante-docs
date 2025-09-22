@@ -65,8 +65,8 @@ acts as a file server and falls back to `welcome.View`.
 
 ```go
 //lib/routes/handlers/fallback/view.go
-func View(c *client.Client) {
-    send.FileOrElse(c, func() { welcome.View(c) })
+func View(client *client.Client) {
+    send.FileOrElse(client, func() { welcome.View(client) })
 }
 ```
 
@@ -76,8 +76,8 @@ All this handler does is send the `"Welcome"` view to the client with `send.View
 
 ```go
 //lib/routes/handlers/welcome/view.go
-func View(c *client.Client) {
-    send.View(c, view.View{Name: "Welcome"})
+func View(client *client.Client) {
+    send.View(client, view.View{Name: "Welcome"})
 }
 ```
 
@@ -141,7 +141,7 @@ This is because in reality `href()` also returns a `onclick` handler.
 //lib/scripts/core/href.ts
 export function href(path = ""): {
     href: string
-    onclick: (e: MouseEvent) => void
+    onclick: (event: MouseEvent) => Promise<boolean>
 }
 ```
 
@@ -190,38 +190,47 @@ retrieved from the session state.
 
 ```go
 //lib/routes/handlers/todos/view.go
-func View(c *client.Client) {
-    s := session.Start(receive.SessionId(c))
-    send.View(c, view.View{
-       Name: "Todos",
-       Props: map[string]any{
-          "todos": s.Todos,
-       },
-    })
+func View(client *client.Client) {
+	state := session.Start(receive.SessionId(client))
+	send.View(client, view.View{
+		Name: "Todos",
+		Props: Props{
+			Todos: state.Todos,
+			Error: receive.Query(client, "error"),
+		},
+	})
 }
 ```
 
 By default the session state has a few items in it.
 
 ```go
-//lib/session/memory/start.go
-var Sessions = map[string]*Session{}
-
-func Start(id string) *Session {
-    v, ok := Sessions[id]
-    if !ok {
-       Sessions[id] = &Session{Todos: []Todo{
-          {Checked: false, Description: "Pet the cat."},
-          {Checked: false, Description: "Do laundry"},
-          {Checked: false, Description: "Pet the cat."},
-          {Checked: false, Description: "Cook"},
-          {Checked: false, Description: "Pet the cat."},
-       }}
-       return Sessions[id]
-    }
-    return v
+//lib/session/memory/new.go
+func New() *State {
+	return &State{
+		Todos: []Todo{
+			{Checked: false, Description: "Pet the cat."},
+			{Checked: false, Description: "Do laundry"},
+			{Checked: false, Description: "Pet the cat."},
+			{Checked: false, Description: "Cook"},
+			{Checked: false, Description: "Pet the cat."},
+		},
+	}
 }
+```
 
+```go
+//lib/session/memory/start.go
+var States = map[string]*State{}
+
+func Start(id string) *State {
+	if state, ok := States[id]; ok {
+		return state
+	}
+
+	States[id] = New()
+	return States[id]
+}
 ```
 
 ## Todos.svelte
@@ -402,50 +411,43 @@ see [Form Component](../web-standards/#form-component).
 
 ```go
 //lib/routes/handlers/todos/remove.go
-func Remove(c *client.Client) {
-    s := session.Start(receive.SessionId(c))
+func Remove(client *client.Client) {
+	var err error
+	var index int64
+	var count int64
+	var query string
+	var state *session.State
 
-    l := int64(len(s.Todos))
-    if 0 == l {
-        // No todos found, ignore the request.
-        send.Navigate(c, "/todos")
-        return
-    }
+	state = session.Start(receive.SessionId(client))
 
-    is := receive.Query(c, "index")
-    if is == "" {
-        // No index provided, ignore the request.
-        send.Navigate(c, "/todos")
-        return
-    }
+	if query = receive.Query(client, "index"); query == "" {
+		// No index found, ignore the request.
+		send.Navigate(client, "/todos")
+		return
+	}
 
-    i, e := strconv.ParseInt(is, 10, 64)
-    if e != nil {
-        send.View(c, view.View{
-            Name: "Todos",
-            Props: map[string]any{
-                "error": e.Error(),
-            },
-        })
-        return
-    }
-    if i >= l {
-        // Index is out of bounds, ignore the request.
-        send.Navigate(c, "/todos")
-        return
-    }
+	if index, err = strconv.ParseInt(query, 10, 64); err != nil {
+		send.Navigatef(client, "/todos?error=%s", err.Error())
+		return
+	}
 
-    s.Todos = append(
-        s.Todos[:i],
-        s.Todos[i+1:]...,
-    )
+	if count = int64(len(state.Todos)); index >= count || index < 0 {
+		// Index is out of bounds, ignore the request.
+		send.Navigate(client, "/todos")
+		return
+	}
 
-    send.Navigate(c, "/todos")
+	state.Todos = append(
+		state.Todos[:index],
+		state.Todos[index+1:]...,
+	)
+
+	send.Navigate(client, "/todos")
 }
 ```
 
 :::caution
-Notice the use of `receive.Query(c, "index")`.
+Notice the use of `receive.Query(client, "index")`.
 
 This is a reminder that, if not specified otherwise, 
 forms prefer using the `GET` verb.
@@ -463,8 +465,7 @@ The equivalent using the `POST` verb would be
 ```go
 //lib/routes/handlers/todos/Remove.go
 // ...
-f := receive.Form(c)
-is := f.Get("index")
+query := receive.Form(client).Get("index")
 // ...
 ```
 :::
@@ -509,37 +510,35 @@ Checking is handled by the `Check` handler.
 
 ```go
 //lib/routes/handlers/todos/check.go
-func Check(c *client.Client) {
-    s := session.Start(receive.SessionId(c))
+func Check(client *client.Client) {
+	var err error
+	var index int64
+	var count int64
+	var query string
+	var state *session.State
 
-    is := receive.Query(c, "index")
-    if is == "" {
-        // No index provided, ignore the request.
-        send.Navigate(c, "/todos")
-        return
-    }
+	state = session.Start(receive.SessionId(client))
 
-    i, e := strconv.ParseInt(is, 10, 64)
-    if e != nil {
-        send.View(c, view.View{
-            Name: "Todos",
-            Props: map[string]any{
-                "error": e.Error(),
-            },
-        })
-        return
-    }
+	if query = receive.Query(client, "index"); query == "" {
+		// No index found, ignore the request.
+		send.Navigate(client, "/todos")
+		return
+	}
 
-    l := int64(len(s.Todos))
-    if i >= l {
-        // Index is out of bounds, ignore the request.
-        send.Navigate(c, "/todos")
-        return
-    }
+	if index, err = strconv.ParseInt(query, 10, 64); err != nil {
+		send.Navigatef(client, "/todos?error=%s", err.Error())
+		return
+	}
 
-    s.Todos[i].Checked = true
+	if count = int64(len(state.Todos)); index >= count || index < 0 {
+		// Index is out of bounds, ignore the request.
+		send.Navigate(client, "/todos")
+		return
+	}
 
-    send.Navigate(c, "/todos")
+	state.Todos[index].Checked = true
+
+	send.Navigate(client, "/todos")
 }
 ```
 
@@ -549,7 +548,7 @@ as `Check`, except it sets `Checked` to `false` instead of `true`.
 ```go
 //lib/routes/handlers/todos/uncheck.go
 // ...
-s.Todos[i].Checked = false
+state.Todos[index].Checked = false
 // ...
 ```
 
@@ -571,27 +570,23 @@ This form is then captured by the `Add` handler.
 
 ```go
 //lib/routes/handlers/todos/add.go
-func Add(c *client.Client) {
-    s := session.Start(receive.SessionId(c))
-    
-    d := receive.Query(c, "description")
-    if d == "" {
-        send.View(c, view.View{
-            Name: "Todos",
-            Props: map[string]any{
-                "todos": s.Todos,
-                "error": "todo description cannot be empty",
-            },
-        })
-        return
-    }
+func Add(client *client.Client) {
+	var query string
+	var state *session.State
 
-    s.Todos = append(s.Todos, session.Todo{
-        Checked:    false,
-        Description: d,
-    })
+	state = session.Start(receive.SessionId(client))
 
-    send.Navigate(c, "/todos")
+	if query = receive.Query(client, "description"); query == "" {
+		send.Navigate(client, "/todos?error=todo description cannot be empty")
+		return
+	}
+
+	state.Todos = append(state.Todos, session.Todo{
+		Checked:     false,
+		Description: query,
+	})
+
+	send.Navigate(client, "/todos")
 }
 ```
 

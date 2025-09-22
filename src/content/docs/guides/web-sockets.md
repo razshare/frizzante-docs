@@ -19,13 +19,13 @@ import (
     "time"
 )
 
-func View(c *client.Client) {
-    a := receive.IsAlive(c)        // Tracks request status.
-    send.WsUpgrade(c)              // Sends ws upgrade.
-    for *a {                       // Loops until cancellation.
-       n := receive.Message(c)     // Receives message.
-       send.Message(c, "Hello "+n) // Sends message.
-       time.Sleep(time.Second)     // Sleeps for 1 second.
+func View(client *client.Client) {
+    alive := receive.IsAlive(client)         // Tracks request status.
+    send.WsUpgrade(client)                   // Sends ws upgrade.
+    for *alive {                             // Loops until cancellation.
+       name := receive.Message(client)       // Receives message.
+       send.Message(client, "Hello " + name) // Sends message.
+       time.Sleep(time.Second)               // Sleeps for 1 second.
     }
 }
 ```
@@ -35,12 +35,12 @@ Then consume the web socket on the client.
 ```svelte
 <script lang="ts">
     import {source} from "$lib/scripts/core/source.ts";
-    const messages:string[] = $state([])                     // Creates reactive list of messages.
-    const socket = new WebSocket("/ws")                      // Connects to handler.
-    socket.send("Hello")                                     // Sends message.
-    socket.addEventListener("message", function incoming(e){ // Listens for incoming messages.
-       messages.push(e.data)                                 // Appends the incoming messages to
-                                                             // the list of messages for later use.
+    const messages:string[] = $state([])                         // Creates reactive list of messages.
+    const socket = new WebSocket("/ws")                          // Connects to handler.
+    socket.send("Hello")                                         // Sends message.
+    socket.addEventListener("message", function incoming(event){ // Listens for incoming messages.
+       messages.push(event.data)                                 // Appends the incoming messages to
+                                                                 // the list of messages for later use.
     })
 </script>
 

@@ -29,7 +29,7 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <Card title='Render Modes' icon='biome'>
     Switch rendering modes at runtime.
     ```go
-    send.View(c, view.View{
+    send.View(client, view.View{
        Name: "Welcome",
        RenderMode: view.RenderModeFull,
        // RenderMode: view.RenderModeServer,
@@ -41,10 +41,10 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <Card title='Web Sockets' icon='heart'>
     Simple Web Sockets api.
     ```go
-    send.WsUpgrade(c)
+    send.WsUpgrade(client)
     for {
-       n := receive.Message(c)
-       send.Message(c, "Hello " + n)
+       n := receive.Message(client)
+       send.Message(client, "Hello " + n)
     }
     ```
     <LinkCard title='Read More' href="/frizzante-docs/guides/web-sockets"/>
@@ -52,9 +52,9 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <Card title='Server Sent Events' icon='heart'>
     Simple Server Sent Events api.
     ```go
-    send.SseUpgrade(c)
+    send.SseUpgrade(client)
     for {
-       send.Message(c, "Hello.")
+       send.Message(client, "Hello.")
        time.Sleep(time.Second)
     }
     ```

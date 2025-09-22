@@ -172,8 +172,8 @@ import (
     "main/lib/core/view"
 )
 
-func View(c *client.Client) {
-    send.View(c, view.View{Name: "Welcome"}) // Sends view "Welcome".
+func View(client *client.Client) {
+    send.View(client, view.View{Name: "Welcome"}) // Sends view "Welcome".
 }
 ```
 
@@ -195,9 +195,9 @@ import (
     "main/lib/core/view"
 )
 
-func View(c *client.Client) {
-    send.FileOrElse(c, func () {                // Attempts to send requested file, or else...
-       send.View(c, view.View{Name: "Welcome"}) // ...sends view "Welcome".
+func View(client *client.Client) {
+    send.FileOrElse(client, func () {                // Attempts to send requested file, or else...
+       send.View(client, view.View{Name: "Welcome"}) // ...sends view "Welcome".
     })
 }
 ```
@@ -242,8 +242,8 @@ import (
     "main/lib/core/view"
 )
 
-func View(c *client.Client) {
-    send.View(c, view.View{      // Sends view.
+func View(client *client.Client) {
+    send.View(client, view.View{ // Sends view.
        Name: "Welcome",          // Sets view name.
        Props: map[string]string{ // Sets view props, which will be injected into the svelte component.
           "name": "world",       // Adds property "name" with value "world".
@@ -304,8 +304,8 @@ import (
     "main/lib/core/view"
 )
 
-func View(c *client.Client) {
-    send.View(c, view.View{             // Sends view.
+func View(client *client.Client) {
+    send.View(client, view.View{        // Sends view.
        Name: "Welcome",                 // Sets view name.
        RenderMode: view.RenderModeFull, // Renders view on server and client.
     })
@@ -331,8 +331,8 @@ import (
     "main/lib/core/view"
 )
 
-func View(c *client.Client) {
-    send.View(c, view.View{               // Sends view.
+func View(client *client.Client) {
+    send.View(client, view.View{          // Sends view.
        Name: "Welcome",                   // Sets view name.
        RenderMode: view.RenderModeServer, // Renders view only on server.
     })
@@ -368,8 +368,8 @@ import (
     "main/lib/core/view"
 )
 
-func View(c *client.Client) {
-    send.View(c, view.View{               // Sends view.
+func View(client *client.Client) {
+    send.View(client, view.View{          // Sends view.
        Name: "Welcome",                   // Sets view name.
        RenderMode: view.RenderModeClient, // Renders view only on client.
     })

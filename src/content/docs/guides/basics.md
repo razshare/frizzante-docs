@@ -52,7 +52,7 @@ package welcome
 
 import "main/lib/core/client"
 
-func View(c *client.Client) {}
+func View(client *client.Client) {}
 ```
 
 ## Path Fields
@@ -74,8 +74,8 @@ import (
     "main/lib/core/receive"
 )
 
-func View(c *client.Client) {
-    _ = receive.Path(c, "name") // Retrieves field "name".
+func View(client *client.Client) {
+    _ = receive.Path(client, "name") // Retrieves field "name".
 }
 ```
 
@@ -93,8 +93,8 @@ import (
     "main/lib/core/receive"
 )
 
-func View(c *client.Client) {
-    _ = receive.Message(c) // Retrieves message.
+func View(client *client.Client) {
+    _ = receive.Message(client) // Retrieves message.
 }
 ```
 
@@ -110,8 +110,8 @@ import (
     "main/lib/core/send"
 )
 
-func View(c *client.Client) {
-    send.Message(c, "Hello.") // Sends message.
+func View(client *client.Client) {
+    send.Message(client, "Hello.") // Sends message.
 }
 ```
 
@@ -128,8 +128,8 @@ import (
     "main/lib/core/receive"
 )
 
-func View(c *client.Client) {
-    _ = receive.Header(c, "Accept") // Retrieves field "Accept".
+func View(client *client.Client) {
+    _ = receive.Header(client, "Accept") // Retrieves field "Accept".
 }
 ```
 
@@ -145,9 +145,9 @@ import (
     "main/lib/core/send"
 )
 
-func View(c *client.Client) {
-    a := receive.Header(c, "Accept")  // Retrieves field "Accept".
-    send.Header(c, "Content-Type", a) // Sends it back.
+func View(client *client.Client) {
+    accept := receive.Header(client, "Accept")  // Retrieves field "Accept".
+    send.Header(client, "Content-Type", accept) // Sends it back.
 }
 ```
 
@@ -164,9 +164,9 @@ import (
     "main/lib/core/send"
 )
 
-func View(c *client.Client) {
-    send.Status(c, 404)           // Sends status 404.
-    send.Message(c, "Not found.") // Sends message.
+func View(client *client.Client) {
+    send.Status(client, 404)           // Sends status 404.
+    send.Message(client, "Not found.") // Sends message.
 }
 ```
 
@@ -195,13 +195,13 @@ import (
     "main/lib/core/send"
 )
 
-func View(c *client.Client) {
-    send.Message(c, "Hello.") // Sends message. (Succeeds).
-    send.Status(c, 404)       // Sends status (Fails).
+func View(client *client.Client) {
+    send.Message(client, "Hello.") // Sends message. (Succeeds).
+    send.Status(client, 404)       // Sends status (Fails).
 }
 ```
 
-`send.Status(c, 404)` will fail and the client will receive status `200` instead of `404`.
+`send.Status(client, 404)` will fail and the client will receive status `200` instead of `404`.
 
 ```http
 HTTP/1.1 200 OK
@@ -237,9 +237,9 @@ import (
     "main/lib/core/send"
 )
 
-func View(c *client.Client) {
-    n := receive.Query(c, "name") // Retrieves field "name".
-    send.Message(c, "Hello " + n) // Sends message.
+func View(client *client.Client) {
+    name := receive.Query(client, "name") // Retrieves field "name".
+    send.Message(client, "Hello " + name) // Sends message.
 }
 ```
 
@@ -264,10 +264,10 @@ import (
     "main/lib/core/send"
 )
 
-func View(c *client.Client) {
-    f := receive.Form(c)          // Retrieves the form.
-    n := f.Get("name")            // Retrieves field "name".
-    send.Message(c, "Hello " + n) // Sends message.
+func View(client *client.Client) {
+    form := receive.Form(client)          // Retrieves the form.
+    nname := f.Get("name")                // Retrieves field "name".
+    send.Message(client, "Hello " + name) // Sends message.
 }
 ```
 
@@ -293,14 +293,14 @@ import (
     "main/lib/core/send"
 )
 
-type GreetingDetails struct { // Defines a struct in which to 
-    Name string `json:"name"` // store the json content.
+type GreetingDetails struct {      // Defines a struct in which to 
+    Name string `json:"name"`      // store the json content.
 }
 
-func View(c *client.Client) {
-    var v GreetingDetails     // Creates a zero value.
-    receive.Json(c, &v)       // Unmarshals the content into v.
-    send.Json(c, v)           // Sends content back as json.
+func View(client *client.Client) {
+    var details GreetingDetails    // Creates a zero value.
+    receive.Json(client, &details) // Unmarshals the content into v.
+    send.Json(client, details)     // Sends content back as json.
 }
 ```
 
@@ -318,9 +318,9 @@ import (
     "main/lib/core/send"
 )
 
-func View(c *client.Client) {
-    n := receive.Cookie(c, "nickname") // Retrieves cookie.
-    send.Cookie(c, "nickname", n)      // Sends it back.
+func View(client *client.Client) {
+    nickname := receive.Cookie(client, "nickname") // Retrieves cookie.
+    send.Cookie(client, "nickname", nickname)      // Sends it back.
 }
 ```
 
@@ -349,8 +349,8 @@ import (
     "main/lib/core/receive"
 )
 
-func View(c *client.Client) {
-    _ = receive.SessionId(c) // Retrieves session id.
+func View(client *client.Client) {
+    _ = receive.SessionId(client) // Retrieves session id.
 }
 ```
 
@@ -367,8 +367,8 @@ import (
     "main/lib/core/send"
 )
 
-func View(c *client.Client) {
-    send.Redirect(c, "/login", 307) // Redirects to /login.
+func View(client *client.Client) {
+    send.Redirect(client, "/login", 307) // Redirects to /login.
 }
 ```
 
@@ -385,7 +385,7 @@ import (
     "main/lib/core/send"
 )
 
-func View(c *client.Client) {
-    send.Navigate(c, "/login") // Redirects to /login with status 302.
+func View(client *client.Client) {
+    send.Navigate(client, "/login") // Redirects to /login with status 302.
 }
 ```

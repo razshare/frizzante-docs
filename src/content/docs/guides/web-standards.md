@@ -37,8 +37,8 @@ import (
     "main/lib/core/view"
 )
 
-func View(c *client.Client)  {
-    send.View(c, view.View{               // Sends view.
+func View(client *client.Client)  {
+    send.View(client, view.View{          // Sends view.
        Name: "Welcome",                   // Sets name of the view.
        RenderMode: view.RenderModeServer, // Renders view only on the server.
     })
@@ -133,8 +133,8 @@ import (
     "main/lib/core/view"
 )
 
-func View(c *client.Client)  {
-    send.View(c, view.View{               // Sends view.
+func View(client *client.Client)  {
+    send.View(client, view.View{          // Sends view.
        Name: "Welcome",                   // Sets name of the view.
        RenderMode: view.RenderModeServer, // Renders view only on the server.
     })
