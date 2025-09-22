@@ -223,9 +223,9 @@ status is locked
 
 `status is locked`, meaning the status code has already been sent to the client and there's nothing you can do about it.
 
-## Query Fields
+## Query Values
 
-Use `receive.Query()` to retrieve query fields.
+Use `receive.Query()` to retrieve query values.
 
 ```go
 //lib/routes/handlers/welcome/view.go
@@ -243,9 +243,9 @@ func View(client *client.Client) {
 }
 ```
 
-## Forms
+## Form Values
 
-Use `receive.Form()` to retrieve and parse forms when using `POST` and `PUT` http verbs.
+Use `receive.Value()` to retrieve and parse form values when using `POST` and `PUT` http verbs.
 
 
 ```go
@@ -265,8 +265,7 @@ import (
 )
 
 func View(client *client.Client) {
-    form := receive.Form(client)          // Retrieves the form.
-    name := form.Get("name")              // Retrieves field "name".
+    name := receive.Value(client, "name") // Retrieves field "name".
     send.Message(client, "Hello " + name) // Sends message.
 }
 ```

@@ -465,7 +465,7 @@ The equivalent using the `POST` verb would be
 ```go
 //lib/routes/handlers/todos/Remove.go
 // ...
-query := receive.Form(client).Get("index")
+value := receive.Value(client, "index")
 // ...
 ```
 :::
