@@ -4,7 +4,7 @@ title: Todos Example
 
 The starter template comes with a todos application.
 
-![alt text](image100.png)
+![alt text](todos.gif)
 
 ## Main
 
