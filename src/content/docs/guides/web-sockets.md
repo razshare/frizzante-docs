@@ -45,7 +45,7 @@ Then consume the web socket on the client.
 </script>
 
 <h1>Messages</h1>
-{#each messages as message, id (id)}                         <!-- Iterates the list of messages. -->
-    <div>{message}</div>                                     <!-- Renders message. -->
+{#each messages as message, id (id)}                             <!-- Iterates the list of messages. -->
+    <div>{message}</div>                                         <!-- Renders message. -->
 {/each}
 ```
