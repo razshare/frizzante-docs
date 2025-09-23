@@ -38,24 +38,16 @@ It is possible, but not required, to generate TypeScript type definitions from G
     Struct `json` tags are not required, but if present, they will be taken into account when generating type definitions.
     :::
 
-1. Create a new `types.go` file and define the `main()` function in it.
+1. Create a new `lib/types/main.go` file and define the `main()` function in it.
     ```go
-    //types.go
-    //go:build types
-
+    //lib/types/main.go
     package main
 
     func main() {}
     ```
-
-    :::caution
-    Make sure to exclude this file from the build process by tagging it with `//go:build types`.
-    :::
 1. Call `types.Generate[T]()` in the `main()` function.
     ```go
-    //types.go
-    //go:build types
-
+    //lib/types/main.go
     package main
 
     import (
