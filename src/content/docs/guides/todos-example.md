@@ -385,10 +385,3 @@ func Add(client *client.Client) {
 	send.Navigate(client, "/todos")
 }
 ```
-
-## More Examples
-
-| Description | Hyperlink |
-|-------------|-----------|
-| A live chat application | https://github.com/razshare/frizzante-example-chat |
-| A blog application with login and registration forms | https://github.com/razshare/frizzante-example-blog |
