@@ -63,15 +63,15 @@ func View(client *client.Client) {
     <div class="pt-6"></div>
     <div class="flex justify-center gap-2 relative">
         {@render Sparkles()}
-        {@render TodosButton()}
-        {@render DocumentationButton()}
+        {@render Todos()}
+        {@render Documentation()}
     </div>
 </Layout>
 ```
 
 ```svelte
 //app/lib/views/Welcome.svelte
-{#snippet TodosButton()}
+{#snippet Todos()}
     <a class="btn btn-primary btn-lg" {...href("/todos")}>
         <span>Show Todos</span>
         <Icon path={mdiArrowRight} size="18" />
