@@ -33,25 +33,25 @@ It is possible, but not required, to generate TypeScript type definitions from G
         })
     }
     ```
-    
+
     :::tip
     Struct `json` tags are not required, but if present, they will be taken into account when generating type definitions.
     :::
 
-1. Create a new `types.go` file and define the `init()` function in it.
+1. Create a new `types.go` file and define the `main()` function in it.
     ```go
     //types.go
     //go:build types
 
     package main
 
-    func init() {}
+    func main() {}
     ```
 
     :::caution
     Make sure to exclude this file from the build process by tagging it with `//go:build types`.
     :::
-1. Call `types.Generate[T]()` in the `init()` function.
+1. Call `types.Generate[T]()` in the `main()` function.
     ```go
     //types.go
     //go:build types
@@ -63,7 +63,7 @@ It is possible, but not required, to generate TypeScript type definitions from G
         "main/lib/routes/handlers/welcome"
     )
 
-    func init() {
+    func main() {
         types.Generate[welcome.Props]()
     }
     ```
