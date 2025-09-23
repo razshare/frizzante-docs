@@ -6,62 +6,37 @@ The starter template comes with a todos application.
 
 ![alt text](image100.png)
 
-Although the application itself is simple, there are many 
-things that might need some explanation.
-
 ## Main
 
-First of all every interaction happens through a `GET` verb.
+For the sake of simplicity, every interaction happens through a `GET` verb.
 
 ```go
 //main.go
-package main
-
-import (
-    "embed"
-    "main/lib/core/route"
-    "main/lib/core/server"
-    "main/lib/core/view/ssr"
-    "main/lib/routes/handlers/fallback"
-    "main/lib/routes/handlers/todos"
-    "main/lib/routes/handlers/welcome"
-    "os"
-)
-
-//go:embed app/dist
-var efs embed.FS
-var srv = server.New()
-var dev = os.Getenv("DEV") == "1"
-var render = ssr.New(ssr.Config{Efs: efs, Disk: dev})
-
 func main() {
-    defer server.Start(srv)
-    srv.Efs = efs
-    srv.Render = render
-    srv.Routes = []route.Route{
-        {Pattern: "GET /", Handler: fallback.View},
-        {Pattern: "GET /welcome", Handler: welcome.View},
-        {Pattern: "GET /todos", Handler: todos.View},
-        {Pattern: "GET /check", Handler: todos.Check},
-        {Pattern: "GET /uncheck", Handler: todos.Uncheck},
-        {Pattern: "GET /add", Handler: todos.Add},
-        {Pattern: "GET /remove", Handler: todos.Remove},
-    }
+	defer server.Start(srv)
+	srv.Efs = efs
+	srv.Render = render
+	srv.Routes = []route.Route{
+		{Pattern: "GET /", Handler: fallback.View},
+		{Pattern: "GET /welcome", Handler: welcome.View},
+		{Pattern: "GET /todos", Handler: todos.View},
+		{Pattern: "GET /toggle", Handler: todos.Toggle},
+		{Pattern: "GET /add", Handler: todos.Add},
+		{Pattern: "GET /remove", Handler: todos.Remove},
+	}
 }
 ```
 
 As you can see, all handlers are exposed with a `GET /...` pattern.
 
-## fallback.View
+## Fallback
 
-The `fallback.View` handler is exposed with a `GET /` pattern, 
-which acts as a fallback handler.
+The `GET /` pattern acts acts as a fallback.
 
 ![](image200.svg)
 
-It is for that reason that this handler tries to send a matching file
-with `send.FileOrElse()` before doing anything else, in doing so it 
-acts as a file server and falls back to `welcome.View`.
+With that in mind, the fallback handler tries to send back a 
+matching file or the `"Welcome"` view using `send.FileOrElse()`.
 
 ```go
 //lib/routes/handlers/fallback/view.go
@@ -70,9 +45,9 @@ func View(client *client.Client) {
 }
 ```
 
-## welcome.View
+## Welcome View
 
-All this handler does is send the `"Welcome"` view to the client with `send.View()`.
+The `"Welcome"` view, among other things, renders a hyperlink pointing to `"GET /todos"`.
 
 ```go
 //lib/routes/handlers/welcome/view.go
@@ -81,112 +56,33 @@ func View(client *client.Client) {
 }
 ```
 
-This `"Welcome"` view is exported by the application for both the client and the server.
-
-```ts
-//app/exports.server.ts
-import Welcome from "$lib/views/Welcome.svelte"
-import Todos from "$lib/views/Todos.svelte"
-
-export const views = {
-    "Welcome": Welcome, // Exporting "Welcome".
-    "Todos": Todos,
-}
-```
-
-```ts
-//app/exports.client.ts
-export const views = {
-    "Welcome": import("$lib/views/Welcome.svelte"), // Exporting "Welcome".
-    "Todos": import("$lib/views/Todos.svelte"),
-}
-```
-
-These are key/value records.
-
-The keys are important, because they dictate the `Name` of the view, the actual `Name` field of the view.
-
-```go
-view.View{
-    Name: "Welcome", // This.
-}
-```
-
-## Welcome.svelte
-
-The `"Welcome"` view is simply laying down a header message and a link pointing 
-to `"/todos"`.
-
 ```svelte
 //app/lib/views/Welcome.svelte
-<script lang="ts">
-    import Layout from "$lib/components/Layout.svelte"
-    import { href } from "$lib/scripts/core/href.ts"
-</script>
-
 <Layout title="Welcome">
-    <h1>Welcome to Frizzante.</h1>
-    <a class="link" {...href("/todos")}> Show todos </a>
+    {@render Description()}
+    <div class="pt-6"></div>
+    <div class="flex justify-center gap-2 relative">
+        {@render Sparkles()}
+        {@render TodosButton()}
+        {@render DocumentationButton()}
+    </div>
 </Layout>
 ```
 
-This hyperlink is a bit special, because it doesn't just specify an `href` attribute
-as you would normally expect.
-
-Instead it uses the `href()` function to set said attribute.
-
-This is because in reality `href()` also returns a `onclick` handler.
-
-```ts
-//lib/scripts/core/href.ts
-export function href(path = ""): {
-    href: string
-    onclick: (event: MouseEvent) => Promise<boolean>
-}
+```svelte
+//app/lib/views/Welcome.svelte
+{#snippet TodosButton()}
+    <a class="btn btn-primary btn-lg" {...href("/todos")}>
+        <span>Show Todos</span>
+        <Icon path={mdiArrowRight} size="18" />
+    </a>
+{/snippet}
 ```
 
-When the view is allowed to execute JavaScript inside the users's browser,
-the hyperlink will swap the view dynamically instead 
-of navigating away to the given path.
+## Todos View
 
-![](image98.gif)
-
-However, if the view is not allowed to execute JavaScript code, then
-the hyperlink will fallback to using web standards, 
-and it will navigate away to the given path when clicked.
-
-![](image99.gif)
-
-:::tip
-There are several reason as to when and why a view can't execute JavaScript code.
-
-Although rare, a client might choose to disable JavaScript altogether on your
-website.
-
-The server itself could choose to not serve a JavaScript bundle to the client.
-
-```go
-view.View{
-    Name: "Welcome",
-    // This will disable JavaScript.
-    RenderMode: view.RenderModeServer,
-}
-```
-
-Another reason might be if, for some reason, your JavaScript bundle is broken, or
-not compatible with the client's browser. In that case there's still a good chance that
-the hyperlink will continue to work by falling back to its standard behavior.
-:::
-
-:::tip
-If you need more control over errors and pending states 
-see [Link Component](../web-standards/#link-component).
-:::
-
-## todos.View
-
-It sends the `"Todos"` view to the client, along with a list of todos, which is
-retrieved from the session state.
+The `"GET /todos"` pattern is then captured by a Go handler function, which sends back 
+the `"Todos"` view along with a list of items retrieved from the user's session state.
 
 ```go
 //lib/routes/handlers/todos/view.go
@@ -202,22 +98,8 @@ func View(client *client.Client) {
 }
 ```
 
-By default the session state has a few items in it.
-
-```go
-//lib/session/memory/new.go
-func New() *State {
-	return &State{
-		Todos: []Todo{
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Do laundry"},
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Cook"},
-			{Checked: false, Description: "Pet the cat."},
-		},
-	}
-}
-```
+:::note
+The user session state is initialized with a few items.
 
 ```go
 //lib/session/memory/start.go
@@ -233,181 +115,107 @@ func Start(id string) *State {
 }
 ```
 
-## Todos.svelte
+```go
+//lib/session/memory/new.go
+func New() *State {
+	return &State{
+		Todos: []Todo{
+			{Checked: false, Description: "Pet the cat."},
+			{Checked: false, Description: "Do laundry"},
+			{Checked: false, Description: "Pet the cat."},
+			{Checked: false, Description: "Cook"},
+			{Checked: false, Description: "Pet the cat."},
+		},
+	}
+}
+```
+:::
 
-The `"Todos"` view does quite a few things.
 
-1. Lists Items
-1. Removes items.
-1. Checks items.
-1. Unchecks items.
-1. Adds items.
+The `"Todos"` view is a [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) web ui.
+
+```svelte
+<script>
+   let { Todos = [], Error }: Props = $props()
+</script>
+```
 
 ```svelte
 //app/lib/views/Todos.svelte
-<script lang="ts">
-    import Layout from "$lib/components/Layout.svelte"
-    import { href } from "$lib/scripts/core/href.ts"
-    import {action} from "$lib/scripts/core/action.ts";
-
-    type Todo = {
-       Checked: boolean
-       Description: string
-    }
-
-    type Props = {
-       todos: Todo[]
-       error: string
-    }
-
-    let { todos, error }: Props = $props()
-</script>
-
 <Layout title="Todos">
-    <ol>
-       {#each todos as todo, index (index)}
-          <li>
-             <form {...action("/remove")}>
-                <input type="hidden" name="index" value={index} />
-                <button class="link">[Remove]</button>
-             </form>
-             {#if todo.Checked}
-                <form {...action("/uncheck")}>
-                    <input
-                       type="hidden"
-                       name="index"
-                       value={index}
-                    />
-                    <button class="link">
-                       <!---->
-                       (x) {todo.Description}
-                       <!---->
-                    </button>
-                </form>
-             {:else}
-                <form {...action("/check")}>
-                    <input
-                       type="hidden"
-                       name="index"
-                       value={index}
-                    />
-                    <button class="link">
-                       <!---->
-                       (&nbsp;&nbsp;) {todo.Description}
-                       <!---->
-                    </button>
-                </form>
-             {/if}
-          </li>
-       {/each}
-    </ol>
-    <form {...action("/add")}>
-       <span class="link">Description</span>
-       <input type="text" value="" name="description" />
-       <button class="link" type="submit">Add +</button>
-    </form>
-
-    {#if error}
-       <br />
-       <span class="error">{error}</span>
-    {/if}
-
-    <br />
-    <a class="link" {...href("/")}>&lt; Back</a>
+    <div class="w-full min-w-[450px] max-w-2xl">
+        <div class="text-center">
+            {@render Description()}
+        </div>
+        <div class="card-body relative p-6">
+            {@render Add()}
+            <div class="divider"></div>
+            {#if Todos.length === 0}
+                {@render Empty()}
+            {:else}
+                {#each Todos as todo, index (index)}
+                    {@render Todo(todo, index)}
+                {/each}
+            {/if}
+            {#if Todos.length > 0}
+                {@render Remaining()}
+            {/if}
+            {@render Back()}
+        </div>
+    </div>
 </Layout>
 ```
 
-###### Listing Items
+### List Todos
 
-The component itself receives the todo list 
-as a `todos` property from the server
-
-```ts
-//app/lib/views/Todos.svelte
-let {todos, error}:Props = $props()
-```
-
-which is then iterated upon to render the items
+Items are listed by iterating over `Todos`.
 
 ```svelte
 //app/lib/views/Todos.svelte
-{#each todos as todo, index (index)}
-    <li>
-       <form {...action("/remove")}>
-          <input type="hidden" name="index" value={index} />
-          <button class="link">[Remove]</button>
-       </form>
-       {#if todo.Checked}
-          <form {...action("/uncheck")}>
-             <input
-                type="hidden"
-                name="index"
-                value={index}
-             />
-             <button class="link">
-                <!---->
-                (x) {todo.Description}
-                <!---->
-             </button>
-          </form>
-       {:else}
-          <form {...action("/check")}>
-             <input
-                type="hidden"
-                name="index"
-                value={index}
-             />
-             <button class="link">
-                <!---->
-                (&nbsp;&nbsp;) {todo.Description}
-                <!---->
-             </button>
-          </form>
-       {/if}
-    </li>
+{#each Todos as todo, index (index)}
+   {@render Todo(todo, index)}
 {/each}
 ```
+```svelte
+//app/lib/views/Todos.svelte
+{#snippet Todo(todo: Todo, index: number)}
+    <div in:slide out:slide class="flex w-full text-base-content/80">
+        {@render Toggle(todo, index)}
+        {@render Remove(index)}
+    </div>
+{/snippet}
+```
 
-Each item has two buttons, a **remove button** and a **toggle** button.
+Each item has remove and toggle buttons.
 
-###### Removing Items
+### Remove Todos
 
-Removing an item from the list involves submitting a form to `/remove`, along with the
-index of the item, which is hidden.
+Items are removed by submitting a form to `"GET /remove"`.
 
 ```svelte
 //app/lib/views/Todos.svelte
-<form {...action("/remove")}>
-    <input type="hidden" name="index" value={index} />
-    <button class="link">[Remove]</button>
-</form>
+{#snippet Remove(index: number)}
+    <form {...action("/remove")}>
+        <input type="hidden" name="index" value={index} />
+        <button
+            type="submit"
+            class="btn btn-ghost btn-sm btn-square hover:text-error hover:bg-error/20 transition-colors"
+            aria-label="Delete"
+        >
+            <Icon path={mdiClose} size="18" />
+        </button>
+    </form>
+{/snippet}
 ```
-
-This action is then captured by the `Remove` handler,
-which does some basic validation, error handling 
-and then finally removes the item from the session.
-
-:::tip
-Similarly to `href()`, the `action()` function adapts the form.
-
-In essence, forms behave similarly to hyperlinks, in that when submitted,
-they naturally navigate away to a new path, the `action` path.
-
-When JavaScript is enabled, `action()` makes it so that instead of navigating away
-and reloading the whole page, the form will swap the view locally.
-
-![](image101.gif)
-
-On the other hand, if JavaScript is disabled, the form will fallback to web standards
-and behave like any other form, navigating away to the new path.
-
-![](image102.gif)
-:::
 
 :::tip
 If you need more control over errors and pending states 
 see [Form Component](../web-standards/#form-component).
 :::
+
+The form is then captured by the `Remove` handler,
+which does some basic validation, error handling 
+and then finally removes the item from the session.
 
 ```go
 //lib/routes/handlers/todos/remove.go
@@ -446,86 +254,68 @@ func Remove(client *client.Client) {
 }
 ```
 
-:::caution
-Notice the use of `receive.Query(client, "index")`.
+### Toggle Todos
 
-This is a reminder that, if not specified otherwise, 
-forms prefer using the `GET` verb.
-
-The equivalent using the `POST` verb would be
+Items are toggled by submitting a form to `GET /toggle`.
 
 ```svelte
 //app/lib/views/Todos.svelte
-<form method="POST" {...action("/remove")}>
-    <input type="hidden" name="index" value={index} />
-    <button class="link">[Remove]</button>
-</form>
+{#snippet Toggle(todo: Todo, index: number)}
+    {@const aria = todo.Checked ? "Uncheck" : "Check"}
+    {@const value = todo.Checked ? "0" : "1"}
+    {@const icon = todo.Checked ? mdiCheckCircleOutline : mdiCircleOutline}
+    <form {...action("/toggle")} class="grow content-center">
+        <input type="hidden" name="index" value={index} />
+        <input type="hidden" name="value" {value} />
+        <button
+            type="submit"
+            class="w-full flex cursor-pointer"
+            class:line-through={todo.Checked}
+            class:text-base-content={todo.Checked}
+            class:opacity-50={todo.Checked}
+            aria-label={aria}
+        >
+            <Icon path={icon} />
+            <div class="pr-4"></div>
+            <span>{todo.Description}</span>
+        </button>
+    </form>
+{/snippet}
 ```
+
+The form is then captured by the `Toggle` handler.
 
 ```go
-//lib/routes/handlers/todos/Remove.go
-// ...
-value := receive.FormValue(client, "index")
-// ...
-```
-:::
-
-###### Checking & Unchecking Items
-
-Checking and unchecking items is also done using forms.
-
-```svelte
-//app/lib/views/Todos.svelte
-{#if todo.Checked}
-    <form {...action("/uncheck")}>
-       <input type="hidden" name="index" value={index} />
-       <button class="link">
-          <!---->
-          (x) {todo.Description}
-          <!---->
-       </button>
-    </form>
-{:else}
-    <form {...action("/check")}>
-       <input type="hidden" name="index" value={index} />
-       <button class="link">
-          <!---->
-          (&nbsp;&nbsp;) {todo.Description}
-          <!---->
-       </button>
-    </form>
-{/if}
-```
-
-Checking an item sends a form to `/check` and unchecking it sends the form to `/uncheck`.
-
-Both forms indicate the index of the item using a hidden input field.
-
-```svelte
-//lib/views/Todos.svelte
-<input type="hidden" name="index" value={index} />
-```
-
-Checking is handled by the `Check` handler.
-
-```go
-//lib/routes/handlers/todos/check.go
-func Check(client *client.Client) {
+//lib/routes/handlers/todos/toggle.go
+func Toggle(client *client.Client) {
 	var err error
 	var index int64
+	var value int64
 	var count int64
-	var query string
+	var queryIndex string
+	var queryValue string
 	var state *session.State
 
 	state = session.Start(receive.SessionId(client))
 
-	if query = receive.Query(client, "index"); query == "" {
+	if queryIndex = receive.Query(client, "index"); queryIndex == "" {
 		// No index found, ignore the request.
 		send.Navigate(client, "/todos")
 		return
 	}
 
-	if index, err = strconv.ParseInt(query, 10, 64); err != nil {
+	if queryValue = receive.Query(client, "index"); queryValue == "" {
+		// No index found, ignore the request.
+		send.Navigate(client, "/todos")
+		return
+	}
+
+	if index, err = strconv.ParseInt(queryIndex, 10, 64); err != nil {
+		send.Navigatef(client, "/todos?error=%s", err.Error())
+		return
+	}
+
+	if value, err = strconv.ParseInt(queryValue, 10, 64); err != nil {
 		send.Navigatef(client, "/todos?error=%s", err.Error())
 		return
 	}
@@ -536,37 +326,43 @@ func Check(client *client.Client) {
 		return
 	}
 
-	state.Todos[index].Checked = true
+	state.Todos[index].Checked = value > 0
 
 	send.Navigate(client, "/todos")
 }
 ```
 
-While unchecking is handled by the `Uncheck` handler, which does the exact same thing
-as `Check`, except it sets `Checked` to `false` instead of `true`.
+### Add Todos
 
-```go
-//lib/routes/handlers/todos/uncheck.go
-// ...
-state.Todos[index].Checked = false
-// ...
-```
-
-###### Adding Items
-
-The final piece of the puzzle is adding items to the list, which is done
-by sending a form to `/add`.
+Items are added by submitting a form to `GET /add`.
 
 ```svelte
 //lib/views/Todos.svelte
-<form {...action("/add")}>
-    <span class="link">Description</span>
-    <input type="text" value="" name="description" />
-    <button class="link" type="submit">Add +</button>
-</form>
+{#snippet Add()}
+    <form {...action("/add")} class="flex">
+        <input
+            type="text"
+            name="description"
+            placeholder="Add a new task..."
+            class="input bg-base-100/ text-lg w-full"
+        />
+        <div class="pt-4"></div>
+        <button type="submit" class="btn btn-ghost text-lg">
+            <Icon path={mdiPlus} size="20" />
+            <span>Add</span>
+        </button>
+    </form>
+
+    {#if Error}
+        <div class="pt-4"></div>
+        <div in:slide out:slide class="alert alert-error">
+            <span>{Error}</span>
+        </div>
+    {/if}
+{/snippet}
 ```
 
-This form is then captured by the `Add` handler.
+The form is then captured by the `Add` handler.
 
 ```go
 //lib/routes/handlers/todos/add.go
