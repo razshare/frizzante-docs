@@ -256,7 +256,7 @@ func Remove(client *client.Client) {
 
 ### Toggle Todos
 
-Items are toggled by submitting a form to `GET /toggle`.
+Items are toggled by submitting a form to `"GET /toggle"`.
 
 ```svelte
 //app/lib/views/Todos.svelte
