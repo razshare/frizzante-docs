@@ -34,8 +34,8 @@ import "main/lib/core/client"
 
 type Hook func(client *client.Client, next func()) // Defines a hook function type which will be used by the middleware.
 
-type Middleware struct {                      // Defines a structure holding multiple hooks.
-    Hooks []Hook                              // Defines the actual hooks slice.
+type Middleware struct {                           // Defines a structure holding multiple hooks.
+    Hooks []Hook                                   // Defines the actual hooks slice.
 }
 ```
 
@@ -49,18 +49,18 @@ import (
 )
 
 func Apply(mid *Middleware, routes []route.Route) {
-    for _, r := range routes {                      // For each route...
-        handler := r.Handler                        // ...saves the route handler for later use.
-        r.Handler = func(client *client.Client) {        // Assigns a new wrapper route handler.
-            var quit = true                         // Creates flag used to interrupt the chain.
-            for _, hook := range mid.Hooks {        // For each hook...
-                quit = true                         // ...prepares to quit...
-                hook(client, func() { quit = false })    // ...invokes the hook...
-                if quit {                           // Checks if route should quit.
-                    return                          // Quits.
+    for _, r := range routes {                        // For each route...
+        handler := r.Handler                          // ...saves the route handler for later use.
+        r.Handler = func(client *client.Client) {     // Assigns a new wrapper route handler.
+            var quit = true                           // Creates flag used to interrupt the chain.
+            for _, hook := range mid.Hooks {          // For each hook...
+                quit = true                           // ...prepares to quit...
+                hook(client, func() { quit = false }) // ...invokes the hook...
+                if quit {                             // Checks if route should quit.
+                    return                            // Quits.
                 }
             }
-            handler(client)                              // Invokes the actual route handler.
+            handler(client)                          // Invokes the actual route handler.
         }
     }
 }
@@ -96,19 +96,19 @@ var srv = server.New()
 var dev = os.Getenv("DEV") == "1"
 var render = ssr.New(ssr.Config{Efs: efs, Disk: dev})
 
-var mid = &middleware.Middleware{             // Creates middleware.
-    Hooks: []middleware.Hook{                 // Creates hooks.
+var mid = &middleware.Middleware{                  // Creates middleware.
+    Hooks: []middleware.Hook{                      // Creates hooks.
         func(client *client.Client, next func()) { // Adds hook.
-                                              // Logic goes here.
+                                                   // Logic goes here.
         },
     },
 }
 
 func main() {
     defer server.Start(srv)
-    defer middleware.Apply(mid, srv.Routes)   // Applies middleware to server routes.
-                                              // Remember that deferred functions are executed in reverse,
-                                              // so this line will execute before the server starts.
+    defer middleware.Apply(mid, srv.Routes)        // Applies middleware to server routes.
+                                                   // Remember that deferred functions are executed in reverse,
+                                                   // so this line will execute before the server starts.
     srv.Efs = efs
     srv.Render = render
     srv.Routes = []route.Route{
