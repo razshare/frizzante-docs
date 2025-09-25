@@ -197,21 +197,12 @@ import (
     "main/lib/core/view"
 )
 
-var dev = os.Getenv("DEV") == "1"                    // If in dev mode we want to send files
-                                                     // directly from disk in order to get
-                                                     // immediate feedback from Vite.
-
 func View(client *client.Client) {
-    send.FileOrElse(client, dev, func () {           // Attempts to send requested file, or else...
+    send.FileOrElse(client, func () {           // Attempts to send requested file, or else...
        send.View(client, view.View{Name: "Welcome"}) // ...sends view "Welcome".
     })
 }
 ```
-
-:::note
-Is the second parameter of `send.FileOrElse()` is set to `true`, 
-then the file will be served directly from the host file system (**disk**), otherwise it will be served from the embedded file system.
-:::
 
 Usually you would map this handler to the default `GET /` pattern, which automatically captures
 all unmatched requests.

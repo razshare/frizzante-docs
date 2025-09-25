@@ -40,10 +40,8 @@ matching file or the `"Welcome"` view using `send.FileOrElse()`.
 
 ```go
 //lib/routes/handlers/fallback/view.go
-var dev = os.Getenv("DEV") == "1"
-
 func View(client *client.Client) {
-    send.FileOrElse(client, dev, func() { welcome.View(client) })
+    send.FileOrElse(client, func() { welcome.View(client) })
 }
 ```
 
