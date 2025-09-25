@@ -20,8 +20,8 @@ It is possible, but not required, to generate TypeScript type definitions from G
     )
 
     type Props struct {
-        Message string `json:"message"`
-        Error   string `json:"error"`
+        Message string
+        Error   string
     }
 
     func View(client *client.Client) {
@@ -68,8 +68,8 @@ It is possible, but not required, to generate TypeScript type definitions from G
     ```ts
     //app/types/gen/main/lib/routes/handlers/welcome/Props.d.ts
     export type Props = {
-        message: string
-        error: string
+        Message: string
+        Error: string
     }
     ```
 </Steps>
