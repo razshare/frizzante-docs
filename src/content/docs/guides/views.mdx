@@ -198,8 +198,9 @@ import (
 )
 
 func View(client *client.Client) {
-    send.FileOrElse(client, func () {           // Attempts to send requested file, or else...
-       send.View(client, view.View{Name: "Welcome"}) // ...sends view "Welcome".
+    send.FileOrElse(client, send.FileOrElseConfig{
+        UseDisk: os.Getenv("DEV") == "1",            // Sends file from disk if in dev mode.
+        OrElse:  func() { welcome.View(client) },    // Else sends "Welcome" view.
     })
 }
 ```
