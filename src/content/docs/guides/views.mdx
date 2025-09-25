@@ -208,6 +208,11 @@ func View(client *client.Client) {
 }
 ```
 
+:::note
+Is the second parameter of `send.FileOrElse()` is set to `true`, 
+then the file will be served directly from the host file system (**disk**), otherwise it will be served from the embedded file system.
+:::
+
 Usually you would map this handler to the default `GET /` pattern, which automatically captures
 all unmatched requests.
 
