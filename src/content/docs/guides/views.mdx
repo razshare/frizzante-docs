@@ -190,13 +190,19 @@ However, you can use `send.FileOrElse()` in order to send the requested file or 
 package lib
 
 import (
+	"os"
+
     "main/lib/core/client"
     "main/lib/core/send"
     "main/lib/core/view"
 )
 
+var dev = os.Getenv("DEV") == "1"                    // If in dev mode we want to send files
+                                                     // directly from disk in order to get
+                                                     // immediate feedback from Vite.
+
 func View(client *client.Client) {
-    send.FileOrElse(client, func () {                // Attempts to send requested file, or else...
+    send.FileOrElse(client, dev, func () {           // Attempts to send requested file, or else...
        send.View(client, view.View{Name: "Welcome"}) // ...sends view "Welcome".
     })
 }
