@@ -62,19 +62,20 @@ func View(client *client.Client) {
 ```svelte
 //app/lib/views/Welcome.svelte
 <Layout title="Welcome">
+    <Logo />
     {@render Description()}
     <div class="pt-6"></div>
     <div class="flex justify-center gap-2 relative">
-        {@render Sparkles()}
-        {@render Todos()}
-        {@render Documentation()}
+        {@render BackgroundEffect()}
+        {@render TodosButton()}
+        {@render DocumentationButton()}
     </div>
 </Layout>
 ```
 
 ```svelte
 //app/lib/views/Welcome.svelte
-{#snippet Todos()}
+{#snippet TodosButton()}
     <a class="btn btn-primary btn-lg" {...href("/todos")}>
         <span>Show Todos</span>
         <Icon path={mdiArrowRight} size="18" />
@@ -106,6 +107,7 @@ The user session state is initialized with a few items.
 
 ```go
 //lib/session/memory/start.go
+
 var States = map[string]*State{}
 
 func Start(id string) *State {
@@ -116,6 +118,7 @@ func Start(id string) *State {
 	States[id] = New()
 	return States[id]
 }
+
 ```
 
 ```go
@@ -139,7 +142,7 @@ The `"Todos"` view is a [CRUD](https://en.wikipedia.org/wiki/Create,_read,_updat
 
 ```svelte
 <script>
-   let { Todos = [], Error }: Props = $props()
+   let { todos = [], error }: Props = $props()
 </script>
 ```
 
@@ -151,19 +154,10 @@ The `"Todos"` view is a [CRUD](https://en.wikipedia.org/wiki/Create,_read,_updat
             {@render Description()}
         </div>
         <div class="card-body relative p-6">
-            {@render Add()}
+            {@render AddTodoForm()}
             <div class="divider"></div>
-            {#if Todos.length === 0}
-                {@render Empty()}
-            {:else}
-                {#each Todos as todo, index (index)}
-                    {@render Todo(todo, index)}
-                {/each}
-            {/if}
-            {#if Todos.length > 0}
-                {@render Remaining()}
-            {/if}
-            {@render Back()}
+            {@render ShowTodosList(todos)}
+            {@render BackButton()}
         </div>
     </div>
 </Layout>
@@ -171,21 +165,23 @@ The `"Todos"` view is a [CRUD](https://en.wikipedia.org/wiki/Create,_read,_updat
 
 ### List Todos
 
-Items are listed by iterating over `Todos`.
+Items are listed by iterating over `todos`.
+
 
 ```svelte
 //app/lib/views/Todos.svelte
-{#each Todos as todo, index (index)}
-   {@render Todo(todo, index)}
-{/each}
-```
-```svelte
-//app/lib/views/Todos.svelte
-{#snippet Todo(todo: Todo, index: number)}
-    <div in:slide out:slide class="flex w-full text-base-content/80">
-        {@render Toggle(todo, index)}
-        {@render Remove(index)}
-    </div>
+{#snippet ShowTodosList(todos: Todo[])}
+    {#if todos.length > 0}
+        {#each todos as todo, index (index)}
+            <div in:slide out:slide class="flex w-full text-base-content/80">
+                {@render ToggleTodoButton(todo, index)}
+                {@render RemoveTodoButton(index)}
+            </div>
+        {/each}
+        {@render CountUncheckedTodos()}
+    {:else}
+        {@render NoTodosFound()}
+    {/if}
 {/snippet}
 ```
 
@@ -197,7 +193,7 @@ Items are removed by submitting a form to `"GET /remove"`.
 
 ```svelte
 //app/lib/views/Todos.svelte
-{#snippet Remove(index: number)}
+{#snippet RemoveTodoButton(index: number)}
     <form {...action("/remove")}>
         <input type="hidden" name="index" value={index} />
         <button
@@ -222,22 +218,23 @@ and then finally removes the item from the session.
 
 ```go
 //lib/routes/handlers/todos/remove.go
+
 func Remove(client *client.Client) {
 	var err error
-	var index int64
 	var count int64
-	var query string
-	var state *session.State
+	var index int64
+	var indexQuery string
 
-	state = session.Start(receive.SessionId(client))
+	state := session.Start(receive.SessionId(client))
 
-	if query = receive.Query(client, "index"); query == "" {
+	if indexQuery = receive.Query(client, "index"); indexQuery == "" {
 		// No index found, ignore the request.
 		send.Navigate(client, "/todos")
 		return
 	}
 
-	if index, err = strconv.ParseInt(query, 10, 64); err != nil {
+	if index, err = strconv.ParseInt(indexQuery, 10, 64); err != nil {
+		// Could not parse index, redirect with error.
 		send.Navigatef(client, "/todos?error=%s", err.Error())
 		return
 	}
@@ -263,24 +260,24 @@ Items are toggled by submitting a form to `"GET /toggle"`.
 
 ```svelte
 //app/lib/views/Todos.svelte
-{#snippet Toggle(todo: Todo, index: number)}
-    {@const aria = todo.Checked ? "Uncheck" : "Check"}
-    {@const value = todo.Checked ? "0" : "1"}
-    {@const icon = todo.Checked ? mdiCheckCircleOutline : mdiCircleOutline}
+{#snippet ToggleTodoButton(todo: Todo, index: number)}
+    {@const aria = todo.checked ? "Uncheck" : "Check"}
+    {@const value = todo.checked ? "0" : "1"}
+    {@const icon = todo.checked ? mdiCheckCircleOutline : mdiCircleOutline}
     <form {...action("/toggle")} class="grow content-center">
         <input type="hidden" name="index" value={index} />
         <input type="hidden" name="value" {value} />
         <button
             type="submit"
             class="w-full flex cursor-pointer"
-            class:line-through={todo.Checked}
-            class:text-base-content={todo.Checked}
-            class:opacity-50={todo.Checked}
+            class:line-through={todo.checked}
+            class:text-base-content={todo.checked}
+            class:opacity-50={todo.checked}
             aria-label={aria}
         >
             <Icon path={icon} />
             <div class="pr-4"></div>
-            <span>{todo.Description}</span>
+            <span>{todo.description}</span>
         </button>
     </form>
 {/snippet}
@@ -292,33 +289,34 @@ The form is then captured by the `Toggle` handler.
 //lib/routes/handlers/todos/toggle.go
 func Toggle(client *client.Client) {
 	var err error
+	var count int64
 	var index int64
 	var value int64
-	var count int64
-	var queryIndex string
-	var queryValue string
-	var state *session.State
+	var indexQuery string
+	var valueQuery string
 
-	state = session.Start(receive.SessionId(client))
+	state := session.Start(receive.SessionId(client))
 
-	if queryIndex = receive.Query(client, "index"); queryIndex == "" {
+	if indexQuery = receive.Query(client, "index"); indexQuery == "" {
 		// No index found, ignore the request.
 		send.Navigate(client, "/todos")
 		return
 	}
 
-	if queryValue = receive.Query(client, "value"); queryValue == "" {
-		// No index found, ignore the request.
+	if valueQuery = receive.Query(client, "value"); valueQuery == "" {
+		// No value found, ignore the request.
 		send.Navigate(client, "/todos")
 		return
 	}
 
-	if index, err = strconv.ParseInt(queryIndex, 10, 64); err != nil {
+	if index, err = strconv.ParseInt(indexQuery, 10, 64); err != nil {
+		// Could not parse index, redirect with error.
 		send.Navigatef(client, "/todos?error=%s", err.Error())
 		return
 	}
 
-	if value, err = strconv.ParseInt(queryValue, 10, 64); err != nil {
+	if value, err = strconv.ParseInt(valueQuery, 10, 64); err != nil {
+		// Could not parse value, redirect with error.
 		send.Navigatef(client, "/todos?error=%s", err.Error())
 		return
 	}
@@ -341,7 +339,7 @@ Items are added by submitting a form to `GET /add`.
 
 ```svelte
 //lib/views/Todos.svelte
-{#snippet Add()}
+{#snippet AddTodoForm()}
     <form {...action("/add")} class="flex">
         <input
             type="text"
@@ -356,10 +354,10 @@ Items are added by submitting a form to `GET /add`.
         </button>
     </form>
 
-    {#if Error}
+    {#if error}
         <div class="pt-4"></div>
         <div in:slide out:slide class="alert alert-error">
-            <span>{Error}</span>
+            <span>{error}</span>
         </div>
     {/if}
 {/snippet}
@@ -370,19 +368,18 @@ The form is then captured by the `Add` handler.
 ```go
 //lib/routes/handlers/todos/add.go
 func Add(client *client.Client) {
-	var query string
-	var state *session.State
+	var description string
 
-	state = session.Start(receive.SessionId(client))
+	state := session.Start(receive.SessionId(client))
 
-	if query = receive.Query(client, "description"); query == "" {
+	if description = receive.Query(client, "description"); description == "" {
 		send.Navigate(client, "/todos?error=todo description cannot be empty")
 		return
 	}
 
 	state.Todos = append(state.Todos, session.Todo{
 		Checked:     false,
-		Description: query,
+		Description: description,
 	})
 
 	send.Navigate(client, "/todos")
