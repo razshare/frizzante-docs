@@ -10,66 +10,63 @@ It is possible, but not required, to generate TypeScript type definitions from G
 <Steps>
 1. Define your Go types.
     ```go
-    //lib/routes/handlers/welcome/view.go
+    //lib/routes/handlers/welcome/types.go
     package welcome
 
-    import (
-        "main/lib/core/client"
-        "main/lib/core/send"
-        "main/lib/core/view"
-    )
-
     type Props struct {
-        Message string
-        Error   string
-    }
-
-    func View(client *client.Client) {
-        send.View(client, view.View{
-            Name: "Welcome",
-            Props: Props{
-                Message: "hello",
-            },
-        })
+        Message string `json:"message"`
+        Error   string `json:"error"`
     }
     ```
 
     :::note
-    Struct `json` tags are currently ignored.
+    Struct `json` tags are optional.
     :::
-
-1. Create a new `lib/types.go` file and define the `main()` function in it.
+1. Call `types.Generate[T]()`.
     ```go
-    //lib/types.go
-    package main
+    //lib/routes/handlers/welcome/types.go
+    package welcome
 
-    func main() {}
-    ```
-1. Call `types.Generate[T]()` in the `main()` function.
-    ```go
-    //lib/types.go
-    package main
+    func init() {
+        _ = types.Generate[Props]()
+    }
 
-    import (
-        "main/lib/core/types"
-        "main/lib/routes/handlers/welcome"
-    )
-
-    func main() {
-        types.Generate[welcome.Props]()
+    type Props struct {
+        Message string `json:"message"`
+        Error   string `json:"error"`
     }
     ```
-1. Generate type definitions.
+1. Start dev mode.
     ```sh
-    frizzante -gtypes
+    frizzante --dev
     ```
-    This will generate your type definitions in `app/types/gen`.
+
+    This will generate your type definitions in `.gen/types`.
 
     ```ts
-    //app/types/gen/main/lib/routes/handlers/welcome/Props.d.ts
+    //.gen/types/gen/main/lib/routes/handlers/welcome/Props.d.ts
     export type Props = {
-        Message: string
-        Error: string
+        message: string
+        error: string
     }
     ```
+    :::note
+    Make sure that your Air configuration uses a `types` tag.
+    ```toml
+    //.air.toml
+    [build]
+      args_bin = []
+      bin = "./.gen/tmp/main.exe"
+      cmd = "go build -tags dev,trace,types -o ./.gen/tmp/main.exe ."
+    ```
+    Without a `types` tag, `types.Generate[T]()` is a noop.
+    ```go
+    //lib/core/types/generate_noop.go
+    //go:build !types
+
+    package types
+
+    func Generate[T any]() error { return nil }
+    ```
+    :::
 </Steps>
