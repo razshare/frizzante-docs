@@ -52,7 +52,7 @@ func Apply(mid *Middleware, routes []route.Route) {
     for _, r := range routes {                                   // For each route...
         handler := r.Handler                                     // ...saves the route handler for later use.
         r.Handler = func(client *client.Client) {                // Assigns a new wrapper route handler.
-            var quit = true                                      // Creates flag used to interrupt the chain.
+            var quit bool                                        // Creates flag used to interrupt the chain.
             for _, hook := range mid.Hooks {                     // Iterate over hooks.
                 quit = true                                      // Prepares to quit.
                 if hook(client, func() { quit = false }); quit { // Invokes hook and checks if route should quit.
