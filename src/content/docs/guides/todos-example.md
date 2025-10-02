@@ -137,8 +137,11 @@ func New() *State {
 The `"Todos"` view is a [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) web ui.
 
 ```svelte
-<script>
-   let { todos = [], error }: Props = $props()
+<script lang="ts">
+    //...
+    import type { Props, Todo } from "$gen/types/main/lib/routes/handlers/todos/Props"
+    let { todos = [], error }: Props = $props()
+    //...
 </script>
 ```
 
