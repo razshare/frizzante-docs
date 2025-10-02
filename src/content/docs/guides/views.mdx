@@ -96,7 +96,7 @@ However, you can use `send.FileOrElse()` in order to send the requested file or 
 package lib
 
 import (
-	"os"
+    "os"
 
     "main/lib/core/client"
     "main/lib/core/send"
@@ -126,7 +126,7 @@ var srv = server.New()                           // Creates server.
 
 func main() {
     defer server.Start(srv)                      // Starts server.
-	srv.Efs = efs                                // Sets embedded file system.
+    srv.Efs = efs                                // Sets embedded file system.
     srv.Routes = append(srv.Routes, route.Route{ // Adds route to the server.
         Pattern: "GET /",
         Handler: welcome.View,

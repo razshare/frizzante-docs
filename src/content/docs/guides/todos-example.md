@@ -13,16 +13,16 @@ For the sake of simplicity, every interaction happens through a `GET` verb.
 ```go
 //main.go
 func main() {
-	defer server.Start(srv)
-	srv.Efs = efs
-	srv.Routes = []route.Route{
-		{Pattern: "GET /", Handler: fallback.View},
-		{Pattern: "GET /welcome", Handler: welcome.View},
-		{Pattern: "GET /todos", Handler: todos.View},
-		{Pattern: "GET /toggle", Handler: todos.Toggle},
-		{Pattern: "GET /add", Handler: todos.Add},
-		{Pattern: "GET /remove", Handler: todos.Remove},
-	}
+    defer server.Start(srv)
+    srv.Efs = efs
+    srv.Routes = []route.Route{
+        {Pattern: "GET /", Handler: fallback.View},
+        {Pattern: "GET /welcome", Handler: welcome.View},
+        {Pattern: "GET /todos", Handler: todos.View},
+        {Pattern: "GET /toggle", Handler: todos.Toggle},
+        {Pattern: "GET /add", Handler: todos.Add},
+        {Pattern: "GET /remove", Handler: todos.Remove},
+    }
 }
 ```
 
@@ -87,14 +87,14 @@ the `"Todos"` view along with a list of items retrieved from the user's session 
 ```go
 //lib/routes/handlers/todos/view.go
 func View(client *client.Client) {
-	state := session.Start(receive.SessionId(client))
-	send.View(client, view.View{
-		Name: "Todos",
-		Props: Props{
-			Todos: state.Todos,
-			Error: receive.Query(client, "error"),
-		},
-	})
+    state := session.Start(receive.SessionId(client))
+    send.View(client, view.View{
+        Name: "Todos",
+        Props: Props{
+            Todos: state.Todos,
+            Error: receive.Query(client, "error"),
+        },
+    })
 }
 ```
 
@@ -107,12 +107,12 @@ The user session state is initialized with a few items.
 var States = map[string]*State{}
 
 func Start(id string) *State {
-	if state, ok := States[id]; ok {
-		return state
-	}
+    if state, ok := States[id]; ok {
+        return state
+    }
 
-	States[id] = New()
-	return States[id]
+    States[id] = New()
+    return States[id]
 }
 
 ```
@@ -120,15 +120,15 @@ func Start(id string) *State {
 ```go
 //lib/session/memory/new.go
 func New() *State {
-	return &State{
-		Todos: []Todo{
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Do laundry"},
-			{Checked: false, Description: "Pet the cat."},
-			{Checked: false, Description: "Cook"},
-			{Checked: false, Description: "Pet the cat."},
-		},
-	}
+    return &State{
+        Todos: []Todo{
+            {Checked: false, Description: "Pet the cat."},
+            {Checked: false, Description: "Do laundry"},
+            {Checked: false, Description: "Pet the cat."},
+            {Checked: false, Description: "Cook"},
+            {Checked: false, Description: "Pet the cat."},
+        },
+    }
 }
 ```
 :::
@@ -216,37 +216,37 @@ and then finally removes the item from the session.
 //lib/routes/handlers/todos/remove.go
 
 func Remove(client *client.Client) {
-	var err error
-	var count int64
-	var index int64
-	var indexQuery string
+    var err error
+    var count int64
+    var index int64
+    var indexQuery string
 
-	state := session.Start(receive.SessionId(client))
+    state := session.Start(receive.SessionId(client))
 
-	if indexQuery = receive.Query(client, "index"); indexQuery == "" {
-		// No index found, ignore the request.
-		send.Navigate(client, "/todos")
-		return
-	}
+    if indexQuery = receive.Query(client, "index"); indexQuery == "" {
+        // No index found, ignore the request.
+        send.Navigate(client, "/todos")
+        return
+    }
 
-	if index, err = strconv.ParseInt(indexQuery, 10, 64); err != nil {
-		// Could not parse index, redirect with error.
-		send.Navigatef(client, "/todos?error=%s", err.Error())
-		return
-	}
+    if index, err = strconv.ParseInt(indexQuery, 10, 64); err != nil {
+        // Could not parse index, redirect with error.
+        send.Navigatef(client, "/todos?error=%s", err.Error())
+        return
+    }
 
-	if count = int64(len(state.Todos)); index >= count || index < 0 {
-		// Index is out of bounds, ignore the request.
-		send.Navigate(client, "/todos")
-		return
-	}
+    if count = int64(len(state.Todos)); index >= count || index < 0 {
+        // Index is out of bounds, ignore the request.
+        send.Navigate(client, "/todos")
+        return
+    }
 
-	state.Todos = append(
-		state.Todos[:index],
-		state.Todos[index+1:]...,
-	)
+    state.Todos = append(
+        state.Todos[:index],
+        state.Todos[index+1:]...,
+    )
 
-	send.Navigate(client, "/todos")
+    send.Navigate(client, "/todos")
 }
 ```
 
@@ -284,48 +284,48 @@ The form is then captured by the `Toggle` handler.
 ```go
 //lib/routes/handlers/todos/toggle.go
 func Toggle(client *client.Client) {
-	var err error
-	var count int64
-	var index int64
-	var value int64
-	var indexQuery string
-	var valueQuery string
+    var err error
+    var count int64
+    var index int64
+    var value int64
+    var indexQuery string
+    var valueQuery string
 
-	state := session.Start(receive.SessionId(client))
+    state := session.Start(receive.SessionId(client))
 
-	if indexQuery = receive.Query(client, "index"); indexQuery == "" {
-		// No index found, ignore the request.
-		send.Navigate(client, "/todos")
-		return
-	}
+    if indexQuery = receive.Query(client, "index"); indexQuery == "" {
+        // No index found, ignore the request.
+        send.Navigate(client, "/todos")
+        return
+    }
 
-	if valueQuery = receive.Query(client, "value"); valueQuery == "" {
-		// No value found, ignore the request.
-		send.Navigate(client, "/todos")
-		return
-	}
+    if valueQuery = receive.Query(client, "value"); valueQuery == "" {
+        // No value found, ignore the request.
+        send.Navigate(client, "/todos")
+        return
+    }
 
-	if index, err = strconv.ParseInt(indexQuery, 10, 64); err != nil {
-		// Could not parse index, redirect with error.
-		send.Navigatef(client, "/todos?error=%s", err.Error())
-		return
-	}
+    if index, err = strconv.ParseInt(indexQuery, 10, 64); err != nil {
+        // Could not parse index, redirect with error.
+        send.Navigatef(client, "/todos?error=%s", err.Error())
+        return
+    }
 
-	if value, err = strconv.ParseInt(valueQuery, 10, 64); err != nil {
-		// Could not parse value, redirect with error.
-		send.Navigatef(client, "/todos?error=%s", err.Error())
-		return
-	}
+    if value, err = strconv.ParseInt(valueQuery, 10, 64); err != nil {
+        // Could not parse value, redirect with error.
+        send.Navigatef(client, "/todos?error=%s", err.Error())
+        return
+    }
 
-	if count = int64(len(state.Todos)); index >= count || index < 0 {
-		// Index is out of bounds, ignore the request.
-		send.Navigate(client, "/todos")
-		return
-	}
+    if count = int64(len(state.Todos)); index >= count || index < 0 {
+        // Index is out of bounds, ignore the request.
+        send.Navigate(client, "/todos")
+        return
+    }
 
-	state.Todos[index].Checked = value > 0
+    state.Todos[index].Checked = value > 0
 
-	send.Navigate(client, "/todos")
+    send.Navigate(client, "/todos")
 }
 ```
 
@@ -364,21 +364,21 @@ The form is then captured by the `Add` handler.
 ```go
 //lib/routes/handlers/todos/add.go
 func Add(client *client.Client) {
-	var description string
+    var description string
 
-	state := session.Start(receive.SessionId(client))
+    state := session.Start(receive.SessionId(client))
 
-	if description = receive.Query(client, "description"); description == "" {
-		send.Navigate(client, "/todos?error=todo description cannot be empty")
-		return
-	}
+    if description = receive.Query(client, "description"); description == "" {
+        send.Navigate(client, "/todos?error=todo description cannot be empty")
+        return
+    }
 
-	state.Todos = append(state.Todos, session.Todo{
-		Checked:     false,
-		Description: description,
-	})
+    state.Todos = append(state.Todos, session.Todo{
+        Checked:     false,
+        Description: description,
+    })
 
-	send.Navigate(client, "/todos")
+    send.Navigate(client, "/todos")
 }
 ```
 
