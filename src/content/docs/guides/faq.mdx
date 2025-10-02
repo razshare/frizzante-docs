@@ -60,7 +60,7 @@ func Apply(mid *Middleware, routes []route.Route) {
                     return                            // Quits.
                 }
             }
-            handler(client)                          // Invokes the actual route handler.
+            handler(client)                           // Invokes the actual route handler.
         }
     }
 }
