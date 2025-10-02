@@ -30,7 +30,7 @@ As you can see, all handlers are exposed with a `GET /...` pattern.
 
 ## Fallback
 
-The `GET /` pattern acts acts as a fallback.
+The `GET /` pattern acts as a fallback.
 
 ![](image200.svg)
 
