@@ -44,12 +44,23 @@ It is possible, but not required, to generate TypeScript type definitions from G
     This will generate your type definitions in `.gen/types`.
 
     ```ts
-    //.gen/types/gen/main/lib/routes/handlers/welcome/Props.d.ts
+    //.gen/types/main/lib/routes/handlers/welcome/Props.d.ts
     export type Props = {
         message: string
         error: string
     }
     ```
+
+    :::tip
+    You can use the default `$gen` alias to access the `.gen` directory.
+    ```svelte
+    <script lang="ts">
+        import type { Props } from "$gen/types/main/lib/routes/handlers/welcome/Props.d.ts"
+        let {}:Props = $props()
+    </script>
+    ```
+    :::
+
     :::note
     Make sure that your Air configuration uses a `types` tag.
     ```toml
