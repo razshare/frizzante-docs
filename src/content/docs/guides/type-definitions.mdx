@@ -56,7 +56,7 @@ It is possible, but not required, to generate TypeScript type definitions from G
     ```svelte
     <script lang="ts">
         import type { Props } from "$gen/types/main/lib/routes/handlers/welcome/Props.d.ts"
-        let {}:Props = $props()
+        let { message, error }:Props = $props()
     </script>
     ```
     :::
