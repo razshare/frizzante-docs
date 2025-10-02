@@ -4,98 +4,6 @@ title: Views
 
 import { FileTree } from '@astrojs/starlight/components'
 
-Before rendering views you need to assign a **rendering function** to your server.\
-This rendering function is used to render views when invoking `send.View()`.
-
-You can choose between two types of rendering functions: `csr` and `ssr`.
-
-### Csr Function
-
-The csr function simply reads the contents of your `index.html`, injects the view properties into the document and returns the result.
-
-You can create a csr function using `csr.New()`.
-
-```go
-//main.go
-package main
-
-import (
-    "embed"
-    "main/lib/core/server"
-    "main/lib/core/view/csr"
-    "os"
-)
-
-//go:embed app/dist
-var efs embed.FS
-var srv = server.New()
-var dev = os.Getenv("DEV") == "1"
-var render = csr.New(ssr.Config{ Efs: efs, Disk: dev })
-
-func main() {
-    defer server.Start(srv)
-    srv.Render = render
-    srv.Efs = efs
-}
-```
-
-:::tip
-Csr functions default to reading from the given embedded file system (`Efs`).\
-You can force the function to read from the disk instead by setting `Disk: true`.
-
-This can be helpful while developing in order to get instant feedback from Vite.
-:::
-
-
-### Ssr Function
-
-The ssr function uses a JavaScript engine in order to render Svelte components on the fly and then return the result.
-
-You can create an ssr function using `ssr.New()`.
-
-```go
-//main.go
-package main
-
-import (
-    "embed"
-    "main/lib/core/server"
-    "main/lib/core/view/ssr"
-    "os"
-)
-
-//go:embed app/dist
-var efs embed.FS
-var srv = server.New()
-var dev = os.Getenv("DEV") == "1"
-var render = ssr.New(ssr.Config{Efs: efs, Disk: dev})
-
-func main() {
-    defer server.Start(srv)
-    srv.Render = render
-    srv.Efs = efs
-}
-```
-
-:::tip
-Ssr functions default to reading from the given embedded file system (`Efs`).\
-You can force the function to read from the disk instead by setting `Disk: true`.
-
-This can be helpful while developing in order to get instant feedback from Vite.
-:::
-
-:::tip
-You can configure how many JavaScript runtimes are executed in parallel by setting the `Limit` field on your ssr configuration.
-```go
-var render = ssr.New(ssr.Config{Efs: efs, Disk: dev, Limit: 3})
-```
-:::caution
-Settings this limit too high could lead to large memory usage by your JavaScript runtimes.\
-For most use cases a limit of 1 runtime (the default) is more than enough, after all, the Svelte compiler
-is simply concatenating strings together when rendering pages on the server.\
-Modify this field based on actual performance measurements.
-:::
-
 ## What are views?
 
 Views are **svelte components** exported by 
@@ -116,8 +24,7 @@ Views that are meant to be rendered on the server should be exported by `app/exp
 import Welcome from '$lib/views/Welcome.svelte'
 import Profile from '$lib/views/Profile.svelte'
 
-export const views = {  // Defines that components "Welcome" and "Profile"
-                        // can be rendered on the server when sent with send.View().
+export const views = {
     "Welcome": Welcome,
     "Profile": Profile,
 }
@@ -128,14 +35,12 @@ export const views = {  // Defines that components "Welcome" and "Profile"
 Views that are meant to be rendered on the client should be exported by `app/exports.client.ts`.
 ```ts
 //app/exports.client.ts
-export const views = { // Defines that components "Welcome" and "Profile"
-                       // can be bundled and rendered on the client when
-                       // sent with send.View().
+export const views = {
     "Welcome": import('$lib/views/Welcome.svelte'),
     "Profile": import('$lib/views/Profile.svelte'),
 }
 ```
-
+:::note
 These views are being imported asynchronously in order to split them 
 in different bundles, however you can simply create fake promises
 in order to bundle them all together and eliminate network latency
@@ -151,6 +56,7 @@ export const views = {
     "Profile": Promise.resolve(Profile),
 }
 ```
+:::
 
 :::note
 Keys in `app/exports.server.ts` and `app/exports.client.ts` are not mutually exclusive.\
@@ -198,10 +104,7 @@ import (
 )
 
 func View(client *client.Client) {
-    send.FileOrElse(client, send.FileOrElseConfig{   // Tries to send requested file.
-        UseDisk: os.Getenv("DEV") == "1",            // Sends file from disk if in dev mode.
-        OrElse:  func() { welcome.View(client) },    // Else sends "Welcome" view.
-    })
+    send.FileOrElse(client, func() { welcome.View(client) })
 }
 ```
 
@@ -219,15 +122,15 @@ import (
 
 //go:embed app/dist
 var efs embed.FS
-var srv = server.Default(efs)               // Creates server config.
-var route = route.Route{                    // Creates route.
-    Pattern: "GET /",                       // Sets route pattern.
-    Handler: welcome.View,                  // Sets route handler.
-}
+var srv = server.New()                           // Creates server.
 
 func main() {
-    defer server.Start(srv)                // Starts the server.
-    srv.Routes = append(srv.Routes, route) // Adds the route to the server.
+    defer server.Start(srv)                      // Starts server.
+	srv.Efs = efs                                // Sets embedded file system.
+    srv.Routes = append(srv.Routes, route.Route{ // Adds route to the server.
+        Pattern: "GET /",
+        Handler: welcome.View,
+    })
 }
 ```
 
@@ -320,10 +223,6 @@ func View(client *client.Client) {
 }
 ```
 
-:::note
-Requires an [ssr function](#ssr-function).
-:::
-
 ### RenderModeServer
 
 Using `RenderModeServer`, the view is rendered only on the server.<br/>
@@ -347,10 +246,6 @@ func View(client *client.Client) {
 }
 ```
 
-:::note
-Requires an [ssr function](#ssr-function).
-:::
-
 :::tip
 While using `RenderModeServer` the view won't serve a JavaScript bundle,
 but you can still use the `<svelte:head>` special
@@ -361,7 +256,6 @@ tag in order to load scripts dynamically.
 </svelte:head>
 ```
 :::
-
 
 ### RenderModeClient
 
@@ -384,19 +278,32 @@ func View(client *client.Client) {
 }
 ```
 
-:::note
-Requires a [csr](#csr-function) or [ssr](#ssr-function) function.
-:::
-
 :::tip
 You can combine any of these render modes with adaptive hyperlinks and forms.\
 Read more about [web standards](../web-standards).
 :::
 
-## Why use Csr Function at all?
+:::tip
+When using `RenderModeFull` or `RenderModeServer`, You can configure how many JavaScript runtimes are executed in parallel by setting the `FRIZZANTE_RENDER_LIMIT` environment variable.
+```sh
+//.gen/bin
+FRIZZANTE_RENDER_LIMIT=3 ./app
+```
 
-Since the [ssr function](#ssr-function) supports all rendering modes, you might ask yourself why bother
-using a [csr function](#csr-function) at all?
+:::caution
+Settings this limit too high could lead to large memory usage by your JavaScript runtimes.\
+For most use cases a limit of 1 runtime (the default) is more than enough, after all, the Svelte compiler
+is simply concatenating strings together when rendering pages on the server.\
+Modify this field based on actual performance measurements.
+:::
 
-When using a [csr function](#csr-function), the server-side JavaScript engine is completely
-eliminated from your final binary, reducing its size from a minimum of 24MB, to a minimum of 10MB.
+## Disabling the server-side JavaScript runtime.
+
+You can add the `no_js_runtime` tag to your build process to completely disable the server-side JavaScript runtime.
+
+```sh
+frizzante --build --tags="no_js_runtime"
+```
+
+This will drop the server-side JavaScript runtime, reducing the minimum size of the final binary from
+25MB to 10MB.

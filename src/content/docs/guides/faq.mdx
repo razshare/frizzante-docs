@@ -93,8 +93,6 @@ import (
 //go:embed app/dist
 var efs embed.FS
 var srv = server.New()
-var dev = os.Getenv("DEV") == "1"
-var render = ssr.New(ssr.Config{ Efs: efs, UseDisk: dev })
 
 var mid = &middleware.Middleware{                  // Creates middleware.
     Hooks: []middleware.Hook{                      // Creates hooks.
@@ -109,8 +107,7 @@ func main() {
     defer middleware.Apply(mid, srv.Routes)        // Applies middleware to server routes.
                                                    // Remember that deferred functions are executed in reverse,
                                                    // so this line will execute before the server starts.
-    srv.Efs = efs
-    srv.Render = render
+    srv.Efs = efs                                  // Sets embedded file system.
     srv.Routes = []route.Route{
         {Pattern: "GET /", Handler: fallback.View},
         {Pattern: "GET /welcome", Handler: welcome.View},

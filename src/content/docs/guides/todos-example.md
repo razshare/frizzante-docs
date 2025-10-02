@@ -15,7 +15,6 @@ For the sake of simplicity, every interaction happens through a `GET` verb.
 func main() {
 	defer server.Start(srv)
 	srv.Efs = efs
-	srv.Render = render
 	srv.Routes = []route.Route{
 		{Pattern: "GET /", Handler: fallback.View},
 		{Pattern: "GET /welcome", Handler: welcome.View},
@@ -41,10 +40,7 @@ matching file or the `"Welcome"` view using `send.FileOrElse()`.
 ```go
 //lib/routes/handlers/fallback/view.go
 func View(client *client.Client) {
-    send.FileOrElse(client, send.FileOrElseConfig{
-        UseDisk: os.Getenv("DEV") == "1",
-        OrElse:  func() { welcome.View(client) },
-    })
+    send.FileOrElse(client, func() { welcome.View(client) })
 }
 ```
 
