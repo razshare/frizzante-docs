@@ -169,7 +169,7 @@ Items are listed by iterating over `todos`.
 
 ```svelte
 //app/lib/views/Todos.svelte
-{#snippet ShowTodosList(todos: Todo[])}
+{#snippet ShowTodosList(todos: memory.Todo[])}
     {#if todos.length > 0}
         {#each todos as todo, index (index)}
             <div in:slide out:slide class="flex w-full text-base-content/80">
