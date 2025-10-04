@@ -70,7 +70,7 @@ Use `send.View()` to send a view.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package lib
+package welcome
 
 import (
     "main/lib/core/client"
@@ -93,7 +93,7 @@ However, you can use `send.FileOrElse()` in order to send the requested file or 
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package lib
+package welcome
 
 import (
     "os"
@@ -101,6 +101,7 @@ import (
     "main/lib/core/client"
     "main/lib/core/send"
     "main/lib/core/view"
+	"main/lib/routes/handlers/welcome"
 )
 
 func View(client *client.Client) {
@@ -118,6 +119,7 @@ import (
     "embed"
     "main/lib/core/client"
     "main/lib/core/server"
+	"main/lib/routes/handlers/welcome"
 )
 
 //go:embed app/dist
@@ -140,7 +142,7 @@ Optionally, you can specify properties for your `View` with the `Props` field.
 
 ```go
 //lib/routes/handlers/welcome/view.go
-package lib
+package welcome
 
 import (
     "main/lib/core/client"
@@ -207,7 +209,7 @@ Using `RenderModeFull`, the view is rendered on both the server and the client.<
 This is the **default** mode.
 ```go
 //lib/routes/handlers/welcome/view.go
-package lib
+package welcome
 
 import (
     "main/lib/core/client"
@@ -230,7 +232,7 @@ You'll have to deal away with apis such as [fetch](https://developer.mozilla.org
 your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
 ```go
 //lib/routes/handlers/welcome/view.go
-package lib
+package welcome
 
 import (
     "main/lib/core/client"
@@ -262,7 +264,7 @@ tag in order to load scripts dynamically.
 Using `RenderModeClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
 ```go
 //lib/routes/handlers/welcome/view.go
-package lib
+package welcome
 
 import (
     "main/lib/core/client"
