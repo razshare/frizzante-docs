@@ -186,6 +186,21 @@ Items are listed by iterating over `todos`.
 
 Each item has remove and toggle buttons.
 
+:::note
+Type `memory.Todo` comes from generated types.
+
+```ts
+//gen/types/main/lib/routes/handlers/welcome/Props.d.ts
+export declare namespace memory {
+    export type Todo = {
+        description: string
+        checked: boolean
+    }
+}
+```
+
+:::
+
 ### Remove Todos
 
 Items are removed by submitting a form to `"GET /remove"`.
