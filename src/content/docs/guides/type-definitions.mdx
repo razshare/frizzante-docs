@@ -36,10 +36,20 @@ It is possible, but not required, to generate TypeScript type definitions from G
         Error   string `json:"error"`
     }
     ```
-1. Start dev mode.
+1. Generate types
+
     ```sh
-    frizzante --dev
+    frizzante -gtypes
     ```
+
+    :::tip
+    Alternatively, starting dev mode will also generate types.
+    ```sh
+    frizzante --dev # this will automatically generate types while you modify them
+    ```
+    :::
+
+    
 
     This will generate your type definitions in `.gen/types`.
 
@@ -62,26 +72,6 @@ It is possible, but not required, to generate TypeScript type definitions from G
         import type { Props } from "$gen/types/main/lib/routes/handlers/welcome/Props"
         let { message, error }:Props = $props()
     </script>
-    ```
-    :::
-
-    :::note
-    Make sure that your Air configuration uses a `types` tag.
-    ```toml
-    //.air.toml
-    [build]
-      args_bin = []
-      bin = "./.gen/tmp/main.exe"
-      cmd = "go build -tags dev,trace,types -o ./.gen/tmp/main.exe ."
-    ```
-    Without a `types` tag, `types.Generate[T]()` is a noop.
-    ```go
-    //lib/core/types/generate_noop.go
-    //go:build !types
-
-    package types
-
-    func Generate[T any]() error { return nil }
     ```
     :::
 </Steps>
