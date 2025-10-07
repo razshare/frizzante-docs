@@ -36,8 +36,8 @@ Views that are meant to be rendered on the client should be exported by `app/exp
 ```ts
 //app/exports.client.ts
 export const views = {
-    "Welcome": import('$lib/views/Welcome.svelte'),
-    "Profile": import('$lib/views/Profile.svelte'),
+    "Welcome": () => import('$lib/views/Welcome.svelte'),
+    "Profile": () => import('$lib/views/Profile.svelte'),
 }
 ```
 :::note
@@ -52,8 +52,8 @@ import Welcome from '$lib/views/Welcome.svelte'
 import Profile from '$lib/views/Profile.svelte'
 
 export const views = {
-    "Welcome": Promise.resolve(Welcome),
-    "Profile": Promise.resolve(Profile),
+    "Welcome": () => Promise.resolve(Welcome),
+    "Profile": () => Promise.resolve(Profile),
 }
 ```
 :::
