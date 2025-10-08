@@ -28,17 +28,17 @@ to retrieve the contents of `/some-other-page` and update the current state and 
 For example, given the following handler using `view.RenderModeServer`
 
 ```go
-//lib/routes/handlers/welcome/view.go
+//lib/routes/welcome/view.go
 package welcome
 
 import (
-    "main/lib/core/client"
+    "main/lib/core/clients"
     "main/lib/core/send"
-    "main/lib/core/view"
+    "main/lib/core/views"
 )
 
-func View(client *client.Client)  {
-    send.View(client, view.View{          // Sends view.
+func View(client *clients.Client)  {
+    send.View(client, views.View{         // Sends view.
        Name: "Welcome",                   // Sets name of the view.
        RenderMode: view.RenderModeServer, // Renders view only on the server.
     })
@@ -85,17 +85,17 @@ to submit the form to `/process` and update the current state and view based on 
 For example, given the following handler using `view.RenderModeServer`
 
 ```go
-//lib/routes/handlers/welcome/view.go
+//lib/routes/welcome/view.go
 package welcome
 
 import (
-    "main/lib/core/client"
+    "main/lib/core/clients"
     "main/lib/core/send"
-    "main/lib/core/view"
+    "main/lib/core/views"
 )
 
-func View(client *client.Client)  {
-    send.View(client, view.View{          // Sends view.
+func View(client *clients.Client)  {
+    send.View(client, views.View{         // Sends view.
        Name: "Welcome",                   // Sets name of the view.
        RenderMode: view.RenderModeServer, // Renders view only on the server.
     })

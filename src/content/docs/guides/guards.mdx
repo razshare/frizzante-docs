@@ -4,56 +4,31 @@ title: Guards
 
 import { Tabs, TabItem } from '@astrojs/starlight/components'
 
-You can protect your [routes](../basics#routes) with guards.
+A guard is an object that is composed of an optional name and a required handler.
 
-A guard is an object that is composed of an optional name, a required handler and slice of **tags**.
+You can add guards to your routes in order to protect them.
 
-You can add guards to the server by appending to or overwriting the `srv.Guards` field.
 
 ```go
-package main
-
-import (
-   "main/lib/core/client"
-   "main/lib/core/route"
-   "main/lib/core/server"
-   "main/lib/core/tag"
-   "main/lib/routes/api/xml/data"
-)
-
-const nojson tag.Tag = 0                                              // Creates tag.
-var srv = server.New()                                                // Creates server.
-
-func main() {
-    defer server.Start(srv)                                           // Starts server.
-    srv.Guards = []srv.Guards{
-        {                                                             // Adds guard.
-            Name: "NoJson",                                           // Sets guard name (It's useful for logs).
-            Handler: func(client *client.Client, allow func()) {      // Sets guard handler.
-               if receive.ContentType(client) == "application/json" { // Checks content type.
-                   return                                             // Returns - this will actually terminate the connection.
-               }
-               allow()                                                // Allows request through.
-            },
-            Tags: []tag.Tag{nojson},                                  // Sets guard tags.
+server.Routes = []routes.Route{
+    {
+        Pattern: "GET /api/xml/data",
+        Handler: data.Get,
+        Guards: []guards.Guards{
+            {Name: "jsonless", Handler: func(client *clients.Client, allow func()) {
+                if receive.ContentType(client) == "application/json" {
+                    return
+                }
+                allow()
+            }},
         },
-    }
-}
-```
-
-You can protect a route by **tagging** it.
-
-```go
-srv.Routes = []route.Route{
-    {                                 // Adds route.
-        Pattern: "GET /api/xml/data", // Sets route pattern.
-        Handler: data.Get,            // Sets route handler.
-        Tags: []tag.Tag{nojson},      // Sets route tags.
     },
 }
 ```
 
-In this case `"GET /api/xml/data"` is tagged with `nojson`, which means it's protected by `"NoJson"`.
+Guards will block all incoming requests by default, you must call `allow()` to explicitly allow the request through.
+
+In this example, the `"GET /api/xml/data"` route will decline requests with content type `"application/json"`.
 
 ![](guards100.svg)
 
@@ -62,70 +37,38 @@ In this case `"GET /api/xml/data"` is tagged with `nojson`, which means it's pro
 You can compose multiple tags in order to create more advanced restrictions.
 
 ```go
-const auth tag.Tag = 0           // Creates tag.
-const authentication tag.Tag = 1 // Creates tag.
-const authorization tag.Tag = 2  // Creates tag.
+var authenticate = guards.Guard{Name: "authentication", Handler: func(client *clients.Client, allow func()) {
+    session := sessions.Start(receive.SessionId(client))
+    if session.Verified && time.Since(session.LastActivity) <= 30*time.Minute {
+        allow()
+        return
+    }
+    send.Status(client, 401)
+    send.Message(client, "not authenticated")
+}}
 ```
 
 ```go
-src.Guards = []guard.Guards{
-   {                                                              // Adds authentication guard.
-        Name: "Authentication",                                   // Sets guard name (useful for logs).
-        Handler: func(client *client.Client, allow func()) {      // Sets guard handler. Call allow() in order to permit the request to
-                                                                  // advance to the next guard or to the route handler.
-            state := session.Start(receive.SessionId(client))     // Starts session.
-            if state.Verified &&                                  // Checks if client is verified. This "Verified" field is
-                                                                  // usually set by a public route, like a /login page.
-               time.Since(state.LastActivity) <= 30*time.Minute { // Checks if client has been active in the past 30 minutes.
-               allow()                                            // Allows the request through.
-               return
-            }
-            send.Status(client, 401)                              // Hints to client that authentication is missing.
-            send.Message(client, "not authenticated")             // Sends a readable hint message.
-            return                                                // At this point allow() has not been called, so the request is blocked.
-        },
-        Tags: []tag.Tag{authentication, auth},                    // Sets the guard tags - use any of these tags to apply this guard to any route.
-    },
-    {                                                             // Adds authorization guard.
-        Name: "Authorization",                                    // Sets guard name (useful for logs).
-        Handler: func(client *client.Client, allow func()) {      // Sets guard handler.
-            state := session.Start(receive.SessionId(client))     // Starts session.
-            if state.UserId == receive.path("user_id") {          // Checks if session user id matches requested user id.
-               allow()                                            // Allows the request through.
-               return
-            }
-            send.Status(client, 401)                              // Hints to client that authorization is missing.
-            send.Message(client, "not authorized")                // Sends a readable hint message.
-            return                                                // At this point allow() has not been called, so the request is blocked.
-        },
-        Tags: []tag.Tag{authorization, auth},                     // Sets the guard tags - use any of these tags to apply this guard to any route.
-    },
-}
+var authorize = guards.Guard{Name: "authorize", Handler: func(client *clients.Client, allow func()) {
+    session := sessions.Start(receive.SessionId(client))
+    if session.UserId == receive.path("user_id") {
+        allow()
+        return
+    }
+    send.Status(client, 401)
+    send.Message(client, "not authorized")
+}}
+```
 
-srv.Routes = []route.Route{     
-    {                                                             // Adds route.
-        Pattern: "GET /public",                                   // Sets route pattern.
-        Handler: publicHandler,                                   // Sets route handler.
-                                                                  // No requirements - it's public.
-    },
-    {                                                             // Adds route.
-        Pattern: "GET /dashboard",                                // Sets route pattern.
-        Handler: dashboardHandler,                                // Sets route handler.
-        Tags: []tag.Tag{authentication},                          // Requires authentication.
-    },
-    {                                                             // Adds route.
-        Pattern: "GET /user/{user_id}/settings",                  // Sets route pattern.
-        Handler: userSettingsHandler,                             // Sets route handler.
-        Tags: []tag.Tag{auth},                                    // Requires auth, meaning both authentication and authorization.
-    },
-    {                                                             // Adds route.
-        Pattern: "DELETE /user/{user_id}",                        // Sets route pattern.
-        Handler: deleteUserHandler,                               // Sets route handler.
-        Tags: []tag.Tag{auth},                                    // Requires auth, meaning both authentication and authorization.
-    },
+```go
+server.Routes = []routes.Route{
+    {Pattern: "GET /public", Handler: public.Get},
+    {Pattern: "GET /dashboard", Handler: dashboard.Get, Guards: []guards.Guard{authenticate}},
+    {Pattern: "GET /user/{user_id}/settings", Handler: settings.Get, Guards: []guards.Guard{authenticate, authorize}},
+    {Pattern: "DELETE /user/{user_id}", Handler: user.Get, Guards: []guards.Guard{authenticate, authorize}},
 }
 ```
 
-In this example `"GET /dashboard"` is protected by `"Authentication"`, while `"GET /user/{user_id}/settings"` and `"DELETE /user/{user_id}"` are protected by both `"Authentication"` and `"Authorization"`.
+In this example `"GET /dashboard"` is protected by `"authenticate"`, while `"GET /user/{user_id}/settings"` and `"DELETE /user/{user_id}"` are protected by both `"authenticate"` and `"authorize"`.
 
 ![](guards200.svg)

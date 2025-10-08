@@ -69,17 +69,17 @@ See [Render Modes below](#render-modes).
 Use `send.View()` to send a view.
 
 ```go
-//lib/routes/handlers/welcome/view.go
+//lib/routes/welcome/view.go
 package welcome
 
 import (
-    "main/lib/core/client"
+    "main/lib/core/clients"
     "main/lib/core/send"
-    "main/lib/core/view"
+    "main/lib/core/views"
 )
 
-func View(client *client.Client) {
-    send.View(client, view.View{Name: "Welcome"}) // Sends view "Welcome".
+func View(client *clients.Client) {
+    send.View(client, views.View{Name: "Welcome"}) // Sends view "Welcome".
 }
 ```
 
@@ -92,19 +92,19 @@ There is no way to specify a "**default view**".
 However, you can use `send.FileOrElse()` in order to send the requested file or run custom logic if it doesn't exist.
 
 ```go
-//lib/routes/handlers/welcome/view.go
+//lib/routes/welcome/view.go
 package welcome
 
 import (
     "os"
 
-    "main/lib/core/client"
+    "main/lib/core/clients"
     "main/lib/core/send"
-    "main/lib/core/view"
-	"main/lib/routes/handlers/welcome"
+    "main/lib/core/views"
+    "main/lib/routes/welcome"
 )
 
-func View(client *client.Client) {
+func View(client *clients.Client) {
     send.FileOrElse(client, func() { welcome.View(client) })
 }
 ```
@@ -117,19 +117,19 @@ package main
 
 import (
     "embed"
-    "main/lib/core/client"
-    "main/lib/core/server"
-	"main/lib/routes/handlers/welcome"
+    "main/lib/core/clients"
+    "main/lib/core/servers"
+    "main/lib/routes/welcome"
 )
 
 //go:embed app/dist
 var efs embed.FS
-var srv = server.New()                           // Creates server.
+var server = servers.New()                              // Creates server.
 
 func main() {
-    defer server.Start(srv)                      // Starts server.
-    srv.Efs = efs                                // Sets embedded file system.
-    srv.Routes = append(srv.Routes, route.Route{ // Adds route to the server.
+    defer servers.Start(server)                         // Starts server.
+    server.Efs = efs                                    // Sets embedded file system.
+    server.Routes = append(server.Routes, routes.Route{ // Adds route to the server.
         Pattern: "GET /",
         Handler: welcome.View,
     })
@@ -141,20 +141,20 @@ func main() {
 Optionally, you can specify properties for your `View` with the `Props` field.
 
 ```go
-//lib/routes/handlers/welcome/view.go
+//lib/routes/welcome/view.go
 package welcome
 
 import (
-    "main/lib/core/client"
+    "main/lib/core/clients"
     "main/lib/core/send"
-    "main/lib/core/view"
+    "main/lib/core/views"
 )
 
-func View(client *client.Client) {
-    send.View(client, view.View{ // Sends view.
-       Name: "Welcome",          // Sets view name.
-       Props: map[string]string{ // Sets view props, which will be injected into the svelte component.
-          "name": "world",       // Adds property "name" with value "world".
+func View(client *clients.Client) {
+    send.View(client, views.View{ // Sends view.
+       Name: "Welcome",           // Sets view name.
+       Props: map[string]string{  // Sets view props, which will be injected into the svelte component.
+          "name": "world",        // Adds property "name" with value "world".
        },
     }) 
 }
@@ -208,17 +208,17 @@ You can choose how to render views by setting the `RenderMode` field in your `Vi
 Using `RenderModeFull`, the view is rendered on both the server and the client.<br/>
 This is the **default** mode.
 ```go
-//lib/routes/handlers/welcome/view.go
+//lib/routes/welcome/view.go
 package welcome
 
 import (
-    "main/lib/core/client"
+    "main/lib/core/clients"
     "main/lib/core/send"
-    "main/lib/core/view"
+    "main/lib/core/views"
 )
 
-func View(client *client.Client) {
-    send.View(client, view.View{        // Sends view.
+func View(client *clients.Client) {
+    send.View(client, views.View{       // Sends view.
        Name: "Welcome",                 // Sets view name.
        RenderMode: view.RenderModeFull, // Renders view on server and client.
     })
@@ -231,17 +231,17 @@ Using `RenderModeServer`, the view is rendered only on the server.<br/>
 You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
 your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
 ```go
-//lib/routes/handlers/welcome/view.go
+//lib/routes/welcome/view.go
 package welcome
 
 import (
-    "main/lib/core/client"
+    "main/lib/core/clients"
     "main/lib/core/send"
-    "main/lib/core/view"
+    "main/lib/core/views"
 )
 
-func View(client *client.Client) {
-    send.View(client, view.View{          // Sends view.
+func View(client *clients.Client) {
+    send.View(client, views.View{         // Sends view.
        Name: "Welcome",                   // Sets view name.
        RenderMode: view.RenderModeServer, // Renders view only on server.
     })
@@ -263,17 +263,17 @@ tag in order to load scripts dynamically.
 
 Using `RenderModeClient`, the view is rendered only on the client by loading a JavaScript bundle asynchronously.
 ```go
-//lib/routes/handlers/welcome/view.go
+//lib/routes/welcome/view.go
 package welcome
 
 import (
-    "main/lib/core/client"
+    "main/lib/core/clients"
     "main/lib/core/send"
-    "main/lib/core/view"
+    "main/lib/core/views"
 )
 
-func View(client *client.Client) {
-    send.View(client, view.View{          // Sends view.
+func View(client *clients.Client) {
+    send.View(client, views.View{         // Sends view.
        Name: "Welcome",                   // Sets view name.
        RenderMode: view.RenderModeClient, // Renders view only on client.
     })

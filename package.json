@@ -16,6 +16,6 @@
     "starlight-theme-flexoki": "^0.1.0"
   },
   "devDependencies": {
-    "starlight-fullview-mode": "^0.2.3"
+    "starlight-fullview-mode": "^0.2.6"
   }
 }

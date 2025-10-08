@@ -10,7 +10,7 @@ It is possible, but not required, to generate TypeScript type definitions from G
 <Steps>
 1. Define your Go types.
     ```go
-    //lib/routes/handlers/welcome/types.go
+    //lib/routes/welcome/types.go
     package welcome
 
     type Props struct {
@@ -24,7 +24,7 @@ It is possible, but not required, to generate TypeScript type definitions from G
     :::
 1. Call `types.Generate[T]()`.
     ```go
-    //lib/routes/handlers/welcome/types.go
+    //lib/routes/welcome/types.go
     package welcome
 
     func init() {
@@ -54,7 +54,7 @@ It is possible, but not required, to generate TypeScript type definitions from G
     This will generate your type definitions in `.gen/types`.
 
     ```ts
-    //.gen/types/main/lib/routes/handlers/welcome/Props.d.ts
+    //.gen/types/main/lib/routes/welcome/Props.d.ts
     export type Props = welcome.Props
 
     export declare namespace welcome {
@@ -69,7 +69,7 @@ It is possible, but not required, to generate TypeScript type definitions from G
     You can use the default `$gen` alias to access the `.gen` directory.
     ```svelte
     <script lang="ts">
-        import type { Props } from "$gen/types/main/lib/routes/handlers/welcome/Props"
+        import type { Props } from "$gen/types/main/lib/routes/welcome/Props"
         let { message, error }:Props = $props()
     </script>
     ```

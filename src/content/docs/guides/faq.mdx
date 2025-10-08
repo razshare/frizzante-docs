@@ -27,33 +27,33 @@ For more details see the [guards page](../guards).
 If you really want middleware-like behavior, you can easily implement it in your own project.
 
 ```go
-//lib/middleware/types.go
-package middleware
+//lib/middlewares/types.go
+package middlewares
 
-import "main/lib/core/client"
+import "main/lib/core/clients"
 
-type Hook func(client *client.Client, next func()) // Defines a hook function type which will be used by the middleware.
+type Hook func(client *clients.Client, next func()) // Defines a hook function type which will be used by the middleware.
 
-type Middleware struct {                           // Defines a structure holding multiple hooks.
-    Hooks []Hook                                   // Defines the actual hooks slice.
+type Middleware struct {                            // Defines a structure holding multiple hooks.
+    Hooks []Hook                                    // Defines the actual hooks slice.
 }
 ```
 
 ```go
-//lib/middleware/apply.go
-package middleware
+//lib/middlewares/apply.go
+package middlewares
 
 import (
-    "main/lib/core/client"
-    "main/lib/core/route"
+    "main/lib/core/clients"
+    "main/lib/core/routes"
 )
 
-func Apply(mid *Middleware, routes []route.Route) {
-    for _, r := range routes {                                   // For each route...
+func Apply(middleware *Middleware, routes []routes.Route) {
+    for _, route := range routes {                               // For each route...
         handler := r.Handler                                     // ...saves the route handler for later use.
-        r.Handler = func(client *client.Client) {                // Assigns a new wrapper route handler.
+        route.Handler = func(client *clients.Client) {           // Assigns a new wrapper route handler.
             var quit bool                                        // Creates flag used to interrupt the chain.
-            for _, hook := range mid.Hooks {                     // Iterate over hooks.
+            for _, hook := range middleware.Hooks {              // Iterate over hooks.
                 quit = true                                      // Prepares to quit.
                 if hook(client, func() { quit = false }); quit { // Invokes hook and checks if route should quit.
                     return                                       // Quits.
@@ -78,36 +78,36 @@ package main
 
 import (
     "embed"
-    "main/lib/core/client"
-    "main/lib/core/route"
-    "main/lib/core/server"
+    "main/lib/core/clients"
+    "main/lib/core/routes"
+    "main/lib/core/servers"
     "main/lib/core/view/ssr"
-    "main/lib/middleware"
-    "main/lib/routes/handlers/fallback"
-    "main/lib/routes/handlers/todos"
-    "main/lib/routes/handlers/welcome"
+    "main/lib/middlewares"
+    "main/lib/routes/fallback"
+    "main/lib/routes/todos"
+    "main/lib/routes/welcome"
     "os"
 )
 
 //go:embed app/dist
 var efs embed.FS
-var srv = server.New()
+var server = servers.New()
 
-var mid = &middleware.Middleware{                  // Creates middleware.
-    Hooks: []middleware.Hook{                      // Creates hooks.
-        func(client *client.Client, next func()) { // Adds hook.
-                                                   // Logic goes here.
+var middleware = &middlewares.Middleware{
+    Hooks: []middleware.Hook{
+        func(client *clients.Client, next func()) {
+            // Hook logic goes here.
         },
     },
 }
 
 func main() {
-    defer server.Start(srv)
-    defer middleware.Apply(mid, srv.Routes)        // Applies middleware to server routes.
-                                                   // Remember that deferred functions are executed in reverse,
-                                                   // so this line will execute before the server starts.
-    srv.Efs = efs                                  // Sets embedded file system.
-    srv.Routes = []route.Route{
+    defer servers.Start(server)
+    defer middlewares.Apply(middleware, server.Routes) // Applies middleware to server routes.
+                                                       // Remember that deferred functions are executed in reverse,
+                                                       // so this line will execute before the server starts.
+    server.Efs = efs                                   // Sets embedded file system.
+    server.Routes = []routes.Route{
         {Pattern: "GET /", Handler: fallback.View},
         {Pattern: "GET /welcome", Handler: welcome.View},
         {Pattern: "GET /todos", Handler: todos.View},

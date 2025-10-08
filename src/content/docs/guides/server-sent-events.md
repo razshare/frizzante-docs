@@ -5,21 +5,21 @@ title: Server Sent Events
 Use `send.SseUpgrade()` to upgrade the connection to server sent events.
 
 ```go
-route.Route{Pattern: "GET /sse", Handler: welcome.View}
+routes.Route{Pattern: "GET /sse", Handler: welcome.View}
 ```
 
 ```go
-//lib/routes/handlers/welcome/view.go
+//lib/routes/welcome/view.go
 package welcome
 
 import (
-    "main/lib/core/client"
+    "main/lib/core/clients"
     "main/lib/core/receive"
     "main/lib/core/send"
     "time"
 )
 
-func View(client *client.Client) {
+func View(client *clients.Client) {
     alive := receive.IsAlive(client)   // Tracks request status.
     event := send.SseUpgrade(client)   // Sends sse upgrade.
     for *alive {                       // Loops until cancellation.
