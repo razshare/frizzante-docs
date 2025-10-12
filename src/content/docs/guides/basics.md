@@ -298,7 +298,7 @@ dst, _ := os.Create("my-file.txt")
 io.Copy(src, dst)
 ```
 
-Remember to close the file.
+Remember to close it.
 
 ```go
 defer file.Close()
