@@ -125,7 +125,7 @@ Where `onsubmit` takes care of submitting the form and fetching the new state an
 ## Link Component
 
 Frizzante provides a `<Link>` component that manages
-pending requests and errors while navigating hyperlinks.
+pending and error states while navigating hyperlinks.
 
 It is a replacement for your `<a>` elements.
 
@@ -160,7 +160,7 @@ This component passes down `pending` and `error` states through the `children` s
 ## Form Component
 
 Frizzante provides a `<Form>` component that manages
-pending requests and errors while submitting form.
+pending and error states while submitting form.
 
 It is a replacement for your `<form>` elements.
 
