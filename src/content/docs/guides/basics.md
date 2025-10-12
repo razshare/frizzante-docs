@@ -276,7 +276,7 @@ func View(client *clients.Client) {
 ```
 
 :::tip
-You can also use tag `json`, it will match the field correctly as if it were a `form` tag.`
+You can also use a `json` tag, it will match the field correctly as if it were a `form` tag.`
 This is so that you can integrate your structs more easily with other libraries that only take into account `json` formats.
 :::
 
