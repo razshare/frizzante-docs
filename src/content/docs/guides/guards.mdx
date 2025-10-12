@@ -65,7 +65,7 @@ server.Routes = []routes.Route{
     {Pattern: "GET /public", Handler: public.Get},
     {Pattern: "GET /dashboard", Handler: dashboard.Get, Guards: []guards.Guard{authenticate}},
     {Pattern: "GET /user/{user_id}/settings", Handler: settings.Get, Guards: []guards.Guard{authenticate, authorize}},
-    {Pattern: "DELETE /user/{user_id}", Handler: user.Get, Guards: []guards.Guard{authenticate, authorize}},
+    {Pattern: "DELETE /user/{user_id}", Handler: user.Delete, Guards: []guards.Guard{authenticate, authorize}},
 }
 ```
 
