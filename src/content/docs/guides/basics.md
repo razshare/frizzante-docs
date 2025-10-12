@@ -290,13 +290,12 @@ type Form struct {
 }
 ```
 
-The file is reader, so you can open and read it.
+You can open and read the file.
 
 ```go
-file, err := form.File.Open()
-if err != nil {
-    client.Config.ErrorLog.Println(err, stack.Trace())
-}
+src, _ := form.File.Open()
+dst, _ := os.Create("my-file.txt")
+io.Copy(src, dst)
 ```
 
 Remember to close the file.
