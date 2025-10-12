@@ -34,7 +34,7 @@ In this example, the `"GET /api/xml/data"` route will decline requests with cont
 
 ## Composition
 
-You can compose multiple tags in order to create more advanced restrictions.
+You can compose multiple guatds in order to create more advanced restrictions.
 
 ```go
 var authenticate = guards.Guard{Name: "authentication", Handler: func(client *clients.Client, allow func()) {
