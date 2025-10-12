@@ -264,13 +264,13 @@ import (
     "main/lib/core/send"
 )
 
-type Form struct {
-    Name string `form:"name"`
+type Form struct {                             // Defines a struct in which to
+    Name string `form:"name"`                  // store the form content.
 }
 
 func View(client *clients.Client) {
     var form Form
-    receive.Form(client, &form)                 // Retrieves form.
+    receive.Form(client, &form)                // Retrieves form.
     send.Message(client, "Hello " + form.Name) // Sends message.
 }
 ```
