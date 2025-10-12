@@ -55,8 +55,8 @@ var authorize = guards.Guard{Name: "authorize", Handler: func(client *clients.Cl
         allow()
         return
     }
-    send.Status(client, 401)
-    send.Message(client, "not authorized")
+    send.Status(client, 403)
+    send.Message(client, "missing permissions")
 }}
 ```
 
