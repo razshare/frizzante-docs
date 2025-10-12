@@ -243,19 +243,19 @@ func View(client *clients.Client) {
 }
 ```
 
-## Form Values
+## Forms
 
-Use `receive.FormValue()` to retrieve and parse form values when using `POST` and `PUT` http verbs.
+Use `receive.Form()` to parse incoming content as multipart form or url encoded form when using `POST` and `GET` http verbs.
 
 
 ```go
 routes.Route{Pattern: "POST /", Handler: welcome.View}
 // or
-routes.Route{Pattern: "PUT /", Handler: welcome.View}
+routes.Route{Pattern: "GET /", Handler: welcome.View}
 ```
 
 ```go
-//lib/routes/welcome/view.go
+//lib/routes/welcome/action.go
 package welcome
 
 import (
@@ -264,12 +264,42 @@ import (
     "main/lib/core/send"
 )
 
+type Form struct {
+    Name string `form:"name"`
+}
+
 func View(client *clients.Client) {
-    name := receive.FormValue(client, "name") // Retrieves field "name".
-    send.Message(client, "Hello " + name)     // Sends message.
+    var form Form
+    receive.Form(client, &form)                 // Retrieves form.
+    send.Messagef(client, "Hello " + form.Name) // Sends message.
 }
 ```
 
+:::tip
+Form structs can define slices and files.
+```go
+type Form struct {
+    Name     string               `form:"name"`
+    Comments []string             `form:"comments"` // <== slice of strings
+    File     multipart.FileHeader `form:"file"`     // <== file handler
+}
+```
+
+The file acts as an reader, so you can open and read it.
+
+```go
+file, err := form.File.Open()
+if err != nil {
+    client.Config.ErrorLog.Println(err, stack.Trace())
+}
+```
+
+Remember to close the file.
+
+```go
+defer file.Close()
+```
+:::
 
 ## Json
 

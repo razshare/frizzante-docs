@@ -8,7 +8,7 @@ The starter template comes with a todos application.
 
 ## Main
 
-For the sake of simplicity, every interaction happens through a `GET` verb.
+The server defines a few routes.
 
 ```go
 //main.go
@@ -19,14 +19,12 @@ func main() {
         {Pattern: "GET /", Handler: fallback.View},
         {Pattern: "GET /welcome", Handler: welcome.View},
         {Pattern: "GET /todos", Handler: todos.View},
-        {Pattern: "GET /toggle", Handler: todos.Toggle},
-        {Pattern: "GET /add", Handler: todos.Add},
-        {Pattern: "GET /remove", Handler: todos.Remove},
+        {Pattern: "POST /toggle", Handler: todos.Toggle},
+        {Pattern: "POST /add", Handler: todos.Add},
+        {Pattern: "POST /remove", Handler: todos.Remove},
     }
 }
 ```
-
-As you can see, all handlers are exposed with a `GET /...` pattern.
 
 ## Fallback
 
@@ -88,13 +86,11 @@ the `"Todos"` view along with a list of items retrieved from the user's session.
 //lib/routes/todos/view.go
 func View(client *clients.Client) {
     session := sessions.Start(receive.SessionId(client))
-    send.View(client, views.View{
-        Name: "Todos",
-        Props: Props{
-            Todos: session.Todos,
-            Error: receive.Query(client, "error"),
-        },
-    })
+    defer func() { session.Error = "" }()
+    send.View(client, views.View{Name: "Todos", Props: Props{
+        Error: session.Error,
+        Items: session.Todos,
+    }})
 }
 ```
 
@@ -102,8 +98,20 @@ func View(client *clients.Client) {
 The user session is initialized with a few items.
 
 ```go
-//lib/session/start.go
+//lib/sessions/types.go
+type Session struct {
+    Error string `json:"error"`
+    Todos []Todo `json:"todos"`
+}
 
+type Todo struct {
+    Description string `json:"description"`
+    Checked     bool   `json:"checked"`
+}
+```
+
+```go
+//lib/sessions/start.go
 var Sessions = map[string]*Session{}
 
 func Start(id string) *Session {
@@ -118,7 +126,7 @@ func Start(id string) *Session {
 ```
 
 ```go
-//lib/session/new.go
+//lib/sessions/new.go
 func New() *Session {
     return &Session{
         Todos: []Todo{
@@ -189,7 +197,7 @@ Each item has remove and toggle buttons.
 Type `memory.Todo` comes from generated types.
 
 ```ts
-//gen/types/main/lib/routes/welcome/Props.d.ts
+//.gen/types/main/lib/routes/welcome/Props.d.ts
 export declare namespace memory {
     export type Todo = {
         description: string
@@ -197,17 +205,17 @@ export declare namespace memory {
     }
 }
 ```
-
+Read more about type definitions [here](../type-definitions).
 :::
 
 ### Remove Todos
 
-Items are removed by submitting a form to `"GET /remove"`.
+Items are removed by submitting a form to `"POST /remove"`.
 
 ```svelte
 //app/lib/views/Todos.svelte
 {#snippet RemoveTodoButton(index: number)}
-    <form {...action("/remove")}>
+    <form method="POST" {...action("/remove")}>
         <input type="hidden" name="index" value={index} />
         <button
             type="submit"
@@ -230,37 +238,33 @@ which does some basic validation, error handling
 and then finally removes the item from the session.
 
 ```go
+//lib/routes/todos/types.go
+type RemoveForm struct {
+    Index int `form:"index"`
+}
+```
+
+```go
 //lib/routes/todos/remove.go
-
 func Remove(client *clients.Client) {
-    var err error
-    var count int64
-    var index int64
-    var indexQuery string
-
     session := sessions.Start(receive.SessionId(client))
 
-    if indexQuery = receive.Query(client, "index"); indexQuery == "" {
-        // No index found, ignore the request.
+    var form RemoveForm
+    if !receive.Form(client, &form) {
+        session.Error = "could not parse form"
         send.Navigate(client, "/todos")
         return
     }
 
-    if index, err = strconv.ParseInt(indexQuery, 10, 64); err != nil {
-        // Could not parse index, redirect with error.
-        send.Navigatef(client, "/todos?error=%s", err.Error())
-        return
-    }
-
-    if count = int64(len(session.Todos)); index >= count || index < 0 {
-        // Index is out of bounds, ignore the request.
+    if count := len(session.Todos); form.Index >= count || form.Index < 0 {
+        session.Error = "index out of bounds"
         send.Navigate(client, "/todos")
         return
     }
 
     session.Todos = append(
-        session.Todos[:index],
-        session.Todos[index+1:]...,
+        session.Todos[:form.Index],
+        session.Todos[form.Index+1:]...,
     )
 
     send.Navigate(client, "/todos")
@@ -269,7 +273,7 @@ func Remove(client *clients.Client) {
 
 ### Toggle Todos
 
-Items are toggled by submitting a form to `"GET /toggle"`.
+Items are toggled by submitting a form to `"POST /toggle"`.
 
 ```svelte
 //app/lib/views/Todos.svelte
@@ -299,48 +303,31 @@ Items are toggled by submitting a form to `"GET /toggle"`.
 The form is then captured by the `Toggle` handler.
 
 ```go
+//lib/routes/todos/types.go
+type ToggleForm struct {
+    Index int `form:"index"`
+    Value int `form:"value"`
+}
+```
+
+```go
 //lib/routes/todos/toggle.go
 func Toggle(client *clients.Client) {
-    var err error
-    var count int64
-    var index int64
-    var value int64
-    var indexQuery string
-    var valueQuery string
-
     session := sessions.Start(receive.SessionId(client))
 
-    if indexQuery = receive.Query(client, "index"); indexQuery == "" {
-        // No index found, ignore the request.
+    var form ToggleForm
+    if !receive.Form(client, &form) {
+        session.Error = "could not parse form"
+        send.Navigate(client, "/todos")
+    }
+
+    if count := len(session.Todos); form.Index >= count || form.Index < 0 {
+        session.Error = "index out of bounds"
         send.Navigate(client, "/todos")
         return
     }
 
-    if valueQuery = receive.Query(client, "value"); valueQuery == "" {
-        // No value found, ignore the request.
-        send.Navigate(client, "/todos")
-        return
-    }
-
-    if index, err = strconv.ParseInt(indexQuery, 10, 64); err != nil {
-        // Could not parse index, redirect with error.
-        send.Navigatef(client, "/todos?error=%s", err.Error())
-        return
-    }
-
-    if value, err = strconv.ParseInt(valueQuery, 10, 64); err != nil {
-        // Could not parse value, redirect with error.
-        send.Navigatef(client, "/todos?error=%s", err.Error())
-        return
-    }
-
-    if count = int64(len(session.Todos)); index >= count || index < 0 {
-        // Index is out of bounds, ignore the request.
-        send.Navigate(client, "/todos")
-        return
-    }
-
-    session.Todos[index].Checked = value > 0
+    session.Todos[form.Index].Checked = form.Value > 0
 
     send.Navigate(client, "/todos")
 }
@@ -348,7 +335,7 @@ func Toggle(client *clients.Client) {
 
 ### Add Todos
 
-Items are added by submitting a form to `GET /add`.
+Items are added by submitting a form to `POST /add`.
 
 ```svelte
 //lib/views/Todos.svelte
@@ -379,20 +366,33 @@ Items are added by submitting a form to `GET /add`.
 The form is then captured by the `Add` handler.
 
 ```go
+//lib/routes/todos/types.go
+type AddForm struct {
+    Description string `form:"description"`
+}
+```
+
+```go
 //lib/routes/todos/add.go
 func Add(client *clients.Client) {
-    var description string
-
     session := sessions.Start(receive.SessionId(client))
 
-    if description = receive.Query(client, "description"); description == "" {
-        send.Navigate(client, "/todos?error=todo description cannot be empty")
+    var form AddForm
+    if !receive.Form(client, &form) {
+        session.Error = "could not parse form"
+        send.Navigate(client, "/todos")
+        return
+    }
+
+    if form.Description == "" {
+        session.Error = "description cannot be empty"
+        send.Navigate(client, "/todos")
         return
     }
 
     session.Todos = append(session.Todos, sessions.Todo{
         Checked:     false,
-        Description: description,
+        Description: form.Description,
     })
 
     send.Navigate(client, "/todos")
