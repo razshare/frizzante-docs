@@ -280,12 +280,12 @@ Form structs can define slices and files.
 ```go
 type Form struct {
     Name     string               `form:"name"`
-    Comments []string             `form:"comments"` // <== slice of strings
-    File     multipart.FileHeader `form:"file"`     // <== file handler
+    Comments []string             `form:"comments"` // slice of strings
+    File     multipart.FileHeader `form:"file"`     // file handler
 }
 ```
 
-The file acts as an reader, so you can open and read it.
+The file is reader, so you can open and read it.
 
 ```go
 file, err := form.File.Open()
