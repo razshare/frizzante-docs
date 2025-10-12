@@ -271,7 +271,7 @@ type Form struct {
 func View(client *clients.Client) {
     var form Form
     receive.Form(client, &form)                 // Retrieves form.
-    send.Messagef(client, "Hello " + form.Name) // Sends message.
+    send.Message(client, "Hello " + form.Name) // Sends message.
 }
 ```
 
