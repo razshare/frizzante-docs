@@ -89,7 +89,7 @@ The **Name** of the view will be used to lookup the view component exported by *
 
 There is no way to specify a "**default view**".
 
-However, you can use `send.FileOrElse()` in order to send the requested file or run custom logic if it doesn't exist.
+However, you can use `send.RequestedFile()` in order to send the requested file or run custom logic if it doesn't exist.
 
 ```go
 //lib/routes/welcome/view.go
@@ -105,7 +105,9 @@ import (
 )
 
 func View(client *clients.Client) {
-    send.FileOrElse(client, func() { welcome.View(client) })
+    if !send.RequestedFile() {
+        welcome.View(client)
+    }
 }
 ```
 

@@ -38,9 +38,9 @@ matching file or the `"Welcome"` view using `send.RequestedFile()`.
 ```go
 //lib/routes/fallback/view.go
 func View(client *clients.Client) {
-	if !send.RequestedFile(client) {
-		welcome.View(client)
-	}
+    if !send.RequestedFile(client) {
+        welcome.View(client)
+    }
 }
 ```
 
