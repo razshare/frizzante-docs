@@ -33,7 +33,7 @@ The `GET /` pattern acts as a fallback.
 ![](image200.svg)
 
 With that in mind, the fallback handler tries to send back a 
-matching file or the `"Welcome"` view using `send.RequestedFile()`.
+matching file using `send.RequestedFile()` or, if it doesn't exist, the `"Welcome"` view using `welcome.View()`.
 
 ```go
 //lib/routes/fallback/view.go
