@@ -160,7 +160,7 @@ This component passes down `pending` and `error` states through the `children` s
 ## Form Component
 
 Frizzante provides a `<Form>` component that captures
-pending and error states while submitting form.
+pending and error states while submitting forms.
 
 It is a replacement for your `<form>` elements.
 
