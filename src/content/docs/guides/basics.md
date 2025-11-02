@@ -4,7 +4,8 @@ title: Basics
 
 Before doing anything you need to start a server.
 
-Create a new server with `servers.New()`, then followup with `servers.Start()` in order to start a server.
+Create a new server with `servers.New()`, then
+followup with `servers.Start()` in order to start a server.
 
 ```go
 //main.go
@@ -183,7 +184,8 @@ Order of operations matters when sending data to the client.
 **Status codes** and **headers** cannot be modified after sending out content.
 :::
 
-For example, sending the status code with `send.Status()` **after** you've already sent content
+For example, sending the status code with
+`send.Status()` **after** you've already sent content
 with `send.Message()` is not allowed.
 
 ```go
@@ -201,7 +203,8 @@ func View(client *clients.Client) {
 }
 ```
 
-`send.Status(client, 404)` will fail and the client will receive status `200` instead of `404`.
+`send.Status(client, 404)` will fail and the client
+will receive status `200` instead of `404`.
 
 ```http
 HTTP/1.1 200 OK
@@ -214,14 +217,16 @@ Hello.
 
 The failure is logged to the server's error logger.
 
-Assuming you're using the default error logger, you'll see an error of sorts in your **console**
+Assuming you're using the default error logger, you'll
+see an error of sorts in your **console**
 
 ```sh
 listening for requests at http://127.0.0.1:8080
 status is locked
 ```
 
-`status is locked`, meaning the status code has already been sent to the client and there's nothing you can do about it.
+`status is locked`, meaning the status code has already
+been sent to the client and there's nothing you can do about it.
 
 ## Queries
 
@@ -245,7 +250,8 @@ func View(client *clients.Client) {
 
 ## Forms
 
-Use `receive.Form()` to parse incoming content as multipart form or url encoded form when using `POST` and `GET` http verbs.
+Use `receive.Form()` to parse incoming content as multipart
+form or url encoded form when using `POST` and `GET` http verbs.
 
 
 ```go
@@ -276,8 +282,10 @@ func View(client *clients.Client) {
 ```
 
 :::tip
-You can also use a `json` tag, it will match the field correctly as if it were a `form` tag.\
-This is so that you can integrate your structs more easily with other libraries that only take into account `json` formats.
+You can also use a `json` tag, it will match
+the field correctly as if it were a `form` tag.\
+This is so that you can integrate your structs more easily
+with other libraries that only take into account `json` formats.
 :::
 
 :::tip
@@ -308,7 +316,9 @@ defer dst.Close()
 
 ## Json
 
-Use `receive.Json()` to parse incoming content as json when using `POST` and `PUT` http verbs and `send.Json()` to send json content.
+Use `receive.Json()` to parse incoming content as
+json when using `POST` and `PUT` http verbs
+and `send.Json()` to send json content.
 
 
 ```go
@@ -327,7 +337,7 @@ import (
     "main/lib/core/send"
 )
 
-type GreetingDetails struct {      // Defines a struct in which to 
+type GreetingDetails struct {      // Defines a struct in which to
     Name string `json:"name"`      // store the json content.
 }
 
@@ -358,6 +368,29 @@ func View(client *clients.Client) {
 }
 ```
 
+## Session
+
+Use `receive.Session()` to retrieve the client's session.
+
+:::note
+The session is retrieved using [receive.SessionId()](#session-id).
+:::
+
+```go
+//lib/routes/welcome/view.go
+package welcome
+
+import (
+    "main/lib/core/clients"
+    "main/lib/core/receive"
+)
+
+func View(client *clients.Client) {
+    var session *sessions.Session         // Creates a zero value.
+    _ = receive.Session(client, &session) // Unmarshals the content into session.
+}
+```
+
 ## Session Id
 
 Use `receive.SessionId()` to retrieve the client's session id.
@@ -372,21 +405,6 @@ creates a new session id and sends the cookie to the client.
 Since `receive.SessionId()` might **send** a cookie to the client,
 it is important to remember that [order of operations matters](#order-of-operations).
 :::
-
-
-```go
-//lib/routes/welcome/view.go
-package welcome
-
-import (
-    "main/lib/core/clients"
-    "main/lib/core/receive"
-)
-
-func View(client *clients.Client) {
-    _ = receive.SessionId(client) // Retrieves session id.
-}
-```
 
 ## Redirect
 

@@ -32,7 +32,7 @@ The `GET /` pattern acts as a fallback.
 
 ![](image200.svg)
 
-With that in mind, the fallback handler tries to send back a 
+With that in mind, the fallback handler tries to send back a
 matching file using `send.RequestedFile()` or, if it doesn't exist, the `"Welcome"` view using `welcome.View()`.
 
 ```go
@@ -81,15 +81,16 @@ func View(client *clients.Client) {
 
 ## Todos View
 
-The `"GET /todos"` pattern is then captured by a Go handler function, which sends back 
+The `"GET /todos"` pattern is then captured by a Go handler function, which sends back
 the `"Todos"` view along with a list of items retrieved from the user's session.
 
 ```go
 //lib/routes/todos/view.go
 func View(client *clients.Client) {
-    session := sessions.Start(receive.SessionId(client))
+    session := sessions.NewDefault()
+    receive.Session(client, &session)
     defer func() { session.Error = "" }()
-    send.View(client, views.View{Name: "Todos", Props: Props{
+    send.View(client, views.View{Name: "todos", Props: Props{
         Error: session.Error,
         Items: session.Todos,
     }})
@@ -100,8 +101,8 @@ func View(client *clients.Client) {
 The user session is initialized with a few items.
 
 ```go
-//lib/sessions/new.go
-func New() *Session {
+//lib/sessions/new_default.go
+func NewDefault() *Session {
     return &Session{
         Todos: []Todo{
             {Checked: false, Description: "Pet the cat."},
@@ -193,12 +194,12 @@ Items are removed by submitting a form to `"POST /remove"`.
 ```
 
 :::tip
-If you need more control over errors and pending states 
+If you need more control over errors and pending states
 see [Form Component](../web-standards/#form-component).
 :::
 
 The form is then captured by the `Remove` handler,
-which does some basic validation, error handling 
+which does some basic validation, error handling
 and then finally removes the item from the session.
 
 ```go
@@ -211,7 +212,8 @@ type RemoveForm struct {
 ```go
 //lib/routes/todos/remove.go
 func Remove(client *clients.Client) {
-    session := sessions.Start(receive.SessionId(client))
+    session := sessions.NewDefault()
+    receive.Session(client, &session)
 
     var form RemoveForm
     if !receive.Form(client, &form) {
@@ -277,7 +279,8 @@ type ToggleForm struct {
 ```go
 //lib/routes/todos/toggle.go
 func Toggle(client *clients.Client) {
-    session := sessions.Start(receive.SessionId(client))
+    session := sessions.NewDefault()
+    receive.Session(client, &session)
 
     var form ToggleForm
     if !receive.Form(client, &form) {
@@ -339,7 +342,8 @@ type AddForm struct {
 ```go
 //lib/routes/todos/add.go
 func Add(client *clients.Client) {
-    session := sessions.Start(receive.SessionId(client))
+    session := sessions.NewDefault()
+    receive.Session(client, &session)
 
     var form AddForm
     if !receive.Form(client, &form) {

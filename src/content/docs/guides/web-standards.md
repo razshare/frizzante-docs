@@ -2,19 +2,20 @@
 title: Web Standards
 ---
 
-You can use `href()` and `action()` in order to make your hyperlinks and forms adapt to the client's browser capabilities and/or the server's rendering configuration.
+You can use `href()` and `action()` in order to make your hyperlinks and forms
+adapt to the client's browser capabilities and/or the server's rendering configuration.
 
 ## Adaptive Hyperlinks
 
 ```svelte
-//app/lib/views/Welcome.svelte
+//app/lib/views/welcome.svelte
 <script lang="ts">
     import { href } from "$lib/scripts/core/href.ts"
 </script>
 
-<a {...href("/some-other-page")}> Go to some other page </a> <!-- Defines a link, which when triggered will either 
-                                                                  directly navigate to the given path, or do so 
-                                                                  through an http request, depending on wether 
+<a {...href("/some-other-page")}> Go to some other page </a> <!-- Defines a link, which when triggered will either
+                                                                  directly navigate to the given path, or do so
+                                                                  through an http request, depending on wether
                                                                   JavaScript is enabled or not. -->
 ```
 
@@ -62,15 +63,15 @@ Where `onclick` takes care of fetching the new state and view from `/some-other-
 ## Adaptive Forms
 
 ```svelte
-//lib/views/Welcome.svelte
+//lib/views/welcome.svelte
 <script lang="ts">
     import { action } from "$lib/scripts/core/action.ts"
 </script>
 
 <form {...action("/process")}>            <!-- Defines a form. -->
     <input type="text" name="name" />     <!-- Defines a text field. -->
-    <button type="submit">Submit</button> <!-- Defines a button, which when triggered will either 
-                                               directly submit the form, or do so through an http request, 
+    <button type="submit">Submit</button> <!-- Defines a button, which when triggered will either
+                                               directly submit the form, or do so through an http request,
                                                depending on wether JavaScript is enabled or not. -->
 </form>
 ```
@@ -141,7 +142,7 @@ This component passes down `pending` and `error` states through the `children` s
 
 ```svelte
 <script lang="ts">
-    import Link from "$lib/components/links/Link.svelte"
+    import Link from "$lib/components/links/link.svelte"
 </script>
 
 <Link href="/some-path">                             <!-- Defines a link. -->
@@ -176,7 +177,7 @@ This component passes down `pending` and `error` states through the `children` s
 
 ```svelte
 <script lang="ts">
-    import Form from "$lib/components/forms/Form.svelte"
+    import Form from "$lib/components/forms/form.svelte"
 </script>
 
 <Form method="POST" action="/login">                           <!-- Defines a form. -->
@@ -184,7 +185,7 @@ This component passes down `pending` and `error` states through the `children` s
        <input type="email" name="email">                       <!-- Defines an email field. -->
        <input type="password" name="password">                 <!-- Defines an password field. -->
        <button disabled={pending} type="submit">Login</button> <!-- Defines a button, which is disabled when the form request is pending. -->
-       
+
        {#if error}                                             <!-- If there's been some sort of error... -->
           <span>Something went wrong: {error}</span>           <!-- ...renders the error. -->
        {/if}

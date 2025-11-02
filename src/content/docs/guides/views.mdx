@@ -6,7 +6,7 @@ import { FileTree } from '@astrojs/starlight/components'
 
 ## What are views?
 
-Views are **svelte components** exported by 
+Views are **svelte components** exported by
 `app/exports.server.ts` and/or `app/exports.client.ts`.
 
 <FileTree>
@@ -21,8 +21,8 @@ Views are **svelte components** exported by
 Views that are meant to be rendered on the server should be exported by `app/exports.server.ts`.
 ```ts
 //app/exports.server.ts
-import Welcome from '$lib/views/Welcome.svelte'
-import Profile from '$lib/views/Profile.svelte'
+import Welcome from '$lib/views/welcome.svelte'
+import Profile from '$lib/views/profile.svelte'
 
 export const views = {
     "Welcome": Welcome,
@@ -36,20 +36,20 @@ Views that are meant to be rendered on the client should be exported by `app/exp
 ```ts
 //app/exports.client.ts
 export const views = {
-    "Welcome": () => import('$lib/views/Welcome.svelte'),
-    "Profile": () => import('$lib/views/Profile.svelte'),
+    "Welcome": () => import('$lib/views/welcome.svelte'),
+    "Profile": () => import('$lib/views/profile.svelte'),
 }
 ```
 :::note
-These views are being imported asynchronously in order to split them 
+These views are being imported asynchronously in order to split them
 in different bundles, however you can simply create fake promises
 in order to bundle them all together and eliminate network latency
 when transitioning between views.
 
 ```ts
 //app/exports.client.ts
-import Welcome from '$lib/views/Welcome.svelte'
-import Profile from '$lib/views/Profile.svelte'
+import Welcome from '$lib/views/welcome.svelte'
+import Profile from '$lib/views/profile.svelte'
 
 export const views = {
     "Welcome": () => Promise.resolve(Welcome),
@@ -158,14 +158,14 @@ func View(client *clients.Client) {
        Props: map[string]string{  // Sets view props, which will be injected into the svelte component.
           "name": "world",        // Adds property "name" with value "world".
        },
-    }) 
+    })
 }
 ```
 
 These properties are passed down to your view component.
 
 ```svelte
-//app/lib/views/Hello.svelte
+//app/lib/views/hello.svelte
 <script lang="ts">
     type Props = { name: string }
     let {name}:Props = $props() // Retrieves view props.
@@ -182,10 +182,10 @@ View properties are initialized with [$state()](https://svelte.dev/docs/svelte/$
 You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to retrieve your properties.
 
 ```svelte
-//app/lib/views/Hello.svelte
+//app/lib/views/hello.svelte
 <script lang="ts">
     import type { View } from "$lib/scripts/core/types.ts"
-    const view = getContext("view") as View<{ name: string }> // Retrieves the same server props, 
+    const view = getContext("view") as View<{ name: string }> // Retrieves the same server props,
                                                               // but can be used anywhere in the project
                                                               // regardless of the component hierarchy.
 </script>
@@ -230,7 +230,7 @@ func View(client *clients.Client) {
 ### RenderModeServer
 
 Using `RenderModeServer`, the view is rendered only on the server.<br/>
-You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API); 
+You'll have to deal away with apis such as [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API);
 your new best friend is [form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form).
 ```go
 //lib/routes/welcome/view.go
