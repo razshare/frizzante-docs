@@ -364,6 +364,35 @@ func View(client *clients.Client) {
 }
 ```
 
+## Session Id
+
+Use `receive.SessionId()` to retrieve the client's session id.
+
+```go
+//lib/routes/welcome/view.go
+package welcome
+
+import (
+    "main/lib/core/clients"
+    "main/lib/core/receive"
+)
+
+func View(client *clients.Client) {
+    _ = receive.SessionId(client) // Retrieves session id.
+}
+```
+
+:::note
+The session id is retrieved from the client's `session-id` cookie.\
+If the client doesn't provide such cookie, `receive.SessionId()`
+creates a new session id and sends the cookie to the client.
+:::
+
+:::caution
+Since `receive.SessionId()` might **send** a cookie to the client,
+it is important to remember that [order of operations matters](#order-of-operations).
+:::
+
 ## Session
 
 Use `receive.Session()` to retrieve the client's session.
@@ -386,21 +415,6 @@ func View(client *clients.Client) {
     _ = receive.Session(client, &session) // Unmarshals the content into session.
 }
 ```
-
-## Session Id
-
-Use `receive.SessionId()` to retrieve the client's session id.
-
-:::note
-The session id is retrieved from the client's `session-id` cookie.\
-If the client doesn't provide such cookie, `receive.SessionId()`
-creates a new session id and sends the cookie to the client.
-:::
-
-:::caution
-Since `receive.SessionId()` might **send** a cookie to the client,
-it is important to remember that [order of operations matters](#order-of-operations).
-:::
 
 ## Redirect
 
