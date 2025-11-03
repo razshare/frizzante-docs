@@ -180,10 +180,6 @@ Read [below](#order-of-operations).
 
 Order of operations matters when sending data to the client.
 
-:::caution
-**Status codes** and **headers** cannot be modified after sending out content.
-:::
-
 For example, sending the status code with
 `send.Status()` **after** you've already sent content
 with `send.Message()` is not allowed.
@@ -198,7 +194,7 @@ import (
 )
 
 func View(client *clients.Client) {
-    send.Message(client, "Hello.") // Sends message. (Succeeds).
+    send.Message(client, "Hello.") // Sends message (Succeeds).
     send.Status(client, 404)       // Sends status (Fails).
 }
 ```
