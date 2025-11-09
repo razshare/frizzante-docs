@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, passthroughImageService } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightThemeFlexoki from "starlight-theme-flexoki";
 import starlightFullViewMode from "starlight-fullview-mode";
@@ -8,6 +8,9 @@ import starlightFullViewMode from "starlight-fullview-mode";
 export default defineConfig({
   site: "https://frizzante.github.io",
   base: "/frizzante-docs",
+  image: {
+    service: passthroughImageService(),
+  },
   integrations: [
     starlight({
       title: "Frizzante Docs",
