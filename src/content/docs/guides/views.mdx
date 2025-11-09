@@ -40,6 +40,7 @@ export const views = {
     "Profile": () => import('$lib/views/profile.svelte'),
 }
 ```
+
 :::note
 These views are being imported asynchronously in order to split them
 in different bundles, however you can simply create fake promises
@@ -83,13 +84,15 @@ func View(client *clients.Client) {
 }
 ```
 
-The **Name** of the view will be used to lookup the view component exported by **app/exports.server.ts** and/or **app/exports.client.ts**.
+The **Name** of the view will be used to lookup the view component
+exported by **app/exports.server.ts** and/or **app/exports.client.ts**.
 
 ## Default View
 
 There is no way to specify a "**default view**".
 
-However, you can use `send.RequestedFile()` in order to send the requested file or run custom logic if it doesn't exist.
+However, you can use `send.RequestedFile()` in order to send the requested
+file or run custom logic if it doesn't exist.
 
 ```go
 //lib/routes/welcome/view.go
@@ -111,8 +114,8 @@ func View(client *clients.Client) {
 }
 ```
 
-Usually you would map this handler to the default `GET /` pattern, which automatically captures
-all unmatched requests.
+Usually you would map this handler to the default `GET /` pattern,
+which automatically captures all unmatched requests.
 
 ```go
 package main
@@ -175,11 +178,13 @@ These properties are passed down to your view component.
 ```
 
 :::note
-View properties are initialized with [$state()](https://svelte.dev/docs/svelte/$state) and thus are reactive by default.
+View properties are initialized with
+[$state()](https://svelte.dev/docs/svelte/$state) and thus are reactive by default.
 :::
 
 :::tip
-You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to retrieve your properties.
+You can also use [getContext("view")](https://svelte.dev/docs/svelte/context)
+to retrieve your properties.
 
 ```svelte
 //app/lib/views/hello.svelte
@@ -192,12 +197,15 @@ You can also use [getContext("view")](https://svelte.dev/docs/svelte/context) to
 
 <h1>Hello {view.props.name}</h1>
 ```
+
 :::note
-`view` is initialized with [$state()](https://svelte.dev/docs/svelte/$state) and thus is reactive.
+`view` is initialized with [$state()](https://svelte.dev/docs/svelte/$state) and
+thus is reactive.
 :::
 
 :::tip
-Instead of manually defining TypeScript/JSDoc type definitions, use the cli to automatically generate them.\
+Instead of manually defining TypeScript/JSDoc type definitions, use the cli to
+automatically generate them.\
 Read more about [type definitions](../type-definitions).
 :::
 
@@ -288,7 +296,10 @@ Read more about [web standards](../web-standards).
 :::
 
 :::tip
-When using `RenderModeFull` or `RenderModeServer`, You can configure how many JavaScript runtimes are executed in parallel by setting the `FRIZZANTE_JS_RUNTIME_LIMIT` environment variable.
+When using `RenderModeFull` or `RenderModeServer`, You can configure how many
+JavaScript runtimes are executed in parallel by setting
+the `FRIZZANTE_JS_RUNTIME_LIMIT` environment variable.
+
 ```sh
 //.gen/bin
 FRIZZANTE_JS_RUNTIME_LIMIT=3 ./app
@@ -303,7 +314,8 @@ Modify this field based on actual performance measurements.
 
 ## Disabling the server-side JavaScript runtime.
 
-You can add the `no_js_runtime` tag to your build process to completely disable the server-side JavaScript runtime.
+You can add the `no_js_runtime` tag to your build process to completely
+disable the server-side JavaScript runtime.
 
 ```sh
 frizzante --build --tags="no_js_runtime"
