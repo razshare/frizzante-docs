@@ -247,7 +247,7 @@ Items are toggled by submitting a form to `"POST /toggle"`.
     {@const aria = todo.checked ? "Uncheck" : "Check"}
     {@const value = todo.checked ? "0" : "1"}
     {@const icon = todo.checked ? mdiCheckCircleOutline : mdiCircleOutline}
-    <form {...action("/toggle")} class="grow content-center">
+    <form method="POST" {...action("/toggle")} class="grow content-center">
         <input type="hidden" name="index" value={index} />
         <input type="hidden" name="value" {value} />
         <button
