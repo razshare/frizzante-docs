@@ -16,9 +16,10 @@ Middleware have some limitations.
 
 While guards have some advantages.
 
-- **Explicit** - you can see exactly which routes use which guards by looking at their tags
-- **Efficient** - guards only execute when their tags match - no wasted computation
-- **Composable** - easy to manage execution order per route
+- **Efficient** - each route has a defined slice of guards and only those guards will execute each time the route is matched
+- **Explicit** - since each route explicitly defines its guards, you can see exactly which guards execute for any route just by looking at the slice
+- **Composable** - in order to add a new guard you can just add a guard to the route's slice
+- **Easy to order** - it's easy to define the order in which guards execute, you can simply move them around in the route's guards slice
 
 For more details see the [guards page](../guards).
 
