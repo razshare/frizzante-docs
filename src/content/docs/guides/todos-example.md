@@ -307,7 +307,7 @@ Items are added by submitting a form to `POST /add`.
 ```svelte
 //lib/views/Todos.svelte
 {#snippet AddTodoForm()}
-    <form {...action("/add")} class="flex">
+    <form method="POST" {...action("/add")} class="flex">
         <input
             type="text"
             name="description"
