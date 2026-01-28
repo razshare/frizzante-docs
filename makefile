@@ -1,14 +1,48 @@
-dev:
-	make update
-	bin/bun x --bun astro dev
+frizzante:
+	frizzante
+
+configure:
+	frizzante configure
+
+test:
+	frizzante test
 
 build:
-	make update
-	bin/bun x --bun astro build
+	frizzante build
 
-preview:
-	make update
-	bin/bun x --bun astro preview
+dev:
+	frizzante dev
+
+package-watch:
+	frizzante package-watch
+
+package:
+	frizzante package
+
+check:
+	frizzante check
+
+clean:
+	frizzante clean
+
+format:
+	frizzante format
+
+install:
+	frizzante install
 
 update:
-	bin/bun --bun update
+	frizzante update
+
+lock-packages:
+	frizzante lock-packages
+
+types:
+	frizzante generate types
+
+snapshot:
+	frizzante generate snapshot http://127.0.0.1:8080/@statics .gen/snapshot
+
+generate:
+	frizzante generate
+

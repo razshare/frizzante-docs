@@ -2,10 +2,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "./node_modules/.bin/astro dev",
-      "name": "Development server",
+      "name": "debug main.go",
+      "type": "go",
       "request": "launch",
-      "type": "node-terminal"
+      "mode": "auto",
+      "program": "${workspaceFolder}/main.go",
+      "buildFlags": ["dev", "trace"]
     }
   ]
 }

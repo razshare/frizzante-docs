@@ -1,0 +1,52 @@
+package receive
+
+import (
+	"encoding/json"
+	"os"
+	"path/filepath"
+
+	"main/lib/core/clients"
+	"main/lib/core/files"
+	"main/lib/core/stack"
+)
+
+func Session(client *clients.Client, value any) bool {
+	id := SessionId(client)
+	baseDirectory := filepath.Join(".gen", "sessions")
+	fileName := filepath.Join(baseDirectory, id+".json")
+	if files.IsFile(fileName) {
+		var err error
+		var data []byte
+		if data, err = os.ReadFile(fileName); err != nil {
+			client.Options.ErrorLog.Println(err, stack.Trace())
+			return false
+		}
+		if err = json.Unmarshal(data, value); err != nil {
+			client.Options.ErrorLog.Println(err, stack.Trace())
+			return false
+		}
+	}
+	if client.Channels.End == nil {
+		client.Channels.End = make(chan struct{}, 1)
+	}
+	go func() {
+		<-client.Channels.End
+		var err error
+		var data []byte
+		if !files.IsDirectory(baseDirectory) {
+			if err = os.MkdirAll(baseDirectory, os.ModePerm); err != nil {
+				client.Options.ErrorLog.Println(err, stack.Trace())
+				return
+			}
+		}
+		if data, err = json.MarshalIndent(value, "", "    "); err != nil {
+			client.Options.ErrorLog.Println(err, stack.Trace())
+			return
+		}
+		if err = os.WriteFile(fileName, data, os.ModePerm); err != nil {
+			client.Options.ErrorLog.Println(err, stack.Trace())
+			return
+		}
+	}()
+	return true
+}
