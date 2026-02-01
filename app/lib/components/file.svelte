@@ -4,7 +4,6 @@
     }
     .file {
         position: relative;
-        height: 100%;
         display: grid;
         padding: var(--file-padding);
         grid-template-areas:

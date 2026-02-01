@@ -1,7 +1,6 @@
 <style>
     .footer {
         position: relative;
-        height: 100%;
         display: grid;
         grid-template-areas:
             "edit-page empty empty"

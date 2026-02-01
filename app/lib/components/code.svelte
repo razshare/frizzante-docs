@@ -1,14 +1,3 @@
-<style>
-    :root {
-        --code-padding: 0.5rem;
-    }
-    .code {
-        position: relative;
-        height: 100%;
-        padding: var(--code-padding);
-    }
-</style>
-
 <script lang="ts">
     import { codeToHtml } from "shiki"
     import { onMount } from "svelte"

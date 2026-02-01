@@ -1,0 +1,5 @@
+send.WsUpgrade(client)
+for {
+   name := receive.Message(client)
+   send.Message(client, "Hello " + name)
+}

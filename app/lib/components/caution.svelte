@@ -10,7 +10,6 @@
     }
     .caution {
         position: relative;
-        height: 100%;
         display: grid;
         gap: var(--caution-gap);
         grid-template-columns: auto 1fr;

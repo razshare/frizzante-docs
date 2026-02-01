@@ -1,5 +1,21 @@
+:root {
+    --shiki-padding: 1rem;
+    --a-text: #a2dece;
+}
+
 html,
 body {
-    background-color: black;
-    color: white;
+    background-color: #100f0f;
+    color: #cecdc3;
+}
+
+pre.shiki {
+    position: relative;
+    padding: var(--shiki-padding);
+}
+
+a,
+a:hover,
+a:active {
+    color: var(--a-text);
 }

@@ -10,7 +10,6 @@
     }
     .note {
         position: relative;
-        height: 100%;
         display: grid;
         gap: var(--note-gap);
         grid-template-columns: auto 1fr;
