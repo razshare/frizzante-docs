@@ -1,8 +1,12 @@
 <style>
+    :root {
+        --sidebar-gap: 1rem;
+    }
     .sidebar {
         display: grid;
         position: relative;
-        grid-template-columns: auto 1fr auto;
+        gap: var(--sidebar-gap);
+        grid-template-columns: auto;
         grid-template-areas:
             "searchbar"
             "content";
@@ -17,11 +21,14 @@
 
 <script>
     import Searchbar from "$lib/components/searchbar.svelte"
+    import Menu from "$lib/components/menu.svelte"
 </script>
 
 <div class="sidebar">
     <div class="searchbar">
         <Searchbar />
     </div>
-    <div class="content"></div>
+    <div class="content">
+        <Menu />
+    </div>
 </div>

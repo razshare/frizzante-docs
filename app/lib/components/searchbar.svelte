@@ -12,8 +12,8 @@
         border: var(--searchbar-border);
         gap: var(--searchbar-gap);
         padding: var(--searchbar-padding);
-        position: relative;
         display: grid;
+        position: relative;
         grid-template-columns: auto 1fr auto;
         grid-template-areas: "icon placeholder shortcut";
     }

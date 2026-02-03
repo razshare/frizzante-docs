@@ -1,7 +1,13 @@
 <style>
+    :root {
+        --layout-gap: 1rem;
+        --layout-padding: 1rem;
+    }
     .layout {
-        position: relative;
         display: grid;
+        position: relative;
+        gap: var(--layout-gap);
+        padding: var(--layout-padding);
         grid-template-areas:
             "navbar navbar navbar"
             "content content sidebar"
