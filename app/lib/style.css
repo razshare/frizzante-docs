@@ -1,5 +1,6 @@
 :root {
     --shiki-padding: 1rem;
+    --shiki-roundness: 1rem;
     --a-text: #a2dece;
 }
 
@@ -12,6 +13,7 @@ body {
 pre.shiki {
     position: relative;
     padding: var(--shiki-padding);
+    border-radius: var(--shiki-roundness);
 }
 
 a,

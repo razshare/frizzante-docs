@@ -3,7 +3,7 @@
         --tip-background: #261c39;
         --tip-text: #cbc1de;
         --tip-padding: 0.7rem;
-        --tip-roundness: 0.3rem;
+        --tip-roundness: 1rem;
         --tip-gap: 0.5rem;
     }
     .tip {

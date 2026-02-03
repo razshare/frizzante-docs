@@ -8,10 +8,11 @@
         position: relative;
         gap: var(--layout-gap);
         padding: var(--layout-padding);
+        grid-template-columns: 1fr 1fr 1fr;
         grid-template-areas:
             "navbar navbar navbar"
-            "content content sidebar"
-            "footer footer sidebar";
+            "sidebar content empty "
+            "footer footer footer ";
     }
     .navbar {
         grid-area: navbar;
@@ -29,7 +30,6 @@
 
 <script lang="ts">
     import type { Snippet } from "svelte"
-    import { scale } from "svelte/transition"
     type Props = {
         title: string
         navbar: Snippet
@@ -48,7 +48,7 @@
     />
     <title>{title}</title>
 </svelte:head>
-<div class="layout" in:scale={{ duration: 100 }}>
+<div class="layout">
     <div class="navbar">{@render navbar()}</div>
     <div class="sidebar">{@render sidebar()}</div>
     <div class="content">{@render content()}</div>

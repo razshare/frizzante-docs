@@ -1,17 +1,19 @@
-<script>
+<script lang="ts">
+    import type { Snippet } from "svelte"
     import Footer from "$lib/components/footer.svelte"
     import Layout from "$lib/components/layout.svelte"
     import Navbar from "$lib/components/navbar.svelte"
-    import Overview from "$lib/components/overview.svelte"
     import Sidebar from "$lib/components/sidebar.svelte"
+    type Props = { title: string; children: Snippet }
+    let { title, children }: Props = $props()
 </script>
 
-<Layout title="welcome">
+<Layout {title}>
     {#snippet navbar()}
         <Navbar />
     {/snippet}
     {#snippet content()}
-        <Overview />
+        {@render children()}
     {/snippet}
     {#snippet footer()}
         <Footer />

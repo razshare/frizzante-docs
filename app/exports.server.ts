@@ -1,5 +1,7 @@
-import Welcome from "$lib/views/welcome.svelte"
+import GetStarted from "$lib/views/get_started.svelte"
+import Overview from "$lib/views/overview.svelte"
 
 export const views = {
-    Welcome: Welcome,
+    Overview,
+    GetStarted,
 }

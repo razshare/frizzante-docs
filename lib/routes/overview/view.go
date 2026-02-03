@@ -1,4 +1,4 @@
-package welcome
+package overview
 
 import (
 	"main/lib/core/clients"
@@ -7,5 +7,5 @@ import (
 )
 
 func View(client *clients.Client) {
-	send.View(client, views.View{Name: "Welcome"})
+	send.View(client, views.View{Name: "Overview"})
 }

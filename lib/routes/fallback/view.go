@@ -3,11 +3,11 @@ package fallback
 import (
 	"main/lib/core/clients"
 	"main/lib/core/send"
-	"main/lib/routes/welcome"
+	"main/lib/routes/overview"
 )
 
 func View(client *clients.Client) {
 	if !send.RequestedFile(client) {
-		welcome.View(client)
+		overview.View(client)
 	}
 }

@@ -9,7 +9,8 @@ import (
 	"main/lib/core/servers"
 	"main/lib/core/ssr"
 	"main/lib/routes/fallback"
-	"main/lib/routes/welcome"
+	"main/lib/routes/get_started"
+	"main/lib/routes/overview"
 )
 
 //go:generate frizzante clean
@@ -24,7 +25,8 @@ func main() {
 	server.Render = ssr.New(1)
 	server.Routes = []routes.Route{
 		{Pattern: "GET /", Handler: fallback.View},
-		{Pattern: "GET /welcome", Handler: welcome.View},
+		{Pattern: "GET /overview", Handler: overview.View},
+		{Pattern: "GET /get_started", Handler: get_started.View},
 		statics.New("GET /@statics", server),
 	}
 	if err := servers.Start(server); err != nil {
