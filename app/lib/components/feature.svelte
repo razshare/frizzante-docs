@@ -42,7 +42,7 @@
         description: string
         example?: {
             lang: string
-            code: string
+            source: string
         }
     }
     let { icon, title, description, example }: Props = $props()

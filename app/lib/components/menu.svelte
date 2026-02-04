@@ -15,7 +15,7 @@
 
 <script>
     import { href } from "$lib/scripts/core/href"
-    import MenuItem from "./menu_item.svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
 </script>
 
 <div class="menu">

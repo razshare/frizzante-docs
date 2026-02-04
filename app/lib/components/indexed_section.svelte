@@ -14,7 +14,8 @@
         grid-template-rows: auto 1fr;
         grid-template-areas:
             "badge content"
-            "link content";
+            "link content"
+            "empty empty";
     }
     .badge {
         grid-area: badge;

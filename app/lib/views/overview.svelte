@@ -83,7 +83,7 @@
                 description="Switch rendering modes at runtime."
                 example={{
                     lang: "go",
-                    code: renderModes,
+                    source: renderModes,
                 }}
             />
             <Feature
@@ -92,7 +92,7 @@
                 description="Simple Web Sockets api."
                 example={{
                     lang: "go",
-                    code: ws,
+                    source: ws,
                 }}
             />
             <Feature
@@ -101,7 +101,7 @@
                 description="Simple Server Sent Events api."
                 example={{
                     lang: "go",
-                    code: sse,
+                    source: sse,
                 }}
             />
         </div>
