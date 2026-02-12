@@ -4,7 +4,6 @@
     import InlineCode from "$lib/components/inline_code.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
-    import { source } from "$lib/scripts/core/source"
 </script>
 
 <Page title="Overview">
