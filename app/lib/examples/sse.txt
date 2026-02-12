@@ -1,5 +1,0 @@
-send.SseUpgrade(client)
-for {
-   send.Message(client, "Hello.")
-   time.Sleep(time.Second)
-}

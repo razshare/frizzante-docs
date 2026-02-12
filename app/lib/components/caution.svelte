@@ -5,7 +5,7 @@
         --caution-title: #fcc192;
         --caution-icon: #fcc192;
         --caution-padding: 0.7rem;
-        --caution-roundness: 0.3rem;
+        --caution-roundness: 1rem;
         --caution-gap: 0.5rem;
     }
     .caution {
@@ -21,6 +21,7 @@
         color: var(--caution-text);
         padding: var(--caution-padding);
         border-radius: var(--caution-roundness);
+        margin-bottom: var(--caution-gap);
     }
     .icon {
         grid-area: icon;

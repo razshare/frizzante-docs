@@ -39,9 +39,6 @@
     import Button from "$lib/components/button.svelte"
     import { mdiArrowRight, mdiBrushOutline, mdiDiamond, mdiHeartOutline, mdiLinkBoxOutline, mdiLinux } from "@mdi/js"
     import Feature from "$lib/components/feature.svelte"
-    import { renderModes } from "$lib/scripts/examples/render_modes"
-    import { ws } from "$lib/scripts/examples/ws"
-    import { sse } from "$lib/scripts/examples/sse"
 </script>
 
 <Page title="Overview">
@@ -51,7 +48,7 @@
             An opinionated web server framework written in Go that uses Svelte to render web pages.
         </p>
         <div class="get-started">
-            <Button>
+            <Button href="/get_started">
                 <span>Get Started</span>
                 {#snippet end()}
                     <Icon path={mdiArrowRight} />
@@ -83,7 +80,14 @@
                 description="Switch rendering modes at runtime."
                 example={{
                     lang: "go",
-                    source: renderModes,
+                    source: `
+                        send.View(client, views.View{
+                            Name: "Welcome",
+                            RenderMode: view.RenderModeFull,
+                            // RenderMode: view.RenderModeServer,
+                            // RenderMode: view.RenderModeClient,
+                        })
+                    `,
                 }}
             />
             <Feature
@@ -92,7 +96,13 @@
                 description="Simple Web Sockets api."
                 example={{
                     lang: "go",
-                    source: ws,
+                    source: `
+                        send.WsUpgrade(client)
+                        for {
+                            name := receive.Message(client)
+                            send.Message(client, "Hello " + name)
+                        }
+                    `,
                 }}
             />
             <Feature
@@ -101,7 +111,13 @@
                 description="Simple Server Sent Events api."
                 example={{
                     lang: "go",
-                    source: sse,
+                    source: `
+                        send.SseUpgrade(client)
+                        for {
+                            send.Message(client, "Hello.")
+                            time.Sleep(time.Second)
+                        }
+                    `,
                 }}
             />
         </div>

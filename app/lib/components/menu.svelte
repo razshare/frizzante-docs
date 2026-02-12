@@ -23,6 +23,7 @@
         <a {...href("/")}>Overview</a>
         {#snippet menu()}
             <MenuItem><a {...href("/get_started")}>Get Started</a></MenuItem>
+            <MenuItem><a {...href("/basics")}>Basics</a></MenuItem>
         {/snippet}
     </MenuItem>
 </div>

@@ -8,6 +8,7 @@ import (
 	"main/lib/core/routes/statics"
 	"main/lib/core/servers"
 	"main/lib/core/ssr"
+	"main/lib/routes/basics"
 	"main/lib/routes/fallback"
 	"main/lib/routes/get_started"
 	"main/lib/routes/overview"
@@ -27,6 +28,7 @@ func main() {
 		{Pattern: "GET /", Handler: fallback.View},
 		{Pattern: "GET /overview", Handler: overview.View},
 		{Pattern: "GET /get_started", Handler: get_started.View},
+		{Pattern: "GET /basics", Handler: basics.View},
 		statics.New("GET /@statics", server),
 	}
 	if err := servers.Start(server); err != nil {

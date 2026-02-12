@@ -8,7 +8,7 @@
         position: relative;
         gap: var(--layout-gap);
         padding: var(--layout-padding);
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 3fr 1fr;
         grid-template-areas:
             "navbar navbar navbar"
             "sidebar content empty "

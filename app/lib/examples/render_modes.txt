@@ -1,6 +1,0 @@
-send.View(client, views.View{
-   Name: "Welcome",
-   RenderMode: view.RenderModeFull,
-   // RenderMode: view.RenderModeServer,
-   // RenderMode: view.RenderModeClient,
-})
