@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import Code from "$lib/components/code.svelte"
     import IndexedSection from "$lib/components/indexed_section.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"

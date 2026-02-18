@@ -4,14 +4,13 @@ import (
 	"embed"
 	"log"
 
+	"main/lib/core/clients"
 	"main/lib/core/routes"
 	"main/lib/core/routes/statics"
+	"main/lib/core/send"
 	"main/lib/core/servers"
 	"main/lib/core/ssr"
-	"main/lib/routes/basics"
-	"main/lib/routes/fallback"
-	"main/lib/routes/get_started"
-	"main/lib/routes/overview"
+	"main/lib/core/views"
 )
 
 //go:generate frizzante clean
@@ -25,10 +24,26 @@ func main() {
 	server.Efs = efs
 	server.Render = ssr.New(1)
 	server.Routes = []routes.Route{
-		{Pattern: "GET /", Handler: fallback.View},
-		{Pattern: "GET /overview", Handler: overview.View},
-		{Pattern: "GET /get_started", Handler: get_started.View},
-		{Pattern: "GET /basics", Handler: basics.View},
+		{Pattern: "GET /", Handler: func(client *clients.Client) {
+			if !send.RequestedFile(client) {
+				send.View(client, views.View{Name: "Overview"})
+			}
+		}},
+		{Pattern: "GET /overview", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Overview"}) }},
+		{Pattern: "GET /get_started", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "GetStarted"}) }},
+		{Pattern: "GET /basics", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Basics"}) }},
+		{Pattern: "GET /web_sockets", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "WebSockets"}) }},
+		{Pattern: "GET /server_sent_events", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "ServerSentEvents"}) }},
+		{Pattern: "GET /guards", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Guards"}) }},
+		{Pattern: "GET /views", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Views"}) }},
+		{Pattern: "GET /web_standards", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "WebStandards"}) }},
+		{Pattern: "GET /type_definitions", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "TypeDefinitions"}) }},
+		{Pattern: "GET /todos_example", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "TodosExample"}) }},
+		{Pattern: "GET /cli", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Cli"}) }},
+		{Pattern: "GET /docker", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Docker"}) }},
+		{Pattern: "GET /issues", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Issues"}) }},
+		{Pattern: "GET /contributing", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Contributing"}) }},
+		{Pattern: "GET /faq", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Faq"}) }},
 		statics.New("GET /@statics", server),
 	}
 	if err := servers.Start(server); err != nil {

@@ -11,6 +11,7 @@
         bottom: 0;
         overflow: hidden;
         grid-template-columns: 1fr 3fr 1fr;
+        grid-template-rows: auto 1fr auto;
         grid-template-areas:
             "navbar navbar navbar"
             "left-sidebar content right-sidebar"
