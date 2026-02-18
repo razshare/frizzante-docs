@@ -1,7 +1,7 @@
 <style>
     :root {
         --danger-background: #af1414;
-        --danger-text: #cbc1de;
+        --danger-text: #ff9995;
         --danger-icon: #ff9995;
         --danger-title: #ff9995;
         --danger-padding: 0.7rem;

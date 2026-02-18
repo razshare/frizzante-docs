@@ -1,7 +1,7 @@
 <style>
     :root {
         --caution-background: #40200d;
-        --caution-text: #cbc1de;
+        --caution-text: #fcc192;
         --caution-title: #fcc192;
         --caution-icon: #fcc192;
         --caution-padding: 0.7rem;
