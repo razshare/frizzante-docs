@@ -44,6 +44,11 @@ func main() {
 		{Pattern: "GET /issues", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Issues"}) }},
 		{Pattern: "GET /contributing", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Contributing"}) }},
 		{Pattern: "GET /faq", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Faq"}) }},
+		// Your `frizzante generate snapshot` requires an endpoint that lists
+		// all static routes of the server. This `statics.New()` function
+		// simply creates a route that lists those routes.
+		// Your snapshot command should be: `frizzante generate snapshot http://127.0.0.1:8080/@statics .gen/snapshot`
+		// or `make snapshot`. See makefile.
 		statics.New("GET /@statics", server),
 	}
 	if err := servers.Start(server); err != nil {
