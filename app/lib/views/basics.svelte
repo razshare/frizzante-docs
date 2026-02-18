@@ -172,7 +172,7 @@
         <span>Sending header fields or status after sending out content is not allowed.</span>
         <span>Read <a href="#order-of-oprations">below</a>.</span>
     </Caution>
-    <h1 id="order-of-oprations">Order of Operations</h1>
+    <h1 id="order-of-operations">Order of Operations</h1>
     <span>Order of operations matters when sending data to the client.</span>
     <br />
     <span>
@@ -470,7 +470,7 @@
                 <MenuItem><a href="#messages">Messages</a></MenuItem>
                 <MenuItem><a href="#headers">Headers</a></MenuItem>
                 <MenuItem><a href="#status">Status</a></MenuItem>
-                <MenuItem><a href="#order-of-operation">Order of Operations</a></MenuItem>
+                <MenuItem><a href="#order-of-operations">Order of Operations</a></MenuItem>
                 <MenuItem><a href="#queries">Queries</a></MenuItem>
                 <MenuItem><a href="#forms">Forms</a></MenuItem>
                 <MenuItem><a href="#json">Json</a></MenuItem>

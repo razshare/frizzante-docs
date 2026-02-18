@@ -1,19 +1,15 @@
 <style>
     :root {
-        --layout-gap: 1rem;
         --layout-padding: 1rem;
     }
     .layout {
         display: grid;
-        /* position: relative; */
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
         overflow: hidden;
-        gap: var(--layout-gap);
-        padding: var(--layout-padding);
         grid-template-columns: 1fr 3fr 1fr;
         grid-template-areas:
             "navbar navbar navbar"
@@ -22,19 +18,25 @@
     }
     .navbar {
         grid-area: navbar;
+        padding: var(--layout-padding);
+        background-color: rgba(0, 0, 0, 0.3);
     }
     .left-sidebar {
         grid-area: left-sidebar;
+        padding: var(--layout-padding);
     }
     .right-sidebar {
         grid-area: right-sidebar;
+        padding: var(--layout-padding);
     }
     .content {
-        grid-area: content;
         overflow-y: auto;
+        grid-area: content;
+        padding: var(--layout-padding);
     }
     .footer {
         grid-area: footer;
+        padding: var(--layout-padding);
     }
 </style>
 
