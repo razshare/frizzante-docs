@@ -21,6 +21,7 @@
         color: var(--note-text);
         padding: var(--note-padding);
         border-radius: var(--note-roundness);
+        margin-top: var(--note-gap);
         margin-bottom: var(--note-gap);
     }
     .icon {

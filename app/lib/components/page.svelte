@@ -3,9 +3,13 @@
     import Footer from "$lib/components/footer.svelte"
     import Layout from "$lib/components/layout.svelte"
     import Navbar from "$lib/components/navbar.svelte"
-    import Sidebar from "$lib/components/sidebar.svelte"
-    type Props = { title: string; children: Snippet }
-    let { title, children }: Props = $props()
+    import LeftSidebar from "$lib/components/left_sidebar.svelte"
+    type Props = {
+        title: string
+        children: Snippet
+        rightSidebar: Snippet
+    }
+    let { title, children, rightSidebar: sidebar }: Props = $props()
 </script>
 
 <Layout {title}>
@@ -18,7 +22,10 @@
     {#snippet footer()}
         <Footer />
     {/snippet}
-    {#snippet sidebar()}
-        <Sidebar />
+    {#snippet leftSidebar()}
+        <LeftSidebar />
+    {/snippet}
+    {#snippet rightSidebar()}
+        {@render sidebar()}
     {/snippet}
 </Layout>

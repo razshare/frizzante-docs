@@ -1,13 +1,13 @@
 <style>
     :root {
-        --sidebar-gap: 1rem;
-        --sidebar-padding: 1rem;
+        --left-sidebar-gap: 1rem;
+        --left-sidebar-padding: 1rem;
     }
     .sidebar {
         display: grid;
         position: relative;
-        gap: var(--sidebar-gap);
-        padding: var(--sidebar-padding);
+        gap: var(--left-sidebar-gap);
+        padding: var(--left-sidebar-padding);
         grid-template-columns: 1fr auto;
         grid-template-areas: "empty content";
     }
@@ -16,7 +16,7 @@
     }
 </style>
 
-<script>
+<script lang="ts">
     import Menu from "$lib/components/menu.svelte"
 </script>
 

@@ -122,4 +122,7 @@
             />
         </div>
     </div>
+    {#snippet rightSidebar()}
+        <!-- empty -->
+    {/snippet}
 </Page>

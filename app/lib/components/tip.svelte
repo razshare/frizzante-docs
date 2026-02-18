@@ -19,6 +19,7 @@
         color: var(--tip-text);
         padding: var(--tip-padding);
         border-radius: var(--tip-roundness);
+        margin-top: var(--tip-gap);
         margin-bottom: var(--tip-gap);
     }
     .icon {

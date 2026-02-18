@@ -5,23 +5,33 @@
     }
     .layout {
         display: grid;
-        position: relative;
+        /* position: relative; */
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
         gap: var(--layout-gap);
         padding: var(--layout-padding);
         grid-template-columns: 1fr 3fr 1fr;
         grid-template-areas:
             "navbar navbar navbar"
-            "sidebar content empty "
+            "left-sidebar content right-sidebar"
             "footer footer footer ";
     }
     .navbar {
         grid-area: navbar;
     }
-    .sidebar {
-        grid-area: sidebar;
+    .left-sidebar {
+        grid-area: left-sidebar;
+    }
+    .right-sidebar {
+        grid-area: right-sidebar;
     }
     .content {
         grid-area: content;
+        overflow-y: auto;
     }
     .footer {
         grid-area: footer;
@@ -34,11 +44,12 @@
     type Props = {
         title: string
         navbar: Snippet
-        sidebar: Snippet
+        leftSidebar: Snippet
+        rightSidebar: Snippet
         content: Snippet
         footer: Snippet
     }
-    let { title, navbar, sidebar, content, footer }: Props = $props()
+    let { title, navbar, leftSidebar, rightSidebar, content, footer }: Props = $props()
 </script>
 
 <svelte:head>
@@ -51,7 +62,8 @@
 </svelte:head>
 <div class="layout" in:fade>
     <div class="navbar">{@render navbar()}</div>
-    <div class="sidebar">{@render sidebar()}</div>
+    <div class="left-sidebar">{@render leftSidebar()}</div>
+    <div class="right-sidebar">{@render rightSidebar()}</div>
     <div class="content">{@render content()}</div>
     <div class="footer">{@render footer()}</div>
 </div>

@@ -48,4 +48,7 @@
             {/snippet}
         </Tree>
     </IndexedSection>
+    {#snippet rightSidebar()}
+        <!-- empty -->
+    {/snippet}
 </Page>

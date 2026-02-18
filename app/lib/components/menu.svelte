@@ -1,14 +1,12 @@
 <style>
     :root {
         --menu-padding: 1rem;
-        --menu-border: 1px solid #63625e;
     }
     .menu {
         display: grid;
         position: relative;
         justify-items: end;
         grid-template-areas: "";
-        border-right: var(--menu-border);
         padding: var(--menu-padding);
     }
 </style>

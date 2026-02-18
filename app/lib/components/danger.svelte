@@ -21,6 +21,8 @@
         color: var(--danger-text);
         padding: var(--danger-padding);
         border-radius: var(--danger-roundness);
+        margin-top: var(--danger-gap);
+        margin-bottom: var(--danger-gap);
     }
     .icon {
         grid-area: icon;
