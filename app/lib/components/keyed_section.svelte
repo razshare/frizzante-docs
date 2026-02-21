@@ -6,7 +6,7 @@
         --indexed-section-link-width: 0.3rem;
         --indexed-section-gap: 0.3rem;
     }
-    .indexed-section {
+    .keyed-section {
         display: grid;
         position: relative;
         gap: var(--indexed-section-gap);
@@ -23,7 +23,7 @@
         justify-self: center;
         align-self: center;
     }
-    .badge > .index {
+    .badge > .key {
         display: grid;
         justify-items: center;
         align-items: center;
@@ -66,16 +66,16 @@
 <script lang="ts">
     import type { Snippet } from "svelte"
     type Props = {
-        index: number
+        key: string
         children: Snippet
         noLink?: boolean
     }
-    let { index, children, noLink = false }: Props = $props()
+    let { key, children, noLink = false }: Props = $props()
 </script>
 
-<div class="indexed-section">
+<div class="keyed-section">
     <div class="badge">
-        <span class="index">{index}</span>
+        <span class="key">{key[0]}</span>
         <div class="circle"></div>
     </div>
     <div class="content">{@render children()}</div>

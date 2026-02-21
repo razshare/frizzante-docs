@@ -8,7 +8,8 @@
     }
     .code {
         position: relative;
-        margin: var(--inline-code-margin);
+        margin-top: var(--code-margin);
+        margin-bottom: var(--code-margin);
         overflow: auto;
         border-radius: var(--code-roundness);
         background-color: var(--code-background);

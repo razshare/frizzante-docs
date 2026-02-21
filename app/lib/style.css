@@ -17,7 +17,11 @@ pre.shiki {
 }
 
 a,
-a:hover,
 a:active {
     color: var(--a-text);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }

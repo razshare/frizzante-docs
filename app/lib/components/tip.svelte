@@ -1,15 +1,16 @@
 <style>
     :root {
         --tip-background: #261c39;
-        --tip-text: #cbc1de;
+        --tip-text: #a193bd;
+        --tip-icon: #a193bd;
+        --tip-title: #a193bd;
         --tip-padding: 0.7rem;
         --tip-roundness: 1rem;
-        --tip-gap: 0.5rem;
+        --tip-margin: 0.5rem;
     }
     .tip {
         position: relative;
         display: grid;
-        gap: var(--tip-gap);
         grid-template-columns: auto 1fr;
         grid-template-areas:
             "icon title"
@@ -19,14 +20,17 @@
         color: var(--tip-text);
         padding: var(--tip-padding);
         border-radius: var(--tip-roundness);
-        margin-top: var(--tip-gap);
-        margin-bottom: var(--tip-gap);
+        margin-top: var(--tip-margin);
+        margin-bottom: var(--tip-margin);
     }
     .icon {
         grid-area: icon;
+        color: var(--danger-icon);
     }
     .title {
         grid-area: title;
+        color: var(--tip-title);
+        padding-left: var(--tip-padding);
     }
     .content {
         grid-area: content;

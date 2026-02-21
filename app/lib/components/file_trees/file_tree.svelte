@@ -1,16 +1,18 @@
 <style>
     :root {
-        --tree-padding: 1rem;
-        --tree-roundness: 1rem;
-        --tree-background: #1c1b1a;
-        --tree-text: #878580;
+        --file-tree-margin: 1rem;
+        --file-tree-padding: 1rem;
+        --file-tree-roundness: 1rem;
+        --file-tree-background: #1c1b1a;
+        --file-tree-text: #878580;
     }
     .tree {
         position: relative;
-        color: var(--tree-text);
-        background-color: var(--tree-background);
-        padding: var(--tree-padding);
-        border-radius: var(--tree-roundness);
+        color: var(--file-tree-text);
+        background-color: var(--file-tree-background);
+        padding: var(--file-tree-padding);
+        margin-top: var(--file-tree-margin);
+        border-radius: var(--file-tree-roundness);
     }
 </style>
 

@@ -1,15 +1,17 @@
 <style>
     :root {
-        --inline-code-background: #343331;
-        --inline-code-text: #cecdc3;
-        --inline-code-margin: 0.3rem;
+        --inline-code-background: rgba(30, 119, 148, 0.3);
+        --inline-code-text: rgba(255, 255, 255, 0.7);
+        --inline-code-top: 0.1.3rem;
         --inline-code-padding: 0.3rem;
         --inline-code-roundness: 0.3rem;
     }
     .inline-code {
         position: relative;
-        margin-left: var(--inline-code-margin);
-        margin-right: var(--inline-code-margin);
+        display: inline-flex;
+        align-items: center;
+        transform: scale(0.9);
+        top: var(--inline-code-top);
     }
     .inline-code > .text {
         position: relative;

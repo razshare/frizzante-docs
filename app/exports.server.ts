@@ -1,4 +1,3 @@
-import Overview from "$lib/views/overview.svelte"
 import GetStarted from "$lib/views/get_started.svelte"
 import Basics from "$lib/views/basics.svelte"
 import WebSockets from "$lib/views/web_sockets.svelte"
@@ -15,7 +14,6 @@ import Contributing from "$lib/views/contributing.svelte"
 import Faq from "$lib/views/faq.svelte"
 
 export const views = {
-    Overview,
     GetStarted,
     Basics,
     WebSockets,

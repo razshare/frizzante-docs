@@ -1,10 +1,10 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
-    import IndexedSection from "$lib/components/indexed_section.svelte"
+    import KeyedSection from "$lib/components/keyed_section.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
-    import Tree from "$lib/components/trees/tree.svelte"
+    import Tree from "$lib/components/file_trees/file_tree.svelte"
     import { mdiPackage } from "@mdi/js"
 </script>
 
@@ -18,19 +18,19 @@
         <Code lang="bash" source={["export GOPATH=$HOME/go", "export PATH=$PATH:$GOPATH/bin"].join("\n")} />
     </Tip>
     <h1>Get Started</h1>
-    <IndexedSection index={1}>
+    <KeyedSection key="1">
         <span>Create project.</span>
         <Code lang="bash" source="frizzante create my_project" />
-    </IndexedSection>
-    <IndexedSection index={2}>
+    </KeyedSection>
+    <KeyedSection key="2">
         <span>Configure project.</span>
         <Code lang="bash" source="frizzante configure" />
-    </IndexedSection>
-    <IndexedSection index={3}>
+    </KeyedSection>
+    <KeyedSection key="3">
         <span>Start development.</span>
         <Code lang="bash" source="frizzante dev" />
-    </IndexedSection>
-    <IndexedSection index={4} noLink>
+    </KeyedSection>
+    <KeyedSection key="4" noLink>
         <span>Build.</span>
         <Code lang="bash" source="frizzante build" />
         <span>This will create a</span>
@@ -47,7 +47,7 @@
                 </Directory>
             {/snippet}
         </Tree>
-    </IndexedSection>
+    </KeyedSection>
     {#snippet rightSidebar()}
         <!-- empty -->
     {/snippet}

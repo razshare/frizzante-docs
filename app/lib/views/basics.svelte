@@ -248,7 +248,7 @@
     <h1 id="forms">Forms</h1>
     <span>
         Use <InlineCode source="receive.Form()" /> to parse incoming content as multipart form or url encoded form when using
-        <strong>POST</strong> and <strong>GET</strong> http verbs.
+        <InlineCode source="POST" /> and <InlineCode source="GET" /> http verbs.
     </span>
     <Code
         lang="go"
@@ -282,13 +282,13 @@
     />
     <Tip>
         <span>
-            You can also use a <strong>json</strong> tag, it will match the field correctly as if it were a
-            <strong>form</strong> tag.
+            You can also use a <InlineCode source="json" /> tag, it will match the field correctly as if it were a
+            <InlineCode source="form" /> tag.
         </span>
         <br />
         <span>
             This is so that you can integrate your structs more easily with other libraries that only take into account
-            <strong>json</strong> formats.
+            <InlineCode source="json" /> formats.
         </span>
     </Tip>
     <Tip>
@@ -462,23 +462,19 @@
         `}
     />
     {#snippet rightSidebar()}
-        <MenuItem>
-            <a href="#basics">Basics</a>
-            {#snippet menu()}
-                <MenuItem><a href="#routes">Routes</a></MenuItem>
-                <MenuItem><a href="#path-fields">Path Fields</a></MenuItem>
-                <MenuItem><a href="#messages">Messages</a></MenuItem>
-                <MenuItem><a href="#headers">Headers</a></MenuItem>
-                <MenuItem><a href="#status">Status</a></MenuItem>
-                <MenuItem><a href="#order-of-operations">Order of Operations</a></MenuItem>
-                <MenuItem><a href="#queries">Queries</a></MenuItem>
-                <MenuItem><a href="#forms">Forms</a></MenuItem>
-                <MenuItem><a href="#json">Json</a></MenuItem>
-                <MenuItem><a href="#cookies">Cookies</a></MenuItem>
-                <MenuItem><a href="#session-id">Session Id</a></MenuItem>
-                <MenuItem><a href="#session">Session</a></MenuItem>
-                <MenuItem><a href="#navigate">Navigate</a></MenuItem>
-            {/snippet}
-        </MenuItem>
+        <MenuItem><a href="#basics">Basics</a></MenuItem>
+        <MenuItem><a href="#routes">Routes</a></MenuItem>
+        <MenuItem><a href="#path-fields">Path Fields</a></MenuItem>
+        <MenuItem><a href="#messages">Messages</a></MenuItem>
+        <MenuItem><a href="#headers">Headers</a></MenuItem>
+        <MenuItem><a href="#status">Status</a></MenuItem>
+        <MenuItem><a href="#order-of-operations">Order of Operations</a></MenuItem>
+        <MenuItem><a href="#queries">Queries</a></MenuItem>
+        <MenuItem><a href="#forms">Forms</a></MenuItem>
+        <MenuItem><a href="#json">Json</a></MenuItem>
+        <MenuItem><a href="#cookies">Cookies</a></MenuItem>
+        <MenuItem><a href="#session-id">Session Id</a></MenuItem>
+        <MenuItem><a href="#session">Session</a></MenuItem>
+        <MenuItem><a href="#navigate">Navigate</a></MenuItem>
     {/snippet}
 </Page>

@@ -1,17 +1,16 @@
 <style>
     :root {
         --note-background: #12253b;
-        --note-text: #cbc1de;
+        --note-text: #90b1c4;
         --note-icon: #90b1c4;
         --note-title: #90b1c4;
         --note-padding: 0.7rem;
         --note-roundness: 1rem;
-        --note-gap: 0.5rem;
+        --note-margin: 0.5rem;
     }
     .note {
         position: relative;
         display: grid;
-        gap: var(--note-gap);
         grid-template-columns: auto 1fr;
         grid-template-areas:
             "icon title"
@@ -21,8 +20,8 @@
         color: var(--note-text);
         padding: var(--note-padding);
         border-radius: var(--note-roundness);
-        margin-top: var(--note-gap);
-        margin-bottom: var(--note-gap);
+        margin-top: var(--note-margin);
+        margin-bottom: var(--note-margin);
     }
     .icon {
         grid-area: icon;
@@ -31,6 +30,7 @@
     .title {
         grid-area: title;
         color: var(--note-title);
+        padding-left: var(--note-padding);
     }
     .content {
         grid-area: content;

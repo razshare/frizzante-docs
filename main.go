@@ -26,10 +26,9 @@ func main() {
 	server.Routes = []routes.Route{
 		{Pattern: "GET /", Handler: func(client *clients.Client) {
 			if !send.RequestedFile(client) {
-				send.View(client, views.View{Name: "Overview"})
+				send.View(client, views.View{Name: "GetStarted"})
 			}
 		}},
-		{Pattern: "GET /overview", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Overview"}) }},
 		{Pattern: "GET /get_started", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "GetStarted"}) }},
 		{Pattern: "GET /basics", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Basics"}) }},
 		{Pattern: "GET /web_sockets", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "WebSockets"}) }},

@@ -6,12 +6,11 @@
         --caution-icon: #fcc192;
         --caution-padding: 0.7rem;
         --caution-roundness: 1rem;
-        --caution-gap: 0.5rem;
+        --caution-margin: 0.5rem;
     }
     .caution {
         position: relative;
         display: grid;
-        gap: var(--caution-gap);
         grid-template-columns: auto 1fr;
         grid-template-areas:
             "icon title"
@@ -21,7 +20,8 @@
         color: var(--caution-text);
         padding: var(--caution-padding);
         border-radius: var(--caution-roundness);
-        margin-bottom: var(--caution-gap);
+        margin-top: var(--caution-margin);
+        margin-bottom: var(--caution-margin);
     }
     .icon {
         grid-area: icon;
@@ -30,6 +30,7 @@
     .title {
         grid-area: title;
         color: var(--caution-title);
+        padding-left: var(--caution-padding);
     }
     .content {
         grid-area: content;
