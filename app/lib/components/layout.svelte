@@ -9,8 +9,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        overflow: hidden;
-        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-columns: auto 1fr auto;
         grid-template-rows: auto 1fr auto;
         grid-template-areas:
             "navbar navbar navbar"
@@ -23,10 +22,12 @@
         background-color: rgba(0, 0, 0, 0.3);
     }
     .left-sidebar {
+        max-width: 20vw;
         grid-area: left-sidebar;
         padding: var(--layout-padding);
     }
     .right-sidebar {
+        max-width: 20vw;
         grid-area: right-sidebar;
         padding: var(--layout-padding);
     }

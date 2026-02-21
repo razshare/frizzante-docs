@@ -42,12 +42,12 @@
                 "main/lib/routes/welcome"
             )
 
-            var server = servers.New()                        // Creates server.
+            var server = servers.New()                         // Creates server.
 
             func main() {
-                defer servers.Start(server)                   // Starts server.
-                server.Routes = []routes.Route{               // Overwrites routes.
-                {Pattern: "GET /", Handler: welcome.View}, // Adds route.
+                defer servers.Start(server)                    // Starts server.
+                server.Routes = []routes.Route{                // Overwrites routes.
+                    {Pattern: "GET /", Handler: welcome.View}, // Adds route.
                 }
             }
         `}
@@ -170,6 +170,7 @@
     />
     <Caution>
         <span>Sending header fields or status after sending out content is not allowed.</span>
+        <br />
         <span>Read <a href="#order-of-oprations">below</a>.</span>
     </Caution>
     <h1 id="order-of-operations">Order of Operations</h1>

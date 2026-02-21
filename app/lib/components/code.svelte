@@ -28,10 +28,10 @@
     type Props = { source: string; lang: string }
     let { source, lang }: Props = $props()
     let html = $state("")
-    onMount(async function ready() {
+    function align(text: string): string {
         const lines = []
         let firstMeaningfulLine = ""
-        for (const line of source.split("\n")) {
+        for (const line of text.split("\n")) {
             const lineIsEmpty = line.trim() === ""
             if (firstMeaningfulLine === "") {
                 firstMeaningfulLine = line
@@ -47,7 +47,10 @@
 
             lines.push(lineLocal)
         }
-        html = await codeToHtml(lines.join("\n").trim(), {
+        return lines.join("\n").trim()
+    }
+    onMount(async function ready() {
+        html = await codeToHtml(align(source), {
             lang: lang,
             theme: "vitesse-dark",
         })
@@ -56,7 +59,7 @@
 
 <div class="code">
     {#if html === ""}
-        <pre class="text">{source}</pre>
+        <pre class="text">{align(source)}</pre>
     {:else}
         <!--eslint-disable-next-line svelte/no-at-html-tags-->
         {@html html}
