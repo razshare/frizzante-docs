@@ -6,17 +6,6 @@
     import Tip from "$lib/components/tip.svelte"
     import Tree from "$lib/components/file_trees/file_tree.svelte"
     import { mdiPackage } from "@mdi/js"
-
-    console.log("randomUUID", crypto.randomUUID())
-    console.log("randomUUID", crypto.randomUUID())
-    console.log("randomUUID", crypto.randomUUID())
-    console.log("randomUUID", crypto.randomUUID())
-    console.log("randomUUID", crypto.randomUUID())
-    console.log("randomUUID", crypto.randomUUID())
-    console.log("randomUUID", crypto.randomUUID())
-    console.log("randomUUID", crypto.randomUUID())
-    console.log("randomUUID", crypto.randomUUID())
-    console.log("randomUUID", crypto.randomUUID())
 </script>
 
 <Page title="Get Started">

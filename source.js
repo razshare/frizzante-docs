@@ -778,19 +778,19 @@ function get_render_context() {
 }
 var als = null;
 var text_encoder;
-var crypto$1;
+var crypto;
 var obfuscated_import = (module_name) => import_627f0c8d3f2158f776f550ab47b35de9(
   /* @vite-ignore */
   module_name
 );
 async function sha256(data) {
   text_encoder ??= new TextEncoder();
-  crypto$1 ??= globalThis.crypto?.subtle?.digest ? globalThis.crypto : (
+  crypto ??= globalThis.crypto?.subtle?.digest ? globalThis.crypto : (
     // @ts-ignore - we don't install node types in the prod build
     // don't use import('node:crypto') directly because static analysers will think we rely on node when we don't
     (await obfuscated_import("node:crypto")).webcrypto
   );
-  const hash_buffer = await crypto$1.subtle.digest("SHA-256", text_encoder.encode(data));
+  const hash_buffer = await crypto.subtle.digest("SHA-256", text_encoder.encode(data));
   return base64_encode(hash_buffer);
 }
 function base64_encode(bytes) {
@@ -2167,16 +2167,6 @@ function File_tree($$renderer, $$props) {
 }
 function Get_started($$renderer, $$props) {
   $$renderer.component(($$renderer2) => {
-    console.log("randomUUID", crypto.randomUUID());
-    console.log("randomUUID", crypto.randomUUID());
-    console.log("randomUUID", crypto.randomUUID());
-    console.log("randomUUID", crypto.randomUUID());
-    console.log("randomUUID", crypto.randomUUID());
-    console.log("randomUUID", crypto.randomUUID());
-    console.log("randomUUID", crypto.randomUUID());
-    console.log("randomUUID", crypto.randomUUID());
-    console.log("randomUUID", crypto.randomUUID());
-    console.log("randomUUID", crypto.randomUUID());
     {
       let rightSidebar = function($$renderer3) {
       };
