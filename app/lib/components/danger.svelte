@@ -13,9 +13,9 @@
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-areas:
-            "icon title"
-            "empty empty"
-            "content content";
+            "danger-icon danger-title"
+            "danger-empty danger-empty"
+            "danger-content danger-content";
         background-color: var(--danger-background);
         color: var(--danger-text);
         padding: var(--danger-padding);
@@ -23,17 +23,17 @@
         margin-top: var(--danger-margin);
         margin-bottom: var(--danger-margin);
     }
-    .icon {
-        grid-area: icon;
+    .danger-icon {
+        grid-area: danger-icon;
         color: var(--danger-icon);
     }
-    .title {
-        grid-area: title;
+    .danger-title {
+        grid-area: danger-title;
         color: var(--danger-title);
         padding-left: var(--danger-padding);
     }
-    .content {
-        grid-area: content;
+    .danger-content {
+        grid-area: danger-content;
     }
 </style>
 
@@ -46,9 +46,9 @@
 </script>
 
 <div class="danger">
-    <div class="icon">
+    <div class="danger-icon">
         <Icon path={mdiFireCircle} size="1.5rem" />
     </div>
-    <div class="title">Danger</div>
-    <div class="content">{@render children()}</div>
+    <div class="danger-title">Danger</div>
+    <div class="danger-content">{@render children()}</div>
 </div>

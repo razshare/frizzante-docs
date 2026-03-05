@@ -28,7 +28,7 @@ export default defineConfig({
             "$lib": `${path.resolve(dir, "./lib")}`,
             "$gen": `${path.resolve(dir, "../.gen")}`,
             "$exports.client": `${path.resolve(dir, "./exports.client.ts")}`,
-            "$exports.server": `${path.resolve(dir, "./exports.server.ts")}`,
+            "$exports.server": `${path.resolve(dir, "./exports.server.ts")}`
         },
     },
     build: {

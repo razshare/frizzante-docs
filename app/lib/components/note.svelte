@@ -13,9 +13,9 @@
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-areas:
-            "icon title"
+            "note-icon note-title"
             "empty empty"
-            "content content";
+            "note-content note-content";
         background-color: var(--note-background);
         color: var(--note-text);
         padding: var(--note-padding);
@@ -23,17 +23,17 @@
         margin-top: var(--note-margin);
         margin-bottom: var(--note-margin);
     }
-    .icon {
-        grid-area: icon;
+    .note-icon {
+        grid-area: note-icon;
         color: var(--note-icon);
     }
-    .title {
-        grid-area: title;
+    .note-title {
+        grid-area: note-title;
         color: var(--note-title);
         padding-left: var(--note-padding);
     }
-    .content {
-        grid-area: content;
+    .note-content {
+        grid-area: note-content;
     }
 </style>
 
@@ -46,9 +46,9 @@
 </script>
 
 <div class="note">
-    <div class="icon">
+    <div class="note-icon">
         <Icon path={mdiInformationOutline} size="1.5rem" />
     </div>
-    <div class="title">Note</div>
-    <div class="content">{@render children()}</div>
+    <div class="note-title">Note</div>
+    <div class="note-content">{@render children()}</div>
 </div>

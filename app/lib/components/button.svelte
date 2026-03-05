@@ -17,23 +17,23 @@
         background-color: var(--button-background);
         color: var(--button-text);
         grid-template-columns: auto 1fr auto;
-        grid-template-areas: "start content end";
+        grid-template-areas: "button-start button-content button-end";
     }
     .ghost {
         background-color: var(--button-ghost-background);
         color: var(--button-ghost-text);
         border: var(--button-ghost-border);
     }
-    .start {
-        grid-area: start;
+    .button-start {
+        grid-area: button-start;
         text-align: start;
     }
-    .content {
-        grid-area: content;
+    .button-content {
+        grid-area: button-content;
         text-align: center;
     }
-    .end {
-        grid-area: end;
+    .button-end {
+        grid-area: button-end;
         text-align: end;
     }
 </style>
@@ -52,7 +52,7 @@
 </script>
 
 <a class="button" class:ghost {...href(path)}>
-    <span class="start">
+    <span class="button-start">
         {#if start}
             {@render start()}
         {/if}
@@ -60,7 +60,7 @@
     <span class="content">
         {@render children()}
     </span>
-    <span class="end">
+    <span class="button-end">
         {#if end}
             {@render end()}
         {/if}

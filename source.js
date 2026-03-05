@@ -2,6 +2,9 @@ var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
@@ -15,6 +18,18 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// .gen/empty.ts
+var empty_exports = {};
+__export(empty_exports, {
+  default: () => empty_default
+});
+var empty_default;
+var init_empty = __esm({
+  ".gen/empty.ts"() {
+    empty_default = {};
+  }
+});
 
 // <stdin>
 var stdin_exports = {};
@@ -779,16 +794,12 @@ function get_render_context() {
 var als = null;
 var text_encoder;
 var crypto;
-var obfuscated_import = (module_name) => import_627f0c8d3f2158f776f550ab47b35de9(
-  /* @vite-ignore */
-  module_name
-);
 async function sha256(data) {
   text_encoder ??= new TextEncoder();
   crypto ??= globalThis.crypto?.subtle?.digest ? globalThis.crypto : (
     // @ts-ignore - we don't install node types in the prod build
     // don't use import('node:crypto') directly because static analysers will think we rely on node when we don't
-    (await obfuscated_import("node:crypto")).webcrypto
+    (await Promise.resolve().then(() => (init_empty(), empty_exports))).webcrypto
   );
   const hash_buffer = await crypto.subtle.digest("SHA-256", text_encoder.encode(data));
   return base64_encode(hash_buffer);
@@ -1710,7 +1721,7 @@ function Footer($$renderer) {
 }
 var $$css$c = {
   hash: "svelte-w3wuk5",
-  code: ':root {--layout-padding: 1rem;}.layout.svelte-w3wuk5 {display:grid;position:fixed;top:0;left:0;right:0;bottom:0;grid-template-columns:auto 1fr auto;grid-template-rows:auto 1fr auto;grid-template-areas:"navbar navbar navbar"\n            "left-sidebar content right-sidebar"\n            "footer footer footer ";}.navbar.svelte-w3wuk5 {grid-area:navbar;padding:var(--layout-padding);background-color:rgba(0, 0, 0, 0.3);}.left-sidebar.svelte-w3wuk5 {max-width:20vw;grid-area:left-sidebar;padding:var(--layout-padding);}.right-sidebar.svelte-w3wuk5 {max-width:20vw;grid-area:right-sidebar;padding:var(--layout-padding);}.content.svelte-w3wuk5 {overflow-y:auto;grid-area:content;padding:var(--layout-padding);}.footer.svelte-w3wuk5 {grid-area:footer;padding:var(--layout-padding);}'
+  code: ':root {--layout-padding: 1rem;}.layout.svelte-w3wuk5 {display:grid;position:fixed;top:0;left:0;right:0;bottom:0;grid-template-columns:1fr 5fr 1fr;grid-template-rows:auto 1fr auto;grid-template-areas:"layout-navbar layout-navbar layout-navbar"\n            "layout-left-sidebar layout-content layout-right-sidebar"\n            "layout-footer layout-footer layout-footer ";}.layout-navbar.svelte-w3wuk5 {grid-area:layout-navbar;padding:var(--layout-padding);background-color:rgba(0, 0, 0, 0.3);}.layout-left-sidebar.svelte-w3wuk5 {max-width:20vw;grid-area:layout-left-sidebar;padding:var(--layout-padding);}.layout-right-sidebar.svelte-w3wuk5 {max-width:20vw;grid-area:layout-right-sidebar;padding:var(--layout-padding);}.layout-content.svelte-w3wuk5 {overflow-y:auto;grid-area:layout-content;padding:var(--layout-padding);position:relative;width:100%;}.layout-footer.svelte-w3wuk5 {grid-area:layout-footer;padding:var(--layout-padding);}'
 };
 function Layout($$renderer, $$props) {
   $$renderer.global.css.add($$css$c);
@@ -1721,15 +1732,15 @@ function Layout($$renderer, $$props) {
     });
     $$renderer2.push(`<meta charset="UTF-8"/> <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>`);
   });
-  $$renderer.push(`<div class="layout svelte-w3wuk5"><div class="navbar svelte-w3wuk5">`);
+  $$renderer.push(`<div class="layout svelte-w3wuk5"><div class="layout-navbar svelte-w3wuk5">`);
   navbar($$renderer);
-  $$renderer.push(`<!----></div> <div class="left-sidebar svelte-w3wuk5">`);
+  $$renderer.push(`<!----></div> <div class="layout-left-sidebar svelte-w3wuk5">`);
   leftSidebar($$renderer);
-  $$renderer.push(`<!----></div> <div class="right-sidebar svelte-w3wuk5">`);
+  $$renderer.push(`<!----></div> <div class="layout-right-sidebar svelte-w3wuk5">`);
   rightSidebar($$renderer);
-  $$renderer.push(`<!----></div> <div class="content svelte-w3wuk5">`);
+  $$renderer.push(`<!----></div> <div class="layout-content svelte-w3wuk5">`);
   content($$renderer);
-  $$renderer.push(`<!----></div> <div class="footer svelte-w3wuk5">`);
+  $$renderer.push(`<!----></div> <div class="layout-footer svelte-w3wuk5">`);
   footer($$renderer);
   $$renderer.push(`<!----></div></div>`);
 }
@@ -1758,26 +1769,26 @@ function Searchbar($$renderer, $$props) {
 }
 var $$css$9 = {
   hash: "svelte-1ha2mkh",
-  code: ':root {--navbar-title-text: #a2dece;--navbar-gap: 1rem;}.navbar.svelte-1ha2mkh {position:relative;display:grid;gap:var(--navbar-gap);align-items:center;grid-template-columns:auto 1fr 1fr 1fr auto;grid-template-areas:"logo title searchbar empty links";}.logo.svelte-1ha2mkh {grid-area:logo;}.title.svelte-1ha2mkh {grid-area:title;color:var(--navbar-title-text);}.searchbar.svelte-1ha2mkh {grid-area:searchbar;}.links.svelte-1ha2mkh {grid-area:links;text-align:end;}'
+  code: ':root {--navbar-title-text: #a2dece;--navbar-gap: 1rem;}.navbar.svelte-1ha2mkh {position:relative;display:grid;gap:var(--navbar-gap);align-items:center;grid-template-columns:auto 1fr 1fr 1fr auto;grid-template-areas:"navbar-logo navbar-title navbar-searchbar empty navbar-links";}.navbar-logo.svelte-1ha2mkh {grid-area:navbar-logo;}.navbar-title.svelte-1ha2mkh {grid-area:navbar-title;color:var(--navbar-title-text);}.navbar-searchbar.svelte-1ha2mkh {grid-area:navbar-searchbar;}.navbar-links.svelte-1ha2mkh {grid-area:navbar-links;text-align:end;}'
 };
 function Navbar($$renderer) {
   $$renderer.global.css.add($$css$9);
-  $$renderer.push(`<div class="navbar svelte-1ha2mkh"><div class="logo svelte-1ha2mkh"><img${attr("src", logo)} width="32" height="32" alt="logo"/></div> <div class="title svelte-1ha2mkh">Frizzante Docs</div> <div class="searchbar svelte-1ha2mkh">`);
+  $$renderer.push(`<div class="navbar svelte-1ha2mkh"><div class="navbar-logo svelte-1ha2mkh"><img${attr("src", logo)} width="32" height="32" alt="logo"/></div> <div class="navbar-title svelte-1ha2mkh">Frizzante Docs</div> <div class="navbar-searchbar svelte-1ha2mkh">`);
   Searchbar($$renderer);
-  $$renderer.push(`<!----></div> <div class="links svelte-1ha2mkh"><a href="https://github.com/razshare/frizzante">`);
+  $$renderer.push(`<!----></div> <div class="navbar-links svelte-1ha2mkh"><a href="https://github.com/razshare/frizzante">`);
   Icon($$renderer, { size: "2rem", path: mdiGithub });
   $$renderer.push(`<!----></a></div></div>`);
 }
 var $$css$8 = {
   hash: "svelte-nodelc",
-  code: ':root {--menu-item-gap: 1rem;}.menu-item.svelte-nodelc {display:grid;position:relative;gap:var(--menu-item-gap);grid-template-columns:auto 1fr;grid-template-areas:"children children"\n            "empty menu";}.children.svelte-nodelc {grid-area:children;}.menu.svelte-nodelc {grid-area:menu;}'
+  code: ':root {--menu-item-gap: 1rem;}.menu-item.svelte-nodelc {display:grid;position:relative;gap:var(--menu-item-gap);grid-template-columns:auto 1fr;grid-template-areas:"menu-item-children menu-item-children"\n            "empty menu-item-menu";}.menu-item-children.svelte-nodelc {grid-area:menu-item-children;}.menu-item-menu.svelte-nodelc {grid-area:menu-item-menu;}'
 };
 function Menu_item($$renderer, $$props) {
   $$renderer.global.css.add($$css$8);
   let { children, menu } = $$props;
-  $$renderer.push(`<div class="menu-item svelte-nodelc"><div class="children svelte-nodelc">`);
+  $$renderer.push(`<div class="menu-item svelte-nodelc"><div class="menu-item-children svelte-nodelc">`);
   children($$renderer);
-  $$renderer.push(`<!----></div> <div class="menu svelte-nodelc">`);
+  $$renderer.push(`<!----></div> <div class="menu-item-menu svelte-nodelc">`);
   if (menu) {
     $$renderer.push("<!--[-->");
     menu($$renderer);
@@ -1983,7 +1994,7 @@ function Link($$renderer, $$props) {
 }
 var $$css$7 = {
   hash: "svelte-yf7de",
-  code: ':root {--menu-padding: 1rem;}.menu.svelte-yf7de {display:grid;position:relative;justify-items:end;grid-template-areas:"";padding:var(--menu-padding);}.menu-item-wrapper.svelte-yf7de {display:grid;grid-template-columns:1fr 1fr;grid-template:"menu-item-hint menu-item-content";}.menu-item-hint.svelte-yf7de {grid-area:menu-item-hint;}.menu-item-content.svelte-yf7de {grid-area:menu-item-content;}'
+  code: ':root {--menu-padding: 1rem;}.menu.svelte-yf7de {display:grid;position:relative;justify-items:start;grid-template-areas:"";padding:var(--menu-padding);}.menu-wrapper-for-item.svelte-yf7de {display:grid;grid-template-columns:1fr 1fr;grid-template:"menu-hint-for-item menu-content-for-item";width:100%;}.menu-hint-for-item.svelte-yf7de {grid-area:menu-hint-for-item;}.menu-content-for-item.svelte-yf7de {grid-area:menu-content-for-item;}'
 };
 function Menu($$renderer, $$props) {
   $$renderer.global.css.add($$css$7);
@@ -1992,7 +2003,7 @@ function Menu($$renderer, $$props) {
     function item($$renderer3, options) {
       {
         let children = function($$renderer4, { pending }) {
-          $$renderer4.push(`<div class="menu-item-wrapper svelte-yf7de"><div class="menu-item-hint svelte-yf7de">`);
+          $$renderer4.push(`<div class="menu-wrapper-for-item svelte-yf7de"><div class="menu-hint-for-item svelte-yf7de">`);
           if (pending) {
             $$renderer4.push("<!--[-->");
             Icon($$renderer4, { path: mdiDownloadOutline });
@@ -2002,7 +2013,7 @@ function Menu($$renderer, $$props) {
           } else {
             $$renderer4.push("<!--[!-->");
           }
-          $$renderer4.push(`<!--]--></div> <div class="menu-item-content svelte-yf7de">`);
+          $$renderer4.push(`<!--]--></div> <div class="menu-content-for-item svelte-yf7de">`);
           Menu_item($$renderer4, {
             children: ($$renderer5) => {
               $$renderer5.push(`<!---->${escape_html(options.text)}`);
@@ -2074,11 +2085,11 @@ function Menu($$renderer, $$props) {
 }
 var $$css$6 = {
   hash: "svelte-bveh4d",
-  code: ':root {--left-sidebar-gap: 1rem;}.sidebar.svelte-bveh4d {display:grid;position:relative;gap:var(--left-sidebar-gap);grid-template-columns:1fr auto;grid-template-areas:"empty content";}.content.svelte-bveh4d {grid-area:content;}'
+  code: ':root {--left-sidebar-gap: 1rem;}.left-sidebar.svelte-bveh4d {display:grid;position:relative;gap:var(--left-sidebar-gap);grid-template-columns:1fr auto;grid-template-areas:"empty left-sidebar-content";}.left-sidebar-content.svelte-bveh4d {grid-area:left-sidebar-content;}'
 };
 function Left_sidebar($$renderer) {
   $$renderer.global.css.add($$css$6);
-  $$renderer.push(`<div class="sidebar svelte-bveh4d"><div class="content svelte-bveh4d">`);
+  $$renderer.push(`<div class="left-sidebar svelte-bveh4d"><div class="left-sidebar-content svelte-bveh4d">`);
   Menu($$renderer);
   $$renderer.push(`<!----></div></div>`);
 }
@@ -2110,28 +2121,28 @@ function Page($$renderer, $$props) {
 }
 var $$css$5 = {
   hash: "svelte-d2tr0e",
-  code: ':root {--tip-background: #261c39;--tip-text: #a193bd;--tip-icon: #a193bd;--tip-title: #a193bd;--tip-padding: 0.7rem;--tip-roundness: 1rem;--tip-margin: 0.5rem;}.tip.svelte-d2tr0e {position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"icon title"\n            "empty empty"\n            "content content";background-color:var(--tip-background);color:var(--tip-text);padding:var(--tip-padding);border-radius:var(--tip-roundness);margin-top:var(--tip-margin);margin-bottom:var(--tip-margin);}.icon.svelte-d2tr0e {grid-area:icon;color:var(--danger-icon);}.title.svelte-d2tr0e {grid-area:title;color:var(--tip-title);padding-left:var(--tip-padding);}.content.svelte-d2tr0e {grid-area:content;}'
+  code: ':root {--tip-background: #261c39;--tip-text: #a193bd;--tip-icon: #a193bd;--tip-title: #a193bd;--tip-padding: 0.7rem;--tip-roundness: 1rem;--tip-margin: 0.5rem;}.tip.svelte-d2tr0e {position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"note-icon note-title"\n            "empty empty"\n            "note-content note-content";background-color:var(--tip-background);color:var(--tip-text);padding:var(--tip-padding);border-radius:var(--tip-roundness);margin-top:var(--tip-margin);margin-bottom:var(--tip-margin);}.note-icon.svelte-d2tr0e {grid-area:note-icon;color:var(--danger-icon);}.note-title.svelte-d2tr0e {grid-area:note-title;color:var(--tip-title);padding-left:var(--tip-padding);}.note-content.svelte-d2tr0e {grid-area:note-content;}'
 };
 function Tip($$renderer, $$props) {
   $$renderer.global.css.add($$css$5);
   let { children } = $$props;
-  $$renderer.push(`<div class="tip svelte-d2tr0e"><div class="icon svelte-d2tr0e">`);
+  $$renderer.push(`<div class="tip svelte-d2tr0e"><div class="note-icon svelte-d2tr0e">`);
   Icon($$renderer, { path: mdiLightbulbGroupOutline, size: "1.5rem" });
-  $$renderer.push(`<!----></div> <div class="title svelte-d2tr0e">Tip</div> <div class="content svelte-d2tr0e">`);
+  $$renderer.push(`<!----></div> <div class="note-title svelte-d2tr0e">Tip</div> <div class="note-content svelte-d2tr0e">`);
   children($$renderer);
   $$renderer.push(`<!----></div></div>`);
 }
 var $$css$4 = {
   hash: "svelte-1mamns7",
-  code: ':root {--directory-gap: 0.1rem;--directory-text-hover: #a2dece;--directory-link-background: #878580;--directory-link-width: 1px;}.directory.svelte-1mamns7 {display:grid;position:relative;gap:var(--directory-gap);grid-template-columns:auto auto 1fr;grid-template-rows:auto auto auto;grid-template-areas:"icon name"\n            "link content";}.icon.svelte-1mamns7 {position:relative;top:0.2rem;grid-area:icon;}.icon.svelte-1mamns7:hover {color:var(--directory-text-hover);}.name.svelte-1mamns7 {position:relative;grid-area:name;}.name.svelte-1mamns7:hover {color:var(--directory-text-hover);}.content.svelte-1mamns7 {grid-area:content;}.link.svelte-1mamns7 {grid-area:link;position:relative;display:grid;justify-items:center;align-items:center;}.link.svelte-1mamns7 > .bar:where(.svelte-1mamns7) {position:absolute;top:0;bottom:0;width:var(--directory-link-width);border-radius:var(--directory-link-width);background:var(--directory-link-background);}.link.hidden.svelte-1mamns7 {display:none;}button.svelte-1mamns7 {cursor:pointer;background:transparent;color:inherit;text-align:start;border:0;font-family:inherit;font-size:inherit;font-weight:inherit;}'
+  code: ':root {--directory-gap: 0.1rem;--directory-text-hover: #a2dece;--directory-link-background: #878580;--directory-link-width: 1px;}.directory.svelte-1mamns7 {display:grid;position:relative;gap:var(--directory-gap);grid-template-columns:auto auto 1fr;grid-template-rows:auto auto auto;grid-template-areas:"directory-icon directory-name"\n            "directory-link directory-content";}.directory-icon.svelte-1mamns7 {grid-area:directory-icon;position:relative;top:0.2rem;}.directory-icon.svelte-1mamns7:hover {color:var(--directory-text-hover);}.directory-name.svelte-1mamns7 {grid-area:directory-name;position:relative;}.directory-name.svelte-1mamns7:hover {color:var(--directory-text-hover);}.directory-content.svelte-1mamns7 {grid-area:directory-content;}.directory-link.svelte-1mamns7 {grid-area:directory-link;position:relative;display:grid;justify-items:center;align-items:center;}.directory-link.svelte-1mamns7 > .bar:where(.svelte-1mamns7) {position:absolute;top:0;bottom:0;width:var(--directory-link-width);border-radius:var(--directory-link-width);background:var(--directory-link-background);}.directory-link.hidden.svelte-1mamns7 {display:none;}button.svelte-1mamns7 {cursor:pointer;background:transparent;color:inherit;text-align:start;border:0;font-family:inherit;font-size:inherit;font-weight:inherit;}'
 };
 function Directory($$renderer, $$props) {
   $$renderer.global.css.add($$css$4);
   $$renderer.component(($$renderer2) => {
     let { name, icon = mdiFolder, children, expanded = false } = $$props;
-    $$renderer2.push(`<div class="directory svelte-1mamns7"><button class="name svelte-1mamns7">${escape_html(name)}</button> <button class="icon svelte-1mamns7">`);
+    $$renderer2.push(`<div class="directory svelte-1mamns7"><button class="directory-name svelte-1mamns7">${escape_html(name)}</button> <button class="directory-icon svelte-1mamns7">`);
     Icon($$renderer2, { path: icon });
-    $$renderer2.push(`<!----></button> <div class="content svelte-1mamns7">`);
+    $$renderer2.push(`<!----></button> <div class="directory-content svelte-1mamns7">`);
     if (expanded && children) {
       $$renderer2.push("<!--[-->");
       children($$renderer2);
@@ -2139,18 +2150,18 @@ function Directory($$renderer, $$props) {
     } else {
       $$renderer2.push("<!--[!-->");
     }
-    $$renderer2.push(`<!--]--></div> <div${attr_class("link svelte-1mamns7", void 0, { "hidden": !children })}><div class="bar svelte-1mamns7"></div></div></div>`);
+    $$renderer2.push(`<!--]--></div> <div${attr_class("directory-link svelte-1mamns7", void 0, { "hidden": !children })}><div class="bar svelte-1mamns7"></div></div></div>`);
     bind_props($$props, { expanded });
   });
 }
 var $$css$3 = {
   hash: "svelte-1mah8sg",
-  code: ':root {--file-gap: 0.1rem;}.file.svelte-1mah8sg {display:grid;position:relative;gap:var(--file-gap);grid-template-columns:auto 1fr;grid-template-areas:"icon name";}.icon.svelte-1mah8sg {position:relative;top:0.2rem;grid-area:icon;}.name.svelte-1mah8sg {position:relative;grid-area:name;}button.svelte-1mah8sg {cursor:default;background:transparent;color:inherit;text-align:start;border:0;font-family:inherit;font-size:inherit;font-weight:inherit;}'
+  code: ':root {--file-gap: 0.1rem;}.file.svelte-1mah8sg {display:grid;position:relative;gap:var(--file-gap);grid-template-columns:auto 1fr;grid-template-areas:"file-icon file-name";}.file-icon.svelte-1mah8sg {position:relative;top:0.2rem;grid-area:file-icon;}.file-name.svelte-1mah8sg {position:relative;grid-area:file-name;}button.svelte-1mah8sg {cursor:default;background:transparent;color:inherit;text-align:start;border:0;font-family:inherit;font-size:inherit;font-weight:inherit;}'
 };
 function File$1($$renderer, $$props) {
   $$renderer.global.css.add($$css$3);
   let { name, icon = mdiFile } = $$props;
-  $$renderer.push(`<div class="file svelte-1mah8sg"><button class="name svelte-1mah8sg">${escape_html(name)}</button> <div class="icon svelte-1mah8sg">`);
+  $$renderer.push(`<div class="file svelte-1mah8sg"><button class="file-name svelte-1mah8sg">${escape_html(name)}</button> <div class="file-icon svelte-1mah8sg">`);
   Icon($$renderer, { path: icon });
   $$renderer.push(`<!----></div></div>`);
 }
@@ -2258,27 +2269,27 @@ function Get_started($$renderer, $$props) {
 }
 var $$css$1 = {
   hash: "svelte-d4anki",
-  code: ':root {--caution-background: #40200d;--caution-text: #fcc192;--caution-title: #fcc192;--caution-icon: #fcc192;--caution-padding: 0.7rem;--caution-roundness: 1rem;--caution-margin: 0.5rem;}.caution.svelte-d4anki {position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"icon title"\n            "empty empty"\n            "content content";background-color:var(--caution-background);color:var(--caution-text);padding:var(--caution-padding);border-radius:var(--caution-roundness);margin-top:var(--caution-margin);margin-bottom:var(--caution-margin);}.icon.svelte-d4anki {grid-area:icon;color:var(--caution-title);}.title.svelte-d4anki {grid-area:title;color:var(--caution-title);padding-left:var(--caution-padding);}.content.svelte-d4anki {grid-area:content;}'
+  code: ':root {--caution-background: #40200d;--caution-text: #fcc192;--caution-title: #fcc192;--caution-icon: #fcc192;--caution-padding: 0.7rem;--caution-roundness: 1rem;--caution-margin: 0.5rem;}.caution.svelte-d4anki {position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"caution-icon caution-title"\n            "caution-empty caution-empty"\n            "caution-content caution-content";background-color:var(--caution-background);color:var(--caution-text);padding:var(--caution-padding);border-radius:var(--caution-roundness);margin-top:var(--caution-margin);margin-bottom:var(--caution-margin);}.caution-icon.svelte-d4anki {grid-area:caution-icon;color:var(--caution-title);}.caution-title.svelte-d4anki {grid-area:caution-title;color:var(--caution-title);padding-left:var(--caution-padding);}.caution-content.svelte-d4anki {grid-area:caution-content;}'
 };
 function Caution($$renderer, $$props) {
   $$renderer.global.css.add($$css$1);
   let { children } = $$props;
-  $$renderer.push(`<div class="caution svelte-d4anki"><div class="icon svelte-d4anki">`);
+  $$renderer.push(`<div class="caution svelte-d4anki"><div class="caution-icon svelte-d4anki">`);
   Icon($$renderer, { path: mdiAlertRhombusOutline, size: "1.5rem" });
-  $$renderer.push(`<!----></div> <div class="title svelte-d4anki">Caution</div> <div class="content svelte-d4anki">`);
+  $$renderer.push(`<!----></div> <div class="caution-title svelte-d4anki">Caution</div> <div class="caution-content svelte-d4anki">`);
   children($$renderer);
   $$renderer.push(`<!----></div></div>`);
 }
 var $$css = {
   hash: "svelte-162z5t7",
-  code: ':root {--note-background: #12253b;--note-text: #90b1c4;--note-icon: #90b1c4;--note-title: #90b1c4;--note-padding: 0.7rem;--note-roundness: 1rem;--note-margin: 0.5rem;}.note.svelte-162z5t7 {position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"icon title"\n            "empty empty"\n            "content content";background-color:var(--note-background);color:var(--note-text);padding:var(--note-padding);border-radius:var(--note-roundness);margin-top:var(--note-margin);margin-bottom:var(--note-margin);}.icon.svelte-162z5t7 {grid-area:icon;color:var(--note-icon);}.title.svelte-162z5t7 {grid-area:title;color:var(--note-title);padding-left:var(--note-padding);}.content.svelte-162z5t7 {grid-area:content;}'
+  code: ':root {--note-background: #12253b;--note-text: #90b1c4;--note-icon: #90b1c4;--note-title: #90b1c4;--note-padding: 0.7rem;--note-roundness: 1rem;--note-margin: 0.5rem;}.note.svelte-162z5t7 {position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"note-icon note-title"\n            "empty empty"\n            "note-content note-content";background-color:var(--note-background);color:var(--note-text);padding:var(--note-padding);border-radius:var(--note-roundness);margin-top:var(--note-margin);margin-bottom:var(--note-margin);}.note-icon.svelte-162z5t7 {grid-area:note-icon;color:var(--note-icon);}.note-title.svelte-162z5t7 {grid-area:note-title;color:var(--note-title);padding-left:var(--note-padding);}.note-content.svelte-162z5t7 {grid-area:note-content;}'
 };
 function Note($$renderer, $$props) {
   $$renderer.global.css.add($$css);
   let { children } = $$props;
-  $$renderer.push(`<div class="note svelte-162z5t7"><div class="icon svelte-162z5t7">`);
+  $$renderer.push(`<div class="note svelte-162z5t7"><div class="note-icon svelte-162z5t7">`);
   Icon($$renderer, { path: mdiInformationOutline, size: "1.5rem" });
-  $$renderer.push(`<!----></div> <div class="title svelte-162z5t7">Note</div> <div class="content svelte-162z5t7">`);
+  $$renderer.push(`<!----></div> <div class="note-title svelte-162z5t7">Note</div> <div class="note-content svelte-162z5t7">`);
   children($$renderer);
   $$renderer.push(`<!----></div></div>`);
 }

@@ -13,9 +13,9 @@
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-areas:
-            "icon title"
-            "empty empty"
-            "content content";
+            "caution-icon caution-title"
+            "caution-empty caution-empty"
+            "caution-content caution-content";
         background-color: var(--caution-background);
         color: var(--caution-text);
         padding: var(--caution-padding);
@@ -23,17 +23,17 @@
         margin-top: var(--caution-margin);
         margin-bottom: var(--caution-margin);
     }
-    .icon {
-        grid-area: icon;
+    .caution-icon {
+        grid-area: caution-icon;
         color: var(--caution-title);
     }
-    .title {
-        grid-area: title;
+    .caution-title {
+        grid-area: caution-title;
         color: var(--caution-title);
         padding-left: var(--caution-padding);
     }
-    .content {
-        grid-area: content;
+    .caution-content {
+        grid-area: caution-content;
     }
 </style>
 
@@ -46,9 +46,9 @@
 </script>
 
 <div class="caution">
-    <div class="icon">
+    <div class="caution-icon">
         <Icon path={mdiAlertRhombusOutline} size="1.5rem" />
     </div>
-    <div class="title">Caution</div>
-    <div class="content">{@render children()}</div>
+    <div class="caution-title">Caution</div>
+    <div class="caution-content">{@render children()}</div>
 </div>

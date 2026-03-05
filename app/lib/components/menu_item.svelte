@@ -8,14 +8,14 @@
         gap: var(--menu-item-gap);
         grid-template-columns: auto 1fr;
         grid-template-areas:
-            "children children"
-            "empty menu";
+            "menu-item-children menu-item-children"
+            "empty menu-item-menu";
     }
-    .children {
-        grid-area: children;
+    .menu-item-children {
+        grid-area: menu-item-children;
     }
-    .menu {
-        grid-area: menu;
+    .menu-item-menu {
+        grid-area: menu-item-menu;
     }
 </style>
 
@@ -29,10 +29,10 @@
 </script>
 
 <div class="menu-item">
-    <div class="children">
+    <div class="menu-item-children">
         {@render children()}
     </div>
-    <div class="menu">
+    <div class="menu-item-menu">
         {#if menu}
             {@render menu()}
         {/if}

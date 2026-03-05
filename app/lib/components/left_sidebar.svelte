@@ -2,15 +2,15 @@
     :root {
         --left-sidebar-gap: 1rem;
     }
-    .sidebar {
+    .left-sidebar {
         display: grid;
         position: relative;
         gap: var(--left-sidebar-gap);
         grid-template-columns: 1fr auto;
-        grid-template-areas: "empty content";
+        grid-template-areas: "empty left-sidebar-content";
     }
-    .content {
-        grid-area: content;
+    .left-sidebar-content {
+        grid-area: left-sidebar-content;
     }
 </style>
 
@@ -18,8 +18,8 @@
     import Menu from "$lib/components/menu.svelte"
 </script>
 
-<div class="sidebar">
-    <div class="content">
+<div class="left-sidebar">
+    <div class="left-sidebar-content">
         <Menu />
     </div>
 </div>

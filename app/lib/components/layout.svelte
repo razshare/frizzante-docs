@@ -9,35 +9,37 @@
         left: 0;
         right: 0;
         bottom: 0;
-        grid-template-columns: auto 1fr auto;
+        grid-template-columns: 1fr 5fr 1fr;
         grid-template-rows: auto 1fr auto;
         grid-template-areas:
-            "navbar navbar navbar"
-            "left-sidebar content right-sidebar"
-            "footer footer footer ";
+            "layout-navbar layout-navbar layout-navbar"
+            "layout-left-sidebar layout-content layout-right-sidebar"
+            "layout-footer layout-footer layout-footer ";
     }
-    .navbar {
-        grid-area: navbar;
+    .layout-navbar {
+        grid-area: layout-navbar;
         padding: var(--layout-padding);
         background-color: rgba(0, 0, 0, 0.3);
     }
-    .left-sidebar {
+    .layout-left-sidebar {
         max-width: 20vw;
-        grid-area: left-sidebar;
+        grid-area: layout-left-sidebar;
         padding: var(--layout-padding);
     }
-    .right-sidebar {
+    .layout-right-sidebar {
         max-width: 20vw;
-        grid-area: right-sidebar;
+        grid-area: layout-right-sidebar;
         padding: var(--layout-padding);
     }
-    .content {
+    .layout-content {
         overflow-y: auto;
-        grid-area: content;
+        grid-area: layout-content;
         padding: var(--layout-padding);
+        position: relative;
+        width: 100%;
     }
-    .footer {
-        grid-area: footer;
+    .layout-footer {
+        grid-area: layout-footer;
         padding: var(--layout-padding);
     }
 </style>
@@ -64,9 +66,9 @@
     <title>{title}</title>
 </svelte:head>
 <div class="layout">
-    <div class="navbar">{@render navbar()}</div>
-    <div class="left-sidebar">{@render leftSidebar()}</div>
-    <div class="right-sidebar">{@render rightSidebar()}</div>
-    <div class="content">{@render content()}</div>
-    <div class="footer">{@render footer()}</div>
+    <div class="layout-navbar">{@render navbar()}</div>
+    <div class="layout-left-sidebar">{@render leftSidebar()}</div>
+    <div class="layout-right-sidebar">{@render rightSidebar()}</div>
+    <div class="layout-content">{@render content()}</div>
+    <div class="layout-footer">{@render footer()}</div>
 </div>

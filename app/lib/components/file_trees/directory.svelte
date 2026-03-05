@@ -12,35 +12,35 @@
         grid-template-columns: auto auto 1fr;
         grid-template-rows: auto auto auto;
         grid-template-areas:
-            "icon name"
-            "link content";
+            "directory-icon directory-name"
+            "directory-link directory-content";
     }
-    .icon {
+    .directory-icon {
+        grid-area: directory-icon;
         position: relative;
         top: 0.2rem;
-        grid-area: icon;
     }
-    .icon:hover {
+    .directory-icon:hover {
         color: var(--directory-text-hover);
     }
-    .name {
+    .directory-name {
+        grid-area: directory-name;
         position: relative;
-        grid-area: name;
     }
-    .name:hover {
+    .directory-name:hover {
         color: var(--directory-text-hover);
     }
-    .content {
-        grid-area: content;
+    .directory-content {
+        grid-area: directory-content;
     }
-    .link {
-        grid-area: link;
+    .directory-link {
+        grid-area: directory-link;
         position: relative;
         display: grid;
         justify-items: center;
         align-items: center;
     }
-    .link > .bar {
+    .directory-link > .bar {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -48,7 +48,7 @@
         border-radius: var(--directory-link-width);
         background: var(--directory-link-background);
     }
-    .link.hidden {
+    .directory-link.hidden {
         display: none;
     }
     button {
@@ -80,14 +80,14 @@
 </script>
 
 <div class="directory">
-    <button class="name" {onclick}>{name}</button>
-    <button class="icon" {onclick}><Icon path={icon} /></button>
-    <div class="content">
+    <button class="directory-name" {onclick}>{name}</button>
+    <button class="directory-icon" {onclick}><Icon path={icon} /></button>
+    <div class="directory-content">
         {#if expanded && children}
             {@render children()}
         {/if}
     </div>
-    <div class="link" class:hidden={!children}>
+    <div class="directory-link" class:hidden={!children}>
         <div class="bar"></div>
     </div>
 </div>

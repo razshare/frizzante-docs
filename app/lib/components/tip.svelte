@@ -13,9 +13,9 @@
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-areas:
-            "icon title"
+            "note-icon note-title"
             "empty empty"
-            "content content";
+            "note-content note-content";
         background-color: var(--tip-background);
         color: var(--tip-text);
         padding: var(--tip-padding);
@@ -23,17 +23,17 @@
         margin-top: var(--tip-margin);
         margin-bottom: var(--tip-margin);
     }
-    .icon {
-        grid-area: icon;
+    .note-icon {
+        grid-area: note-icon;
         color: var(--danger-icon);
     }
-    .title {
-        grid-area: title;
+    .note-title {
+        grid-area: note-title;
         color: var(--tip-title);
         padding-left: var(--tip-padding);
     }
-    .content {
-        grid-area: content;
+    .note-content {
+        grid-area: note-content;
     }
 </style>
 
@@ -46,9 +46,9 @@
 </script>
 
 <div class="tip">
-    <div class="icon">
+    <div class="note-icon">
         <Icon path={mdiLightbulbGroupOutline} size="1.5rem" />
     </div>
-    <div class="title">Tip</div>
-    <div class="content">{@render children()}</div>
+    <div class="note-title">Tip</div>
+    <div class="note-content">{@render children()}</div>
 </div>

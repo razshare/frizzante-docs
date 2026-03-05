@@ -7,16 +7,16 @@
         position: relative;
         gap: var(--file-gap);
         grid-template-columns: auto 1fr;
-        grid-template-areas: "icon name";
+        grid-template-areas: "file-icon file-name";
     }
-    .icon {
+    .file-icon {
         position: relative;
         top: 0.2rem;
-        grid-area: icon;
+        grid-area: file-icon;
     }
-    .name {
+    .file-name {
         position: relative;
-        grid-area: name;
+        grid-area: file-name;
     }
     button {
         cursor: default;
@@ -41,6 +41,6 @@
 </script>
 
 <div class="file">
-    <button class="name">{name}</button>
-    <div class="icon"><Icon path={icon} /></div>
+    <button class="file-name">{name}</button>
+    <div class="file-icon"><Icon path={icon} /></div>
 </div>

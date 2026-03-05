@@ -14,21 +14,21 @@
         grid-template-columns: auto 1fr;
         background-color: var(--feature-background);
         grid-template-areas:
-            "icon title"
-            "description description"
-            "button button";
+            "feature-icon feature-title"
+            "feature-description feature-description"
+            "feature-button feature-button";
     }
-    .icon {
-        grid-area: icon;
+    .feature-icon {
+        grid-area: feature-icon;
     }
     .title {
         grid-area: title;
     }
-    .description {
-        grid-area: description;
+    .feature-description {
+        grid-area: feature-description;
     }
-    .button {
-        grid-area: button;
+    .feature-button {
+        grid-area: feature-button;
     }
 </style>
 
@@ -49,15 +49,15 @@
 </script>
 
 <div class="feature">
-    <div class="icon"><Icon path={icon} /></div>
-    <div class="title">{title}</div>
-    <div class="description">
+    <div class="feature-icon"><Icon path={icon} /></div>
+    <div class="feature-title">{title}</div>
+    <div class="feature-description">
         <span>{description}</span>
         {#if example}
             <Code {...example} />
         {/if}
     </div>
-    <div class="button">
+    <div class="feature-button">
         <Button ghost>Read More</Button>
     </div>
 </div>

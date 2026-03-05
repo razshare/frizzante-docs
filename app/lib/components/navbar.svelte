@@ -9,20 +9,20 @@
         gap: var(--navbar-gap);
         align-items: center;
         grid-template-columns: auto 1fr 1fr 1fr auto;
-        grid-template-areas: "logo title searchbar empty links";
+        grid-template-areas: "navbar-logo navbar-title navbar-searchbar empty navbar-links";
     }
-    .logo {
-        grid-area: logo;
+    .navbar-logo {
+        grid-area: navbar-logo;
     }
-    .title {
-        grid-area: title;
+    .navbar-title {
+        grid-area: navbar-title;
         color: var(--navbar-title-text);
     }
-    .searchbar {
-        grid-area: searchbar;
+    .navbar-searchbar {
+        grid-area: navbar-searchbar;
     }
-    .links {
-        grid-area: links;
+    .navbar-links {
+        grid-area: navbar-links;
         text-align: end;
     }
 </style>
@@ -35,14 +35,14 @@
 </script>
 
 <div class="navbar">
-    <div class="logo">
+    <div class="navbar-logo">
         <img src={logo} width="32" height="32" alt="logo" />
     </div>
-    <div class="title">Frizzante Docs</div>
-    <div class="searchbar">
+    <div class="navbar-title">Frizzante Docs</div>
+    <div class="navbar-searchbar">
         <Searchbar />
     </div>
-    <div class="links">
+    <div class="navbar-links">
         <a href="https://github.com/razshare/frizzante"><Icon size="2rem" path={mdiGithub} /></a>
     </div>
 </div>

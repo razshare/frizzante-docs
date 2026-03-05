@@ -5,20 +5,21 @@
     .menu {
         display: grid;
         position: relative;
-        justify-items: end;
+        justify-items: start;
         grid-template-areas: "";
         padding: var(--menu-padding);
     }
-    .menu-item-wrapper {
+    .menu-wrapper-for-item {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-template: "menu-item-hint menu-item-content";
+        grid-template: "menu-hint-for-item menu-content-for-item";
+        width: 100%;
     }
-    .menu-item-hint {
-        grid-area: menu-item-hint;
+    .menu-hint-for-item {
+        grid-area: menu-hint-for-item;
     }
-    .menu-item-content {
-        grid-area: menu-item-content;
+    .menu-content-for-item {
+        grid-area: menu-content-for-item;
     }
 </style>
 
@@ -36,15 +37,15 @@
 {#snippet item(options: Option)}
     <Link href={options.href}>
         {#snippet children({ pending })}
-            <div class="menu-item-wrapper">
-                <div class="menu-item-hint">
+            <div class="menu-wrapper-for-item">
+                <div class="menu-hint-for-item">
                     {#if pending}
                         <Icon path={mdiDownloadOutline} />
                     {:else if view.name === options.viewName}
                         <Icon path={mdiChevronRight} />
                     {/if}
                 </div>
-                <div class="menu-item-content">
+                <div class="menu-content-for-item">
                     <MenuItem>{options.text}</MenuItem>
                 </div>
             </div>
