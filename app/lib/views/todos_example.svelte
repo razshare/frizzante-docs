@@ -70,7 +70,7 @@
         `}
     />
     <Code
-        lang="go"
+        lang="svelte"
         source={`
             <Layout title="Welcome">
                 <Logo />
@@ -85,7 +85,7 @@
         `}
     />
     <Code
-        lang="go"
+        lang="svelte"
         source={`
             {#snippet TodosButton()}
                 <a class="btn btn-primary btn-lg" {...href("/todos")}>
@@ -150,7 +150,7 @@
         `}
     />
     <Code
-        lang="go"
+        lang="svelte"
         source={`
             <Layout title="Todos">
                 <div class="w-full min-w-[450px] max-w-2xl">
@@ -170,7 +170,7 @@
     <h1>List Todos</h1>
     <span>Items are listed by iterating over <InlineCode source="todos" />.</span>
     <Code
-        lang="go"
+        lang="svelte"
         source={`
             {#snippet ShowTodosList(todos: sessions.Todo[])}
                 {#if todos.length > 0}
@@ -261,7 +261,7 @@
     <h1>Toggle Todos</h1>
     <span>Items are toggled by submitting a form to <InlineCode source="POST /toggle" />.</span>
     <Code
-        lang="go"
+        lang="svelte"
         source={`
             {#snippet ToggleTodoButton(todo: Todo, index: number)}
                 {@const aria = todo.checked ? "Uncheck" : "Check"}
