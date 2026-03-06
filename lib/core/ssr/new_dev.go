@@ -11,13 +11,12 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/evanw/esbuild/pkg/api"
 	"main/lib/core/esbuild"
 	"main/lib/core/files"
 	"main/lib/core/javascript"
 	"main/lib/core/views"
 	"main/lib/core/views/renders"
-
-	"github.com/evanw/esbuild/pkg/api"
 )
 
 func New(_ int64) renders.Render {
