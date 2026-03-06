@@ -11,12 +11,13 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/evanw/esbuild/pkg/api"
 	"main/lib/core/esbuild"
 	"main/lib/core/files"
 	"main/lib/core/javascript"
 	"main/lib/core/views"
 	"main/lib/core/views/renders"
+
+	"github.com/evanw/esbuild/pkg/api"
 )
 
 func New(_ int64) renders.Render {
@@ -36,9 +37,9 @@ func New(_ int64) renders.Render {
 			Server:   server,
 			InfoLog:  options.InfoLog,
 			ErrorLog: options.ErrorLog,
-			FindSource: func() (serverStringBundled string, err error) {
-				var serverData []byte
-				if serverData, err = os.ReadFile(server); err != nil {
+			FindSource: func() (source string, err error) {
+				var data []byte
+				if data, err = os.ReadFile(server); err != nil {
 					return
 				}
 				if !files.IsFile(emptyTsFileName) {
@@ -46,28 +47,15 @@ func New(_ int64) renders.Render {
 						return
 					}
 				}
-				if serverStringBundled, err = esbuild.Bundle(
-					"app",
-					api.FormatCommonJS,
-					string(serverData),
-					map[string]string{
-						"node:crypto": strings.ReplaceAll(emptyTsFileName, string(os.PathSeparator), "/"),
-					},
-				); err != nil {
-					return
-				}
 				// currently svelte imports `node:crypto`, which will break our runtime,
 				// so we need to strip it off from the bundle.
 				// see issues #17762 and #17771:
 				// https://github.com/sveltejs/svelte/issues/17762
 				// https://github.com/sveltejs/svelte/issues/17771
-				serverStringBundled = strings.Replace(
-					serverStringBundled,
-					`obfuscated_import(`,
-					"import(",
-					1,
-				)
-				if err = os.WriteFile("source.js", []byte(serverStringBundled), os.ModePerm); err != nil {
+				source = strings.Replace(string(data), `await obfuscated_import(`, "await import(", 1)
+				if source, err = esbuild.Bundle("app", api.FormatCommonJS, source, map[string]string{
+					"node:crypto": strings.ReplaceAll(emptyTsFileName, string(os.PathSeparator), "/"),
+				}); err != nil {
 					return
 				}
 				return

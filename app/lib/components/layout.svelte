@@ -9,7 +9,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        grid-template-columns: 1fr 5fr 1fr;
+        grid-template-columns: 20vw auto 20vw;
         grid-template-rows: auto 1fr auto;
         grid-template-areas:
             "layout-navbar layout-navbar layout-navbar"
@@ -22,12 +22,10 @@
         background-color: rgba(0, 0, 0, 0.3);
     }
     .layout-left-sidebar {
-        max-width: 20vw;
         grid-area: layout-left-sidebar;
         padding: var(--layout-padding);
     }
     .layout-right-sidebar {
-        max-width: 20vw;
         grid-area: layout-right-sidebar;
         padding: var(--layout-padding);
     }
@@ -36,7 +34,6 @@
         grid-area: layout-content;
         padding: var(--layout-padding);
         position: relative;
-        width: 100%;
     }
     .layout-footer {
         grid-area: layout-footer;
