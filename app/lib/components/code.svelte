@@ -25,8 +25,8 @@
 <script lang="ts">
     import { codeToHtml } from "shiki"
     import { onMount } from "svelte"
-    type Props = { source: string; lang: string }
-    let { source, lang }: Props = $props()
+    type Props = { source: string; lang?: string }
+    let { source, lang = "sh" }: Props = $props()
     let html = $state("")
     function align(text: string): string {
         const lines = []

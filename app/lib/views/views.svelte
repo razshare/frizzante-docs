@@ -1,7 +1,7 @@
 <script lang="ts">
     import InlineCode from "$lib/components/inline_code.svelte"
     import Page from "$lib/components/page.svelte"
-    import FileTree from "$lib/components/file_trees/file_tree.svelte"
+    import FileTree from "$lib/components/file_tree.svelte"
     import Code from "$lib/components/code.svelte"
     import Note from "$lib/components/note.svelte"
     import Tip from "$lib/components/tip.svelte"

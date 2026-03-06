@@ -1,22 +1,23 @@
 <style>
     :root {
-        --file-gap: 0.1rem;
+        --file-tree-file-gap: 0.1rem;
     }
-    .file {
+    .file-tree-file {
         display: grid;
         position: relative;
-        gap: var(--file-gap);
+        gap: var(--file-tree-file-gap);
         grid-template-columns: auto 1fr;
         grid-template-areas: "file-icon file-name";
     }
     .file-icon {
+        grid-area: file-icon;
         position: relative;
         top: 0.2rem;
-        grid-area: file-icon;
+        left: 0.2rem;
     }
     .file-name {
-        position: relative;
         grid-area: file-name;
+        position: relative;
     }
     button {
         cursor: default;
@@ -40,7 +41,7 @@
     let { name, icon = mdiFile }: Props = $props()
 </script>
 
-<div class="file">
+<div class="file-tree-file">
     <button class="file-name">{name}</button>
     <div class="file-icon"><Icon path={icon} /></div>
 </div>

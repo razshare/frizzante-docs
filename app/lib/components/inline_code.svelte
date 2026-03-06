@@ -10,7 +10,6 @@
         position: relative;
         display: inline-flex;
         align-items: center;
-        transform: scale(0.9);
         top: var(--inline-code-top);
     }
     .inline-code > .text {
@@ -21,10 +20,10 @@
         z-index: 1;
     }
     .inline-code > .background {
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
+        left: 1px;
+        right: 1px;
+        top: 1px;
+        bottom: 1px;
         z-index: 0;
         position: absolute;
         pointer-events: none;

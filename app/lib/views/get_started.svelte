@@ -4,7 +4,7 @@
     import InlineCode from "$lib/components/inline_code.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
-    import Tree from "$lib/components/file_trees/file_tree.svelte"
+    import Tree from "$lib/components/file_tree.svelte"
     import { mdiPackage } from "@mdi/js"
 </script>
 

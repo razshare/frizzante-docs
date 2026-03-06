@@ -18,10 +18,15 @@
 
 <script lang="ts">
     import type { Snippet } from "svelte"
-    import Directory from "./directory.svelte"
-    import File from "./file.svelte"
-    type Props = { children: Snippet<[{ Directory: typeof Directory; File: typeof File }]> }
+    import FileTreeDirectory from "$lib/components/file_tree_directory.svelte"
+    import FileTreeFile from "$lib/components/file_tree_file.svelte"
+    type Props = { children: Snippet<[{ Directory: typeof FileTreeDirectory; File: typeof FileTreeFile }]> }
     let { children }: Props = $props()
 </script>
 
-<div class="tree">{@render children({ Directory, File })}</div>
+<div class="tree">
+    {@render children({
+        Directory: FileTreeDirectory,
+        File: FileTreeFile,
+    })}
+</div>
