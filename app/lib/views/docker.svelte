@@ -3,16 +3,18 @@
     import FileTree from "$lib/components/file_tree.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
+    import Title from "$lib/components/title.svelte"
     import { mdiApplication } from "@mdi/js"
 </script>
 
 <Page title="Docker">
-    <h1>Docker</h1>
+    <Title text="Docker" />
     <span>A Docker solution is available for both development and production deployment.</span>
-    <h3>Get Started</h3>
+    <Title type="h3" text="Get Started" />
     <KeyedSection key="1">
         <span>Create a new container.</span>
         <br />
@@ -70,7 +72,7 @@
             {/snippet}
         </FileTree>
     </KeyedSection>
-    <h1>Production with Docker</h1>
+    <Title text="Production with Docker" />
     <span>You have different options for deploying to the production environment using docker.</span>
     <br />
     <br />
@@ -105,6 +107,12 @@
         </span>
     </Note>
     {#snippet rightSidebar()}
-        <!-- empty -->
+        <MenuItem>
+            <a href="#docker">Docker</a>
+            {#snippet menu()}
+                <MenuItem><a href="#get-started">Get Started</a></MenuItem>
+            {/snippet}
+        </MenuItem>
+        <MenuItem><a href="#production-with-docker">Production with Docker</a></MenuItem>
     {/snippet}
 </Page>

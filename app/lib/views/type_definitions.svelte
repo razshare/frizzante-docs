@@ -2,13 +2,15 @@
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Type Definitions">
-    <h1>Type Definitions</h1>
+    <Title text="Type Definitions" />
     <span>
         It is possible, but not required, to generate TypeScript type definitions from Go structs with
         <InlineCode source="types.Generate[T]()" />, where T is the type you wish to generate.
@@ -86,6 +88,6 @@
         </Tip>
     </KeyedSection>
     {#snippet rightSidebar()}
-        <!-- empty -->
+        <MenuItem><a href="#type-definitions">Type Definitions</a></MenuItem>
     {/snippet}
 </Page>

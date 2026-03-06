@@ -3,16 +3,18 @@
     import Code from "$lib/components/code.svelte"
     import FileTree from "$lib/components/file_tree.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
+    import Title from "$lib/components/title.svelte"
     import { mdiApplication, mdiCodeBraces, mdiFolder } from "@mdi/js"
 </script>
 
 <Page title="Cli">
-    <h1>Cli</h1>
+    <Title text="Cli" />
     <span>The cli provides various commands to manage your project lifecycle, from creation to deployment.</span>
-    <h1>Create Project</h1>
+    <Title text="Create Project" />
     <Code
         lang="sh"
         source={`
@@ -32,7 +34,7 @@
             </Directory>
         {/snippet}
     </FileTree>
-    <h1>Generate</h1>
+    <Title text="Generate" />
     <Code
         lang="sh"
         source={`
@@ -49,7 +51,7 @@
     <Tip>
         <span>Use <InlineCode source=":pick" /> to run the interactive menu.</span>
     </Tip>
-    <h1>Configure</h1>
+    <Title text="Configure" />
     <Code lang="sh" source="frizzante --configure" />
     <span>Runs</span>
     <ol>
@@ -72,7 +74,7 @@
             </Directory>
         {/snippet}
     </FileTree>
-    <h1>Install</h1>
+    <Title text="Install" />
     <Code
         lang="sh"
         source={`
@@ -108,7 +110,7 @@
         <Code lang="sh" source="frizzante --bun=bun --install" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
-    <h1>Update</h1>
+    <Title text="Update" />
     <Code
         lang="sh"
         source={`
@@ -146,7 +148,7 @@
         <Code lang="sh" source="frizzante --bun=bun --update" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
-    <h1>Package</h1>
+    <Title text="Package" />
     <Code
         lang="sh"
         source={`
@@ -201,13 +203,13 @@
         <Code lang="sh" source="frizzante --bun=bun --package" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
-    <h1>Package Watch</h1>
+    <Title text="Package Watch" />
     <Code lang="sh" source="frizzante --package-watch" />
     <span>Runs <InlineCode source="frizzante —package" /> in watch mode.</span>
     <Note>
         This will detect changes made only in the <InlineCode source="app" /> directory.
     </Note>
-    <h1>Dev</h1>
+    <Title text="Dev" />
     <Code
         lang="sh"
         source={`
@@ -234,7 +236,7 @@
         <span>Or even use custom paths for both Air and Bun.</span>
         <Code lang="sh" source="frizzante --air=air --bun=bun --dev" />
     </Note>
-    <h1>Build</h1>
+    <Title text="Build" />
     <Code
         lang="sh"
         source={`
@@ -256,7 +258,7 @@
             </Directory>
         {/snippet}
     </FileTree>
-    <h1>Check</h1>
+    <Title text="Check" />
     <Code lang="sh" source="frizzante --check" />
     <span>
         Runs <InlineCode source="eslint" /> and <InlineCode source="svelte-check" /> in your
@@ -276,7 +278,7 @@
         <Code lang="sh" source="frizzante --bun=bun --check" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
-    <h1>Format</h1>
+    <Title text="Format" />
     <Code
         lang="sh"
         source={`
@@ -302,7 +304,7 @@
         <Code lang="sh" source="frizzante --bun=bun --format" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
-    <h1>Touch</h1>
+    <Title text="Touch" />
     <Code lang="sh" source="frizzante --touch" />
     <span>Creates placeholder files in <InlineCode source="app/dist" />.</span>
     <Note>
@@ -314,7 +316,7 @@
             some placeholders in your <InlineCode source="app/dist" /> directory.
         </span>
     </Note>
-    <h1>Create Project</h1>
+    <Title text="Create Project" />
     <Code lang="sh" source="frizzante --clean-project" />
     <span>
         Removes directories
@@ -329,7 +331,7 @@
         These are all files that can easily be recreated with <InlineCode source="--configure" />
         followed by <InlineCode source="--package" />.
     </Note>
-    <h1>Reset</h1>
+    <Title text="Reset" />
     <Code lang="sh" source="frizzante --reset" />
     <span>Deletes frizzante’s global cache.</span>
     <Note>
@@ -341,7 +343,7 @@
             </span>
         </Tip>
     </Note>
-    <h1>Strict</h1>
+    <Title text="Strict" />
     <Code
         lang="sh"
         source={`
@@ -358,7 +360,7 @@
     <Tip>
         <span>This is useful for ci/cd pipelines, automated scripts, batch operations and so on.</span>
     </Tip>
-    <h1>Version</h1>
+    <Title text="Version" />
     <Code
         lang="sh"
         source={`
@@ -368,7 +370,7 @@
         `}
     />
     <span>Displays the version of the binary.</span>
-    <h1>Help</h1>
+    <Title text="Help" />
     <Code
         lang="sh"
         source={`
@@ -378,7 +380,7 @@
         `}
     />
     <span>Shows the complete list of available commands and options.</span>
-    <h1>Interactive Mode</h1>
+    <Title text="Interactive Mode" />
     <Code lang="sh" source="frizzante" />
     <span>
         Running <InlineCode source="frizzante" /> without any flags starts an interactive menu where you can select commands
@@ -393,6 +395,20 @@
         </ul>
     </Note>
     {#snippet rightSidebar()}
-        <!-- empty -->
+        <MenuItem><a href="#cli">Cli</a></MenuItem>
+        <MenuItem><a href="#create-project">Create Project</a></MenuItem>
+        <MenuItem><a href="#generate">Generate</a></MenuItem>
+        <MenuItem><a href="#configure">Configure</a></MenuItem>
+        <MenuItem><a href="#install">Install</a></MenuItem>
+        <MenuItem><a href="#update">Update</a></MenuItem>
+        <MenuItem><a href="#package">Package</a></MenuItem>
+        <MenuItem><a href="#package-watch">Package Watch</a></MenuItem>
+        <MenuItem><a href="#check">Check</a></MenuItem>
+        <MenuItem><a href="#touch">Touch</a></MenuItem>
+        <MenuItem><a href="#create-project">Create Project</a></MenuItem>
+        <MenuItem><a href="#reset">Reset</a></MenuItem>
+        <MenuItem><a href="#version">Version</a></MenuItem>
+        <MenuItem><a href="#help">Help</a></MenuItem>
+        <MenuItem><a href="#interactive-mode">Interactive Mode</a></MenuItem>
     {/snippet}
 </Page>

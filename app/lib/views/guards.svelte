@@ -10,10 +10,11 @@
     import diagram2 from "$lib/assets/guards_diagram_2.svg"
     import MenuItem from "$lib/components/menu_item.svelte"
     import Image from "$lib/components/image.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Guards">
-    <h1 id="guards">Guards</h1>
+    <Title text="Guards" />
     <span>A guard is an object that is composed of an optional name and a required handler.</span>
     <br />
     <span>You can add guards to your routes in order to protect them.</span>
@@ -47,7 +48,7 @@
         />
     </span>
     <Image src={diagram1} width="100%" />
-    <h1 id="composition">Composition</h1>
+    <Title text="Composition" />
     <span>You can compose multiple guards in order to create more advanced restrictions.</span>
     <Code
         lang="go"

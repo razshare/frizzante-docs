@@ -6,18 +6,20 @@
     import Tip from "$lib/components/tip.svelte"
     import Tree from "$lib/components/file_tree.svelte"
     import { mdiPackage } from "@mdi/js"
+    import Title from "$lib/components/title.svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
 </script>
 
 <Page title="Get Started">
-    <h1>What is Frizzante?</h1>
+    <Title text="What is Frizzante?" />
     <p>Frizzante is an opinionated web server framework written in Go that uses Svelte to render web pages.</p>
-    <h2>Prerequisites</h2>
+    <Title type="h2" text="Prerequisites" />
     <Code lang="bash" source="go install github.com/razshare/frizzante@latest" />
     <Tip>
         <span>Remember to add Go binaries to your path.</span>
         <Code lang="bash" source={["export GOPATH=$HOME/go", "export PATH=$PATH:$GOPATH/bin"].join("\n")} />
     </Tip>
-    <h1>Get Started</h1>
+    <Title text="Get Started" />
     <KeyedSection key="1">
         <span>Create project.</span>
         <Code lang="bash" source="frizzante create my_project" />
@@ -49,6 +51,12 @@
         </Tree>
     </KeyedSection>
     {#snippet rightSidebar()}
-        <!-- empty -->
+        <MenuItem>
+            <a href="#what-is-frizzante">What is Frizzante?</a>
+            {#snippet menu()}
+                <MenuItem><a href="#prerequisites">Prerequisites</a></MenuItem>
+            {/snippet}
+        </MenuItem>
+        <MenuItem><a href="#get-started">Get Started</a></MenuItem>
     {/snippet}
 </Page>

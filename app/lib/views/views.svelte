@@ -9,10 +9,12 @@
     import KeyedSection from "$lib/components/keyed_section.svelte"
     import Caution from "$lib/components/caution.svelte"
     import MenuItem from "$lib/components/menu_item.svelte"
+    import Title from "$lib/components/title.svelte"
+    import { mdiCodeBraces } from "@mdi/js"
 </script>
 
 <Page title="Views">
-    <h1 id="views">Views</h1>
+    <Title text="Views" />
     <span>
         Views are svelte components exported by <InlineCode source="app/exports.server.ts" /> and/or
         <InlineCode source="app/exports.client.ts" />.
@@ -20,12 +22,12 @@
     <FileTree>
         {#snippet children({ Directory, File })}
             <Directory name="app" expanded>
-                <File name="exports.client.ts" />
-                <File name="exports.server.ts" />
+                <File name="exports.client.ts" icon={mdiCodeBraces} />
+                <File name="exports.server.ts" icon={mdiCodeBraces} />
             </Directory>
         {/snippet}
     </FileTree>
-    <h1 id="server-exports">Server Exports</h1>
+    <Title text="Server Exports" />
     <span>
         Views that are meant to be rendered on the server should be exported by
         <InlineCode source="app/exports.server.ts" />.
@@ -41,7 +43,7 @@
             }
         `}
     />
-    <h1 id="client-exports">Client Exports</h1>
+    <Title text="Client Exports" />
     <span>
         Views that are meant to be rendered on the client should be exported by
         <InlineCode source="app/exports.client.ts" />.
@@ -81,7 +83,7 @@
         <br />
         <span>You can render the same component on both the server and the client at the same time.</span>
     </Note>
-    <h1 id="send-views">Send Views</h1>
+    <Title text="Send Views" />
     <span>Use <InlineCode source="send.View()" /> to send a view.</span>
     <Code
         lang="go"
@@ -104,7 +106,7 @@
         <InlineCode source="app/exports.server.ts" />
         and/or <InlineCode source="app/exports.client.ts" />.
     </span>
-    <h1 id="default-view">Default View</h1>
+    <Title text="Default View" />
     <span>There is no way to specify a "<strong>default view</strong>”.</span>
     <span>
         However, you can use <InlineCode source="send.RequestedFile()" />
@@ -161,7 +163,7 @@
             }
         `}
     />
-    <h1 id="view-properties">View Properties</h1>
+    <Title text="View Properties" />
     <span>Optionally, you can specify properties for your View with the Props field.</span>
     <Code
         lang="go"
@@ -198,7 +200,7 @@
                 let {name}:Props = $props() // Retrieves view props.
             </script>
 
-            <h1>Hello {name}</h1>
+            <Title  text="Hello {name}"/>
         `}
     />
     <Note>
@@ -208,14 +210,15 @@
             and thus are reactive by default.
         </span>
     </Note>
-    <h1 id="render-modes">Render Modes</h1>
+    <Title text="Render Modes" />
     <span>
         You can choose how to render views by setting one of 3 values for the
         <InlineCode source="RenderMode" /> field in your <InlineCode source="View" />.
     </span>
     <br />
+    <br />
     <KeyedSection key="1">
-        <strong id="render-mode-full">RenderModeFull</strong>
+        <Title type="h3" text="RenderModeFull" />
         <br />
         <span>
             Using <InlineCode source="RenderModeFull" />, the view is rendered on both the server and the client.
@@ -243,7 +246,7 @@
         />
     </KeyedSection>
     <KeyedSection key="2">
-        <strong id="render-mode-server">RenderModeServer</strong>
+        <Title type="h3" text="RenderModeServer" />
         <br />
         <span>
             Using <InlineCode source="RenderModeServer" />, the view is rendered only on the server.
@@ -279,7 +282,7 @@
         </Tip>
     </KeyedSection>
     <KeyedSection key="3" noLink>
-        <strong id="render-mode-client">RenderModeClient</strong>
+        <Title type="h3" text="RenderModeClient" />
         <br />
         <span>
             Using <InlineCode source="RenderModeClient" />, the view is rendered only on the client by loading a
@@ -325,9 +328,7 @@
             </Caution>
         </Tip>
     </KeyedSection>
-    <h1 id="disabling-the-server-side-javascript-runtime">
-        <span>Disabling the server-side JavaScript runtime</span>
-    </h1>
+    <Title text="Disabling the server-side JavaScript runtime" />
     <span>
         You can add the <InlineCode source="no_js_runtime" /> tag to your build process to completely disable the server-side
         JavaScript runtime.
@@ -344,9 +345,9 @@
         <MenuItem>
             <a href="#render-modes">Render Modes</a>
             {#snippet menu()}
-                <MenuItem><a href="#render-mode-full">RenderModeFull</a></MenuItem>
-                <MenuItem><a href="#render-mode-server">RenderModeServer</a></MenuItem>
-                <MenuItem><a href="#render-mode-client">RenderModeClient</a></MenuItem>
+                <MenuItem><a href="#rendermodefull">RenderModeFull</a></MenuItem>
+                <MenuItem><a href="#rendermodeserver">RenderModeServer</a></MenuItem>
+                <MenuItem><a href="#rendermodeclient">RenderModeClient</a></MenuItem>
             {/snippet}
         </MenuItem>
         <MenuItem>

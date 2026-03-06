@@ -1,13 +1,15 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Faq">
-    <h1>Faq</h1>
-    <h3>Why doesn’t Frizzante have middleware?</h3>
+    <Title text="Faq" />
+    <Title type="h3" text="Why doesn’t Frizzante have middleware?" />
     <span>Frizzante intentionally uses guards instead of middleware.</span>
     <br />
     <span>Middleware have some limitations.</span>
@@ -58,7 +60,7 @@
         For more details see the
         <a href="/guards">guards page</a>.
     </span>
-    <h5>Middleware Implementation</h5>
+    <Title type="h5" text="Middleware Implementation" />
     <span> If you really want middleware-like behavior, you can easily implement it in your own project. </span>
     <Code
         lang="go"
@@ -108,7 +110,7 @@
         <br />
         <span>This should keep your stack size smaller and thus more readable.</span>
     </Note>
-    <h5>Middleware Usage</h5>
+    <Title type="h5" text="Middleware Usage" />
     <Code
         lang="go"
         source={`
@@ -157,7 +159,7 @@
             }
         `}
     />
-    <h3>Can I use Frizzante with other frontend frameworks?</h3>
+    <Title type="h3" text="Can I use Frizzante with other frontend frameworks?" />
     <span>Yes you can, as long as Vite supports your framework.</span>
     <br />
     <span>
@@ -170,6 +172,22 @@
         You can find a Vue3 example <a href="https://github.com/razshare/frizzante-example-vue3">here</a>.
     </span>
     {#snippet rightSidebar()}
-        <!-- empty -->
+        <MenuItem>
+            <a href="#faq">Faq</a>
+            {#snippet menu()}
+                <MenuItem>
+                    <a href="#why-doesn’t-frizzante-have-middleware">Why doesn't Frizzante have middleware?</a>
+                    {#snippet menu()}
+                        <MenuItem><a href="#middleware-implementation">Middleware Implementation</a></MenuItem>
+                        <MenuItem><a href="#middleware-usage">Middleware Usage</a></MenuItem>
+                    {/snippet}
+                </MenuItem>
+                <MenuItem>
+                    <a href="#can-i-use-frizzante-with-other-frontend-frameworks">
+                        <span>Can I use Frizzante with other frontend frameworks?</span>
+                    </a>
+                </MenuItem>
+            {/snippet}
+        </MenuItem>
     {/snippet}
 </Page>

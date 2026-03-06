@@ -1,11 +1,13 @@
 <script lang="ts">
+    import MenuItem from "$lib/components/menu_item.svelte"
     import Page from "$lib/components/page.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Issues">
-    <h1>Issues</h1>
+    <Title text="Issues" />
     <span>This document is a guide on how to submit bug reports and feature requests.</span>
-    <h1>Reporting a Bug</h1>
+    <Title text="Reporting a Bug" />
     <span>
         Make sure to read the <a href="/">documentation</a> before submitting a bug report.
     </span>
@@ -19,7 +21,7 @@
         When reporting a bug, make sure to include a link to a repository isolating the issue and the steps to reproduce
         said issue.
     </span>
-    <h1>Requesting a Feature</h1>
+    <Title text="Requesting a Feature" />
     <span>
         Make sure to read the <a href="/">documentation</a> before submitting a feature request.
     </span>
@@ -30,6 +32,8 @@
     </span>
 
     {#snippet rightSidebar()}
-        <!-- empty -->
+        <MenuItem><a href="#issues">Issues</a></MenuItem>
+        <MenuItem><a href="#reporting-a-bug">Reporting a Bug</a></MenuItem>
+        <MenuItem><a href="#requesting-a-feature">Requesting a Feature</a></MenuItem>
     {/snippet}
 </Page>

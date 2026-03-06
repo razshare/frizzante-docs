@@ -1,11 +1,13 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
     import Page from "$lib/components/page.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Web Sockets">
-    <h1 id="web-sockets">Web Sockets</h1>
+    <Title text="Web Sockets" />
     <span>Use <InlineCode source="send.WsUpgrade()" /> to upgrade the connection to web sockets.</span>
     <Code lang="go" source={`routes.Route{Pattern: "GET /ws", Handler: welcome.View}`} />
     <Code
@@ -45,7 +47,7 @@
             socket.send("Hello")                  // Sends message.
         </script>
 
-        <h1>Messages</h1>
+        <Title  text="Messages"/>
         {#each messages as message, id (id)}      <!-- Iterates the list of messages. -->
             <div>{message}</div>                  <!-- Renders message. -->
         {/each}
@@ -53,6 +55,6 @@
     `}
     />
     {#snippet rightSidebar()}
-        <!-- empty -->
+        <MenuItem><a href="#web-sockets">Web Sockets</a></MenuItem>
     {/snippet}
 </Page>

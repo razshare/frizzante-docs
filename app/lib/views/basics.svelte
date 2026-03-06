@@ -6,10 +6,11 @@
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Overview">
-    <h1 id="basics">Basics</h1>
+    <Title text="Server" />
     <span>
         Create a new server with <InlineCode source="servers.New()" />, then followup with servers.Start() in order to
         start a server.
@@ -28,7 +29,7 @@
             }
         `}
     />
-    <h1 id="routes">Routes</h1>
+    <Title text="Routes" />
     <span>Each server exposes a slice of Routes which you can freely modify.</span>
     <br />
     <span>You can add a new route by appending to or overwriting <InlineCode source="server.Routes" />.</span>
@@ -63,7 +64,7 @@
             func View(client *clients.Client) {}
         `}
     />
-    <h1 id="path-fields">Path Fields</h1>
+    <Title text="Path Fields" />
     <span>Route patterns can define dynamic path fields using <InlineCode source={"{}"} /> syntax.</span>
     <Code lang="go" source={`routes.Route{Pattern: "GET /{name}", Handler: welcome.View}`} />
     <span>Path fields can then be retrieved with <InlineCode source="receive.Path()" />.</span>
@@ -82,7 +83,7 @@
             }
         `}
     />
-    <h1 id="messages">Messages</h1>
+    <Title text="Messages" />
     <span>Use <InlineCode source="receive.Message()" /> to retrieve messages sent by the client.</span>
     <Code
         lang="go"
@@ -115,7 +116,7 @@
             }
         `}
     />
-    <h1 id="headers">Headers</h1>
+    <Title text="Headers" />
     <span>Use <InlineCode source="receive.Header()" /> to retrieve header fields sent by the client.</span>
     <Code
         lang="go"
@@ -150,7 +151,7 @@
             }
         `}
     />
-    <h1 id="status">Status</h1>
+    <Title text="Status" />
     <span>Use <InlineCode source="send.Status()" /> to send the status of the response to the client.</span>
     <Code
         lang="go"
@@ -173,7 +174,7 @@
         <br />
         <span>Read <a href="#order-of-oprations">below</a>.</span>
     </Caution>
-    <h1 id="order-of-operations">Order of Operations</h1>
+    <Title text="Order of Operations" />
     <span>Order of operations matters when sending data to the client.</span>
     <br />
     <span>
@@ -227,7 +228,7 @@
         <InlineCode source="status is locked" />, meaning the status code has already been sent to the client and
         there’s nothing you can do about it.
     </span>
-    <h1 id="queries">Queries</h1>
+    <Title text="Queries" />
     <span>Use <InlineCode source="receive.Query()" /> to retrieve query fields.</span>
     <Code
         lang="go"
@@ -246,7 +247,7 @@
             }
         `}
     />
-    <h1 id="forms">Forms</h1>
+    <Title text="Forms" />
     <span>
         Use <InlineCode source="receive.Form()" /> to parse incoming content as multipart form or url encoded form when using
         <InlineCode source="POST" /> and <InlineCode source="GET" /> http verbs.
@@ -322,7 +323,7 @@
             `}
         />
     </Tip>
-    <h1 id="json">Json</h1>
+    <Title text="Json" />
     <span>
         Use <InlineCode source="receive.Json()" /> to parse incoming content as json when using POST and PUT http verbs and
         <InlineCode source="send.Json()" /> to send json content.
@@ -357,7 +358,7 @@
             }
         `}
     />
-    <h1 id="cookies">Cookies</h1>
+    <Title text="Cookies" />
     <span>
         Use <InlineCode source="receive.Cookie()" /> to retrieve cookies and <InlineCode source="send.Cookie()" /> to send
         them.
@@ -379,7 +380,7 @@
             }
         `}
     />
-    <h1 id="session-id">Session Id</h1>
+    <Title text="Session Id" />
     <span>Use <InlineCode source="receive.SessionId()" /> to retrieve the client’s session id.</span>
     <Code
         lang="go"
@@ -409,7 +410,7 @@
             that order of operations matters.
         </span>
     </Caution>
-    <h1 id="session">Session</h1>
+    <Title text="Session" />
     <span>Use <InlineCode source="receive.Session()" /> to retrieve the client’s session.</span>
     <Note>The session is retrieved using <InlineCode source="receive.SessionId()" />.</Note>
     <Code
@@ -428,7 +429,7 @@
             }
         `}
     />
-    <h1 id="redirect">Redirect</h1>
+    <Title text="Redirect" />
     <span>Use <InlineCode source="send.Redirect()" /> to redirect to a different location.</span>
     <Code
         lang="go"
@@ -445,7 +446,7 @@
             }
         `}
     />
-    <h1 id="navigate">Navigate</h1>
+    <Title text="Navigate" />
     <span>Use <InlineCode source="send.Navigate()" /> to redirect to a different location with status 302.</span>
     <Code
         lang="go"
@@ -463,7 +464,7 @@
         `}
     />
     {#snippet rightSidebar()}
-        <MenuItem><a href="#basics">Basics</a></MenuItem>
+        <MenuItem><a href="#server">Server</a></MenuItem>
         <MenuItem><a href="#routes">Routes</a></MenuItem>
         <MenuItem><a href="#path-fields">Path Fields</a></MenuItem>
         <MenuItem><a href="#messages">Messages</a></MenuItem>

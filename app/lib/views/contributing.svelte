@@ -1,16 +1,18 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Contributing">
-    <h1>Contributing</h1>
+    <Title text="Contributing" />
     <span>
         This document describes the full process of setting up a fully working local development environment and
         submitting your first contribution.
     </span>
-    <h1>Clone Repository</h1>
+    <Title text="Clone Repository" />
     <span>Clone the frizzante repository from GitHub.</span>
     <Code source="git clone https://github.com/razshare/frizzante" />
     <Tip>
@@ -18,12 +20,12 @@
         <br />
         <span>Then when you’re done with your changes you will need to submit a pull request.</span>
     </Tip>
-    <h1>Create Branch</h1>
+    <Title text="Create Branch" />
     <span>Create a new branch and give it a name that describes your changes.</span>
     <Code source="git checkout -b feature/some-feature" />
-    <h1>Coding Standards</h1>
+    <Title text="Coding Standards" />
     <span>Submitted code must follow a few rules.</span>
-    <h3>Export Everything</h3>
+    <Title type="h3" text="Export Everything" />
     <span>Export Everything</span>
     <Code
         lang="go"
@@ -39,7 +41,7 @@
             var Name = "World"
         `}
     />
-    <h3>Data & Logic</h3>
+    <Title type="h3" text="Data & Logic" />
     <span>
         Data and logic must be separated, don’t define receiver functions unless you’re forced to by some third party
         package.
@@ -69,11 +71,21 @@
             }
         `}
     />
-    <h1>Pull Requests</h1>
+    <Title text="Pull Requests" />
     <span>
         When you’re done with your changes you can submit a pull request in order to implement them into frizzante.
     </span>
     {#snippet rightSidebar()}
-        <!-- empty -->
+        <MenuItem><a href="#contributing">Contributing</a></MenuItem>
+        <MenuItem><a href="#clone-repository">Clone Repository</a></MenuItem>
+        <MenuItem><a href="#create-branch">Create Branch</a></MenuItem>
+        <MenuItem>
+            <a href="#coding-standards">Coding Standards</a>
+            {#snippet menu()}
+                <MenuItem><a href="#export-everything">Export Everything</a></MenuItem>
+                <MenuItem><a href="#data-and-logic">Data & Logic</a></MenuItem>
+            {/snippet}
+        </MenuItem>
+        <MenuItem><a href="#pull-requests">Pull Requests</a></MenuItem>
     {/snippet}
 </Page>

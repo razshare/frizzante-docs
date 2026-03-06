@@ -1,11 +1,13 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
     import Page from "$lib/components/page.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Server Sent Events">
-    <h1>Server Sent Events</h1>
+    <Title text="Server Sent Events" />
     <span>Use <InlineCode source="send.SseUpgrade()" /> to upgrade the connection to server sent events.</span>
     <Code lang="go" source={`routes.Route{Pattern: "GET /sse", Handler: welcome.View}`} />
     <Code
@@ -47,13 +49,13 @@
             socket.send("Hello")                  // Sends message.
         </script>
 
-        <h1>Messages</h1>
+        <Title  text="Messages"/>
         {#each messages as message, id (id)}      <!-- Iterates the list of messages. -->
             <div>{message}</div>                  <!-- Renders message. -->
         {/each}
     `}
     />
     {#snippet rightSidebar()}
-        <!-- empty -->
+        <MenuItem><a href="#server-sent-events">Server Sent Events</a></MenuItem>
     {/snippet}
 </Page>

@@ -3,16 +3,17 @@
     import InlineCode from "$lib/components/inline_code.svelte"
     import MenuItem from "$lib/components/menu_item.svelte"
     import Page from "$lib/components/page.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Web Standards">
-    <h1 id="web-standards">Web Standards</h1>
+    <Title text="Web Standards" />
     <span>
         You can use <InlineCode source="href()" /> and <InlineCode source="action()" />
         in order to make your hyperlinks and forms adapt to the client’s browser capabilities and/or the server’s rendering
         configuration.
     </span>
-    <h1 id="adaptive-hyperlinks">Adaptive Hyperlinks</h1>
+    <Title text="Adaptive Hyperlinks" />
     <Code
         lang="svelte"
         source={`
@@ -72,7 +73,7 @@
             <a href="/some-other-page" onclick="onclick(event)"> Go to some other page </a>
         `}
     />
-    <h1 id="adaptive-forms">Adaptive Forms</h1>
+    <Title text="Adaptive Forms" />
     <Code
         lang="go"
         source={`
@@ -145,7 +146,7 @@
         Where <InlineCode source="onsubmit" /> takes care of submitting the form and fetching the new state and view from
         <InlineCode source="/process" />.
     </span>
-    <h1 id="link-component">Link Component</h1>
+    <Title text="Link Component" />
     <span>
         Frizzante provides a <InlineCode source="<Link>" />
         component that captures pending and error states while navigating hyperlinks.
@@ -182,7 +183,7 @@
             </Link>
         `}
     />
-    <h1 id="form-component">Form Component</h1>
+    <Title text="Form Component" />
     <span>
         Frizzante provides a <InlineCode source="<Form>" />
         component that captures pending and error states while submitting forms.
