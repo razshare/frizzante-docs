@@ -68,6 +68,8 @@
     import Icon from "$lib/components/icons/icon.svelte"
     import { mdiTextSearch } from "@mdi/js"
     import { onMount } from "svelte"
+    type Props = { value?: string }
+    let { value = $bindable("") }: Props = $props()
     let input: HTMLInputElement
     let focused = $state(false)
     function onfocus() {
@@ -91,6 +93,6 @@
 
 <button class="searchbar" class:focused>
     <div class="icon"><Icon path={mdiTextSearch} size="1.5rem" /></div>
-    <input bind:this={input} class="text" class:focused type="text" {onfocus} {onblur} />
+    <input bind:this={input} class="text" class:focused type="text" {onfocus} {onblur} bind:value />
     <div class="shortcut">Ctrl K</div>
 </button>

@@ -10,14 +10,25 @@
         rightSidebar: Snippet
     }
     let { title, children, rightSidebar: sidebar }: Props = $props()
+    let search: string = $state("")
+    let mode: "default" | "zen" = $derived.by(function update() {
+        if (search !== "") {
+            return "zen"
+        }
+        return "default"
+    })
 </script>
 
-<Layout {title}>
+<Layout {title} {mode}>
     {#snippet navbar()}
-        <Navbar />
+        <Navbar bind:search />
     {/snippet}
     {#snippet content()}
-        {@render children()}
+        {#if search !== ""}
+            <span>Searching for:{search}</span>
+        {:else}
+            {@render children()}
+        {/if}
     {/snippet}
     {#snippet footer()}
         <Footer />

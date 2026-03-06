@@ -11,10 +11,18 @@
         bottom: 0;
         grid-template-columns: 200px auto 200px;
         grid-template-rows: auto 1fr auto;
+    }
+    .layout.default {
         grid-template-areas:
             "layout-navbar layout-navbar layout-navbar"
             "layout-left-sidebar layout-content layout-right-sidebar"
-            "layout-footer layout-footer layout-footer ";
+            "layout-footer layout-footer layout-footer";
+    }
+    .layout.zen {
+        grid-template-areas:
+            "layout-navbar layout-navbar layout-navbar"
+            "layout-content layout-content layout-content"
+            "layout-content layout-content layout-content";
     }
     .layout-navbar {
         grid-area: layout-navbar;
@@ -30,9 +38,9 @@
         padding: var(--layout-padding);
     }
     .layout-content {
-        overflow-y: auto;
         grid-area: layout-content;
         position: relative;
+        overflow-y: auto;
     }
     .layout-footer {
         grid-area: layout-footer;
@@ -49,8 +57,9 @@
         rightSidebar: Snippet
         content: Snippet
         footer: Snippet
+        mode?: "default" | "zen"
     }
-    let { title, navbar, leftSidebar, rightSidebar, content, footer }: Props = $props()
+    let { title, navbar, leftSidebar, rightSidebar, content, footer, mode = "default" }: Props = $props()
 </script>
 
 <svelte:head>
@@ -61,10 +70,12 @@
     />
     <title>{title}</title>
 </svelte:head>
-<div class="layout">
+<div class="layout {mode}">
     <div class="layout-navbar">{@render navbar()}</div>
-    <div class="layout-left-sidebar">{@render leftSidebar()}</div>
-    <div class="layout-right-sidebar">{@render rightSidebar()}</div>
+    {#if mode === "default"}
+        <div class="layout-left-sidebar">{@render leftSidebar()}</div>
+        <div class="layout-right-sidebar">{@render rightSidebar()}</div>
+        <div class="layout-footer">{@render footer()}</div>
+    {/if}
     <div class="layout-content">{@render content()}</div>
-    <div class="layout-footer">{@render footer()}</div>
 </div>
