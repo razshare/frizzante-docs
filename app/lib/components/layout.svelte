@@ -9,7 +9,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        grid-template-columns: 20vw auto 20vw;
+        grid-template-columns: 200px auto 200px;
         grid-template-rows: auto 1fr auto;
         grid-template-areas:
             "layout-navbar layout-navbar layout-navbar"
@@ -32,7 +32,6 @@
     .layout-content {
         overflow-y: auto;
         grid-area: layout-content;
-        padding: var(--layout-padding);
         position: relative;
     }
     .layout-footer {

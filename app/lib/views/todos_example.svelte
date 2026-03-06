@@ -11,6 +11,7 @@
     import Note from "$lib/components/note.svelte"
     import Tip from "$lib/components/tip.svelte"
     import HyperTable from "$lib/components/hyper_table.svelte"
+    import Image from "$lib/components/image.svelte"
 </script>
 
 <Page title="Todos Example">
@@ -18,7 +19,7 @@
     <span>The starter template comes with a todos application.</span>
     <br />
     <br />
-    <img src={gif1} alt="" loading="lazy" decoding="async" fetchpriority="auto" width="100%" />
+    <Image src={gif1} width="500px" />
     <h1>Main</h1>
     <span>The server defines a few routes.</span>
     <Code
@@ -40,7 +41,7 @@
     />
     <h1>Fallback</h1>
     <span>The <InlineCode source="GET /" /> pattern acts as a fallback.</span>
-    <img src={diagram1} alt="" loading="lazy" decoding="async" fetchpriority="auto" width="100%" />
+    <Image src={diagram1} width="100%" />
     <span>
         With that in mind, the fallback handler tries to send back a matching file using
         <InlineCode source="send.RequestedFile()" />

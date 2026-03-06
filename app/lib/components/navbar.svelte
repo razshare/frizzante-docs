@@ -32,11 +32,12 @@
     import { mdiGithub } from "@mdi/js"
     import Icon from "$lib/components/icons/icon.svelte"
     import Searchbar from "$lib/components/searchbar.svelte"
+    import Image from "$lib/components/image.svelte"
 </script>
 
 <div class="navbar">
     <div class="navbar-logo">
-        <img src={logo} width="32" height="32" alt="logo" />
+        <Image src={logo} width="32px" height="32px" alt="logo" />
     </div>
     <div class="navbar-title">Frizzante Docs</div>
     <div class="navbar-searchbar">

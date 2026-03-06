@@ -9,6 +9,7 @@
     // @ts-expect-error
     import diagram2 from "$lib/assets/guards_diagram_2.svg"
     import MenuItem from "$lib/components/menu_item.svelte"
+    import Image from "$lib/components/image.svelte"
 </script>
 
 <Page title="Guards">
@@ -45,7 +46,7 @@
             source="application/json"
         />
     </span>
-    <img src={diagram1} alt="" loading="lazy" decoding="async" fetchpriority="auto" width="100%" />
+    <Image src={diagram1} width="100%" />
     <h1 id="composition">Composition</h1>
     <span>You can compose multiple guards in order to create more advanced restrictions.</span>
     <Code
@@ -87,7 +88,7 @@
             }
         `}
     />
-    <img src={diagram2} alt="" loading="lazy" decoding="async" fetchpriority="auto" width="100%" />
+    <Image src={diagram2} width="100%" />
     {#snippet rightSidebar()}
         <MenuItem><a href="#guards">Guards</a></MenuItem>
         <MenuItem><a href="#composition">Composition</a></MenuItem>
