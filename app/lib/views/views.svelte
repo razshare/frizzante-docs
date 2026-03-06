@@ -125,8 +125,8 @@
             )
 
             func View(client *clients.Client) {
-                if !send.RequestedFile() { // Tries to send the requested file, or else...
-                    welcome.View(client)   // ...sends the welcome view.
+                if !send.RequestedFile(client) { // Tries to send the requested file, or else...
+                    welcome.View(client)         // ...sends the welcome view.
                 }
             }
         `}
@@ -207,22 +207,6 @@
             <a href="https://svelte.dev/docs/svelte/$state">$state()</a>
             and thus are reactive by default.
         </span>
-        <!-- 
-            For some reason svelte tooling will not 
-            escape strings that look like svelte code 
-            and it gets confused throwing errors around.
-        -->
-        <Code
-            lang="go"
-            source={`
-                ${"<"}script lang="ts">
-                    type Props = { name: string }
-                    let { name }: Props = $props() // Retrieves view props.
-                </script>
-                
-                <h1>Hello {name}</h1>
-            `}
-        />
     </Note>
     <h1 id="render-modes">Render Modes</h1>
     <span>
@@ -331,10 +315,13 @@
             <InlineCode source="FRIZZANTE_JS_RUNTIME_LIMIT" /> environment variable.
             <Code lang="shell" source="FRIZZANTE_JS_RUNTIME_LIMIT=3 ./app" />
             <Caution>
-                Settings this limit too high could lead to large memory usage by your JavaScript runtimes. For most use
-                cases a limit of 1 runtime (the default) is more than enough, after all, the Svelte compiler is simply
-                concatenating strings together when rendering pages on the server. Modify this field based on actual
-                performance measurements.
+                <span>Settings this limit too high could lead to large memory usage by your JavaScript runtimes.</span>
+                <br />
+                <span>
+                    For most use cases a limit of 1 runtime (the default) is more than enough, after all, the Svelte
+                    compiler is simply concatenating strings together when rendering pages on the server. Modify this
+                    field based on actual performance measurements.
+                </span>
             </Caution>
         </Tip>
     </KeyedSection>
