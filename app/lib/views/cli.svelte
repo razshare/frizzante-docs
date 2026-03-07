@@ -316,7 +316,7 @@
             some placeholders in your <InlineCode source="app/dist" /> directory.
         </span>
     </Note>
-    <Title text="Create Project" />
+    <Title text="Clean Project" />
     <Code lang="sh" source="frizzante --clean-project" />
     <span>
         Removes directories
@@ -395,20 +395,22 @@
         </ul>
     </Note>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#cli">Cli</MenuItemHyperlink>
-        <MenuItemHyperlink href="#create-project">Create Project</MenuItemHyperlink>
-        <MenuItemHyperlink href="#generate">Generate</MenuItemHyperlink>
-        <MenuItemHyperlink href="#configure">Configure</MenuItemHyperlink>
-        <MenuItemHyperlink href="#install">Install</MenuItemHyperlink>
-        <MenuItemHyperlink href="#update">Update</MenuItemHyperlink>
-        <MenuItemHyperlink href="#package">Package</MenuItemHyperlink>
-        <MenuItemHyperlink href="#package-watch">Package Watch</MenuItemHyperlink>
-        <MenuItemHyperlink href="#check">Check</MenuItemHyperlink>
-        <MenuItemHyperlink href="#touch">Touch</MenuItemHyperlink>
-        <MenuItemHyperlink href="#create-project">Create Project</MenuItemHyperlink>
-        <MenuItemHyperlink href="#reset">Reset</MenuItemHyperlink>
-        <MenuItemHyperlink href="#version">Version</MenuItemHyperlink>
-        <MenuItemHyperlink href="#help">Help</MenuItemHyperlink>
-        <MenuItemHyperlink href="#interactive-mode">Interactive Mode</MenuItemHyperlink>
+        <MenuItemHyperlink text="Cli" />
+        <MenuItemHyperlink text="Create Project" />
+        <MenuItemHyperlink text="Generate" />
+        <MenuItemHyperlink text="Configure" />
+        <MenuItemHyperlink text="Install" />
+        <MenuItemHyperlink text="Update" />
+        <MenuItemHyperlink text="Package" />
+        <MenuItemHyperlink text="Package Watch" />
+        <MenuItemHyperlink text="Build" />
+        <MenuItemHyperlink text="Check" />
+        <MenuItemHyperlink text="Touch" />
+        <MenuItemHyperlink text="Clean Project" />
+        <MenuItemHyperlink text="Reset" />
+        <MenuItemHyperlink text="Strict" />
+        <MenuItemHyperlink text="Version" />
+        <MenuItemHyperlink text="Help" />
+        <MenuItemHyperlink text="Interactive Mode" />
     {/snippet}
 </Page>

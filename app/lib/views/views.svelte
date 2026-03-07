@@ -330,18 +330,16 @@
     <Code lang="shell" source="frizzante --build --tags=no_js_runtime" />
     <span>This will reduce the minimum size of the final binary from 25MB to 10MB.</span>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#views">Views</MenuItemHyperlink>
-        <MenuItemHyperlink href="#server-exports">Server Exports</MenuItemHyperlink>
-        <MenuItemHyperlink href="#client-exports">Client Exports</MenuItemHyperlink>
-        <MenuItemHyperlink href="#send-views">Send Views</MenuItemHyperlink>
-        <MenuItemHyperlink href="#default-view">Default View</MenuItemHyperlink>
-        <MenuItemHyperlink href="#view-properties">View Properties</MenuItemHyperlink>
-        <MenuItemHyperlink href="#render-modes">Render Modes</MenuItemHyperlink>
-        <MenuItemHyperlink shift={1} href="#rendermodefull">RenderModeFull</MenuItemHyperlink>
-        <MenuItemHyperlink shift={1} href="#rendermodeserver">RenderModeServer</MenuItemHyperlink>
-        <MenuItemHyperlink shift={1} href="#rendermodeclient">RenderModeClient</MenuItemHyperlink>
-        <MenuItemHyperlink href="#disabling-the-server-side-javascript-runtime">
-            <span>Disabling the server-side JavaScript runtime</span>
-        </MenuItemHyperlink>
+        <MenuItemHyperlink text="Views" />
+        <MenuItemHyperlink text="Server Exports" />
+        <MenuItemHyperlink text="Client Exports" />
+        <MenuItemHyperlink text="Send Views" />
+        <MenuItemHyperlink text="Default View" />
+        <MenuItemHyperlink text="View Properties" />
+        <MenuItemHyperlink text="Render Modes" />
+        <MenuItemHyperlink shift={1} text="RenderModeFull" />
+        <MenuItemHyperlink shift={1} text="RenderModeServer" />
+        <MenuItemHyperlink shift={1} text="RenderModeClient" />
+        <MenuItemHyperlink text="Disabling the server-side JavaScript runtime" />
     {/snippet}
 </Page>

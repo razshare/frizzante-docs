@@ -222,10 +222,10 @@
         `}
     />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#web-standards">Web Standards</MenuItemHyperlink>
-        <MenuItemHyperlink href="#adaptive-hyperlinks">Adaptive Hyperlinks</MenuItemHyperlink>
-        <MenuItemHyperlink href="#adaptive-forms">Adaptive Forms</MenuItemHyperlink>
-        <MenuItemHyperlink href="#link-component">Link Component</MenuItemHyperlink>
-        <MenuItemHyperlink href="#form-component">Form Component</MenuItemHyperlink>
+        <MenuItemHyperlink text="Web Standards" />
+        <MenuItemHyperlink text="Adaptive Hyperlinks" />
+        <MenuItemHyperlink text="Adaptive Forms" />
+        <MenuItemHyperlink text="Link Component" />
+        <MenuItemHyperlink text="Form Component" />
     {/snippet}
 </Page>

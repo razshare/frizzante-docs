@@ -47,8 +47,8 @@
         </Tree>
     </KeyedSection>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#what-is-frizzante">What is Frizzante?</MenuItemHyperlink>
-        <MenuItemHyperlink shift={1} href="#prerequisites">Prerequisites</MenuItemHyperlink>
-        <MenuItemHyperlink href="#get-started">Get Started</MenuItemHyperlink>
+        <MenuItemHyperlink text="What is Frizzante?" />
+        <MenuItemHyperlink shift={1} text="Prerequisites" />
+        <MenuItemHyperlink text="Get Started" />
     {/snippet}
 </Page>

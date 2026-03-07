@@ -56,6 +56,6 @@
     `}
     />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#server-sent-events">Server Sent Events</MenuItemHyperlink>
+        <MenuItemHyperlink text="Server Sent Events" />
     {/snippet}
 </Page>

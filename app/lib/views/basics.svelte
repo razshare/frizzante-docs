@@ -464,20 +464,20 @@
         `}
     />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#server">Server</MenuItemHyperlink>
-        <MenuItemHyperlink href="#routes">Routes</MenuItemHyperlink>
-        <MenuItemHyperlink href="#path-fields">Path Fields</MenuItemHyperlink>
-        <MenuItemHyperlink href="#messages">Messages</MenuItemHyperlink>
-        <MenuItemHyperlink href="#headers">Headers</MenuItemHyperlink>
-        <MenuItemHyperlink href="#status">Status</MenuItemHyperlink>
-        <MenuItemHyperlink href="#order-of-operations">Order of Operations</MenuItemHyperlink>
-        <MenuItemHyperlink href="#queries">Queries</MenuItemHyperlink>
-        <MenuItemHyperlink href="#forms">Forms</MenuItemHyperlink>
-        <MenuItemHyperlink href="#json">Json</MenuItemHyperlink>
-        <MenuItemHyperlink href="#cookies">Cookies</MenuItemHyperlink>
-        <MenuItemHyperlink href="#session-id">Session Id</MenuItemHyperlink>
-        <MenuItemHyperlink href="#session">Session</MenuItemHyperlink>
-        <MenuItemHyperlink href="#redirect">Redirect</MenuItemHyperlink>
-        <MenuItemHyperlink href="#navigate">Navigate</MenuItemHyperlink>
+        <MenuItemHyperlink text="Server" />
+        <MenuItemHyperlink text="Routes" />
+        <MenuItemHyperlink text="Path Fields" />
+        <MenuItemHyperlink text="Messages" />
+        <MenuItemHyperlink text="Headers" />
+        <MenuItemHyperlink text="Status" />
+        <MenuItemHyperlink text="Order of Operations" />
+        <MenuItemHyperlink text="Queries" />
+        <MenuItemHyperlink text="Forms" />
+        <MenuItemHyperlink text="Json" />
+        <MenuItemHyperlink text="Cookies" />
+        <MenuItemHyperlink text="Session Id" />
+        <MenuItemHyperlink text="Session" />
+        <MenuItemHyperlink text="Redirect" />
+        <MenuItemHyperlink text="Navigate" />
     {/snippet}
 </Page>

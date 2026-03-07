@@ -9,23 +9,24 @@
 <script lang="ts">
     import MenuItem from "$lib/components/menu_item.svelte"
     import { scroll } from "$lib/scripts/scroll/scroll.svelte"
-    import type { Snippet } from "svelte"
+    import { textToAnchor } from "$lib/scripts/text_to_anchor"
     type Props = {
-        href: string
-        children: Snippet
+        text: string
+        group?: string
         shift?: number
     }
-    let { href, children, shift = 0 }: Props = $props()
-    let active = $derived(scroll.active === href.substring(1))
+    let { text, group = "", shift = 0 }: Props = $props()
+    let id = $derived(textToAnchor(`${group}-${text}`))
+    let active = $derived(scroll.active === id)
 </script>
 
 <MenuItem {shift}>
-    <a {href}>
+    <a href="#{id}">
         {#if active}
             <span>#</span>
         {:else}
             <span></span>
         {/if}
-        <span>{@render children()}</span>
+        <span>{text}</span>
     </a>
 </MenuItem>

@@ -94,8 +94,17 @@
         </span>
     </Note>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#docker">Docker</MenuItemHyperlink>
-        <MenuItemHyperlink shift={1} href="#get-started">Get Started</MenuItemHyperlink>
-        <MenuItemHyperlink href="#production-with-docker">Production with Docker</MenuItemHyperlink>
+        <MenuItemHyperlink text="Docker" />
+        <MenuItemHyperlink text="Get Started" />
+        <MenuItemHyperlink shift={1} text="Create a new container" />
+        <MenuItemHyperlink shift={1} text="Start the container" />
+        <MenuItemHyperlink shift={1} text="Attach to this container with your IDE or directly with a shell" />
+        <MenuItemHyperlink shift={1} text="Configure project" />
+        <MenuItemHyperlink shift={1} text="Start development" />
+        <MenuItemHyperlink shift={1} text="Build" />
+        <MenuItemHyperlink text="Production with Docker" />
+        <MenuItemHyperlink shift={1} text="Build and run production binary inside container" />
+        <MenuItemHyperlink shift={1} text="Build production Docker image" />
+        <MenuItemHyperlink shift={1} text="Use Docker Compose for production" />
     {/snippet}
 </Page>

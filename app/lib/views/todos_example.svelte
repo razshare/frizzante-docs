@@ -400,14 +400,15 @@
         }}
     />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#todos-example">Todos Example</MenuItemHyperlink>
-        <MenuItemHyperlink href="#main">Main</MenuItemHyperlink>
-        <MenuItemHyperlink href="#fallback">Fallback</MenuItemHyperlink>
-        <MenuItemHyperlink href="#welcome-view">Welcome View</MenuItemHyperlink>
-        <MenuItemHyperlink href="#todos-view">Todos VIew</MenuItemHyperlink>
-        <MenuItemHyperlink href="#remove-todos">Remove Todos</MenuItemHyperlink>
-        <MenuItemHyperlink href="#toggle-todos">Toggle Todos</MenuItemHyperlink>
-        <MenuItemHyperlink href="#add-todos">Add Todos</MenuItemHyperlink>
-        <MenuItemHyperlink href="#more-examples">More Examples</MenuItemHyperlink>
+        <MenuItemHyperlink text="Todos Example" />
+        <MenuItemHyperlink text="Main" />
+        <MenuItemHyperlink text="Fallback" />
+        <MenuItemHyperlink text="Welcome View" />
+        <MenuItemHyperlink text="Todos View" />
+        <MenuItemHyperlink text="List Todos" />
+        <MenuItemHyperlink text="Remove Todos" />
+        <MenuItemHyperlink text="Toggle Todos" />
+        <MenuItemHyperlink text="Add Todos" />
+        <MenuItemHyperlink text="More Examples" />
     {/snippet}
 </Page>

@@ -17,8 +17,7 @@
     </span>
     <br />
     <br />
-    <KeyedSection key="1">
-        <span>Define your Go types.</span>
+    <KeyedSection key="1" description="Define your Go types.">
         <Code
             lang="go"
             source={`
@@ -32,8 +31,7 @@
         />
         <Note><span>All <InlineCode source="json" /> tags are optional.</span></Note>
     </KeyedSection>
-    <KeyedSection key="2">
-        <span>Call <InlineCode source="types.Generate[T]()" />.</span>
+    <KeyedSection key="2" description="Call types.Generate[T]().">
         <Code
             lang="go"
             source={`
@@ -50,8 +48,7 @@
             `}
         />
     </KeyedSection>
-    <KeyedSection key="3" noLink>
-        <span>Generate types</span>
+    <KeyedSection key="3" description="Generate types." noLink>
         <Code
             lang="shell"
             source={`
@@ -88,6 +85,9 @@
         </Tip>
     </KeyedSection>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#type-definitions">Type Definitions</MenuItemHyperlink>
+        <MenuItemHyperlink text="Type Definitions" />
+        <MenuItemHyperlink shift={1} text="Define your Go types" />
+        <MenuItemHyperlink shift={1} text="Call types.Generate[T]()" />
+        <MenuItemHyperlink shift={1} text="Generate types" />
     {/snippet}
 </Page>

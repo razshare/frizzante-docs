@@ -172,18 +172,10 @@
         You can find a Vue3 example <a href="https://github.com/razshare/frizzante-example-vue3">here</a>.
     </span>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#faq">Faq</MenuItemHyperlink>
-        <MenuItemHyperlink href="#why-doesn’t-frizzante-have-middleware">
-            <span>Why doesn't Frizzante have middleware?</span>
-        </MenuItemHyperlink>
-        <MenuItemHyperlink shift={1} href="#middleware-implementation">
-            <span>Middleware Implementation</span>
-        </MenuItemHyperlink>
-        <MenuItemHyperlink shift={1} href="#middleware-usage">
-            <span>Middleware Usage</span>
-        </MenuItemHyperlink>
-        <MenuItemHyperlink href="#can-i-use-frizzante-with-other-frontend-frameworks">
-            <span>Can I use Frizzante with other frontend frameworks?</span>
-        </MenuItemHyperlink>
+        <MenuItemHyperlink text="Faq" />
+        <MenuItemHyperlink text="Why doesn't Frizzante have middleware?" />
+        <MenuItemHyperlink shift={1} text="Middleware Implementation" />
+        <MenuItemHyperlink shift={1} text="Middleware Usage" />
+        <MenuItemHyperlink text="Can I use Frizzante with other frontend frameworks?" />
     {/snippet}
 </Page>

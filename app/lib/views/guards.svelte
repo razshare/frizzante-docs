@@ -91,7 +91,7 @@
     />
     <Image src={diagram2} width="100%" />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#guards">Guards</MenuItemHyperlink>
-        <MenuItemHyperlink href="#composition">Composition</MenuItemHyperlink>
+        <MenuItemHyperlink text="Guards" />
+        <MenuItemHyperlink text="Composition" />
     {/snippet}
 </Page>

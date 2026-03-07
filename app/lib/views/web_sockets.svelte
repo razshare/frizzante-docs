@@ -55,6 +55,6 @@
     `}
     />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#web-sockets">Web Sockets</MenuItemHyperlink>
+        <MenuItemHyperlink text="Web Sockets" />
     {/snippet}
 </Page>

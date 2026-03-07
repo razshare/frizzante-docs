@@ -76,12 +76,12 @@
         When you’re done with your changes you can submit a pull request in order to implement them into frizzante.
     </span>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#contributing">Contributing</MenuItemHyperlink>
-        <MenuItemHyperlink href="#clone-repository">Clone Repository</MenuItemHyperlink>
-        <MenuItemHyperlink href="#create-branch">Create Branch</MenuItemHyperlink>
-        <MenuItemHyperlink href="#coding-standards">Coding Standards</MenuItemHyperlink>
-        <MenuItemHyperlink shift={1} href="#export-everything">Export Everything</MenuItemHyperlink>
-        <MenuItemHyperlink shift={1} href="#data-and-logic">Data & Logic</MenuItemHyperlink>
-        <MenuItemHyperlink href="#pull-requests">Pull Requests</MenuItemHyperlink>
+        <MenuItemHyperlink text="Contributing" />
+        <MenuItemHyperlink text="Clone Repository" />
+        <MenuItemHyperlink text="Create Branch" />
+        <MenuItemHyperlink text="Coding Standards" />
+        <MenuItemHyperlink shift={1} text="Export Everything" />
+        <MenuItemHyperlink shift={1} text="Data & Logic" />
+        <MenuItemHyperlink text="Pull Requests" />
     {/snippet}
 </Page>

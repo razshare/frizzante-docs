@@ -32,8 +32,8 @@
     </span>
 
     {#snippet rightSidebar()}
-        <MenuItemHyperlink href="#issues">Issues</MenuItemHyperlink>
-        <MenuItemHyperlink href="#reporting-a-bug">Reporting a Bug</MenuItemHyperlink>
-        <MenuItemHyperlink href="#requesting-a-feature">Requesting a Feature</MenuItemHyperlink>
+        <MenuItemHyperlink text="Issues" />
+        <MenuItemHyperlink text="Reporting a Bug" />
+        <MenuItemHyperlink text="Requesting a Feature" />
     {/snippet}
 </Page>
