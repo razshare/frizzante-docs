@@ -15,10 +15,7 @@
     <Title text="Docker" />
     <span>A Docker solution is available for both development and production deployment.</span>
     <Title type="h3" text="Get Started" />
-    <KeyedSection key="1">
-        <span>Create a new container.</span>
-        <br />
-        <br />
+    <KeyedSection key="1" description="Create a new container.">
         <Code
             lang="sh"
             source={`
@@ -28,10 +25,7 @@
             `}
         />
     </KeyedSection>
-    <KeyedSection key="2">
-        <span>Start the container.</span>
-        <br />
-        <br />
+    <KeyedSection key="2" description="Start the container.">
         <Code lang="sh" source="docker compose up" />
         <Note>
             <span>
@@ -46,20 +40,16 @@
             <Code lang="sh" source="docker compose down --remove-orphans" />
         </Tip>
     </KeyedSection>
-    <KeyedSection key="3">
-        <span>Attach to this container with your IDE or directly with a shell.</span>
+    <KeyedSection key="3" description="Attach to this container with your IDE or directly with a shell.">
         <Code lang="sh" source="docker exec -it frizzante-start sh" />
     </KeyedSection>
-    <KeyedSection key="4">
-        <span>Configure project.</span>
+    <KeyedSection key="4" description="Configure project.">
         <Code lang="sh" source="docker exec -it frizzante-start sh" />
     </KeyedSection>
-    <KeyedSection key="5">
-        <span>Start development.</span>
+    <KeyedSection key="5" description="Start development.">
         <Code lang="sh" source="docker exec -it frizzante-start sh" />
     </KeyedSection>
-    <KeyedSection key="6" noLink>
-        <span>Build.</span>
+    <KeyedSection key="6" description="Build." noLink>
         <Code lang="sh" source="frizzante --build" />
         <span>This will create a <InlineCode source=".gen/bin/app" /> standalone executable.</span>
         <FileTree>
@@ -76,8 +66,7 @@
     <span>You have different options for deploying to the production environment using docker.</span>
     <br />
     <br />
-    <KeyedSection key="A">
-        <span>Build and run production binary inside container.</span>
+    <KeyedSection key="A" description="Build and run production binary inside container.">
         <Code
             source={`
                 # Inside the container
@@ -86,8 +75,7 @@
             `}
         />
     </KeyedSection>
-    <KeyedSection key="B">
-        <span>Build production Docker image.</span>
+    <KeyedSection key="B" description="Build production Docker image.">
         <Code
             source={`
                 docker build --target frizzante_prod -t my-app:prod .
@@ -95,8 +83,7 @@
             `}
         />
     </KeyedSection>
-    <KeyedSection key="C" noLink>
-        <span>Use Docker Compose for production.</span>
+    <KeyedSection key="C" description="Use Docker Compose for production." noLink>
         <Code source="docker compose -f compose.yaml -f compose.prod.yaml up -d --build" />
     </KeyedSection>
     <Note>

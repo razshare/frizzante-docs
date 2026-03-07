@@ -144,8 +144,8 @@
             func main() {
                 defer servers.Start(server)
                 defer middlewares.Apply(middleware, server.Routes) // Applies middleware to server routes.
-                                                                // Remember that deferred functions are executed in reverse,
-                                                                // so this line will execute before the server starts.
+                                                                   // Remember that deferred functions are executed in reverse,
+                                                                   // so this line will execute before the server starts.
                 server.Efs = efs                                   // Sets embedded file system.
                 server.Routes = []routes.Route{
                     {Pattern: "GET /", Handler: fallback.View},

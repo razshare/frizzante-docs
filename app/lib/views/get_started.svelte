@@ -20,20 +20,16 @@
         <Code lang="bash" source={["export GOPATH=$HOME/go", "export PATH=$PATH:$GOPATH/bin"].join("\n")} />
     </Tip>
     <Title text="Get Started" />
-    <KeyedSection key="1">
-        <span>Create project.</span>
+    <KeyedSection key="1" description="Create project.">
         <Code lang="bash" source="frizzante create my_project" />
     </KeyedSection>
-    <KeyedSection key="2">
-        <span>Configure project.</span>
+    <KeyedSection key="2" description="Configure project.">
         <Code lang="bash" source="frizzante configure" />
     </KeyedSection>
-    <KeyedSection key="3">
-        <span>Start development.</span>
+    <KeyedSection key="3" description="Start development.">
         <Code lang="bash" source="frizzante dev" />
     </KeyedSection>
-    <KeyedSection key="4" noLink>
-        <span>Build.</span>
+    <KeyedSection key="4" description="Build." noLink>
         <Code lang="bash" source="frizzante build" />
         <span>This will create a</span>
         <InlineCode source=".gen/bin/app" />

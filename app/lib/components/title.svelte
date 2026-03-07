@@ -1,12 +1,24 @@
 <style>
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
+    h1 {
+        font-size: 2.5rem;
+    }
+    h2 {
+        font-size: 2.2rem;
+    }
+    h3 {
+        font-size: 2rem;
+    }
+    h4 {
+        font-size: 1.7rem;
+    }
+    h5 {
+        font-size: 1.5rem;
+    }
     h6 {
-        margin-top: 0;
-        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+    .no-margin {
+        margin: 0;
     }
 </style>
 
@@ -21,8 +33,9 @@
         type?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
         id?: string
         noAnchor?: boolean
+        noMargin?: boolean
     }
-    let { text, type: tag = "h1", id: providedId = "", noAnchor = false }: Props = $props()
+    let { text, type: tag = "h1", id: providedId = "", noAnchor = false, noMargin = false }: Props = $props()
     let id: string = $state("")
     let element: HTMLAnchorElement
     onMount(function start() {
@@ -43,32 +56,32 @@
 
 <a bind:this={element} href="#{id}">
     {#if tag === "h1"}
-        <h1 {id}>
+        <h1 {id} class:no-margin={noMargin}>
             <span>#</span>
             <span>{text}</span>
         </h1>
     {:else if tag === "h2"}
-        <h2 {id}>
+        <h2 {id} class:no-margin={noMargin}>
             <span>#</span>
             <span>{text}</span>
         </h2>
     {:else if tag === "h3"}
-        <h3 {id}>
+        <h3 {id} class:no-margin={noMargin}>
             <span>#</span>
             <span>{text}</span>
         </h3>
     {:else if tag === "h4"}
-        <h4 {id}>
+        <h4 {id} class:no-margin={noMargin}>
             <span>#</span>
             <span>{text}</span>
         </h4>
     {:else if tag === "h5"}
-        <h5 {id}>
+        <h5 {id} class:no-margin={noMargin}>
             <span>#</span>
             <span>{text}</span>
         </h5>
     {:else}
-        <h6 {id}>
+        <h6 {id} class:no-margin={noMargin}>
             <span>#</span>
             <span>{text}</span>
         </h6>

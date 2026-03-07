@@ -94,7 +94,7 @@
         <div class="circle"></div>
     </div>
     <div class="content">
-        <Title type="h3" text={description} {id} noAnchor />
+        <Title type="h6" text={description} {id} noAnchor noMargin />
         {@render children()}
     </div>
     <div class="link" class:hidden={noLink}>
