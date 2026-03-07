@@ -1,6 +1,6 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
@@ -76,16 +76,12 @@
         When you’re done with your changes you can submit a pull request in order to implement them into frizzante.
     </span>
     {#snippet rightSidebar()}
-        <MenuItem><a href="#contributing">Contributing</a></MenuItem>
-        <MenuItem><a href="#clone-repository">Clone Repository</a></MenuItem>
-        <MenuItem><a href="#create-branch">Create Branch</a></MenuItem>
-        <MenuItem>
-            <a href="#coding-standards">Coding Standards</a>
-            {#snippet menu()}
-                <MenuItem><a href="#export-everything">Export Everything</a></MenuItem>
-                <MenuItem><a href="#data-and-logic">Data & Logic</a></MenuItem>
-            {/snippet}
-        </MenuItem>
-        <MenuItem><a href="#pull-requests">Pull Requests</a></MenuItem>
+        <MenuItemHyperlink href="#contributing">Contributing</MenuItemHyperlink>
+        <MenuItemHyperlink href="#clone-repository">Clone Repository</MenuItemHyperlink>
+        <MenuItemHyperlink href="#create-branch">Create Branch</MenuItemHyperlink>
+        <MenuItemHyperlink href="#coding-standards">Coding Standards</MenuItemHyperlink>
+        <MenuItemHyperlink shift={1} href="#export-everything">Export Everything</MenuItemHyperlink>
+        <MenuItemHyperlink shift={1} href="#data-and-logic">Data & Logic</MenuItemHyperlink>
+        <MenuItemHyperlink href="#pull-requests">Pull Requests</MenuItemHyperlink>
     {/snippet}
 </Page>

@@ -2,14 +2,14 @@
     import Caution from "$lib/components/caution.svelte"
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
 </script>
 
-<Page title="Overview">
+<Page title="Basics">
     <Title text="Server" />
     <span>
         Create a new server with <InlineCode source="servers.New()" />, then followup with servers.Start() in order to
@@ -464,19 +464,20 @@
         `}
     />
     {#snippet rightSidebar()}
-        <MenuItem><a href="#server">Server</a></MenuItem>
-        <MenuItem><a href="#routes">Routes</a></MenuItem>
-        <MenuItem><a href="#path-fields">Path Fields</a></MenuItem>
-        <MenuItem><a href="#messages">Messages</a></MenuItem>
-        <MenuItem><a href="#headers">Headers</a></MenuItem>
-        <MenuItem><a href="#status">Status</a></MenuItem>
-        <MenuItem><a href="#order-of-operations">Order of Operations</a></MenuItem>
-        <MenuItem><a href="#queries">Queries</a></MenuItem>
-        <MenuItem><a href="#forms">Forms</a></MenuItem>
-        <MenuItem><a href="#json">Json</a></MenuItem>
-        <MenuItem><a href="#cookies">Cookies</a></MenuItem>
-        <MenuItem><a href="#session-id">Session Id</a></MenuItem>
-        <MenuItem><a href="#session">Session</a></MenuItem>
-        <MenuItem><a href="#navigate">Navigate</a></MenuItem>
+        <MenuItemHyperlink href="#server">Server</MenuItemHyperlink>
+        <MenuItemHyperlink href="#routes">Routes</MenuItemHyperlink>
+        <MenuItemHyperlink href="#path-fields">Path Fields</MenuItemHyperlink>
+        <MenuItemHyperlink href="#messages">Messages</MenuItemHyperlink>
+        <MenuItemHyperlink href="#headers">Headers</MenuItemHyperlink>
+        <MenuItemHyperlink href="#status">Status</MenuItemHyperlink>
+        <MenuItemHyperlink href="#order-of-operations">Order of Operations</MenuItemHyperlink>
+        <MenuItemHyperlink href="#queries">Queries</MenuItemHyperlink>
+        <MenuItemHyperlink href="#forms">Forms</MenuItemHyperlink>
+        <MenuItemHyperlink href="#json">Json</MenuItemHyperlink>
+        <MenuItemHyperlink href="#cookies">Cookies</MenuItemHyperlink>
+        <MenuItemHyperlink href="#session-id">Session Id</MenuItemHyperlink>
+        <MenuItemHyperlink href="#session">Session</MenuItemHyperlink>
+        <MenuItemHyperlink href="#redirect">Redirect</MenuItemHyperlink>
+        <MenuItemHyperlink href="#navigate">Navigate</MenuItemHyperlink>
     {/snippet}
 </Page>

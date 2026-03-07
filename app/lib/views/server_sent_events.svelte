@@ -1,7 +1,7 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Page from "$lib/components/page.svelte"
     import Title from "$lib/components/title.svelte"
 </script>
@@ -56,6 +56,6 @@
     `}
     />
     {#snippet rightSidebar()}
-        <MenuItem><a href="#server-sent-events">Server Sent Events</a></MenuItem>
+        <MenuItemHyperlink href="#server-sent-events">Server Sent Events</MenuItemHyperlink>
     {/snippet}
 </Page>

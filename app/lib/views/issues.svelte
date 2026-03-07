@@ -1,5 +1,5 @@
 <script lang="ts">
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Page from "$lib/components/page.svelte"
     import Title from "$lib/components/title.svelte"
 </script>
@@ -32,8 +32,8 @@
     </span>
 
     {#snippet rightSidebar()}
-        <MenuItem><a href="#issues">Issues</a></MenuItem>
-        <MenuItem><a href="#reporting-a-bug">Reporting a Bug</a></MenuItem>
-        <MenuItem><a href="#requesting-a-feature">Requesting a Feature</a></MenuItem>
+        <MenuItemHyperlink href="#issues">Issues</MenuItemHyperlink>
+        <MenuItemHyperlink href="#reporting-a-bug">Reporting a Bug</MenuItemHyperlink>
+        <MenuItemHyperlink href="#requesting-a-feature">Requesting a Feature</MenuItemHyperlink>
     {/snippet}
 </Page>

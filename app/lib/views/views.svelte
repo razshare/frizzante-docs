@@ -8,9 +8,9 @@
     import Link from "$lib/components/links/link.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
     import Caution from "$lib/components/caution.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
     import Title from "$lib/components/title.svelte"
     import { mdiCodeBraces } from "@mdi/js"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
 </script>
 
 <Page title="Views">
@@ -217,9 +217,7 @@
     </span>
     <br />
     <br />
-    <KeyedSection key="1">
-        <Title type="h3" text="RenderModeFull" />
-        <br />
+    <KeyedSection key="1" description="RenderModeFull">
         <span>
             Using <InlineCode source="RenderModeFull" />, the view is rendered on both the server and the client.
         </span>
@@ -245,9 +243,7 @@
         `}
         />
     </KeyedSection>
-    <KeyedSection key="2">
-        <Title type="h3" text="RenderModeServer" />
-        <br />
+    <KeyedSection key="2" description="RenderModeServer">
         <span>
             Using <InlineCode source="RenderModeServer" />, the view is rendered only on the server.
         </span>
@@ -281,9 +277,7 @@
             use the <InlineCode source="<svelte:head>" /> special tag in order to load scripts dynamically.
         </Tip>
     </KeyedSection>
-    <KeyedSection key="3" noLink>
-        <Title type="h3" text="RenderModeClient" />
-        <br />
+    <KeyedSection key="3" description="RenderModeClient" noLink>
         <span>
             Using <InlineCode source="RenderModeClient" />, the view is rendered only on the client by loading a
             JavaScript bundle asynchronously.
@@ -336,24 +330,18 @@
     <Code lang="shell" source="frizzante --build --tags=no_js_runtime" />
     <span>This will reduce the minimum size of the final binary from 25MB to 10MB.</span>
     {#snippet rightSidebar()}
-        <MenuItem><a href="#views">Views</a></MenuItem>
-        <MenuItem><a href="#server-exports">Server Exports</a></MenuItem>
-        <MenuItem><a href="#client-exports">Client Exports</a></MenuItem>
-        <MenuItem><a href="#send-views">Send Views</a></MenuItem>
-        <MenuItem><a href="#default-view">Default View</a></MenuItem>
-        <MenuItem><a href="#view-properties">View Properties</a></MenuItem>
-        <MenuItem>
-            <a href="#render-modes">Render Modes</a>
-            {#snippet menu()}
-                <MenuItem><a href="#rendermodefull">RenderModeFull</a></MenuItem>
-                <MenuItem><a href="#rendermodeserver">RenderModeServer</a></MenuItem>
-                <MenuItem><a href="#rendermodeclient">RenderModeClient</a></MenuItem>
-            {/snippet}
-        </MenuItem>
-        <MenuItem>
-            <a href="#disabling-the-server-side-javascript-runtime">
-                <span>Disabling the server-side JavaScript runtime</span>
-            </a>
-        </MenuItem>
+        <MenuItemHyperlink href="#views">Views</MenuItemHyperlink>
+        <MenuItemHyperlink href="#server-exports">Server Exports</MenuItemHyperlink>
+        <MenuItemHyperlink href="#client-exports">Client Exports</MenuItemHyperlink>
+        <MenuItemHyperlink href="#send-views">Send Views</MenuItemHyperlink>
+        <MenuItemHyperlink href="#default-view">Default View</MenuItemHyperlink>
+        <MenuItemHyperlink href="#view-properties">View Properties</MenuItemHyperlink>
+        <MenuItemHyperlink href="#render-modes">Render Modes</MenuItemHyperlink>
+        <MenuItemHyperlink shift={1} href="#rendermodefull">RenderModeFull</MenuItemHyperlink>
+        <MenuItemHyperlink shift={1} href="#rendermodeserver">RenderModeServer</MenuItemHyperlink>
+        <MenuItemHyperlink shift={1} href="#rendermodeclient">RenderModeClient</MenuItemHyperlink>
+        <MenuItemHyperlink href="#disabling-the-server-side-javascript-runtime">
+            <span>Disabling the server-side JavaScript runtime</span>
+        </MenuItemHyperlink>
     {/snippet}
 </Page>

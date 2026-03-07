@@ -13,7 +13,7 @@
     import HyperTable from "$lib/components/hyper_table.svelte"
     import Image from "$lib/components/image.svelte"
     import Title from "$lib/components/title.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
 </script>
 
 <Page title="Todos Example">
@@ -400,14 +400,14 @@
         }}
     />
     {#snippet rightSidebar()}
-        <MenuItem><a href="#todos-example">Todos Example</a></MenuItem>
-        <MenuItem><a href="#main">Main</a></MenuItem>
-        <MenuItem><a href="#fallback">Fallback</a></MenuItem>
-        <MenuItem><a href="#welcome-view">Welcome View</a></MenuItem>
-        <MenuItem><a href="#todos-view">Todos VIew</a></MenuItem>
-        <MenuItem><a href="#remove-todos">Remove Todos</a></MenuItem>
-        <MenuItem><a href="#toggle-todos">Toggle Todos</a></MenuItem>
-        <MenuItem><a href="#add-todos">Add Todos</a></MenuItem>
-        <MenuItem><a href="#more-examples">More Examples</a></MenuItem>
+        <MenuItemHyperlink href="#todos-example">Todos Example</MenuItemHyperlink>
+        <MenuItemHyperlink href="#main">Main</MenuItemHyperlink>
+        <MenuItemHyperlink href="#fallback">Fallback</MenuItemHyperlink>
+        <MenuItemHyperlink href="#welcome-view">Welcome View</MenuItemHyperlink>
+        <MenuItemHyperlink href="#todos-view">Todos VIew</MenuItemHyperlink>
+        <MenuItemHyperlink href="#remove-todos">Remove Todos</MenuItemHyperlink>
+        <MenuItemHyperlink href="#toggle-todos">Toggle Todos</MenuItemHyperlink>
+        <MenuItemHyperlink href="#add-todos">Add Todos</MenuItemHyperlink>
+        <MenuItemHyperlink href="#more-examples">More Examples</MenuItemHyperlink>
     {/snippet}
 </Page>

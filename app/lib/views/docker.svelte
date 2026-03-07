@@ -3,7 +3,7 @@
     import FileTree from "$lib/components/file_tree.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
@@ -107,12 +107,8 @@
         </span>
     </Note>
     {#snippet rightSidebar()}
-        <MenuItem>
-            <a href="#docker">Docker</a>
-            {#snippet menu()}
-                <MenuItem><a href="#get-started">Get Started</a></MenuItem>
-            {/snippet}
-        </MenuItem>
-        <MenuItem><a href="#production-with-docker">Production with Docker</a></MenuItem>
+        <MenuItemHyperlink href="#docker">Docker</MenuItemHyperlink>
+        <MenuItemHyperlink shift={1} href="#get-started">Get Started</MenuItemHyperlink>
+        <MenuItemHyperlink href="#production-with-docker">Production with Docker</MenuItemHyperlink>
     {/snippet}
 </Page>

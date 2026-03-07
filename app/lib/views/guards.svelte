@@ -8,9 +8,9 @@
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     import diagram2 from "$lib/assets/guards_diagram_2.svg"
-    import MenuItem from "$lib/components/menu_item.svelte"
     import Image from "$lib/components/image.svelte"
     import Title from "$lib/components/title.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
 </script>
 
 <Page title="Guards">
@@ -91,7 +91,7 @@
     />
     <Image src={diagram2} width="100%" />
     {#snippet rightSidebar()}
-        <MenuItem><a href="#guards">Guards</a></MenuItem>
-        <MenuItem><a href="#composition">Composition</a></MenuItem>
+        <MenuItemHyperlink href="#guards">Guards</MenuItemHyperlink>
+        <MenuItemHyperlink href="#composition">Composition</MenuItemHyperlink>
     {/snippet}
 </Page>

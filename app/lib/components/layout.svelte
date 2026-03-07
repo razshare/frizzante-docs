@@ -49,7 +49,10 @@
 </style>
 
 <script lang="ts">
-    import type { Snippet } from "svelte"
+    import { scroll } from "$lib/scripts/scroll/scroll.svelte"
+    import { target } from "$lib/scripts/scroll/target"
+    import { update } from "$lib/scripts/scroll/update"
+    import { onMount, type Snippet } from "svelte"
     type Props = {
         title: string
         navbar: Snippet
@@ -60,6 +63,17 @@
         mode?: "default" | "zen"
     }
     let { title, navbar, leftSidebar, rightSidebar, content, footer, mode = "default" }: Props = $props()
+    let contentElement: HTMLDivElement | undefined = $state(undefined)
+    onMount(function start() {
+        if (!contentElement) {
+            return
+        }
+        target(scroll, contentElement)
+        update(scroll)
+    })
+    function onscroll() {
+        update(scroll)
+    }
 </script>
 
 <svelte:head>
@@ -77,5 +91,5 @@
         <div class="layout-right-sidebar">{@render rightSidebar()}</div>
         <div class="layout-footer">{@render footer()}</div>
     {/if}
-    <div class="layout-content">{@render content()}</div>
+    <div bind:this={contentElement} class="layout-content" {onscroll}>{@render content()}</div>
 </div>

@@ -7,7 +7,7 @@
     import Tree from "$lib/components/file_tree.svelte"
     import { mdiPackage } from "@mdi/js"
     import Title from "$lib/components/title.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
 </script>
 
 <Page title="Get Started">
@@ -51,12 +51,8 @@
         </Tree>
     </KeyedSection>
     {#snippet rightSidebar()}
-        <MenuItem>
-            <a href="#what-is-frizzante">What is Frizzante?</a>
-            {#snippet menu()}
-                <MenuItem><a href="#prerequisites">Prerequisites</a></MenuItem>
-            {/snippet}
-        </MenuItem>
-        <MenuItem><a href="#get-started">Get Started</a></MenuItem>
+        <MenuItemHyperlink href="#what-is-frizzante">What is Frizzante?</MenuItemHyperlink>
+        <MenuItemHyperlink shift={1} href="#prerequisites">Prerequisites</MenuItemHyperlink>
+        <MenuItemHyperlink href="#get-started">Get Started</MenuItemHyperlink>
     {/snippet}
 </Page>

@@ -2,7 +2,7 @@
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
@@ -88,6 +88,6 @@
         </Tip>
     </KeyedSection>
     {#snippet rightSidebar()}
-        <MenuItem><a href="#type-definitions">Type Definitions</a></MenuItem>
+        <MenuItemHyperlink href="#type-definitions">Type Definitions</MenuItemHyperlink>
     {/snippet}
 </Page>

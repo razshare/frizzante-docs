@@ -6,8 +6,8 @@
     import LeftSidebar from "$lib/components/left_sidebar.svelte"
     type Props = {
         title: string
-        children: Snippet
         rightSidebar: Snippet
+        children: Snippet
     }
     let { title, children, rightSidebar: sidebar }: Props = $props()
     let search: string = $state("")

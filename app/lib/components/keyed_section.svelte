@@ -64,21 +64,39 @@
 </style>
 
 <script lang="ts">
-    import type { Snippet } from "svelte"
+    import { onMount, type Snippet } from "svelte"
+    import Title from "./title.svelte"
+    import { register } from "$lib/scripts/scroll/register"
+    import { unregister } from "$lib/scripts/scroll/unregister"
+    import { scroll } from "$lib/scripts/scroll/scroll.svelte"
+    import { textToAnchor } from "$lib/scripts/text_to_anchor"
     type Props = {
         key: string
+        description: string
         children: Snippet
         noLink?: boolean
     }
-    let { key, children, noLink = false }: Props = $props()
+    let { key, description, children, noLink = false }: Props = $props()
+    let id: string = $state("")
+    let element: HTMLDivElement
+    onMount(function start() {
+        id = textToAnchor(description)
+        register(scroll, id, element)
+        return function stop() {
+            unregister(scroll, id)
+        }
+    })
 </script>
 
-<div class="keyed-section">
+<div bind:this={element} class="keyed-section">
     <div class="badge">
         <span class="key">{key[0]}</span>
         <div class="circle"></div>
     </div>
-    <div class="content">{@render children()}</div>
+    <div class="content">
+        <Title type="h3" text={description} {id} noAnchor />
+        {@render children()}
+    </div>
     <div class="link" class:hidden={noLink}>
         <div class="bar"></div>
     </div>

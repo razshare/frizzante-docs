@@ -1,7 +1,7 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import Title from "$lib/components/title.svelte"
@@ -172,22 +172,18 @@
         You can find a Vue3 example <a href="https://github.com/razshare/frizzante-example-vue3">here</a>.
     </span>
     {#snippet rightSidebar()}
-        <MenuItem>
-            <a href="#faq">Faq</a>
-            {#snippet menu()}
-                <MenuItem>
-                    <a href="#why-doesn’t-frizzante-have-middleware">Why doesn't Frizzante have middleware?</a>
-                    {#snippet menu()}
-                        <MenuItem><a href="#middleware-implementation">Middleware Implementation</a></MenuItem>
-                        <MenuItem><a href="#middleware-usage">Middleware Usage</a></MenuItem>
-                    {/snippet}
-                </MenuItem>
-                <MenuItem>
-                    <a href="#can-i-use-frizzante-with-other-frontend-frameworks">
-                        <span>Can I use Frizzante with other frontend frameworks?</span>
-                    </a>
-                </MenuItem>
-            {/snippet}
-        </MenuItem>
+        <MenuItemHyperlink href="#faq">Faq</MenuItemHyperlink>
+        <MenuItemHyperlink href="#why-doesn’t-frizzante-have-middleware">
+            <span>Why doesn't Frizzante have middleware?</span>
+        </MenuItemHyperlink>
+        <MenuItemHyperlink shift={1} href="#middleware-implementation">
+            <span>Middleware Implementation</span>
+        </MenuItemHyperlink>
+        <MenuItemHyperlink shift={1} href="#middleware-usage">
+            <span>Middleware Usage</span>
+        </MenuItemHyperlink>
+        <MenuItemHyperlink href="#can-i-use-frizzante-with-other-frontend-frameworks">
+            <span>Can I use Frizzante with other frontend frameworks?</span>
+        </MenuItemHyperlink>
     {/snippet}
 </Page>

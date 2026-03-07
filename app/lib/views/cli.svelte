@@ -3,7 +3,7 @@
     import Code from "$lib/components/code.svelte"
     import FileTree from "$lib/components/file_tree.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
-    import MenuItem from "$lib/components/menu_item.svelte"
+    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import Tip from "$lib/components/tip.svelte"
@@ -395,20 +395,20 @@
         </ul>
     </Note>
     {#snippet rightSidebar()}
-        <MenuItem><a href="#cli">Cli</a></MenuItem>
-        <MenuItem><a href="#create-project">Create Project</a></MenuItem>
-        <MenuItem><a href="#generate">Generate</a></MenuItem>
-        <MenuItem><a href="#configure">Configure</a></MenuItem>
-        <MenuItem><a href="#install">Install</a></MenuItem>
-        <MenuItem><a href="#update">Update</a></MenuItem>
-        <MenuItem><a href="#package">Package</a></MenuItem>
-        <MenuItem><a href="#package-watch">Package Watch</a></MenuItem>
-        <MenuItem><a href="#check">Check</a></MenuItem>
-        <MenuItem><a href="#touch">Touch</a></MenuItem>
-        <MenuItem><a href="#create-project">Create Project</a></MenuItem>
-        <MenuItem><a href="#reset">Reset</a></MenuItem>
-        <MenuItem><a href="#version">Version</a></MenuItem>
-        <MenuItem><a href="#help">Help</a></MenuItem>
-        <MenuItem><a href="#interactive-mode">Interactive Mode</a></MenuItem>
+        <MenuItemHyperlink href="#cli">Cli</MenuItemHyperlink>
+        <MenuItemHyperlink href="#create-project">Create Project</MenuItemHyperlink>
+        <MenuItemHyperlink href="#generate">Generate</MenuItemHyperlink>
+        <MenuItemHyperlink href="#configure">Configure</MenuItemHyperlink>
+        <MenuItemHyperlink href="#install">Install</MenuItemHyperlink>
+        <MenuItemHyperlink href="#update">Update</MenuItemHyperlink>
+        <MenuItemHyperlink href="#package">Package</MenuItemHyperlink>
+        <MenuItemHyperlink href="#package-watch">Package Watch</MenuItemHyperlink>
+        <MenuItemHyperlink href="#check">Check</MenuItemHyperlink>
+        <MenuItemHyperlink href="#touch">Touch</MenuItemHyperlink>
+        <MenuItemHyperlink href="#create-project">Create Project</MenuItemHyperlink>
+        <MenuItemHyperlink href="#reset">Reset</MenuItemHyperlink>
+        <MenuItemHyperlink href="#version">Version</MenuItemHyperlink>
+        <MenuItemHyperlink href="#help">Help</MenuItemHyperlink>
+        <MenuItemHyperlink href="#interactive-mode">Interactive Mode</MenuItemHyperlink>
     {/snippet}
 </Page>
