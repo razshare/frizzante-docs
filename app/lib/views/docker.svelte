@@ -3,9 +3,9 @@
     import FileTree from "$lib/components/file_tree.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
     import { mdiApplication } from "@mdi/js"
@@ -94,17 +94,21 @@
         </span>
     </Note>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Docker" />
-        <MenuItemHyperlink text="Get Started" />
-        <MenuItemHyperlink shift={1} text="Create a new container" />
-        <MenuItemHyperlink shift={1} text="Start the container" />
-        <MenuItemHyperlink shift={1} text="Attach to this container with your IDE or directly with a shell" />
-        <MenuItemHyperlink shift={1} text="Configure project" />
-        <MenuItemHyperlink shift={1} text="Start development" />
-        <MenuItemHyperlink shift={1} text="Build" />
-        <MenuItemHyperlink text="Production with Docker" />
-        <MenuItemHyperlink shift={1} text="Build and run production binary inside container" />
-        <MenuItemHyperlink shift={1} text="Build production Docker image" />
-        <MenuItemHyperlink shift={1} text="Use Docker Compose for production" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Docker" },
+                { shift: 0, text: "Get Started" },
+                { shift: 1, text: "Create a new container" },
+                { shift: 1, text: "Start the container" },
+                { shift: 1, text: "Attach to this container with your IDE or directly with a shell" },
+                { shift: 1, text: "Configure project" },
+                { shift: 1, text: "Start development" },
+                { shift: 1, text: "Build" },
+                { shift: 0, text: "Production with Docker" },
+                { shift: 1, text: "Build and run production binary inside container" },
+                { shift: 1, text: "Build production Docker image" },
+                { shift: 1, text: "Use Docker Compose for production" },
+            ]}
+        />
     {/snippet}
 </Page>

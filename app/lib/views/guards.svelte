@@ -10,7 +10,7 @@
     import diagram2 from "$lib/assets/guards_diagram_2.svg"
     import Image from "$lib/components/image.svelte"
     import Title from "$lib/components/title.svelte"
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
 </script>
 
 <Page title="Guards">
@@ -91,7 +91,11 @@
     />
     <Image src={diagram2} width="100%" />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Guards" />
-        <MenuItemHyperlink text="Composition" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Guards" },
+                { shift: 0, text: "Composition" },
+            ]}
+        />
     {/snippet}
 </Page>

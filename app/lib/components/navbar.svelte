@@ -33,8 +33,12 @@
     import Icon from "$lib/components/icons/icon.svelte"
     import Searchbar from "$lib/components/searchbar.svelte"
     import Image from "$lib/components/image.svelte"
-    type Props = { search?: string }
-    let { search = $bindable("") }: Props = $props()
+    import { IS_BROWSER } from "$lib/scripts/core/is_browser"
+    type Props = {
+        search: string
+        focused: boolean
+    }
+    let { search = $bindable(""), focused = $bindable(false) }: Props = $props()
 </script>
 
 <div class="navbar">
@@ -43,7 +47,9 @@
     </div>
     <div class="navbar-title">Frizzante Docs</div>
     <div class="navbar-searchbar">
-        <Searchbar bind:value={search} />
+        {#if IS_BROWSER}
+            <Searchbar bind:query={search} bind:focused />
+        {/if}
     </div>
     <div class="navbar-links">
         <a href="https://github.com/razshare/frizzante"><Icon size="2rem" path={mdiGithub} /></a>

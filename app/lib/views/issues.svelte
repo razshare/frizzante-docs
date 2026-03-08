@@ -1,6 +1,6 @@
 <script lang="ts">
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Page from "$lib/components/page.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
 </script>
 
@@ -32,8 +32,12 @@
     </span>
 
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Issues" />
-        <MenuItemHyperlink text="Reporting a Bug" />
-        <MenuItemHyperlink text="Requesting a Feature" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Issues" },
+                { shift: 0, text: "Reporting a Bug" },
+                { shift: 0, text: "Requesting a Feature" },
+            ]}
+        />
     {/snippet}
 </Page>

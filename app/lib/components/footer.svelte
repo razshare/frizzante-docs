@@ -1,5 +1,6 @@
 <style>
     .footer {
+        min-height: 10rem;
         position: relative;
         display: grid;
         grid-template-areas:

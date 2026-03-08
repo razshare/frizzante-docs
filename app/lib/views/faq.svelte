@@ -1,9 +1,9 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
 </script>
 
@@ -172,10 +172,14 @@
         You can find a Vue3 example <a href="https://github.com/razshare/frizzante-example-vue3">here</a>.
     </span>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Faq" />
-        <MenuItemHyperlink text="Why doesn't Frizzante have middleware?" />
-        <MenuItemHyperlink shift={1} text="Middleware Implementation" />
-        <MenuItemHyperlink shift={1} text="Middleware Usage" />
-        <MenuItemHyperlink text="Can I use Frizzante with other frontend frameworks?" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Faq" },
+                { shift: 0, text: "Why doesn't Frizzante have middleware?" },
+                { shift: 1, text: "Middleware Implementation" },
+                { shift: 1, text: "Middleware Usage" },
+                { shift: 0, text: "Can I use Frizzante with other frontend frameworks?" },
+            ]}
+        />
     {/snippet}
 </Page>

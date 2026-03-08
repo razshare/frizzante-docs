@@ -1,8 +1,8 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Page from "$lib/components/page.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
 </script>
 
@@ -222,10 +222,14 @@
         `}
     />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Web Standards" />
-        <MenuItemHyperlink text="Adaptive Hyperlinks" />
-        <MenuItemHyperlink text="Adaptive Forms" />
-        <MenuItemHyperlink text="Link Component" />
-        <MenuItemHyperlink text="Form Component" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Web Standards" },
+                { shift: 0, text: "Adaptive Hyperlinks" },
+                { shift: 0, text: "Adaptive Forms" },
+                { shift: 0, text: "Link Component" },
+                { shift: 0, text: "Form Component" },
+            ]}
+        />
     {/snippet}
 </Page>

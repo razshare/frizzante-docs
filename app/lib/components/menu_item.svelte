@@ -4,6 +4,7 @@
     }
     .menu-item {
         position: relative;
+        width: 100%;
     }
     .shift {
         --shift: 0;

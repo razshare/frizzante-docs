@@ -13,7 +13,7 @@
     import HyperTable from "$lib/components/hyper_table.svelte"
     import Image from "$lib/components/image.svelte"
     import Title from "$lib/components/title.svelte"
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
 </script>
 
 <Page title="Todos Example">
@@ -400,15 +400,19 @@
         }}
     />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Todos Example" />
-        <MenuItemHyperlink text="Main" />
-        <MenuItemHyperlink text="Fallback" />
-        <MenuItemHyperlink text="Welcome View" />
-        <MenuItemHyperlink text="Todos View" />
-        <MenuItemHyperlink text="List Todos" />
-        <MenuItemHyperlink text="Remove Todos" />
-        <MenuItemHyperlink text="Toggle Todos" />
-        <MenuItemHyperlink text="Add Todos" />
-        <MenuItemHyperlink text="More Examples" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Todos Example" },
+                { shift: 0, text: "Main" },
+                { shift: 0, text: "Fallback" },
+                { shift: 0, text: "Welcome View" },
+                { shift: 0, text: "Todos View" },
+                { shift: 0, text: "List Todos" },
+                { shift: 0, text: "Remove Todos" },
+                { shift: 0, text: "Toggle Todos" },
+                { shift: 0, text: "Add Todos" },
+                { shift: 0, text: "More Examples" },
+            ]}
+        />
     {/snippet}
 </Page>

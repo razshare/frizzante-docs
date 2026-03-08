@@ -2,14 +2,33 @@
     import Caution from "$lib/components/caution.svelte"
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
+    import Link from "$lib/components/links/link.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Basics">
+    <Title text="Basics" />
+    <span> All internals of the framework are exposed intentionally. </span>
+    <br />
+    <br />
+    <span>
+        For example the frizzante <a href="#server">server</a> is a wrapper around
+        <InlineCode source="net/http.Server" /> and a frizzante <a href="#messages">client</a> is a wrapper around
+        <InlineCode source="net/http.Request" /> and <InlineCode source="net/http.ResponseWriter" />.
+    </span>
+    <br />
+    <br />
+    <span>
+        You can interact with these internals and you are, in fact, intended to do so whenever the framework is
+        insufficient, you're hitting a performance wall, a bug and so on.
+    </span>
+    <Note>
+        <span>Please <Link href="/issues">report</Link> such incidents if you can.</span>
+    </Note>
     <Title text="Server" />
     <span>
         Create a new server with <InlineCode source="servers.New()" />, then followup with servers.Start() in order to
@@ -464,20 +483,25 @@
         `}
     />
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Server" />
-        <MenuItemHyperlink text="Routes" />
-        <MenuItemHyperlink text="Path Fields" />
-        <MenuItemHyperlink text="Messages" />
-        <MenuItemHyperlink text="Headers" />
-        <MenuItemHyperlink text="Status" />
-        <MenuItemHyperlink text="Order of Operations" />
-        <MenuItemHyperlink text="Queries" />
-        <MenuItemHyperlink text="Forms" />
-        <MenuItemHyperlink text="Json" />
-        <MenuItemHyperlink text="Cookies" />
-        <MenuItemHyperlink text="Session Id" />
-        <MenuItemHyperlink text="Session" />
-        <MenuItemHyperlink text="Redirect" />
-        <MenuItemHyperlink text="Navigate" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Basics" },
+                { shift: 0, text: "Server" },
+                { shift: 0, text: "Routes" },
+                { shift: 0, text: "Path Fields" },
+                { shift: 0, text: "Messages" },
+                { shift: 0, text: "Headers" },
+                { shift: 0, text: "Status" },
+                { shift: 0, text: "Order of Operations" },
+                { shift: 0, text: "Queries" },
+                { shift: 0, text: "Forms" },
+                { shift: 0, text: "Json" },
+                { shift: 0, text: "Cookies" },
+                { shift: 0, text: "Session Id" },
+                { shift: 0, text: "Session" },
+                { shift: 0, text: "Redirect" },
+                { shift: 0, text: "Navigate" },
+            ]}
+        />
     {/snippet}
 </Page>

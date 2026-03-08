@@ -2,9 +2,9 @@
     import Code from "$lib/components/code.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
 </script>
@@ -85,9 +85,13 @@
         </Tip>
     </KeyedSection>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Type Definitions" />
-        <MenuItemHyperlink shift={1} text="Define your Go types" />
-        <MenuItemHyperlink shift={1} text="Call types.Generate[T]()" />
-        <MenuItemHyperlink shift={1} text="Generate types" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Type Definitions" },
+                { shift: 1, text: "Define your Go types" },
+                { shift: 1, text: "Call types.Generate[T]()" },
+                { shift: 1, text: "Generate types" },
+            ]}
+        />
     {/snippet}
 </Page>

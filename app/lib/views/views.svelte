@@ -10,7 +10,7 @@
     import Caution from "$lib/components/caution.svelte"
     import Title from "$lib/components/title.svelte"
     import { mdiCodeBraces } from "@mdi/js"
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
 </script>
 
 <Page title="Views">
@@ -330,16 +330,20 @@
     <Code lang="shell" source="frizzante --build --tags=no_js_runtime" />
     <span>This will reduce the minimum size of the final binary from 25MB to 10MB.</span>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Views" />
-        <MenuItemHyperlink text="Server Exports" />
-        <MenuItemHyperlink text="Client Exports" />
-        <MenuItemHyperlink text="Send Views" />
-        <MenuItemHyperlink text="Default View" />
-        <MenuItemHyperlink text="View Properties" />
-        <MenuItemHyperlink text="Render Modes" />
-        <MenuItemHyperlink shift={1} text="RenderModeFull" />
-        <MenuItemHyperlink shift={1} text="RenderModeServer" />
-        <MenuItemHyperlink shift={1} text="RenderModeClient" />
-        <MenuItemHyperlink text="Disabling the server-side JavaScript runtime" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Views" },
+                { shift: 0, text: "Server Exports" },
+                { shift: 0, text: "Client Exports" },
+                { shift: 0, text: "Send Views" },
+                { shift: 0, text: "Default View" },
+                { shift: 0, text: "View Properties" },
+                { shift: 0, text: "Render Modes" },
+                { shift: 1, text: "RenderModeFull" },
+                { shift: 1, text: "RenderModeServer" },
+                { shift: 1, text: "RenderModeClient" },
+                { shift: 0, text: "Disabling the server-side JavaScript runtime" },
+            ]}
+        />
     {/snippet}
 </Page>

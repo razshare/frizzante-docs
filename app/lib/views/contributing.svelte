@@ -1,7 +1,7 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
-    import MenuItemHyperlink from "$lib/components/menu_item_hyperlink.svelte"
     import Page from "$lib/components/page.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
 </script>
@@ -76,12 +76,16 @@
         When you’re done with your changes you can submit a pull request in order to implement them into frizzante.
     </span>
     {#snippet rightSidebar()}
-        <MenuItemHyperlink text="Contributing" />
-        <MenuItemHyperlink text="Clone Repository" />
-        <MenuItemHyperlink text="Create Branch" />
-        <MenuItemHyperlink text="Coding Standards" />
-        <MenuItemHyperlink shift={1} text="Export Everything" />
-        <MenuItemHyperlink shift={1} text="Data & Logic" />
-        <MenuItemHyperlink text="Pull Requests" />
+        <RightSidebar
+            items={[
+                { shift: 0, text: "Contributing" },
+                { shift: 0, text: "Clone Repository" },
+                { shift: 0, text: "Create Branch" },
+                { shift: 0, text: "Coding Standards" },
+                { shift: 1, text: "Export Everything" },
+                { shift: 1, text: "Data & Logic" },
+                { shift: 0, text: "Pull Requests" },
+            ]}
+        />
     {/snippet}
 </Page>
