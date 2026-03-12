@@ -219,7 +219,7 @@ const suggestions: Suggestion[] = [
     {
         page: "Views",
         section: "Server Exports",
-        description: "Views that meant to be rendered on the server",
+        description: "Views that are meant to be rendered on the server",
         href(): string {
             return `/views#${textToAnchor(this.section)}`
         },
