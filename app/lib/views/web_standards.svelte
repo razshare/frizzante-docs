@@ -22,9 +22,8 @@
             </script>
 
             <a {...href("/some-other-page")}> Go to some other page </a> <!-- Defines a link, which when triggered will either
-                                                                            directly navigate to the given path, or do so
-                                                                            through an http request, depending on wether
-                                                                            JavaScript is enabled or not. -->
+                                                                              directly navigate to the given path, or do so using 
+                                                                              fetch, depending on wether JavaScript is enabled or not. -->
         `}
     />
     <span>
@@ -84,8 +83,8 @@
             <form {...action("/process")}>            <!-- Defines a form. -->
                 <input type="text" name="name" />     <!-- Defines a text field. -->
                 <button type="submit">Submit</button> <!-- Defines a button, which when triggered will either
-                                                        directly submit the form, or do so through an http request,
-                                                        depending on wether JavaScript is enabled or not. -->
+                                                           directly submit the form, or do so using fetch(),
+                                                           depending on wether JavaScript is enabled or not. -->
             </form>
         `}
     />
@@ -136,14 +135,15 @@
     <Code
         lang="html"
         source={`
-            <form action="/process" onsubmit="onsubmit">
+            <form action="/process" onsubmit="onsubmit(event)">
                 <input type="text" name="name" />
                 <button type="submit">Submit</button>
             </form>
         `}
     />
     <span>
-        Where <InlineCode source="onsubmit" /> takes care of submitting the form and fetching the new state and view from
+        Where <InlineCode source="onsubmit(event)" /> takes care of submitting the form and fetching the new state and view
+        from
         <InlineCode source="/process" />.
     </span>
     <Title text="Link Component" />
