@@ -1,6 +1,5 @@
 import type { View } from "$lib/scripts/core/view"
 import type { HistoryEntry } from "$lib/scripts/core/history_entry"
-import { delay } from "./delay"
 let lastUrl: false | string = false
 export async function swap(target: HTMLAnchorElement | HTMLFormElement, view: View<unknown>): Promise<() => void> {
     if (lastUrl === false) {

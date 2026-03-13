@@ -28,7 +28,9 @@
         // We force the browser to re-evaluate the url hash,
         // so that it scrolls to the target element.
         //
-        location.hash = location.hash
+        if (window.location.hash !== "") {
+            window.location.hash = window.location.hash
+        }
     })
 </script>
 
