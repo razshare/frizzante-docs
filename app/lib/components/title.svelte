@@ -23,38 +23,18 @@
 </style>
 
 <script lang="ts">
-    import { register } from "$lib/scripts/scroll/register"
-    import { scroll } from "$lib/scripts/scroll/scroll.svelte"
-    import { unregister } from "$lib/scripts/scroll/unregister"
     import { textToAnchor } from "$lib/scripts/text_to_anchor"
-    import { onMount } from "svelte"
+
     type Props = {
         text: string
         type?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
-        id?: string
-        noAnchor?: boolean
         noMargin?: boolean
     }
-    let { text, type: tag = "h1", id: providedId = "", noAnchor = false, noMargin = false }: Props = $props()
-    let id: string = $state("")
-    let element: HTMLAnchorElement
-    onMount(function start() {
-        if (providedId !== "") {
-            id = providedId
-        } else {
-            id = textToAnchor(text)
-        }
-        if (noAnchor) {
-            return
-        }
-        register(scroll, id, element)
-        return function stop() {
-            unregister(scroll, id)
-        }
-    })
+    let { text, type: tag = "h1", noMargin = false }: Props = $props()
+    let id: string = $derived(textToAnchor(text))
 </script>
 
-<a bind:this={element} href="#{id}">
+<a href="#{id}">
     {#if tag === "h1"}
         <h1 {id} class:no-margin={noMargin}>
             <span>#</span>

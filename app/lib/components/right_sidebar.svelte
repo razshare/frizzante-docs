@@ -38,7 +38,6 @@
     import { mdiPound } from "@mdi/js"
     import Icon from "$lib/components/icons/icon.svelte"
     import MenuItem from "$lib/components/menu_item.svelte"
-    import { scroll } from "$lib/scripts/scroll/scroll.svelte"
     type Item = { text: string; shift: number }
     type Props = { items: Item[] }
     let { items }: Props = $props()
@@ -48,9 +47,7 @@
     {@const id = textToAnchor(item.text)}
     <a href="#{id}" class="right-sidebar-item">
         <div class="right-sidebar-hint">
-            {#if id === scroll.active}
-                <div class="icon"><Icon path={mdiPound} /></div>
-            {/if}
+            <div class="icon"><Icon path={mdiPound} /></div>
         </div>
         <div class="right-sidebar-text">
             <MenuItem>{item.text}</MenuItem>

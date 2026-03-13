@@ -175,7 +175,7 @@
         <RightSidebar
             items={[
                 { shift: 0, text: "Faq" },
-                { shift: 0, text: "Why doesn't Frizzante have middleware?" },
+                { shift: 0, text: "Why doesn’t Frizzante have middleware?" },
                 { shift: 1, text: "Middleware Implementation" },
                 { shift: 1, text: "Middleware Usage" },
                 { shift: 0, text: "Can I use Frizzante with other frontend frameworks?" },
