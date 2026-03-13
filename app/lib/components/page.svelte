@@ -13,16 +13,21 @@
     let searchQuery: string = $state("")
     let searchFocused: boolean = $state(false)
     onMount(function start() {
-        // There is a very good chance that the URL contains a HASH.
-        // Since pages are loaded asynchronously, the first render of the DOM
+        // There is a very good chance that the URL contains a hash.
+        // Since pages are loaded asynchronously, the first render of the dom
         // may not actually contain the contents of the page.
         //
-        // If the DOM does not contain the content of the page, and the URL HASH
-        // references an ID within the content of the page, then we need to force the
-        // browser to re-evaluate the URL HASH, so that it scrolls to the target element.
+        // If the DOM does not contain the content of the page, and the url hash
+        // references an ID within the content of the page, then the browser doesn't
+        // know what to do with the url hash, it won't scroll down.
         //
-        // onMount() ensures that whatever code we run inside it, it is running AFTER
-        // the contents of this component have rendered, which makes it safe to re-evaluate the URL HASH.
+        // The onMount() event function ensures that whatever code we run inside it,
+        // it is running **after** the contents of the page (aka this component) have rendered,
+        // which makes it safe to re-evaluate the url hash.
+        //
+        // We force the browser to re-evaluate the url hash,
+        // so that it scrolls to the target element.
+        //
         location.hash = location.hash
     })
 </script>
