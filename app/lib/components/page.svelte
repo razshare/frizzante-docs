@@ -22,7 +22,7 @@
         // know what to do with the url hash, it won't scroll down.
         //
         // The onMount() event function ensures that whatever code we run inside it,
-        // it is running **after** the contents of the page (aka this component) have rendered,
+        // it is running **after** the contents of the page have rendered,
         // which makes it safe to re-evaluate the url hash.
         //
         // We force the browser to re-evaluate the url hash,
