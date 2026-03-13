@@ -206,7 +206,7 @@
     <Note>
         <span>
             View properties are initialized with
-            <a href="https://svelte.dev/docs/svelte/$state">$state()</a>
+            <a target="_blank" href="https://svelte.dev/docs/svelte/$state">$state()</a>
             and thus are reactive by default.
         </span>
     </Note>
@@ -250,8 +250,12 @@
         <br />
         <span>
             You’ll have to deal away with apis such as
-            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">fetch</a>; your new best friend is
-            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form">form</a>.
+            <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">
+                <span>fetch</span>
+            </a>; your new best friend is
+            <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form">
+                <span>form</span>
+            </a>.
         </span>
         <Code
             lang="go"

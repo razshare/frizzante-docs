@@ -1,5 +1,6 @@
 import type { View } from "$lib/scripts/core/view"
 import type { HistoryEntry } from "$lib/scripts/core/history_entry"
+import { delay } from "./delay"
 let lastUrl: false | string = false
 export async function swap(target: HTMLAnchorElement | HTMLFormElement, view: View<unknown>): Promise<() => void> {
     if (lastUrl === false) {
@@ -12,6 +13,7 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement, view: Vi
     if (target.nodeName === "A") {
         const anchor = target as HTMLAnchorElement
         requestUrl = anchor.href
+        console.log({ requestUrl })
         if (view.type === "snapshot") {
             requestUrl = requestUrl.replace(/\/+$/, "") + "/data.json"
         }
@@ -58,11 +60,11 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement, view: Vi
             })
         }
     } else {
-        return function push() {}
+        return function push(): void {}
     }
     const text = await response.text()
     if (text === "") {
-        return function push() {}
+        return function push(): void {}
     }
     const remote = JSON.parse(text) as View<Record<string, unknown>>
     await view.pin()
@@ -89,6 +91,7 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement, view: Vi
     if (view.type === "snapshot") {
         fixedResponseUrl = fixedResponseUrl.replace(/\/data\.json$/, "")
     }
+    const hash = requestUrl.split("#", 2)[1] ?? ""
     const stationary = lastUrl === fixedResponseUrl
     lastUrl = fixedResponseUrl
     return function push() {
@@ -101,6 +104,11 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement, view: Vi
             url: fixedResponseUrl,
             body,
         }
-        window.history.pushState(JSON.stringify(entry), "", fixedResponseUrl)
+        console.log({ requestUrl, hash })
+        if (hash !== "") {
+            window.history.pushState(JSON.stringify(entry), "", `${fixedResponseUrl}#${hash}`)
+        } else {
+            window.history.pushState(JSON.stringify(entry), "", fixedResponseUrl)
+        }
     }
 }

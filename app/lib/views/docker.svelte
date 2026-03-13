@@ -89,8 +89,8 @@
     <Note>
         <span>
             For more details see the official
-            <a href="https://github.com/cmjoseph07/frizzante-docker">Frizzante Docker</a>
-            made by <a href="https://github.com/cmjoseph07">@cmjoseph07</a>.
+            <a target="_blank" href="https://github.com/cmjoseph07/frizzante-docker">Frizzante Docker</a>
+            made by <a target="_blank" href="https://github.com/cmjoseph07">@cmjoseph07</a>.
         </span>
     </Note>
     {#snippet rightSidebar()}

@@ -23,9 +23,12 @@
 </style>
 
 <script lang="ts">
-    import { codeToHtml } from "shiki"
+    import { codeToHtml, type BundledLanguage } from "shiki"
     import { onMount } from "svelte"
-    type Props = { source: string; lang?: string }
+    type Props = {
+        source: string
+        lang?: BundledLanguage
+    }
     let { source, lang = "sh" }: Props = $props()
     let html = $state("")
     function align(text: string): string {

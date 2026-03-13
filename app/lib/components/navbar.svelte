@@ -52,6 +52,8 @@
         {/if}
     </div>
     <div class="navbar-links">
-        <a href="https://github.com/razshare/frizzante"><Icon size="2rem" path={mdiGithub} /></a>
+        <a target="_blank" href="https://github.com/razshare/frizzante">
+            <Icon size="2rem" path={mdiGithub} />
+        </a>
     </div>
 </div>

@@ -46,7 +46,7 @@
                         <span>{key}</span>
                     </td>
                     <td>
-                        <a href={value}>
+                        <a target="_blank" href={value}>
                             <span>{value}</span>
                         </a>
                     </td>

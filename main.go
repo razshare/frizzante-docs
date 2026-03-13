@@ -39,6 +39,7 @@ func main() {
 		{Pattern: "GET /type_definitions", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "TypeDefinitions"}) }},
 		{Pattern: "GET /todos_example", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "TodosExample"}) }},
 		{Pattern: "GET /cli", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Cli"}) }},
+		{Pattern: "GET /snapshots", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Snapshots"}) }},
 		{Pattern: "GET /docker", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Docker"}) }},
 		{Pattern: "GET /issues", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Issues"}) }},
 		{Pattern: "GET /contributing", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Contributing"}) }},

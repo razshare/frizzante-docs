@@ -7,12 +7,14 @@
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
+    import { href } from "$lib/scripts/core/href"
 </script>
 
 <Page title="Type Definitions">
     <Title text="Type Definitions" />
     <span>
-        It is possible, but not required, to generate TypeScript type definitions from Go structs with
+        It is possible, but not required, to generate TypeScript type definitions from Go structs using
+        <a {...href("/cli#plugins")}>cli plugins</a> and
         <InlineCode source="types.Generate[T]()" />, where T is the type you wish to generate.
     </span>
     <br />

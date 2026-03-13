@@ -12,6 +12,7 @@ import Docker from "$lib/views/docker.svelte"
 import Issues from "$lib/views/issues.svelte"
 import Contributing from "$lib/views/contributing.svelte"
 import Faq from "$lib/views/faq.svelte"
+import Snapshots from "$lib/views/snapshots.svelte"
 
 export const views = {
     GetStarted,
@@ -28,4 +29,5 @@ export const views = {
     Issues,
     Contributing,
     Faq,
+    Snapshots,
 }

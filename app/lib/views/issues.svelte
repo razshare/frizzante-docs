@@ -14,7 +14,9 @@
     <br />
     <span>
         Bug reports can be submitted using the
-        <a href="https://github.com/razshare/frizzante/issues/new?template=bug_report.md">GitHub issue tracker</a>.
+        <a target="_blank" href="https://github.com/razshare/frizzante/issues/new?template=bug_report.md"
+            >GitHub issue tracker</a
+        >.
     </span>
     <br />
     <span>
@@ -28,7 +30,9 @@
     <br />
     <span>
         Feature requests can be submitted using the
-        <a href="https://github.com/razshare/frizzante/issues/new?template=feature_request.md">GitHub issue tracker</a>.
+        <a target="_blank" href="https://github.com/razshare/frizzante/issues/new?template=feature_request.md">
+            <span>GitHub issue tracker</span>
+        </a>.
     </span>
 
     {#snippet rightSidebar()}

@@ -1,12 +1,11 @@
 package main
 
-import "path/filepath"
-
-var directoryName = filepath.Join(".gen", "types")
+import (
+	"fmt"
+	"os"
+	"strings"
+)
 
 func main() {
-	// if err := types.Generate[todos.Props](directoryName); err != nil {
-	// 	log.Fatal(err)
-	// 	return
-	// }
+	fmt.Printf("args: %s\n", strings.Join(os.Args, " "))
 }

@@ -13,4 +13,5 @@ export const views = {
     Issues: () => import("$lib/views/issues.svelte"),
     Contributing: () => import("$lib/views/contributing.svelte"),
     Faq: () => import("$lib/views/faq.svelte"),
+    Snapshots: () => import("$lib/views/snapshots.svelte"),
 }

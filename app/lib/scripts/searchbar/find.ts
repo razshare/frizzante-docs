@@ -462,7 +462,15 @@ const suggestions: Suggestion[] = [
     },
     {
         page: "Cli",
-        section: "Install",
+        section: "Configure",
+        description: "",
+        href(): string {
+            return `/cli#${textToAnchor(this.section)}`
+        },
+    },
+    {
+        page: "Cli",
+        section: "Plugins",
         description: "",
         href(): string {
             return `/cli#${textToAnchor(this.section)}`
@@ -562,6 +570,15 @@ const suggestions: Suggestion[] = [
         description: "",
         href(): string {
             return `/cli#${textToAnchor(this.section)}`
+        },
+    },
+    // Snapshots.
+    {
+        page: "Snapshots",
+        section: "Snapshots",
+        description: "",
+        href(): string {
+            return `/snapshots#${textToAnchor(this.section)}`
         },
     },
     // Docker.

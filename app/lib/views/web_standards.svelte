@@ -97,7 +97,10 @@
     <span>
         On the other hand, when JavaScript is enabled, <InlineCode source="<form>" /> will render to a form that overrides
         the default behavior of the browser. Instead of navigating away immediately,
-        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">fetch</a> is used to submit the form to
+        <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">
+            <span>fetch</span>
+        </a>
+        is used to submit the form to
         <InlineCode source="/process" /> and update the current state and view based on the server’s response.
     </span>
     <br />

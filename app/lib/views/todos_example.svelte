@@ -138,7 +138,7 @@
     </Note>
     <span>
         The <InlineCode source="Todos" /> view is a
-        <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>
         web ui.
     </span>
     <Code

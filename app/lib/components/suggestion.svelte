@@ -52,20 +52,13 @@
 <script lang="ts">
     import type { Suggestion } from "$lib/scripts/searchbar/suggestion"
     import { href } from "$lib/scripts/core/href"
-    import { delay } from "$lib/scripts/core/delay"
     type Props = Suggestion
     let { description, page, section, href: createSuggestionHref }: Props = $props()
     let suggestionHref = $derived(createSuggestionHref())
     let { onclick } = $derived(href(suggestionHref))
-    async function onmousedown(event: MouseEvent): Promise<void> {
-        event.stopImmediatePropagation()
-        await onclick(event)
-        await delay(100)
-        location.hash = suggestionHref.split("#")[1] ?? ""
-    }
 </script>
 
-<button class="suggestion" {onmousedown}>
+<button class="suggestion" onmousedown={onclick}>
     <div class="title">
         <span class="page">{page}</span>
         <span class="section">#{section}</span>

@@ -47,6 +47,78 @@
     <Note>
         <span>Many of frizzante’s functionalities come as code and resource generations, not as packages.</span>
     </Note>
+    <Tip>
+        <Title text="Plugins" type="h5" noMargin />
+        <span>It is possible, but not required, to create generation plugins for you cli.</span>
+        <br />
+        <br />
+        <span>
+            All you need to do is create a directory
+            <InlineCode source="plugins/generate/[plugin name]" /> directory in your project.
+        </span>
+        <br />
+        <span>This directory must be a Go <InlineCode source="main" /> package.</span>
+        <FileTree>
+            {#snippet children({ Directory, File })}
+                <Directory name="plugins" expanded>
+                    <Directory name="generate" expanded>
+                        <Directory name="my-awesome-plugin" expanded>
+                            <File name="main.go" />
+                        </Directory>
+                    </Directory>
+                </Directory>
+            {/snippet}
+        </FileTree>
+        <Code
+            lang="go"
+            source={`
+                package main
+
+                func main() {
+                    println("hello, this is my generation plugin")
+                }
+            `}
+        />
+        <span>You will then be able to invoke this plugin using the frizzante cli.</span>
+        <Code lang="go" source="frizzante generate my-awesome-plugin" />
+        <Note>
+            <span>
+                Environment variables, cli flags and additional cli positional parameters will be passed down to your
+                plugin program.
+            </span>
+            <br />
+            <span>For example, given this plugin program</span>
+            <Code
+                lang="go"
+                source={`
+                    package main
+
+                    import (
+                        "fmt"
+                        "os"
+                        "strings"
+                    )
+
+                    func main() {
+                        fmt.Printf("args: %s\\n", strings.Join(os.Args, " "))
+                    }
+                `}
+            />
+            <span>The following script</span>
+            <Code lang="go" source="frizzante --strict generate my-awesome-plugin world" />
+            <span>Will output to the console something like this</span>
+            <Code
+                lang="bash"
+                source={`
+                    args: /tmp/go-build2815184765/b001/exe/types --strict --bun=".gen/bun/bun" --go="go" --air=".gen/air/air" --sqlc=".gen/sqlc/sqlc" world 
+                `}
+            />
+            <span>
+                There are no implicit flags, frizzante will resolve the default flags automatically and pass them down
+                to your plugin program explicitly.
+            </span>
+        </Note>
+    </Tip>
     <Title text="Configure" />
     <Code lang="sh" source="frizzante configure" />
     <span>Runs</span>
@@ -215,7 +287,7 @@
         `}
     />
     <span>
-        Runs <a href="https://github.com/air-verse/air">Air</a> and
+        Runs <a target="_blank" href="https://github.com/air-verse/air">Air</a> and
         <InlineCode source="frizzante package-watch" /> in parallel.
     </span>
     <Note>
@@ -380,6 +452,7 @@
                 { shift: 0, text: "Cli" },
                 { shift: 0, text: "Create Project" },
                 { shift: 0, text: "Generate" },
+                { shift: 1, text: "Plugins" },
                 { shift: 0, text: "Configure" },
                 { shift: 0, text: "Install" },
                 { shift: 0, text: "Update" },

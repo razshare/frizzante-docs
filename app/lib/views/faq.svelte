@@ -169,7 +169,8 @@
     </span>
     <br />
     <span>
-        You can find a Vue3 example <a href="https://github.com/razshare/frizzante-example-vue3">here</a>.
+        You can find a Vue3 example
+        <a target="_blank" href="https://github.com/razshare/frizzante-example-vue3">here</a>.
     </span>
     {#snippet rightSidebar()}
         <RightSidebar
