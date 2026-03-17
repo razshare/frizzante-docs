@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Caution from "$lib/components/caution.svelte"
     import Code from "$lib/components/code.svelte"
     import FileTree from "$lib/components/file_tree.svelte"
     import Footer from "$lib/components/footer.svelte"
@@ -200,9 +199,6 @@
             </Directory>
         {/snippet}
     </FileTree>
-    <Caution>
-        <span>This will bump version numbers.</span>
-    </Caution>
     <Note>
         <span>
             JavaScript packages are updated using <InlineCode source=".gen/bun/bin" /> by default. You can point to a custom
