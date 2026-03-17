@@ -14,13 +14,31 @@
         grid-template-rows: auto 1fr auto;
         grid-template-areas:
             "layout-navbar layout-navbar layout-navbar"
-            "layout-left-sidebar layout-content-wrapper layout-right-sidebar";
+            "layout-left-sidebar layout-body layout-right-sidebar";
+    }
+    @media screen and (max-width: 980px) {
+        .layout {
+            grid-template-columns: 15rem auto 1rem;
+        }
+        .layout-right-sidebar {
+            display: none;
+        }
+    }
+    @media screen and (max-width: 640px) {
+        .layout {
+            grid-template-columns: 1rem auto 1rem;
+        }
+        .layout-left-sidebar {
+            display: none;
+        }
+        .layout-right-sidebar {
+            display: none;
+        }
     }
     .layout-navbar {
         grid-area: layout-navbar;
         padding: var(--layout-padding);
         background-color: var(--layout-navbar-background);
-        position: relative;
         z-index: 1;
     }
     .layout-left-sidebar {
@@ -35,24 +53,24 @@
         overflow: auto;
         z-index: 0;
     }
-    .layout-content-wrapper {
-        grid-area: layout-content-wrapper;
+    .layout-body {
+        grid-area: layout-body;
         display: grid;
         overflow: auto;
+        grid-template-rows: auto 1fr;
         grid-template-areas:
-            "layout-content layout-content layout-content"
-            "layout-footer layout-footer layout-footer";
-        position: relative;
+            "layout-body-content layout-body-content layout-body-content"
+            "layout-body-footer layout-body-footer layout-body-footer";
         z-index: 0;
     }
-    .layout-content {
-        grid-area: layout-content;
-        position: relative;
+    .layout-body-content {
+        grid-area: layout-body-content;
+        overflow-y: auto;
         z-index: 0;
     }
-    .layout-footer {
-        grid-area: layout-footer;
-        position: relative;
+    .layout-body-footer {
+        grid-area: layout-body-footer;
+        overflow: hidden;
         z-index: 0;
     }
 </style>
@@ -81,9 +99,9 @@
 <div class="layout">
     <div class="layout-left-sidebar">{@render leftSidebar()}</div>
     <div class="layout-right-sidebar">{@render rightSidebar()}</div>
-    <div class="layout-content-wrapper">
-        <div class="layout-content">{@render content()}</div>
-        <div class="layout-footer">{@render footer()}</div>
+    <div class="layout-body">
+        <div class="layout-body-content">{@render content()}</div>
+        <div class="layout-body-footer">{@render footer()}</div>
     </div>
     <div class="layout-navbar">{@render navbar()}</div>
 </div>

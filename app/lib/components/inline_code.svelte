@@ -13,7 +13,6 @@
         top: var(--inline-code-top);
     }
     .inline-code > .text {
-        position: relative;
         color: var(--inline-code-text);
         padding-left: var(--inline-code-padding);
         padding-right: var(--inline-code-padding);

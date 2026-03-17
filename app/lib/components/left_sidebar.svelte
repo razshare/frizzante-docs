@@ -6,7 +6,6 @@
         --left-sidebar-item-hover-background: rgba(162, 222, 206, 0.1);
     }
     .left-sidebar {
-        position: relative;
         padding: var(--left-sidebar-padding);
     }
     .left-sidebar-item {
@@ -26,19 +25,18 @@
         grid-area: left-sidebar-text;
     }
     .icon {
-        position: relative;
         padding-right: 0.1rem;
         top: 0.1rem;
     }
 </style>
 
 <script lang="ts">
-    import MenuItem from "$lib/components/menu_item.svelte"
     import Link from "$lib/components/links/link.svelte"
-    import { getContext } from "svelte"
+    import MenuItem from "$lib/components/menu_item.svelte"
     import type { View } from "$lib/scripts/core/view"
-    import Icon from "./icons/icon.svelte"
     import { mdiArrowRight, mdiCloudRefresh } from "@mdi/js"
+    import { getContext } from "svelte"
+    import Icon from "./icons/icon.svelte"
     const view = getContext("view") as View<unknown>
     type Item = { text: string; viewName: string; href: string }
 </script>

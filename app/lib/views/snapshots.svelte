@@ -155,7 +155,7 @@
         <span>
             This will retrieve the list of static routes from
             <InlineCode source="http://127.0.0.1:8080/@statics" /> and generate the output in
-            <InlineCode source="./gen/snapshot" />.
+            <InlineCode source="./.gen/snapshot" />.
         </span>
         <Tip>
             <span>

@@ -2,10 +2,6 @@
     :root {
         --menu-item-gap: 1rem;
     }
-    .menu-item {
-        position: relative;
-        width: 100%;
-    }
     .shift {
         --shift: 0;
         padding-left: calc(1rem * var(--shift));

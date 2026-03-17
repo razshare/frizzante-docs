@@ -8,7 +8,6 @@
     }
     .keyed-section {
         display: grid;
-        position: relative;
         gap: var(--indexed-section-gap);
         grid-template-columns: auto 1fr;
         grid-template-rows: auto 1fr;
@@ -42,6 +41,7 @@
     .content {
         grid-area: content;
         padding-top: 0.3rem; /* A small padding because OCD. */
+        overflow: auto;
     }
     .link {
         grid-area: link;

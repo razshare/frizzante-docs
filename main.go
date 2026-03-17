@@ -44,6 +44,7 @@ func main() {
 		{Pattern: "GET /issues", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Issues"}) }},
 		{Pattern: "GET /contributing", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Contributing"}) }},
 		{Pattern: "GET /faq", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "Faq"}) }},
+		{Pattern: "GET /full-screen-menu", Handler: func(client *clients.Client) { send.View(client, views.View{Name: "FullScreenMenu"}) }},
 		// Your `frizzante generate snapshot` requires an endpoint that lists
 		// all static routes of the server. This `statics.New()` function
 		// simply creates a route that lists those routes.

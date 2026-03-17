@@ -1,13 +1,13 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
-    import KeyedSection from "$lib/components/keyed_section.svelte"
+    import FileTree from "$lib/components/file_tree.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
-    import Page from "$lib/components/page.svelte"
-    import Tree from "$lib/components/file_tree.svelte"
-    import { mdiPackage } from "@mdi/js"
-    import Title from "$lib/components/title.svelte"
+    import KeyedSection from "$lib/components/keyed_section.svelte"
     import Note from "$lib/components/note.svelte"
+    import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
+    import Title from "$lib/components/title.svelte"
+    import { mdiPackage } from "@mdi/js"
 </script>
 
 <Page title="Get Started">
@@ -35,7 +35,7 @@
         <span>standalone executable.</span>
         <br />
         <br />
-        <Tree>
+        <FileTree>
             {#snippet children({ Directory, File })}
                 <Directory name=".gen" expanded>
                     <Directory name="bin" expanded>
@@ -43,7 +43,7 @@
                     </Directory>
                 </Directory>
             {/snippet}
-        </Tree>
+        </FileTree>
     </KeyedSection>
     {#snippet rightSidebar()}
         <RightSidebar

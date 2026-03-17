@@ -9,7 +9,6 @@
         --caution-margin: 0.5rem;
     }
     .caution {
-        position: relative;
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-areas:
@@ -38,8 +37,8 @@
 </style>
 
 <script lang="ts">
-    import { mdiAlertRhombusOutline } from "@mdi/js"
     import Icon from "$lib/components/icons/icon.svelte"
+    import { mdiAlertRhombusOutline } from "@mdi/js"
     import type { Snippet } from "svelte"
     type Props = { children: Snippet }
     let { children }: Props = $props()

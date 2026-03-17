@@ -7,10 +7,11 @@
     }
     .suggestion {
         border: 0;
-        background-color: transparent;
         width: 100%;
-        color: var(--suggestion-text);
+        position: relative;
         text-align: start;
+        background-color: transparent;
+        color: var(--suggestion-text);
         padding: var(--suggestion-padding);
         border-radius: var(--suggestion-roundness);
         grid-template-columns: 1fr 10fr 2fr;
@@ -50,8 +51,8 @@
 </style>
 
 <script lang="ts">
-    import type { Suggestion } from "$lib/scripts/searchbar/suggestion"
     import { href } from "$lib/scripts/core/href"
+    import type { Suggestion } from "$lib/scripts/searchbar/suggestion"
     type Props = Suggestion
     let { description, page, section, href: createSuggestionHref }: Props = $props()
     let suggestionHref = $derived(createSuggestionHref())

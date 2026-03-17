@@ -9,7 +9,6 @@
         --danger-margin: 0.5rem;
     }
     .danger {
-        position: relative;
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-areas:
@@ -38,8 +37,8 @@
 </style>
 
 <script lang="ts">
-    import { mdiFireCircle } from "@mdi/js"
     import Icon from "$lib/components/icons/icon.svelte"
+    import { mdiFireCircle } from "@mdi/js"
     import type { Snippet } from "svelte"
     type Props = { children: Snippet }
     let { children }: Props = $props()

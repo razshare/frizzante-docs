@@ -4,20 +4,17 @@
     }
     .file-tree-file {
         display: grid;
-        position: relative;
         gap: var(--file-tree-file-gap);
         grid-template-columns: auto 1fr;
         grid-template-areas: "file-icon file-name";
     }
     .file-icon {
         grid-area: file-icon;
-        position: relative;
         top: 0.2rem;
         left: 0.2rem;
     }
     .file-name {
         grid-area: file-name;
-        position: relative;
     }
     button {
         cursor: default;

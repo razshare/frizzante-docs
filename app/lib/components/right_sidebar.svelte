@@ -7,7 +7,6 @@
         --right-sidebar-item-hover-background: rgba(162, 222, 206, 0.1);
     }
     .right-sidebar {
-        position: relative;
         display: grid;
     }
     .right-sidebar-item {
@@ -33,17 +32,16 @@
         grid-area: right-sidebar-text;
     }
     .icon {
-        position: relative;
         padding-right: 0.1rem;
         top: 0.1rem;
     }
 </style>
 
 <script lang="ts">
-    import { textToAnchor } from "$lib/scripts/text_to_anchor"
-    import { mdiPound } from "@mdi/js"
     import Icon from "$lib/components/icons/icon.svelte"
     import MenuItem from "$lib/components/menu_item.svelte"
+    import { textToAnchor } from "$lib/scripts/text_to_anchor"
+    import { mdiPound } from "@mdi/js"
     type Item = { text: string; shift: number }
     type Props = { items: Item[] }
     let { items }: Props = $props()

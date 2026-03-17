@@ -4,12 +4,16 @@
         --navbar-gap: 1rem;
     }
     .navbar {
-        position: relative;
         display: grid;
         gap: var(--navbar-gap);
         align-items: center;
-        grid-template-columns: auto 1fr 1fr 1fr auto;
-        grid-template-areas: "navbar-logo navbar-title navbar-searchbar empty navbar-links";
+        grid-template-columns: auto auto 1fr auto auto 0;
+        grid-template-areas: "navbar-logo navbar-title navbar-searchbar empty navbar-links navbar-menu-link";
+    }
+    .navbar-menu-link {
+        grid-area: navbar-menu-link;
+        color: var(--navbar-title-text);
+        display: none;
     }
     .navbar-logo {
         grid-area: navbar-logo;
@@ -25,23 +29,59 @@
         grid-area: navbar-links;
         text-align: end;
     }
+    @media screen and (max-width: 980px) {
+        .navbar {
+            grid-template-columns: auto 0 1fr 0 auto 0;
+        }
+        .navbar-title {
+            display: none;
+        }
+    }
+    @media screen and (max-width: 640px) {
+        .navbar {
+            gap: 0;
+            grid-template-columns: 0 0 1fr 0 0 auto;
+        }
+        .navbar-menu-link:not(.hidden) {
+            display: block;
+            padding-left: 1rem;
+            position: relative;
+            top: 0.15rem;
+        }
+        .navbar-logo {
+            display: none;
+        }
+        .navbar-title {
+            display: none;
+        }
+        .navbar-links {
+            display: none;
+        }
+    }
 </style>
 
 <script lang="ts">
-    import { logo } from "$lib/scripts/logo"
-    import { mdiGithub } from "@mdi/js"
     import Icon from "$lib/components/icons/icon.svelte"
-    import Searchbar from "$lib/components/searchbar.svelte"
     import Image from "$lib/components/image.svelte"
+    import Searchbar from "$lib/components/searchbar.svelte"
+    import { href } from "$lib/scripts/core/href"
     import { IS_BROWSER } from "$lib/scripts/core/is_browser"
+    import { logo } from "$lib/scripts/logo"
+    import { mdiFunction, mdiGithub } from "@mdi/js"
     type Props = {
         search: string
         focused: boolean
+        noMenuLink?: boolean
     }
-    let { search = $bindable(""), focused = $bindable(false) }: Props = $props()
+    let { search = $bindable(""), focused = $bindable(false), noMenuLink = false }: Props = $props()
 </script>
 
 <div class="navbar">
+    <div class="navbar-menu-link" class:hidden={noMenuLink}>
+        <a {...href("/full-screen-menu")}>
+            <Icon path={mdiFunction} size="2rem" />
+        </a>
+    </div>
     <div class="navbar-logo">
         <Image src={logo} width="32px" height="32px" alt="logo" />
     </div>

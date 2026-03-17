@@ -7,7 +7,6 @@
         --code-roundness: 1rem;
     }
     .code {
-        position: relative;
         margin-top: var(--code-margin);
         margin-bottom: var(--code-margin);
         overflow: auto;
@@ -15,7 +14,6 @@
         background-color: var(--code-background);
     }
     .code > .text {
-        position: relative;
         color: var(--code-text);
         padding: var(--code-padding);
         z-index: 1;

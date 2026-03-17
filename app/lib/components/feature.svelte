@@ -7,7 +7,6 @@
     }
     .feature {
         display: grid;
-        position: relative;
         gap: var(--feature-gap);
         padding: var(--feature-padding);
         border-radius: var(--feature-roundness);
@@ -21,7 +20,7 @@
     .feature-icon {
         grid-area: feature-icon;
     }
-    .title {
+    .feature-title {
         grid-area: title;
     }
     .feature-description {
@@ -33,16 +32,17 @@
 </style>
 
 <script lang="ts">
-    import Icon from "$lib/components/icons/icon.svelte"
     import Button from "$lib/components/button.svelte"
     import Code from "$lib/components/code.svelte"
+    import Icon from "$lib/components/icons/icon.svelte"
+    import type { BundledLanguage } from "shiki"
     type Props = {
         icon: string
         title: string
         description: string
         example?: {
-            lang: string
             source: string
+            lang: BundledLanguage
         }
     }
     let { icon, title, description, example }: Props = $props()

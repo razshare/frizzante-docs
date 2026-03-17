@@ -7,7 +7,6 @@
         --file-tree-text: #878580;
     }
     .tree {
-        position: relative;
         color: var(--file-tree-text);
         background-color: var(--file-tree-background);
         padding: var(--file-tree-padding);
@@ -17,9 +16,9 @@
 </style>
 
 <script lang="ts">
-    import type { Snippet } from "svelte"
     import FileTreeDirectory from "$lib/components/file_tree_directory.svelte"
     import FileTreeFile from "$lib/components/file_tree_file.svelte"
+    import type { Snippet } from "svelte"
     type Props = { children: Snippet<[{ Directory: typeof FileTreeDirectory; File: typeof FileTreeFile }]> }
     let { children }: Props = $props()
 </script>

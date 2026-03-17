@@ -1,8 +1,7 @@
 <style>
     .footer {
-        min-height: 10rem;
-        position: relative;
         display: grid;
+        min-height: 10rem;
         grid-template-areas:
             "edit-page empty empty"
             "line line line"

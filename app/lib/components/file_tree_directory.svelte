@@ -7,7 +7,6 @@
     }
     .file-tree-directory {
         display: grid;
-        position: relative;
         gap: var(--file-tree-directory-gap);
         grid-template-columns: auto auto 1fr;
         grid-template-rows: auto auto auto;
@@ -17,7 +16,6 @@
     }
     .icon {
         grid-area: directory-icon;
-        position: relative;
         top: 0.2rem;
     }
     .icon:hover {
@@ -25,7 +23,6 @@
     }
     .name {
         grid-area: directory-name;
-        position: relative;
     }
     .name:hover {
         color: var(--file-tree-directory-text-hover);
@@ -34,9 +31,9 @@
         grid-area: directory-content;
     }
     .link {
-        grid-area: directory-link;
-        position: relative;
         display: grid;
+        position: relative;
+        grid-area: directory-link;
         justify-items: center;
         align-items: center;
     }

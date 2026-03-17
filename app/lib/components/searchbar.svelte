@@ -71,7 +71,15 @@
         height: 20rem;
         overflow: hidden;
     }
-    .results-container {
+    @media screen and (max-width: 640px) {
+        .results {
+            position: fixed;
+            border-radius: 0;
+            height: auto;
+            bottom: 0;
+        }
+    }
+    .searchbar-results {
         border-radius: var(--searchbar-results-roundness);
         position: relative;
         width: 100%;
@@ -81,11 +89,11 @@
 </style>
 
 <script lang="ts">
-    import SearchbarResults from "./searchbar_results.svelte"
     import Icon from "$lib/components/icons/icon.svelte"
     import { find } from "$lib/scripts/searchbar/find"
     import { mdiTextSearch } from "@mdi/js"
     import { onMount } from "svelte"
+    import SearchbarResults from "./searchbar_results.svelte"
     type Props = {
         query: string
         focused: boolean
@@ -163,7 +171,7 @@
     </button>
     {#if query !== ""}
         <div class="results">
-            <div class="results-container">
+            <div class="searchbar-results">
                 <SearchbarResults {suggestions} />
             </div>
         </div>

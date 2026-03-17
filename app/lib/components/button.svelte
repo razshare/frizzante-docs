@@ -10,7 +10,6 @@
     }
     .button {
         display: grid;
-        position: relative;
         align-items: center;
         padding: var(--button-padding);
         border-radius: var(--button-roundness);
@@ -39,8 +38,8 @@
 </style>
 
 <script lang="ts">
-    import type { Snippet } from "svelte"
     import { href } from "$lib/scripts/core/href"
+    import type { Snippet } from "svelte"
     type Props = {
         start?: Snippet
         end?: Snippet

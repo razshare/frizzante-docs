@@ -9,8 +9,8 @@
         --note-margin: 0.5rem;
     }
     .note {
-        position: relative;
         display: grid;
+        overflow: auto;
         grid-template-columns: auto 1fr;
         grid-template-areas:
             "note-icon note-title"
@@ -38,8 +38,8 @@
 </style>
 
 <script lang="ts">
-    import { mdiInformationOutline } from "@mdi/js"
     import Icon from "$lib/components/icons/icon.svelte"
+    import { mdiInformationOutline } from "@mdi/js"
     import type { Snippet } from "svelte"
     type Props = { children: Snippet }
     let { children }: Props = $props()
