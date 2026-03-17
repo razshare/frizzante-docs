@@ -7,13 +7,14 @@
     // @ts-expect-error
     import diagram1 from "$lib/assets/todos_example_diagram_1.svg"
     import Code from "$lib/components/code.svelte"
-    import InlineCode from "$lib/components/inline_code.svelte"
-    import Note from "$lib/components/note.svelte"
-    import Tip from "$lib/components/tip.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import HyperTable from "$lib/components/hyper_table.svelte"
     import Image from "$lib/components/image.svelte"
-    import Title from "$lib/components/title.svelte"
+    import InlineCode from "$lib/components/inline_code.svelte"
+    import Note from "$lib/components/note.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
+    import Tip from "$lib/components/tip.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Todos Example">
@@ -414,5 +415,8 @@
                 { shift: 0, text: "More Examples" },
             ]}
         />
+    {/snippet}
+    {#snippet footer()}
+        <Footer previous={{ label: "Snapshots", href: "/snapshots" }} next={{ label: "Docker", href: "/docker" }} />
     {/snippet}
 </Page>

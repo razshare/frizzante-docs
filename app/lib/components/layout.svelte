@@ -55,22 +55,13 @@
     }
     .layout-body {
         grid-area: layout-body;
-        display: grid;
         overflow: auto;
-        grid-template-rows: auto 1fr;
-        grid-template-areas:
-            "layout-body-content layout-body-content layout-body-content"
-            "layout-body-footer layout-body-footer layout-body-footer";
         z-index: 0;
     }
     .layout-body-content {
-        grid-area: layout-body-content;
-        overflow-y: auto;
         z-index: 0;
     }
     .layout-body-footer {
-        grid-area: layout-body-footer;
-        overflow: hidden;
         z-index: 0;
     }
 </style>

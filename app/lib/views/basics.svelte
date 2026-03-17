@@ -1,6 +1,7 @@
 <script lang="ts">
     import Caution from "$lib/components/caution.svelte"
     import Code from "$lib/components/code.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import Link from "$lib/components/links/link.svelte"
     import Note from "$lib/components/note.svelte"
@@ -502,6 +503,12 @@
                 { shift: 0, text: "Redirect" },
                 { shift: 0, text: "Navigate" },
             ]}
+        />
+    {/snippet}
+    {#snippet footer()}
+        <Footer
+            previous={{ label: "Get Started", href: "/get_started" }}
+            next={{ label: "Web Sockets", href: "/web_sockets" }}
         />
     {/snippet}
 </Page>

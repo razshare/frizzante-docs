@@ -1,5 +1,6 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
@@ -87,5 +88,8 @@
                 { shift: 0, text: "Pull Requests" },
             ]}
         />
+    {/snippet}
+    {#snippet footer()}
+        <Footer previous={{ label: "Issues", href: "/issues" }} next={{ label: "Faq", href: "/faq" }} />
     {/snippet}
 </Page>

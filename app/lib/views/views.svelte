@@ -1,16 +1,17 @@
 <script lang="ts">
-    import InlineCode from "$lib/components/inline_code.svelte"
-    import Page from "$lib/components/page.svelte"
-    import FileTree from "$lib/components/file_tree.svelte"
-    import Code from "$lib/components/code.svelte"
-    import Note from "$lib/components/note.svelte"
-    import Tip from "$lib/components/tip.svelte"
-    import Link from "$lib/components/links/link.svelte"
-    import KeyedSection from "$lib/components/keyed_section.svelte"
     import Caution from "$lib/components/caution.svelte"
+    import Code from "$lib/components/code.svelte"
+    import FileTree from "$lib/components/file_tree.svelte"
+    import Footer from "$lib/components/footer.svelte"
+    import InlineCode from "$lib/components/inline_code.svelte"
+    import KeyedSection from "$lib/components/keyed_section.svelte"
+    import Link from "$lib/components/links/link.svelte"
+    import Note from "$lib/components/note.svelte"
+    import Page from "$lib/components/page.svelte"
+    import RightSidebar from "$lib/components/right_sidebar.svelte"
+    import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
     import { mdiCodeBraces } from "@mdi/js"
-    import RightSidebar from "$lib/components/right_sidebar.svelte"
 </script>
 
 <Page title="Views">
@@ -348,6 +349,12 @@
                 { shift: 1, text: "RenderModeClient" },
                 { shift: 0, text: "Disabling the server-side JavaScript runtime" },
             ]}
+        />
+    {/snippet}
+    {#snippet footer()}
+        <Footer
+            previous={{ label: "Guards", href: "/guards" }}
+            next={{ label: "Web Standards", href: "/web_standards" }}
         />
     {/snippet}
 </Page>

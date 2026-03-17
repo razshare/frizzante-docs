@@ -1,6 +1,7 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
     import FileTree from "$lib/components/file_tree.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
     import Page from "$lib/components/page.svelte"
@@ -216,5 +217,11 @@
         <RightSidebar items={[{ shift: 2, text: "Start production server" }]} />
         <RightSidebar items={[{ shift: 2, text: "Start development server using makefile" }]} />
         <RightSidebar items={[{ shift: 1, text: "Snapshot" }]} />
+    {/snippet}
+    {#snippet footer()}
+        <Footer
+            previous={{ label: "Type Definitions", href: "/type_definitions" }}
+            next={{ label: "Todos Example", href: "/todos_example" }}
+        />
     {/snippet}
 </Page>

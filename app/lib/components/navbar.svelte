@@ -7,7 +7,7 @@
         display: grid;
         gap: var(--navbar-gap);
         align-items: center;
-        grid-template-columns: auto auto 1fr auto auto 0;
+        grid-template-columns: auto 1fr 3fr 1fr auto 0;
         grid-template-areas: "navbar-logo navbar-title navbar-searchbar empty navbar-links navbar-menu-link";
     }
     .navbar-menu-link {
@@ -88,7 +88,7 @@
     <div class="navbar-title">Frizzante Docs</div>
     <div class="navbar-searchbar">
         {#if IS_BROWSER}
-            <Searchbar bind:query={search} bind:focused />
+            <Searchbar bind:query={search} bind:focused placeholder="Search" />
         {/if}
     </div>
     <div class="navbar-links">

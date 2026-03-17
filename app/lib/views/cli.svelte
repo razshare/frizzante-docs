@@ -2,6 +2,7 @@
     import Caution from "$lib/components/caution.svelte"
     import Code from "$lib/components/code.svelte"
     import FileTree from "$lib/components/file_tree.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
@@ -468,6 +469,12 @@
                 { shift: 0, text: "Help" },
                 { shift: 0, text: "Interactive Mode" },
             ]}
+        />
+    {/snippet}
+    {#snippet footer()}
+        <Footer
+            previous={{ label: "Web Standards", href: "/web_standards" }}
+            next={{ label: "Type Definitions", href: "/type_definitions" }}
         />
     {/snippet}
 </Page>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
     import Note from "$lib/components/note.svelte"
@@ -95,5 +96,8 @@
                 { shift: 1, text: "Generate types" },
             ]}
         />
+    {/snippet}
+    {#snippet footer()}
+        <Footer previous={{ label: "Cli", href: "/cli" }} next={{ label: "Snapshots", href: "/snapshots" }} />
     {/snippet}
 </Page>

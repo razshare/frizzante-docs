@@ -1,15 +1,15 @@
 <script lang="ts">
-    import { onMount, type Snippet } from "svelte"
-    import Footer from "$lib/components/footer.svelte"
     import Layout from "$lib/components/layout.svelte"
-    import Navbar from "$lib/components/navbar.svelte"
     import LeftSidebar from "$lib/components/left_sidebar.svelte"
+    import Navbar from "$lib/components/navbar.svelte"
+    import { onMount, type Snippet } from "svelte"
     type Props = {
         title: string
         rightSidebar: Snippet
+        footer: Snippet
         children: Snippet
     }
-    let { title, children, rightSidebar: sidebar }: Props = $props()
+    let { title, children, rightSidebar: sidebar, footer: pageFooter }: Props = $props()
     let searchQuery: string = $state("")
     let searchFocused: boolean = $state(false)
     onMount(function start() {
@@ -42,7 +42,7 @@
         {@render children()}
     {/snippet}
     {#snippet footer()}
-        <Footer />
+        {@render pageFooter()}
     {/snippet}
     {#snippet leftSidebar()}
         <LeftSidebar />

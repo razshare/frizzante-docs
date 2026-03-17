@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Footer from "$lib/components/footer.svelte"
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
@@ -42,6 +43,12 @@
                 { shift: 0, text: "Reporting a Bug" },
                 { shift: 0, text: "Requesting a Feature" },
             ]}
+        />
+    {/snippet}
+    {#snippet footer()}
+        <Footer
+            previous={{ label: "Docker", href: "/docker" }}
+            next={{ label: "Contributing", href: "/contributing" }}
         />
     {/snippet}
 </Page>

@@ -2,12 +2,14 @@
     --shiki-padding: 1rem;
     --shiki-roundness: 1rem;
     --a-text: #a2dece;
+    --body-text: #cecdc3;
+    --body-background: #100f0f;
 }
 
 html,
 body {
-    background-color: #100f0f;
-    color: #cecdc3;
+    background-color: var(--body-background);
+    color: var(--body-text);
 }
 
 pre.shiki {

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
@@ -56,5 +57,11 @@
     />
     {#snippet rightSidebar()}
         <RightSidebar items={[{ shift: 0, text: "Web Sockets" }]} />
+    {/snippet}
+    {#snippet footer()}
+        <Footer
+            previous={{ label: "Basics", href: "/basics" }}
+            next={{ label: "Server Sent Events", href: "/server_sent_events" }}
+        />
     {/snippet}
 </Page>

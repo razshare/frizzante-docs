@@ -8,9 +8,10 @@
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     import diagram2 from "$lib/assets/guards_diagram_2.svg"
+    import Footer from "$lib/components/footer.svelte"
     import Image from "$lib/components/image.svelte"
-    import Title from "$lib/components/title.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
+    import Title from "$lib/components/title.svelte"
 </script>
 
 <Page title="Guards">
@@ -96,6 +97,12 @@
                 { shift: 0, text: "Guards" },
                 { shift: 0, text: "Composition" },
             ]}
+        />
+    {/snippet}
+    {#snippet footer()}
+        <Footer
+            previous={{ label: "Server Sent Events", href: "/server_sent_events" }}
+            next={{ label: "Views", href: "/views" }}
         />
     {/snippet}
 </Page>

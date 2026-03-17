@@ -1,6 +1,7 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
     import FileTree from "$lib/components/file_tree.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
     import Note from "$lib/components/note.svelte"
@@ -56,5 +57,8 @@
                 { shift: 1, text: "Build" },
             ]}
         />
+    {/snippet}
+    {#snippet footer()}
+        <Footer next={{ label: "Basics", href: "/basics" }} />
     {/snippet}
 </Page>

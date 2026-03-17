@@ -97,8 +97,9 @@
     type Props = {
         query: string
         focused: boolean
+        placeholder?: string
     }
-    let { query = $bindable(""), focused = $bindable(false) }: Props = $props()
+    let { query = $bindable(""), focused = $bindable(false), placeholder = "" }: Props = $props()
     let suggestions = $derived(find(query))
     let input: HTMLInputElement | undefined
     function onfocus() {
@@ -166,6 +167,7 @@
             {onblur}
             bind:value={query}
             onkeydown={oninputkeydown}
+            {placeholder}
         />
         <div class="shortcut">Ctrl K</div>
     </button>

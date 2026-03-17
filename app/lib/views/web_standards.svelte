@@ -1,5 +1,6 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
@@ -234,5 +235,8 @@
                 { shift: 0, text: "Form Component" },
             ]}
         />
+    {/snippet}
+    {#snippet footer()}
+        <Footer previous={{ label: "Views", href: "/views" }} next={{ label: "Cli", href: "/cli" }} />
     {/snippet}
 </Page>

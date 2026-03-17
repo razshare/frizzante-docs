@@ -1,5 +1,6 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
+    import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
@@ -182,5 +183,8 @@
                 { shift: 0, text: "Can I use Frizzante with other frontend frameworks?" },
             ]}
         />
+    {/snippet}
+    {#snippet footer()}
+        <Footer previous={{ label: "Contributing", href: "/contributing" }} />
     {/snippet}
 </Page>
