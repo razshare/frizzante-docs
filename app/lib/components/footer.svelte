@@ -23,7 +23,7 @@
     }
     .footer-content-previous {
         padding: var(--footer-previous-padding);
-        font-size: 2rem;
+        font-size: 1.3rem;
         flex-grow: 1;
         text-align: start;
     }
@@ -34,7 +34,7 @@
         grid-template-areas: "footer-content-previous-hint-icon footer-content-previous-hint-text";
     }
     .footer-content-previous-hint-icon {
-        top: 0.3rem;
+        top: 0.1rem;
         position: relative;
         grid-area: footer-content-previous-hint-icon;
     }
@@ -43,7 +43,7 @@
     }
     .footer-content-next {
         padding: var(--footer-next-padding);
-        font-size: 2rem;
+        font-size: 1.3rem;
         flex-grow: 1;
         text-align: end;
     }
@@ -54,7 +54,7 @@
         grid-template-areas: "footer-content-next-hint-text footer-content-next-hint-icon";
     }
     .footer-content-next-hint-icon {
-        top: 0.3rem;
+        top: 0.1rem;
         position: relative;
         grid-area: footer-content-next-hint-icon;
     }
@@ -93,9 +93,9 @@
                             <span class="footer-content-previous-hint-text">Previous</span>
                             <div class="footer-content-previous-hint-icon">
                                 {#if pending}
-                                    <Icon path={mdiCloudRefresh} size="2rem" />
+                                    <Icon path={mdiCloudRefresh} size="1.3rem" />
                                 {:else}
-                                    <Icon path={mdiArrowLeft} size="2rem" />
+                                    <Icon path={mdiArrowLeft} size="1.3rem" />
                                 {/if}
                             </div>
                         </div>
@@ -114,9 +114,9 @@
                             <span class="footer-content-next-hint-text">Next</span>
                             <div class="footer-content-next-hint-icon">
                                 {#if pending}
-                                    <Icon path={mdiCloudRefresh} size="2rem" />
+                                    <Icon path={mdiCloudRefresh} size="1.3rem" />
                                 {:else}
-                                    <Icon path={mdiArrowRight} size="2rem" />
+                                    <Icon path={mdiArrowRight} size="1.3rem" />
                                 {/if}
                             </div>
                         </div>
