@@ -1,26 +1,32 @@
 <style>
     :root {
-        --navbar-title-text: #a2dece;
+        --navbar-title-text: #d24317;
+        --navbar-tile-size: 1.5rem;
         --navbar-gap: 1rem;
     }
     .navbar {
         display: grid;
         gap: var(--navbar-gap);
         align-items: center;
-        grid-template-columns: auto 1fr 3fr 1fr auto 0;
+        grid-template-columns: auto 1fr 2fr 2fr auto 0;
         grid-template-areas: "navbar-logo navbar-title navbar-searchbar empty navbar-links navbar-menu-link";
     }
     .navbar-menu-link {
         grid-area: navbar-menu-link;
-        color: var(--navbar-title-text);
         display: none;
     }
     .navbar-logo {
         grid-area: navbar-logo;
+        align-items: center;
+        display: grid;
     }
     .navbar-title {
         grid-area: navbar-title;
         color: var(--navbar-title-text);
+        font-size: var(--navbar-tile-size);
+        align-items: center;
+        display: grid;
+        font-weight: bold;
     }
     .navbar-searchbar {
         grid-area: navbar-searchbar;
@@ -46,7 +52,6 @@
             display: block;
             padding-left: 1rem;
             position: relative;
-            top: 0.15rem;
         }
         .navbar-logo {
             display: none;
@@ -67,28 +72,30 @@
     import { href } from "$lib/scripts/core/href"
     import { IS_BROWSER } from "$lib/scripts/core/is_browser"
     import { logo } from "$lib/scripts/logo"
+    import { base } from "$lib/scripts/strings/base"
     import { mdiFunction, mdiGithub } from "@mdi/js"
     type Props = {
         search: string
+        prefix: string
         focused: boolean
         noMenuLink?: boolean
     }
-    let { search = $bindable(""), focused = $bindable(false), noMenuLink = false }: Props = $props()
+    let { search = $bindable(""), focused = $bindable(false), noMenuLink = false, prefix }: Props = $props()
 </script>
 
 <div class="navbar">
     <div class="navbar-menu-link" class:hidden={noMenuLink}>
-        <a {...href("/full-screen-menu")}>
+        <a {...href(base("/full-screen-menu", { prefix }))}>
             <Icon path={mdiFunction} size="2rem" />
         </a>
     </div>
     <div class="navbar-logo">
-        <Image src={logo} width="32px" height="32px" alt="logo" />
+        <Image src={logo} height="3rem" alt="logo" />
     </div>
-    <div class="navbar-title">Frizzante Docs</div>
+    <div class="navbar-title"></div>
     <div class="navbar-searchbar">
         {#if IS_BROWSER}
-            <Searchbar bind:query={search} bind:focused placeholder="Search" />
+            <Searchbar bind:query={search} bind:focused placeholder="Start typing to search." {prefix} />
         {/if}
     </div>
     <div class="navbar-links">

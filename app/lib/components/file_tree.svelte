@@ -2,7 +2,7 @@
     :root {
         --file-tree-margin: 1rem;
         --file-tree-padding: 1rem;
-        --file-tree-roundness: 1rem;
+        --file-tree-roundness: 0;
         --file-tree-background: #1c1b1a;
         --file-tree-text: #878580;
     }

@@ -1,9 +1,8 @@
 <style>
     :root {
-        --menu-item-gap: 1rem;
+        --menu-item-shift: 0;
     }
-    .shift {
-        --shift: 0;
+    .menu-item-shift {
         padding-left: calc(1rem * var(--shift));
     }
 </style>
@@ -18,7 +17,7 @@
 </script>
 
 <div class="menu-item">
-    <div class="shift" style:--shift={shift}>
+    <div class="menu-item-shift" style:--shift={shift}>
         {@render children()}
     </div>
 </div>

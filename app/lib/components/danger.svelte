@@ -5,7 +5,7 @@
         --danger-icon: #ff9995;
         --danger-title: #ff9995;
         --danger-padding: 0.7rem;
-        --danger-roundness: 0.3rem;
+        --danger-roundness: 0;
         --danger-margin: 0.5rem;
     }
     .danger {
@@ -27,12 +27,15 @@
         color: var(--danger-icon);
     }
     .danger-title {
+        display: grid;
+        align-items: center;
         grid-area: danger-title;
         color: var(--danger-title);
-        padding-left: var(--danger-padding);
+        padding-left: calc(var(--danger-padding) / 4);
     }
     .danger-content {
         grid-area: danger-content;
+        padding-top: calc(var(--danger-padding) / 2);
     }
 </style>
 
@@ -46,7 +49,7 @@
 
 <div class="danger">
     <div class="danger-icon">
-        <Icon path={mdiFireCircle} size="1.5rem" />
+        <Icon path={mdiFireCircle} size="1.4rem" />
     </div>
     <div class="danger-title">Danger</div>
     <div class="danger-content">{@render children()}</div>

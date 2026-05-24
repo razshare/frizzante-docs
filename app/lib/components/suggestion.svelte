@@ -1,9 +1,10 @@
 <style>
     :root {
         --suggestion-padding: 1rem;
-        --suggestion-roundness: 1rem;
+        --suggestion-roundness: 0;
         --suggestion-text: #c0c0c0;
-        --suggestion-hover-background: rgba(162, 222, 206, 0.1);
+        --suggestion-hover-background: rgba(210, 67, 23, 0.05);
+        --suggestion-hover-text: #d24317;
     }
     .suggestion {
         border: 0;
@@ -23,6 +24,7 @@
     }
     .suggestion:hover:not(.active) {
         background-color: var(--suggestion-hover-background);
+        color: var(--suggestion-hover-text);
         cursor: pointer;
     }
     .title {
@@ -53,9 +55,9 @@
 <script lang="ts">
     import { href } from "$lib/scripts/core/href"
     import type { Suggestion } from "$lib/scripts/searchbar/suggestion"
-    type Props = Suggestion
-    let { description, page, section, href: createSuggestionHref }: Props = $props()
-    let suggestionHref = $derived(createSuggestionHref())
+    type Props = Suggestion & { prefix: string }
+    let { description, page, section, href: createSuggestionHref, prefix }: Props = $props()
+    let suggestionHref = $derived(createSuggestionHref(prefix))
     let { onclick } = $derived(href(suggestionHref))
 </script>
 

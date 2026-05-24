@@ -3,52 +3,98 @@
     import Code from "$lib/components/code.svelte"
     import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
-    import Link from "$lib/components/links/link.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
+    import { href } from "$lib/scripts/core/href"
+    import { base } from "$lib/scripts/strings/base"
+    let { prefix } = $props()
 </script>
 
-<Page title="Basics">
+<Page title="Basics" {prefix}>
     <Title text="Basics" />
-    <span> All internals of the framework are exposed intentionally. </span>
-    <br />
-    <br />
-    <span>
-        For example the frizzante <a href="#server">server</a> is a wrapper around
-        <InlineCode source="net/http.Server" /> and a frizzante <a href="#messages">client</a> is a wrapper around
-        <InlineCode source="net/http.Request" /> and <InlineCode source="net/http.ResponseWriter" />.
-    </span>
-    <br />
+    <span> All internals of the framework are exposed. </span>
     <br />
     <span>
-        You can interact with these internals and you are, in fact, intended to do so whenever the framework is
-        insufficient, you're hitting a performance wall, a bug and so on.
+        You can modify these internals, in fact it is intended for you to do so whenever you're in a state of urgency,
+        you're hitting a performance wall that needs to be solved immediately, a bug comes up and so on.
     </span>
     <Note>
-        <span>Please <Link href="/issues">report</Link> such incidents if you can.</span>
+        <span>You are also welcome to <a {...href(base("/issues", { prefix }))}>contribute</a> back if you can.</span>
     </Note>
     <Title text="Server" />
     <span>
-        Create a new server with <InlineCode source="servers.New()" />, then followup with servers.Start() in order to
-        start a server.
+        Create a new server with <InlineCode source="servers.New()" />, then followup with
+        <InlineCode source="servers.Start()" /> in order to start the server.
     </span>
     <Code
         lang="go"
         source={`
             package main
 
-            import "main/lib/core/servers"
+            import (
+                "main/lib/core/servers"
+                "main/lib/core/ssr"
+            )
 
-            var server = servers.New()      // Creates server.
+            var server = servers.New() // Creates server.
+            var render = ssr.New(1)    // Creates an SSR function.
 
             func main() {
-                defer servers.Start(server) // Starts server.
+                server.Render = render // Assigns render function to the server.
+                servers.Start(server)  // Starts server.
             }
         `}
     />
+    <Note>
+        <span>
+            The <InlineCode source="ssr.New()" /> function creates a function that is capable executing JavaScript code on
+            the server. This is what enables Server Side Rendering for your server, as the package name implies.
+        </span>
+    </Note>
+    <Caution>
+        <span>
+            The first parameter of <InlineCode source="ssr.New()" /> indicates how many runtimes should be created and executed
+            in parallel when rendering views.
+        </span>
+        <br />
+        <span>
+            Setting this value too high could lead to unnecessary large memory usage by your JavaScript runtimes.
+        </span>
+        <br />
+        <span>For most use cases a limit of 1 runtime is more than enough. </span>
+        <br />
+        <br />
+        <span>Modify based on actual performance benchmarks.</span>
+    </Caution>
+    <Tip>
+        <span>
+            If you don't plan to use SSR features then create your render function using
+            <InlineCode source="csr.New()" /> instead.
+        </span>
+        <Code
+            lang="go"
+            source={`
+            package main
+
+            import (
+                "main/lib/core/servers"
+                "main/lib/core/csr"
+            )
+
+            var server = servers.New() // Creates server.
+            var render = csr.New()     // Creates CSR function.
+
+            func main() {
+                server.Render = render // Assigns render function to the server.
+                servers.Start(server)  // Starts server.
+            }
+        `}
+        />
+        <span>This will reduce the minimum size of the final binary from 25MB to 10MB.</span>
+    </Tip>
     <Title text="Routes" />
     <span>Each server exposes a slice of Routes which you can freely modify.</span>
     <br />
@@ -192,7 +238,7 @@
     <Caution>
         <span>Sending header fields or status after sending out content is not allowed.</span>
         <br />
-        <span>Read <a href="#order-of-oprations">below</a>.</span>
+        <span>Read <a href="#order-of-operations">below</a>.</span>
     </Caution>
     <Title text="Order of Operations" />
     <span>Order of operations matters when sending data to the client.</span>
@@ -483,8 +529,9 @@
             }
         `}
     />
-    {#snippet rightSidebar()}
+    {#snippet rightSidebar({ body })}
         <RightSidebar
+            {body}
             items={[
                 { shift: 0, text: "Basics" },
                 { shift: 0, text: "Server" },
@@ -507,8 +554,8 @@
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Get Started", href: "/get_started" }}
-            next={{ label: "Web Sockets", href: "/web_sockets" }}
+            previous={{ label: "Get Started", href: base("/get_started", { prefix }) }}
+            next={{ label: "Web Sockets", href: base("/web_sockets", { prefix }) }}
         />
     {/snippet}
 </Page>

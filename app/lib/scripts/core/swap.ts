@@ -8,13 +8,17 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement, view: Vi
     let requestUrl: string
     let response: Response
     let method: "GET" | "POST" = "GET"
+    let hash = ""
     const body: Record<string, string> = {}
     if (target.nodeName === "A") {
         const anchor = target as HTMLAnchorElement
-        requestUrl = anchor.href
-        console.log({ requestUrl })
+        const parts = anchor.href.split("#", 2)
+        requestUrl = parts[0]
         if (view.type === "snapshot") {
             requestUrl = requestUrl.replace(/\/+$/, "") + "/data.json"
+        }
+        if (parts.length >= 2) {
+            hash = `#${parts[1]}`
         }
         response = await fetch(requestUrl, {
             headers: {
@@ -90,7 +94,6 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement, view: Vi
     if (view.type === "snapshot") {
         fixedResponseUrl = fixedResponseUrl.replace(/\/data\.json$/, "")
     }
-    const hash = requestUrl.split("#", 2)[1] ?? ""
     const stationary = lastUrl === fixedResponseUrl
     lastUrl = fixedResponseUrl
     return function push() {
@@ -103,11 +106,6 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement, view: Vi
             url: fixedResponseUrl,
             body,
         }
-        console.log({ requestUrl, hash })
-        if (hash !== "") {
-            window.history.pushState(JSON.stringify(entry), "", `${fixedResponseUrl}#${hash}`)
-        } else {
-            window.history.pushState(JSON.stringify(entry), "", fixedResponseUrl)
-        }
+        window.history.pushState(JSON.stringify(entry), "", `${fixedResponseUrl}${hash}`)
     }
 }

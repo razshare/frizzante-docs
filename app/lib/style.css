@@ -1,7 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
 :root {
     --shiki-padding: 1rem;
     --shiki-roundness: 1rem;
-    --a-text: #a2dece;
+    --a-text: #d24317;
     --body-text: #cecdc3;
     --body-background: #100f0f;
 }
@@ -10,6 +12,11 @@ html,
 body {
     background-color: var(--body-background);
     color: var(--body-text);
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    font-size: 0.95rem;
 }
 
 pre.shiki {
@@ -26,4 +33,20 @@ a:active {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 1rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: rgba(210, 67, 23, 0.1);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(210, 67, 23);
 }

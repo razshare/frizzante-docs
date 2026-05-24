@@ -5,7 +5,7 @@
         --caution-title: #fcc192;
         --caution-icon: #fcc192;
         --caution-padding: 0.7rem;
-        --caution-roundness: 1rem;
+        --caution-roundness: 0;
         --caution-margin: 0.5rem;
     }
     .caution {
@@ -27,12 +27,15 @@
         color: var(--caution-title);
     }
     .caution-title {
+        display: grid;
+        align-items: center;
         grid-area: caution-title;
         color: var(--caution-title);
-        padding-left: var(--caution-padding);
+        padding-left: calc(var(--caution-padding) / 4);
     }
     .caution-content {
         grid-area: caution-content;
+        padding-top: calc(var(--caution-padding) / 2);
     }
 </style>
 
@@ -46,7 +49,7 @@
 
 <div class="caution">
     <div class="caution-icon">
-        <Icon path={mdiAlertRhombusOutline} size="1.5rem" />
+        <Icon path={mdiAlertRhombusOutline} size="1.4rem" />
     </div>
     <div class="caution-title">Caution</div>
     <div class="caution-content">{@render children()}</div>

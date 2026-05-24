@@ -4,7 +4,7 @@
         --code-text: #cecdc3;
         --code-margin: 1rem;
         --code-padding: 1rem;
-        --code-roundness: 1rem;
+        --code-roundness: 0;
     }
     .code {
         margin-top: var(--code-margin);
@@ -21,8 +21,8 @@
 </style>
 
 <script lang="ts">
-    import theme from "@shikijs/themes/vitesse-dark"
-    import { createHighlighterCore, createOnigurumaEngine, type BundledLanguage } from "shiki"
+    import { highlighter } from "$lib/scripts/highlighter"
+    import { type BundledLanguage } from "shiki"
     import { onMount } from "svelte"
     type Props = {
         source: string
@@ -52,20 +52,8 @@
         return lines.join("\n").trim()
     }
     onMount(async function ready() {
-        const highlighter = await createHighlighterCore({
-            themes: [theme],
-            langs: [
-                import("@shikijs/langs/javascript"),
-                import("@shikijs/langs/go"),
-                import("@shikijs/langs/sh"),
-                import("@shikijs/langs/bash"),
-                import("@shikijs/langs/svelte"),
-                import("@shikijs/langs/typescript"),
-            ],
-            engine: createOnigurumaEngine(import("shiki/wasm")),
-        })
-        await highlighter.loadTheme(import("@shikijs/themes/vitesse-dark"))
-        html = await highlighter.codeToHtml(align(source), {
+        const singleton = await highlighter()
+        html = singleton.codeToHtml(align(source), {
             lang: lang,
             theme: "vitesse-dark",
         })

@@ -1,20 +1,18 @@
 <script lang="ts">
-    import Code from "$lib/components/code.svelte"
-    import InlineCode from "$lib/components/inline_code.svelte"
-    import Page from "$lib/components/page.svelte"
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     import diagram1 from "$lib/assets/guards_diagram_1.svg"
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     import diagram2 from "$lib/assets/guards_diagram_2.svg"
+    import Code from "$lib/components/code.svelte"
     import Footer from "$lib/components/footer.svelte"
     import Image from "$lib/components/image.svelte"
+    import InlineCode from "$lib/components/inline_code.svelte"
+    import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
+    import { base } from "$lib/scripts/strings/base"
+    let { prefix } = $props()
 </script>
 
-<Page title="Guards">
+<Page title="Guards" {prefix}>
     <Title text="Guards" />
     <span>A guard is an object that is composed of an optional name and a required handler.</span>
     <br />
@@ -48,7 +46,9 @@
             source="application/json"
         />
     </span>
-    <Image src={diagram1} width="100%" />
+    <br />
+    <Image src={diagram1} width="auto" />
+    <br />
     <Title text="Composition" />
     <span>You can compose multiple guards in order to create more advanced restrictions.</span>
     <Code
@@ -90,9 +90,12 @@
             }
         `}
     />
-    <Image src={diagram2} width="100%" />
-    {#snippet rightSidebar()}
+    <br />
+    <Image src={diagram2} width="auto" />
+    <br />
+    {#snippet rightSidebar({ body })}
         <RightSidebar
+            {body}
             items={[
                 { shift: 0, text: "Guards" },
                 { shift: 0, text: "Composition" },
@@ -101,8 +104,8 @@
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Server Sent Events", href: "/server_sent_events" }}
-            next={{ label: "Views", href: "/views" }}
+            previous={{ label: "Server Sent Events", href: base("/server_sent_events", { prefix }) }}
+            next={{ label: "Views", href: base("/views", { prefix }) }}
         />
     {/snippet}
 </Page>

@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"testing"
 
-	"main/lib/dev/mocks"
+	"main/lib/core/mocks"
 )
 
 func TestQuery(t *testing.T) {

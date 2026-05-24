@@ -3,7 +3,7 @@ package receive
 import (
 	"testing"
 
-	"main/lib/dev/mocks"
+	"main/lib/core/mocks"
 )
 
 func TestSessionId(t *testing.T) {

@@ -1,14 +1,14 @@
 <style>
     :root {
-        --searchbar-text: #5f5e5a;
+        --searchbar-text: #6e6e6e;
         --searchbar-text-focused: #c0c0c0;
-        --searchbar-gap: 1rem;
-        --searchbar-border: 1px solid #5f5e5a;
+        --searchbar-border: 1px solid #6e6e6e;
         --searchbar-border-focused: 1px solid #c0c0c0;
-        --searchbar-roundness: 1rem;
+        --searchbar-roundness: 0;
         --searchbar-padding: 0.5rem;
+        --searchbar-gap: 0.1rem;
         --searchbar-results-background: #0b0a0a;
-        --searchbar-results-roundness: 1rem;
+        --searchbar-results-roundness: 0;
         --searchbar-results-padding: 1rem;
     }
     .searchbar {
@@ -38,6 +38,10 @@
         pointer-events: none;
         align-items: center;
         left: var(--searchbar-padding);
+        color: var(--searchbar-text);
+    }
+    .icon.focused {
+        color: var(--searchbar-text-focused);
     }
     .text {
         grid-area: text;
@@ -49,16 +53,10 @@
         outline: none;
         color: inherit;
         width: 100%;
+        color: var(--searchbar-text);
     }
     .text.focused {
         color: var(--searchbar-text-focused);
-    }
-    .shortcut {
-        grid-area: shortcut;
-        pointer-events: none;
-        display: grid;
-        align-items: center;
-        padding-right: var(--searchbar-padding);
     }
     .results {
         position: absolute;
@@ -67,7 +65,7 @@
         padding: var(--searchbar-results-padding);
         left: 0;
         right: 0;
-        top: 5rem;
+        top: 4rem;
         height: 20rem;
         overflow: hidden;
     }
@@ -90,16 +88,17 @@
 
 <script lang="ts">
     import Icon from "$lib/components/icons/icon.svelte"
+    import SearchbarResults from "$lib/components/searchbar_results.svelte"
     import { find } from "$lib/scripts/searchbar/find"
-    import { mdiTextSearch } from "@mdi/js"
+    import { mdiLayersSearch } from "@mdi/js"
     import { onMount } from "svelte"
-    import SearchbarResults from "./searchbar_results.svelte"
     type Props = {
         query: string
+        prefix: string
         focused: boolean
         placeholder?: string
     }
-    let { query = $bindable(""), focused = $bindable(false), placeholder = "" }: Props = $props()
+    let { query = $bindable(""), focused = $bindable(false), placeholder = "", prefix }: Props = $props()
     let suggestions = $derived(find(query))
     let input: HTMLInputElement | undefined
     function onfocus() {
@@ -157,7 +156,9 @@
 
 <div class="searchbar">
     <button class="button" class:focused>
-        <div class="icon"><Icon path={mdiTextSearch} size="1.5rem" /></div>
+        <div class="icon" class:focused>
+            <Icon path={mdiLayersSearch} size="1.5rem" />
+        </div>
         <input
             bind:this={input}
             class="text"
@@ -169,12 +170,11 @@
             onkeydown={oninputkeydown}
             {placeholder}
         />
-        <div class="shortcut">Ctrl K</div>
     </button>
     {#if query !== ""}
         <div class="results">
             <div class="searchbar-results">
-                <SearchbarResults {suggestions} />
+                <SearchbarResults {suggestions} {prefix} />
             </div>
         </div>
     {/if}

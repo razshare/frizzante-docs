@@ -1,11 +1,7 @@
 <style>
-    :root {
-        --image-roundness: 1rem;
-    }
     .image {
         --width: auto;
         --height: auto;
-        border-radius: var(--image-roundness);
         width: var(--width);
         height: var(--height);
         max-width: 100%;

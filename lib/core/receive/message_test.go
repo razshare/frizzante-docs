@@ -4,7 +4,7 @@ import (
 	"io"
 	"testing"
 
-	"main/lib/dev/mocks"
+	"main/lib/core/mocks"
 )
 
 func TestMessage(t *testing.T) {

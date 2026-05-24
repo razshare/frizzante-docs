@@ -1,6 +1,7 @@
 export const views = {
     GetStarted: () => import("$lib/views/get_started.svelte"),
     Basics: () => import("$lib/views/basics.svelte"),
+    BuildCheckpoints: () => import("$lib/views/build_checkpoints.svelte"),
     WebSockets: () => import("$lib/views/web_sockets.svelte"),
     ServerSentEvents: () => import("$lib/views/server_sent_events.svelte"),
     Guards: () => import("$lib/views/guards.svelte"),

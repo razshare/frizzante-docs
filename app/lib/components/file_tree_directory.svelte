@@ -1,7 +1,7 @@
 <style>
     :root {
         --file-tree-directory-gap: 0.1rem;
-        --file-tree-directory-text-hover: #a2dece;
+        --file-tree-directory-text-hover: #d24317;
         --file-tree-directory-link-background: #878580;
         --file-tree-directory-link-width: 0.1rem;
     }

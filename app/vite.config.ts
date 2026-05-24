@@ -1,20 +1,20 @@
-import { defineConfig } from "vite"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
 import tailwindcss from "@tailwindcss/vite"
 import path from "path"
 import { fileURLToPath } from "url"
-
+import { defineConfig } from "vite"
 const file = fileURLToPath(import.meta.url)
 const dir = path.dirname(file).replace(/\\+/, "/")
 const dev = (process.env.DEV ?? "0") === "1"
-
+const prefix = process.env.PREFIX ?? ""
+console.log(`using prefix - "${prefix}"`)
 let sourcemap: "inline" | boolean = false
 if (dev) {
     sourcemap = "inline"
 }
-
 // https://vite.dev/config/
 export default defineConfig({
+    base: prefix,
     plugins: [
         tailwindcss(),
         svelte({
@@ -37,6 +37,10 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 index: "./index.html",
+            },
+            output: {
+                chunkFileNames: `assets/[name].js`,
+                assetFileNames: `assets/[name].[ext]`,
             },
         },
     },

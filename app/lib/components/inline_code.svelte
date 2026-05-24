@@ -1,10 +1,10 @@
 <style>
     :root {
-        --inline-code-background: rgba(30, 119, 148, 0.1);
+        --inline-code-background: rgba(149, 227, 255, 0.107);
         --inline-code-text: rgba(255, 255, 255, 0.7);
         --inline-code-top: 0.1.3rem;
         --inline-code-padding: 0.3rem;
-        --inline-code-roundness: 0.3rem;
+        --inline-code-roundness: 0;
     }
     .inline-code {
         position: relative;

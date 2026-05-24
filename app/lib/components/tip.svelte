@@ -5,16 +5,16 @@
         --tip-icon: #a193bd;
         --tip-title: #a193bd;
         --tip-padding: 0.7rem;
-        --tip-roundness: 1rem;
+        --tip-roundness: 0;
         --tip-margin: 0.5rem;
     }
     .tip {
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-areas:
-            "note-icon note-title"
+            "tip-icon tip-title"
             "empty empty"
-            "note-content note-content";
+            "tip-content tip-content";
         background-color: var(--tip-background);
         color: var(--tip-text);
         padding: var(--tip-padding);
@@ -22,17 +22,20 @@
         margin-top: var(--tip-margin);
         margin-bottom: var(--tip-margin);
     }
-    .note-icon {
-        grid-area: note-icon;
-        color: var(--danger-icon);
+    .tip-icon {
+        grid-area: tip-icon;
+        color: var(--tip-icon);
     }
-    .note-title {
-        grid-area: note-title;
+    .tip-title {
+        display: grid;
+        align-items: center;
+        grid-area: tip-title;
         color: var(--tip-title);
-        padding-left: var(--tip-padding);
+        padding-left: calc(var(--tip-padding) / 4);
     }
-    .note-content {
-        grid-area: note-content;
+    .tip-content {
+        grid-area: tip-content;
+        padding-top: calc(var(--tip-padding) / 2);
     }
 </style>
 
@@ -45,9 +48,9 @@
 </script>
 
 <div class="tip">
-    <div class="note-icon">
-        <Icon path={mdiLightbulbGroupOutline} size="1.5rem" />
+    <div class="tip-icon">
+        <Icon path={mdiLightbulbGroupOutline} size="1.4rem" />
     </div>
-    <div class="note-title">Tip</div>
-    <div class="note-content">{@render children()}</div>
+    <div class="tip-title">Tip</div>
+    <div class="tip-content">{@render children()}</div>
 </div>

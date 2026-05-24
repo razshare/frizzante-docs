@@ -1,4 +1,5 @@
 import Basics from "$lib/views/basics.svelte"
+import BuildCheckpoints from "$lib/views/build_checkpoints.svelte"
 import Cli from "$lib/views/cli.svelte"
 import Contributing from "$lib/views/contributing.svelte"
 import Docker from "$lib/views/docker.svelte"
@@ -18,6 +19,7 @@ import WebStandards from "$lib/views/web_standards.svelte"
 export const views = {
     GetStarted,
     Basics,
+    BuildCheckpoints,
     WebSockets,
     ServerSentEvents,
     Guards,

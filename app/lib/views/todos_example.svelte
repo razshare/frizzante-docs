@@ -1,28 +1,26 @@
 <script lang="ts">
-    import Page from "$lib/components/page.svelte"
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    import gif1 from "$lib/assets/todos_example_gif_1.gif"
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     import diagram1 from "$lib/assets/todos_example_diagram_1.svg"
+    import header from "$lib/assets/todos_example_header.png"
     import Code from "$lib/components/code.svelte"
     import Footer from "$lib/components/footer.svelte"
     import HyperTable from "$lib/components/hyper_table.svelte"
     import Image from "$lib/components/image.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import Note from "$lib/components/note.svelte"
+    import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
-    import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
+    import { base } from "$lib/scripts/strings/base"
+    let { prefix } = $props()
 </script>
 
-<Page title="Todos Example">
+<Page title="Todos Example" {prefix}>
     <Title text="Todos Example" />
     <span>The starter template comes with a todos application.</span>
     <br />
     <br />
-    <Image src={gif1} width="500px" />
+    <Image src={header} width="auto" />
+    <br />
     <Title text="Main" />
     <span>The server defines a few routes.</span>
     <Code
@@ -44,7 +42,9 @@
     />
     <Title text="Fallback" />
     <span>The <InlineCode source="GET /" /> pattern acts as a fallback.</span>
-    <Image src={diagram1} width="100%" />
+    <br />
+    <Image src={diagram1} width="auto" />
+    <br />
     <span>
         With that in mind, the fallback handler tries to send back a matching file using
         <InlineCode source="send.RequestedFile()" />
@@ -76,25 +76,39 @@
     <Code
         lang="svelte"
         source={`
+            ${"<"}script lang="ts">
+                import Icon from "$lib/components/icons/icon.svelte"
+                import Layout from "$lib/components/layout.svelte"
+                import Logo from "$lib/components/logo.svelte"
+                import { href } from "$lib/scripts/core/href.ts"
+                import { mdiArrowRight } from "@mdi/js"
+            </script>
+
             <Layout title="Welcome">
                 <Logo />
                 {@render Description()}
-                <div class="pt-6"></div>
-                <div class="flex justify-center gap-2 relative">
-                    {@render BackgroundEffect()}
+                <div>
                     {@render TodosButton()}
                     {@render DocumentationButton()}
                 </div>
             </Layout>
-        `}
-    />
-    <Code
-        lang="svelte"
-        source={`
+
+            {#snippet Description()}
+                <p>Modern Go + Svelte Framework</p>
+            {/snippet}
+
             {#snippet TodosButton()}
-                <a class="btn btn-primary btn-lg" {...href("/todos")}>
-                    <span>Show Todos</span>
-                    <Icon path={mdiArrowRight} size="18" />
+                <a {...href("/todos")}>
+                    <button>
+                        <span>Show Todos</span>
+                        <Icon path={mdiArrowRight} />
+                    </button>
+                </a>
+            {/snippet}
+
+            {#snippet DocumentationButton()}
+                <a href="https://razshare.github.io/frizzante-docs/guides/get-started" target="_blank">
+                    <button>Documentation</button>
                 </a>
             {/snippet}
         `}
@@ -147,8 +161,8 @@
         source={`
             ${"<"}script lang="ts">
                 //...
-                import type { Props, Todo } from "$gen/types/main/lib/routes/todos/Props"
-                let { todos = [], error }: Props = $props()
+                import type { Props, sessions } from "$gen/types/main/lib/routes/todos/props"
+                let { items = [], error }: Props = $props()
                 //...
             </script>
         `}
@@ -157,36 +171,34 @@
         lang="svelte"
         source={`
             <Layout title="Todos">
-                <div class="w-full min-w-[450px] max-w-2xl">
-                    <div class="text-center">
-                        {@render Description()}
-                    </div>
-                    <div class="card-body relative p-6">
-                        {@render AddTodoForm()}
-                        <div class="divider"></div>
-                        {@render ShowTodosList(todos)}
-                        {@render BackButton()}
-                    </div>
-                </div>
+                {@render Description()}
+                {@render AddTodoForm()}
+                {@render TodoList(items)}
+                {@render BackButton()}
             </Layout>
         `}
     />
     <Title text="List Todos" />
-    <span>Items are listed by iterating over <InlineCode source="todos" />.</span>
+    <span>Items are listed by iterating over the <InlineCode source="items" /> prop (which comes from the server).</span
+    >
     <Code
         lang="svelte"
         source={`
-            {#snippet ShowTodosList(todos: sessions.Todo[])}
-                {#if todos.length > 0}
-                    {#each todos as todo, index (index)}
-                        <div in:slide out:slide class="flex w-full text-base-content/80">
-                            {@render ToggleTodoButton(todo, index)}
-                            {@render RemoveTodoButton(index)}
-                        </div>
-                    {/each}
+            {#snippet TodoList(items: sessions.Todo[])}
+                {#if items.length > 0}
+                    <div class="todo-list">
+                        {#each items as todo, index (index)}
+                            <div transition:slide class="item">
+                                {@render ToggleTodoButton(todo, index)}
+                                {@render RemoveTodoButton(index)}
+                            </div>
+                        {/each}
+                    </div>
                     {@render CountUncheckedTodos()}
                 {:else}
-                    {@render NoTodosFound()}
+                    <div class="todo-list">
+                        {@render NoTodosFound()}
+                    </div>
                 {/if}
             {/snippet}
         `}
@@ -194,7 +206,8 @@
     <span>Each item has remove and toggle buttons.</span>
     <Note>
         <span>Type <InlineCode source="sessions.Todo" /> is an autogenerated type definition.</span>
-        <span>See <a href="/type_definitions">type definitions</a>.</span>
+        <br />
+        <span>See <a href={base("/type_definitions", { prefix })}>type definitions</a>.</span>
     </Note>
     <Title text="Remove Todos" />
     <span>Items are removed by submitting a form to <InlineCode source="POST /remove" />.</span>
@@ -204,23 +217,14 @@
             {#snippet RemoveTodoButton(index: number)}
                 <form method="POST" {...action("/remove")}>
                     <input type="hidden" name="index" value={index} />
-                    <button
-                        type="submit"
-                        class="btn btn-ghost btn-sm btn-square hover:text-error hover:bg-error/20 transition-colors"
-                        aria-label="Delete"
-                    >
-                        <Icon path={mdiClose} size="18" />
-                    </button>
+                    <label aria-label="Delete">
+                        <Icon path={mdiClose} />
+                        <button aria-label="remove"></button>
+                    </label>
                 </form>
             {/snippet}
         `}
     />
-    <Tip>
-        <span>
-            If you need more control over errors and pending states see
-            <a href="/web_standards#form-component">Form Component</a>.
-        </span>
-    </Tip>
     <span>
         The form is then captured by the <InlineCode source="Remove" />
         handler, which does some basic validation, error handling and then finally removes the item from the session.
@@ -267,25 +271,24 @@
     <Code
         lang="svelte"
         source={`
-            {#snippet ToggleTodoButton(todo: Todo, index: number)}
+            {#snippet ToggleTodoButton(todo: sessions.Todo, index: number)}
                 {@const aria = todo.checked ? "Uncheck" : "Check"}
                 {@const value = todo.checked ? "0" : "1"}
                 {@const icon = todo.checked ? mdiCheckCircleOutline : mdiCircleOutline}
-                <form method="POST" {...action("/toggle")} class="grow content-center">
+                <form method="POST" {...action("/toggle")}>
                     <input type="hidden" name="index" value={index} />
                     <input type="hidden" name="value" {value} />
-                    <button
-                        type="submit"
-                        class="w-full flex cursor-pointer"
-                        class:line-through={todo.checked}
-                        class:text-base-content={todo.checked}
-                        class:opacity-50={todo.checked}
-                        aria-label={aria}
-                    >
+                    <label aria-label={aria}>
                         <Icon path={icon} />
-                        <div class="pr-4"></div>
-                        <span>{todo.description}</span>
-                    </button>
+                        {#if todo.checked}
+                            <strike>
+                                <span>{todo.description}</span>
+                            </strike>
+                        {:else}
+                            <span>{todo.description}</span>
+                        {/if}
+                        <button aria-label="toggle"></button>
+                    </label>
                 </form>
             {/snippet}
         `}
@@ -331,23 +334,16 @@
         lang="svelte"
         source={`
             {#snippet AddTodoForm()}
-                <form method="POST" {...action("/add")} class="flex">
-                    <input
-                        type="text"
-                        name="description"
-                        placeholder="Add a new task..."
-                        class="input bg-base-100/ text-lg w-full"
-                    />
-                    <div class="pt-4"></div>
-                    <button type="submit" class="btn btn-ghost text-lg">
-                        <Icon path={mdiPlus} size="20" />
+                <form method="POST" {...action("/add")}>
+                    <input type="text" name="description" placeholder="Add a new task..." />
+                    <br />
+                    <button type="submit">
+                        <Icon path={mdiPlus} />
                         <span>Add</span>
                     </button>
                 </form>
-
                 {#if error}
-                    <div class="pt-4"></div>
-                    <div in:slide out:slide class="alert alert-error">
+                    <div transition:slide>
                         <span>{error}</span>
                     </div>
                 {/if}
@@ -400,8 +396,9 @@
                 "https://github.com/razshare/frizzante-example-blog",
         }}
     />
-    {#snippet rightSidebar()}
+    {#snippet rightSidebar({ body })}
         <RightSidebar
+            {body}
             items={[
                 { shift: 0, text: "Todos Example" },
                 { shift: 0, text: "Main" },
@@ -417,6 +414,9 @@
         />
     {/snippet}
     {#snippet footer()}
-        <Footer previous={{ label: "Snapshots", href: "/snapshots" }} next={{ label: "Docker", href: "/docker" }} />
+        <Footer
+            previous={{ label: "Snapshots", href: base("/snapshots", { prefix }) }}
+            next={{ label: "Docker", href: base("/docker", { prefix }) }}
+        />
     {/snippet}
 </Page>

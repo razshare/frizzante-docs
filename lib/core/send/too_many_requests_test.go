@@ -3,7 +3,7 @@ package send
 import (
 	"testing"
 
-	"main/lib/dev/mocks"
+	"main/lib/core/mocks"
 )
 
 func TestTooManyRequests(t *testing.T) {

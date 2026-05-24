@@ -6,9 +6,11 @@
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
+    import { base } from "$lib/scripts/strings/base"
+    let { prefix } = $props()
 </script>
 
-<Page title="Faq">
+<Page title="Faq" {prefix}>
     <Title text="Faq" />
     <Title type="h3" text="Why doesn’t Frizzante have middleware?" />
     <span>Frizzante intentionally uses guards instead of middleware.</span>
@@ -59,7 +61,7 @@
     </ul>
     <span>
         For more details see the
-        <a href="/guards">guards page</a>.
+        <a href={base("/guards", { prefix })}>guards page</a>.
     </span>
     <Title type="h5" text="Middleware Implementation" />
     <span> If you really want middleware-like behavior, you can easily implement it in your own project. </span>
@@ -107,9 +109,11 @@
     <Note>
         <span>Your implementation may vary.</span>
         <br />
-        <span>This implementation doesn’t directly invoke the next hook, instead it sets a flag.</span>
+        <span>
+            This implementation doesn’t directly invoke the next hook, instead it use a flag to check when to stop.
+        </span>
         <br />
-        <span>This should keep your stack size smaller and thus more readable.</span>
+        <span>This should reduce nesting in your stack trace and keep it a little more readable.</span>
     </Note>
     <Title type="h5" text="Middleware Usage" />
     <Code
@@ -170,11 +174,12 @@
     </span>
     <br />
     <span>
-        You can find a Vue3 example
+        You can find an old Vue3 example
         <a target="_blank" href="https://github.com/razshare/frizzante-example-vue3">here</a>.
     </span>
-    {#snippet rightSidebar()}
+    {#snippet rightSidebar({ body })}
         <RightSidebar
+            {body}
             items={[
                 { shift: 0, text: "Faq" },
                 { shift: 0, text: "Why doesn’t Frizzante have middleware?" },
@@ -185,6 +190,6 @@
         />
     {/snippet}
     {#snippet footer()}
-        <Footer previous={{ label: "Contributing", href: "/contributing" }} />
+        <Footer previous={{ label: "Contributing", href: base("/contributing", { prefix }) }} />
     {/snippet}
 </Page>

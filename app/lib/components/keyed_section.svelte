@@ -5,6 +5,7 @@
         --indexed-section-link-background: rgba(0, 0, 0, 0.3);
         --indexed-section-link-width: 0.3rem;
         --indexed-section-gap: 0.3rem;
+        --indexed-section-badge-key-text: inherit;
     }
     .keyed-section {
         display: grid;
@@ -16,13 +17,13 @@
             "link content"
             "empty empty";
     }
-    .badge {
+    .keyed-section-badge {
         grid-area: badge;
         position: relative;
         justify-self: center;
         align-self: center;
     }
-    .badge > .key {
+    .keyed-section-badge > .keyed-section-badge-key {
         display: grid;
         justify-items: center;
         align-items: center;
@@ -31,26 +32,28 @@
         right: 0;
         top: 0;
         bottom: 0;
+        color: var(--indexed-section-badge-key-text);
+        font-weight: bold;
     }
-    .badge > .circle {
+    .keyed-section-badge > .keyed-section-badge-circle {
         position: relative;
         background: var(--indexed-section-circle-background);
         border-radius: 50%;
         padding: var(--indexed-section-circle-size);
     }
-    .content {
+    .keyed-section-content {
         grid-area: content;
         padding-top: 0.3rem; /* A small padding because OCD. */
         overflow: auto;
     }
-    .link {
+    .keyed-section-link {
         grid-area: link;
         position: relative;
         display: grid;
         justify-items: center;
         align-items: center;
     }
-    .link > .bar {
+    .keyed-section-link > .keyed-section-badge-bar {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -58,7 +61,7 @@
         border-radius: var(--indexed-section-link-width);
         background: var(--indexed-section-link-background);
     }
-    .link.hidden {
+    .keyed-section-link.hidden {
         display: none;
     }
 </style>
@@ -76,15 +79,15 @@
 </script>
 
 <div class="keyed-section">
-    <div class="badge">
-        <span class="key">{key[0]}</span>
-        <div class="circle"></div>
+    <div class="keyed-section-badge">
+        <div class="keyed-section-badge-circle"></div>
+        <span class="keyed-section-badge-key">{key[0]}</span>
     </div>
-    <div class="content">
+    <div class="keyed-section-content">
         <Title type="h6" text={description} noMargin />
         {@render children()}
     </div>
-    <div class="link" class:hidden={noLink}>
-        <div class="bar"></div>
+    <div class="keyed-section-link" class:hidden={noLink}>
+        <div class="keyed-section-badge-bar"></div>
     </div>
 </div>

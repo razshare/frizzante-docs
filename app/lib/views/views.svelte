@@ -5,16 +5,18 @@
     import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
-    import Link from "$lib/components/links/link.svelte"
     import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
+    import { href } from "$lib/scripts/core/href"
+    import { base } from "$lib/scripts/strings/base"
     import { mdiCodeBraces } from "@mdi/js"
+    let { prefix } = $props()
 </script>
 
-<Page title="Views">
+<Page title="Views" {prefix}>
     <Title text="Views" />
     <span>
         Views are svelte components exported by <InlineCode source="app/exports.server.ts" /> and/or
@@ -309,7 +311,7 @@
         <Tip>
             <span>You can combine any of these render modes with adaptive hyperlinks and forms.</span>
             <br />
-            <span>Read more about <Link href="/web_standards">web standards</Link>.</span>
+            <span>Read more about <a {...href(base("/web_standards", { prefix }))}>web standards</a>.</span>
         </Tip>
         <Tip>
             When using <InlineCode source="RenderModeFull" /> or <InlineCode source="RenderModeServer" />, You can
@@ -327,15 +329,9 @@
             </Caution>
         </Tip>
     </KeyedSection>
-    <Title text="Disabling the server-side JavaScript runtime" />
-    <span>
-        You can add the <InlineCode source="no_js_runtime" /> tag to your build process to completely disable the server-side
-        JavaScript runtime.
-    </span>
-    <Code lang="shell" source="frizzante --build --tags=no_js_runtime" />
-    <span>This will reduce the minimum size of the final binary from 25MB to 10MB.</span>
-    {#snippet rightSidebar()}
+    {#snippet rightSidebar({ body })}
         <RightSidebar
+            {body}
             items={[
                 { shift: 0, text: "Views" },
                 { shift: 0, text: "Server Exports" },
@@ -347,14 +343,13 @@
                 { shift: 1, text: "RenderModeFull" },
                 { shift: 1, text: "RenderModeServer" },
                 { shift: 1, text: "RenderModeClient" },
-                { shift: 0, text: "Disabling the server-side JavaScript runtime" },
             ]}
         />
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Guards", href: "/guards" }}
-            next={{ label: "Web Standards", href: "/web_standards" }}
+            previous={{ label: "Guards", href: base("/guards", { prefix }) }}
+            next={{ label: "Web Standards", href: base("/web_standards", { prefix }) }}
         />
     {/snippet}
 </Page>

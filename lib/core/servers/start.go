@@ -9,6 +9,7 @@ import (
 	"syscall"
 
 	"main/lib/core/clients"
+	"main/lib/core/stack"
 	"main/lib/core/values"
 	"main/lib/core/views/renders"
 )
@@ -37,7 +38,10 @@ func Start(server *Server) (err error) {
 	for _, route := range server.Routes {
 		handler.HandleFunc(route.Pattern, func(writer http.ResponseWriter, request *http.Request) {
 			if errLocal := server.Cors.Check(request); errLocal != nil {
-				server.ErrorLog.Println(errLocal)
+				server.ErrorLog.Printf(
+					"servers.Start: CORS check failed: %v",
+					errLocal,
+				)
 				return
 			}
 			client := &clients.Client{
@@ -65,6 +69,15 @@ func Start(server *Server) (err error) {
 				}
 			}
 			route.Handler(client)
+			if client.WebSocket != nil {
+				if cerr := client.WebSocket.Close(); cerr != nil {
+					client.Options.ErrorLog.Printf(
+						"send.WsUpgradeWithUpgrader: failed to close WebSocket connection: %v\n%s",
+						cerr,
+						stack.Trace(),
+					)
+				}
+			}
 			if client.Channels.End != nil {
 				client.Channels.End <- values.None
 			}

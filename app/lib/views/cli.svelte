@@ -8,10 +8,12 @@
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
+    import { base } from "$lib/scripts/strings/base"
     import { mdiApplication, mdiCodeBraces, mdiFolder } from "@mdi/js"
+    let { prefix } = $props()
 </script>
 
-<Page title="Cli">
+<Page title="Cli" {prefix}>
     <Title text="Cli" />
     <span>The cli provides various commands to manage your project lifecycle, from creation to deployment.</span>
     <Title text="Create Project" />
@@ -47,78 +49,6 @@
     <Note>
         <span>Many of frizzante’s functionalities come as code and resource generations, not as packages.</span>
     </Note>
-    <Tip>
-        <Title text="Plugins" type="h5" noMargin />
-        <span>It is possible, but not required, to create generation plugins for you cli.</span>
-        <br />
-        <br />
-        <span>
-            All you need to do is create a directory
-            <InlineCode source="plugins/generate/[plugin name]" /> directory in your project.
-        </span>
-        <br />
-        <span>This directory must be a Go <InlineCode source="main" /> package.</span>
-        <FileTree>
-            {#snippet children({ Directory, File })}
-                <Directory name="plugins" expanded>
-                    <Directory name="generate" expanded>
-                        <Directory name="my-awesome-plugin" expanded>
-                            <File name="main.go" />
-                        </Directory>
-                    </Directory>
-                </Directory>
-            {/snippet}
-        </FileTree>
-        <Code
-            lang="go"
-            source={`
-                package main
-
-                func main() {
-                    println("hello, this is my generation plugin")
-                }
-            `}
-        />
-        <span>You will then be able to invoke this plugin using the frizzante cli.</span>
-        <Code lang="go" source="frizzante generate my-awesome-plugin" />
-        <Note>
-            <span>
-                Environment variables, cli flags and additional cli positional parameters will be passed down to your
-                plugin program.
-            </span>
-            <br />
-            <span>For example, given this plugin program</span>
-            <Code
-                lang="go"
-                source={`
-                    package main
-
-                    import (
-                        "fmt"
-                        "os"
-                        "strings"
-                    )
-
-                    func main() {
-                        fmt.Printf("args: %s\\n", strings.Join(os.Args, " "))
-                    }
-                `}
-            />
-            <span>The following script</span>
-            <Code lang="go" source="frizzante --strict generate my-awesome-plugin world" />
-            <span>Will output to the console something like this</span>
-            <Code
-                lang="bash"
-                source={`
-                    args: /tmp/go-build2815184765/b001/exe/types --strict --bun=".gen/bun/bun" --go="go" --air=".gen/air/air" --sqlc=".gen/sqlc/sqlc" world 
-                `}
-            />
-            <span>
-                There are no implicit flags, frizzante will resolve the default flags automatically and pass them down
-                to your plugin program explicitly.
-            </span>
-        </Note>
-    </Tip>
     <Title text="Configure" />
     <Code lang="sh" source="frizzante configure" />
     <span>Runs</span>
@@ -165,7 +95,7 @@
     </FileTree>
     <Note>
         <span>
-            JavaScript packages are installed using <InlineCode source=".gen/bun/bin" /> by default. You can point to a custom
+            JavaScript packages are installed using <InlineCode source=".gen/bun/bun" /> by default. You can point to a custom
             Bun binary of your choice by setting <InlineCode source="--bun" />.
         </span>
 
@@ -194,14 +124,14 @@
     <FileTree>
         {#snippet children({ Directory, File })}
             <File name="go.mod" />
-            <Directory name="app">
+            <Directory name="app" expanded>
                 <File name="package.json" icon={mdiCodeBraces} />
             </Directory>
         {/snippet}
     </FileTree>
     <Note>
         <span>
-            JavaScript packages are updated using <InlineCode source=".gen/bun/bin" /> by default. You can point to a custom
+            JavaScript packages are updated using <InlineCode source=".gen/bun/bun" /> by default. You can point to a custom
             Bun binary of your choice by setting <InlineCode source="--bun" />
         </span>
         <span>
@@ -255,7 +185,7 @@
     </span>
     <Note>
         <span>
-            Your app directory is packaged using <InlineCode source=".gen/bun/bin" /> by default. You can point to a custom
+            Your app directory is packaged using <InlineCode source=".gen/bun/bun" /> by default. You can point to a custom
             Bun binary of your choice by setting <InlineCode source="--bun" />.
         </span>
         <br />
@@ -331,7 +261,7 @@
     </span>
     <Note>
         <span>
-            Checks are run using <InlineCode source=".gen/bun/bin" /> by default. You can point to a custom Bun binary of
+            Checks are run using <InlineCode source=".gen/bun/bun" /> by default. You can point to a custom Bun binary of
             your choice by setting <InlineCode source="--bun" />.
         </span>
         <span>
@@ -372,7 +302,7 @@
     <Title text="Clean Project" />
     <Code lang="sh" source="frizzante clean-project" />
     <span>
-        Removes directories
+        Removes
         <InlineCode source=".gen" />,
         <InlineCode source="app/dist" />,
         <InlineCode source="app/.vite" />,
@@ -403,7 +333,11 @@
     />
     <span>
         Normally <InlineCode source="frizzante" /> will prompt the user for required parameters whenever they're being passed
-        in, the <InlineCode source="--strict" />
+        in.
+    </span>
+    <br />
+    <span>
+        The <InlineCode source="--strict" />
         flag disables this behavior and instead defaults to stopping the program whenever a required parameter is missing.
     </span>
     <Tip>
@@ -428,12 +362,12 @@
             frizzante help
         `}
     />
-    <span>Shows the complete list of available commands.</span>
+    <span>Shows the complete list of available commands (WIP).</span>
     <Title text="Interactive Mode" />
     <Code lang="sh" source="frizzante" />
     <span>
-        Running <InlineCode source="frizzante" /> without any flags starts an interactive menu where you can select commands
-        using arrow keys.
+        Running <InlineCode source="frizzante" /> without any parameters or flags starts an interactive menu where you can
+        select commands using arrow keys.
     </span>
     <Note>
         <span>This is useful if</span>
@@ -443,13 +377,13 @@
             <li>you prefer a guided interface</li>
         </ul>
     </Note>
-    {#snippet rightSidebar()}
+    {#snippet rightSidebar({ body })}
         <RightSidebar
+            {body}
             items={[
                 { shift: 0, text: "Cli" },
                 { shift: 0, text: "Create Project" },
                 { shift: 0, text: "Generate" },
-                { shift: 1, text: "Plugins" },
                 { shift: 0, text: "Configure" },
                 { shift: 0, text: "Install" },
                 { shift: 0, text: "Update" },
@@ -469,8 +403,8 @@
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Web Standards", href: "/web_standards" }}
-            next={{ label: "Type Definitions", href: "/type_definitions" }}
+            previous={{ label: "Web Standards", href: base("/web_standards", { prefix }) }}
+            next={{ label: "Type Definitions", href: base("/type_definitions", { prefix }) }}
         />
     {/snippet}
 </Page>

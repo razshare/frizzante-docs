@@ -1,7 +1,7 @@
 <style>
     :root {
         --layout-padding: 1rem;
-        --layout-navbar-background: rgba(0, 0, 0, 0.3);
+        --layout-navbar-background: #100f0f;
     }
     .layout {
         display: grid;
@@ -15,6 +15,24 @@
         grid-template-areas:
             "layout-navbar layout-navbar layout-navbar"
             "layout-left-sidebar layout-body layout-right-sidebar";
+    }
+    @media screen and (min-width: 980px) {
+        .layout {
+            left: 0;
+            right: 0;
+        }
+    }
+    @media screen and (min-width: 1600px) {
+        .layout {
+            left: 200px;
+            right: 200px;
+        }
+    }
+    @media screen and (min-width: 2400px) {
+        .layout {
+            left: 500px;
+            right: 500px;
+        }
     }
     @media screen and (max-width: 980px) {
         .layout {
@@ -57,9 +75,11 @@
         grid-area: layout-body;
         overflow: auto;
         z-index: 0;
+        padding: var(--layout-padding);
     }
     .layout-body-content {
         z-index: 0;
+        padding-top: var(--layout-padding);
     }
     .layout-body-footer {
         z-index: 0;
@@ -68,6 +88,7 @@
 
 <script lang="ts">
     import { type Snippet } from "svelte"
+    import { fade } from "svelte/transition"
     type Props = {
         title: string
         navbar: Snippet
@@ -75,8 +96,9 @@
         rightSidebar: Snippet
         content: Snippet
         footer: Snippet
+        body: false | HTMLDivElement
     }
-    let { title, navbar, leftSidebar, rightSidebar, content, footer }: Props = $props()
+    let { title, navbar, leftSidebar, rightSidebar, content, footer, body = $bindable(false) }: Props = $props()
 </script>
 
 <svelte:head>
@@ -87,10 +109,10 @@
     />
     <title>{title}</title>
 </svelte:head>
-<div class="layout">
+<div class="layout" in:fade={{ duration: 0.1 }}>
     <div class="layout-left-sidebar">{@render leftSidebar()}</div>
     <div class="layout-right-sidebar">{@render rightSidebar()}</div>
-    <div class="layout-body">
+    <div bind:this={body} class="layout-body">
         <div class="layout-body-content">{@render content()}</div>
         <div class="layout-body-footer">{@render footer()}</div>
     </div>

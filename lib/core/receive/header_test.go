@@ -3,7 +3,7 @@ package receive
 import (
 	"testing"
 
-	"main/lib/dev/mocks"
+	"main/lib/core/mocks"
 )
 
 func TestHeader(t *testing.T) {

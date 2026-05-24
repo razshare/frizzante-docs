@@ -8,9 +8,11 @@
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
+    import { base } from "$lib/scripts/strings/base"
+    let { prefix } = $props()
 </script>
 
-<Page title="Snapshots">
+<Page title="Snapshots" {prefix}>
     <Title text="Snapshots" />
     <span>You can take a snapshot of a server using the cli and statically generate your website.</span>
     <br />
@@ -150,9 +152,9 @@
     </KeyedSection>
     <KeyedSection key="3" description="Snapshot" noLink>
         <span>
-            Run the frizzante cli, point it to the <InlineCode source="GET /@statics" /> route and give it an output directory.
+            Run the frizzante cli and point it to the <InlineCode source="GET /@statics" /> route.
         </span>
-        <Code lang="bash" source="frizzante generate snapshot http://127.0.0.1:8080/@statics .gen/snapshot" />
+        <Code lang="bash" source="frizzante generate snapshot http://127.0.0.1:8080/@statics" />
         <span>
             This will retrieve the list of static routes from
             <InlineCode source="http://127.0.0.1:8080/@statics" /> and generate the output in
@@ -202,26 +204,27 @@
         <br />
         <span>
             You can publish the <InlineCode source=".gen/snapshot" />
-            directory to a CDN or any other web file server like
-            <a target="_blank" href="https://docs.github.com/en/pages">GitHub Pages</a>,
-            <a target="_blank" href="https://docs.gitlab.com/user/project/pages">GitLab Pages</a>,
-            <a target="_blank" href="https://neocities.org">Neocities</a>
-            and your website should render statically.
+            directory to a CDN and your website should render statically.
         </span>
     </KeyedSection>
-    {#snippet rightSidebar()}
-        <RightSidebar items={[{ shift: 0, text: "Snapshots" }]} />
-        <RightSidebar items={[{ shift: 1, text: "List statics" }]} />
-        <RightSidebar items={[{ shift: 1, text: "Start the application" }]} />
-        <RightSidebar items={[{ shift: 2, text: "Start development server" }]} />
-        <RightSidebar items={[{ shift: 2, text: "Start production server" }]} />
-        <RightSidebar items={[{ shift: 2, text: "Start development server using makefile" }]} />
-        <RightSidebar items={[{ shift: 1, text: "Snapshot" }]} />
+    {#snippet rightSidebar({ body })}
+        <RightSidebar
+            {body}
+            items={[
+                { shift: 0, text: "Snapshots" },
+                { shift: 1, text: "List statics" },
+                { shift: 1, text: "Start the application" },
+                { shift: 2, text: "Start development server" },
+                { shift: 2, text: "Start production server" },
+                { shift: 2, text: "Start development server using makefile" },
+                { shift: 1, text: "Snapshot" },
+            ]}
+        />
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Type Definitions", href: "/type_definitions" }}
-            next={{ label: "Todos Example", href: "/todos_example" }}
+            previous={{ label: "Type Definitions", href: base("/type_definitions", { prefix }) }}
+            next={{ label: "Todos Example", href: base("/todos_example", { prefix }) }}
         />
     {/snippet}
 </Page>

@@ -7,8 +7,8 @@ import (
 
 	"github.com/dop251/goja"
 	"main/lib/core/security"
+	"main/lib/core/types"
 	"main/lib/core/views"
-	"main/lib/dev/types"
 )
 
 func NewRender(options NewRenderOptions) (render Render, err error) {
@@ -32,14 +32,6 @@ func NewRender(options NewRenderOptions) (render Render, err error) {
 	}
 	if err = console.Set("warn", CreateLogger(CreateLoggerOptions{
 		Level:    LogLevelWarning,
-		Runtime:  runtime,
-		ErrorLog: options.ErrorLog,
-		InfoLog:  options.InfoLog,
-	})); err != nil {
-		return
-	}
-	if err = console.Set("error", CreateLogger(CreateLoggerOptions{
-		Level:    LogLevelDanger,
 		Runtime:  runtime,
 		ErrorLog: options.ErrorLog,
 		InfoLog:  options.InfoLog,

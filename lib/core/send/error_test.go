@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"main/lib/dev/mocks"
+	"main/lib/core/mocks"
 )
 
 func TestError(t *testing.T) {

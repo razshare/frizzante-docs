@@ -5,9 +5,11 @@
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
+    import { base } from "$lib/scripts/strings/base"
+    let { prefix } = $props()
 </script>
 
-<Page title="Server Sent Events">
+<Page title="Server Sent Events" {prefix}>
     <Title text="Server Sent Events" />
     <span>Use <InlineCode source="send.SseUpgrade()" /> to upgrade the connection to server sent events.</span>
     <Code lang="go" source={`routes.Route{Pattern: "GET /sse", Handler: welcome.View}`} />
@@ -56,10 +58,13 @@
         {/each}
     `}
     />
-    {#snippet rightSidebar()}
-        <RightSidebar items={[{ shift: 0, text: "Server Sent Events" }]} />
+    {#snippet rightSidebar({ body })}
+        <RightSidebar {body} items={[{ shift: 0, text: "Server Sent Events" }]} />
     {/snippet}
     {#snippet footer()}
-        <Footer previous={{ label: "Web Sockets", href: "/web_sockets" }} next={{ label: "Guards", href: "/guards" }} />
+        <Footer
+            previous={{ label: "Web Sockets", href: base("/web_sockets", { prefix }) }}
+            next={{ label: "Guards", href: base("/guards", { prefix }) }}
+        />
     {/snippet}
 </Page>

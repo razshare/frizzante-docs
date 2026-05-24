@@ -3,14 +3,16 @@
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
+    import { base } from "$lib/scripts/strings/base"
+    let { prefix } = $props()
 </script>
 
-<Page title="Issues">
+<Page title="Issues" {prefix}>
     <Title text="Issues" />
     <span>This document is a guide on how to submit bug reports and feature requests.</span>
     <Title text="Reporting a Bug" />
     <span>
-        Make sure to read the <a href="/">documentation</a> before submitting a bug report.
+        Make sure to read the <a href={base("/get_started", { prefix })}>documentation</a> before submitting a bug report.
     </span>
     <br />
     <span>
@@ -26,7 +28,7 @@
     </span>
     <Title text="Requesting a Feature" />
     <span>
-        Make sure to read the <a href="/">documentation</a> before submitting a feature request.
+        Make sure to read the <a href={base("/get_started", { prefix })}>documentation</a> before submitting a feature request.
     </span>
     <br />
     <span>
@@ -36,8 +38,9 @@
         </a>.
     </span>
 
-    {#snippet rightSidebar()}
+    {#snippet rightSidebar({ body })}
         <RightSidebar
+            {body}
             items={[
                 { shift: 0, text: "Issues" },
                 { shift: 0, text: "Reporting a Bug" },
@@ -47,8 +50,8 @@
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Docker", href: "/docker" }}
-            next={{ label: "Contributing", href: "/contributing" }}
+            previous={{ label: "Docker", href: base("/docker", { prefix }) }}
+            next={{ label: "Contributing", href: base("/contributing", { prefix }) }}
         />
     {/snippet}
 </Page>

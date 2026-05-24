@@ -1,79 +1,78 @@
 <style>
     :root {
+        --left-sidebar-gap: 0.5rem;
         --left-sidebar-padding: 1rem;
-        --left-sidebar-item-padding: 0.5rem;
-        --left-sidebar-item-roundness: 1rem;
-        --left-sidebar-item-hover-background: rgba(162, 222, 206, 0.1);
+        --left-sidebar-item-roundness: 0;
+        --left-sidebar-text: #cecdc3;
+        --left-sidebar-text-active: #d24317;
     }
     .left-sidebar {
+        display: grid;
+        gap: var(--left-sidebar-gap);
         padding: var(--left-sidebar-padding);
+        padding-top: 0;
     }
     .left-sidebar-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        padding: var(--left-sidebar-item-padding);
         border-radius: var(--left-sidebar-item-roundness);
-        grid-template-areas: "left-sidebar-hint left-sidebar-text";
+        color: var(--left-sidebar-text);
+        text-decoration: none;
+        opacity: 0.5;
     }
     .left-sidebar-item:hover {
-        background-color: var(--left-sidebar-item-hover-background);
+        text-decoration: none;
+        opacity: 1;
     }
-    .left-sidebar-hint {
-        grid-area: left-sidebar-hint;
-    }
-    .left-sidebar-text {
-        grid-area: left-sidebar-text;
-    }
-    .icon {
-        padding-right: 0.1rem;
-        top: 0.1rem;
+    .active {
+        opacity: 1;
+        color: var(--left-sidebar-text-active);
+        font-weight: bold;
     }
 </style>
 
 <script lang="ts">
-    import Link from "$lib/components/links/link.svelte"
     import MenuItem from "$lib/components/menu_item.svelte"
+    import { href } from "$lib/scripts/core/href"
     import type { View } from "$lib/scripts/core/view"
-    import { mdiArrowRight, mdiCloudRefresh } from "@mdi/js"
+    import { base } from "$lib/scripts/strings/base"
     import { getContext } from "svelte"
-    import Icon from "./icons/icon.svelte"
-    const view = getContext("view") as View<unknown>
     type Item = { text: string; viewName: string; href: string }
+    const view = getContext("view") as View<unknown>
+    let { prefix } = $props()
 </script>
 
 {#snippet item(item: Item)}
-    <Link href={item.href}>
-        {#snippet children({ pending })}
-            <div class="left-sidebar-item">
-                <div class="left-sidebar-hint">
-                    {#if pending}
-                        <div class="icon"><Icon path={mdiCloudRefresh} /></div>
-                    {:else if view.name === item.viewName}
-                        <div class="icon"><Icon path={mdiArrowRight} /></div>
-                    {/if}
-                </div>
-                <div class="left-sidebar-text">
-                    <MenuItem>{item.text}</MenuItem>
-                </div>
-            </div>
-        {/snippet}
-    </Link>
+    <a class="left-sidebar-item" class:active={view.name === item.viewName} {...href(item.href)}>
+        <MenuItem>{item.text}</MenuItem>
+    </a>
 {/snippet}
 
 <div class="left-sidebar">
-    {@render item({ text: "Get Started", viewName: "GetStarted", href: "/get_started" })}
-    {@render item({ text: "Basics", viewName: "Basics", href: "/basics" })}
-    {@render item({ text: "Web Sockets", viewName: "WebSockets", href: "/web_sockets" })}
-    {@render item({ text: "Server Sent Events", viewName: "ServerSentEvents", href: "/server_sent_events" })}
-    {@render item({ text: "Guards", viewName: "Guards", href: "/guards" })}
-    {@render item({ text: "Views", viewName: "Views", href: "/views" })}
-    {@render item({ text: "Web Standards", viewName: "WebStandards", href: "/web_standards" })}
-    {@render item({ text: "Cli", viewName: "Cli", href: "/cli" })}
-    {@render item({ text: "Type Definitions", viewName: "TypeDefinitions", href: "/type_definitions" })}
-    {@render item({ text: "Snapshots", viewName: "Snapshots", href: "/snapshots" })}
-    {@render item({ text: "Todos Example", viewName: "TodosExample", href: "/todos_example" })}
-    {@render item({ text: "Docker", viewName: "Docker", href: "/docker" })}
-    {@render item({ text: "Issues", viewName: "Issues", href: "/issues" })}
-    {@render item({ text: "Contributing", viewName: "Contributing", href: "/contributing" })}
-    {@render item({ text: "Faq", viewName: "Faq", href: "/faq" })}
+    {@render item({ text: "Get Started", viewName: "GetStarted", href: base("/get_started", { prefix }) })}
+    {@render item({ text: "Basics", viewName: "Basics", href: base("/basics", { prefix }) })}
+    {@render item({
+        text: "Build Checkpoints",
+        viewName: "BuildCheckpoints",
+        href: base("/build_checkpoints", { prefix }),
+    })}
+    {@render item({ text: "Web Sockets", viewName: "WebSockets", href: base("/web_sockets", { prefix }) })}
+    {@render item({
+        text: "Server Sent Events",
+        viewName: "ServerSentEvents",
+        href: base("/server_sent_events", { prefix }),
+    })}
+    {@render item({ text: "Guards", viewName: "Guards", href: base("/guards", { prefix }) })}
+    {@render item({ text: "Views", viewName: "Views", href: base("/views", { prefix }) })}
+    {@render item({ text: "Web Standards", viewName: "WebStandards", href: base("/web_standards", { prefix }) })}
+    {@render item({ text: "Cli", viewName: "Cli", href: base("/cli", { prefix }) })}
+    {@render item({
+        text: "Type Definitions",
+        viewName: "TypeDefinitions",
+        href: base("/type_definitions", { prefix }),
+    })}
+    {@render item({ text: "Snapshots", viewName: "Snapshots", href: base("/snapshots", { prefix }) })}
+    {@render item({ text: "Todos Example", viewName: "TodosExample", href: base("/todos_example", { prefix }) })}
+    {@render item({ text: "Docker", viewName: "Docker", href: base("/docker", { prefix }) })}
+    {@render item({ text: "Issues", viewName: "Issues", href: base("/issues", { prefix }) })}
+    {@render item({ text: "Contributing", viewName: "Contributing", href: base("/contributing", { prefix }) })}
+    {@render item({ text: "Faq", viewName: "Faq", href: base("/faq", { prefix }) })}
 </div>

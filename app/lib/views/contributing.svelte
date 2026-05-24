@@ -5,9 +5,11 @@
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
+    import { base } from "$lib/scripts/strings/base"
+    let { prefix } = $props()
 </script>
 
-<Page title="Contributing">
+<Page title="Contributing" {prefix}>
     <Title text="Contributing" />
     <span>
         This document describes the full process of setting up a fully working local development environment and
@@ -76,8 +78,9 @@
     <span>
         When you’re done with your changes you can submit a pull request in order to implement them into frizzante.
     </span>
-    {#snippet rightSidebar()}
+    {#snippet rightSidebar({ body })}
         <RightSidebar
+            {body}
             items={[
                 { shift: 0, text: "Contributing" },
                 { shift: 0, text: "Clone Repository" },
@@ -90,6 +93,9 @@
         />
     {/snippet}
     {#snippet footer()}
-        <Footer previous={{ label: "Issues", href: "/issues" }} next={{ label: "Faq", href: "/faq" }} />
+        <Footer
+            previous={{ label: "Issues", href: base("/issues", { prefix }) }}
+            next={{ label: "Faq", href: base("/faq", { prefix }) }}
+        />
     {/snippet}
 </Page>

@@ -10,8 +10,10 @@
     }
     .file-icon {
         grid-area: file-icon;
-        top: 0.2rem;
-        left: 0.2rem;
+        position: relative;
+        top: 0.3rem;
+        left: 0.3rem;
+        padding-right: 0.3rem;
     }
     .file-name {
         grid-area: file-name;

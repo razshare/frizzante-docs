@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"main/lib/dev/mocks"
+	"main/lib/core/mocks"
 )
 
 func TestFormParsedValueString(t *testing.T) {

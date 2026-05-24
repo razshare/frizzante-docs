@@ -3,7 +3,7 @@
         --feature-background: #1c1b1a;
         --feature-gap: 1rem;
         --feature-padding: 3rem;
-        --feature-roundness: 1rem;
+        --feature-roundness: 0;
     }
     .feature {
         display: grid;

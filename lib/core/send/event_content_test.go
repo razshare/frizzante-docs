@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"main/lib/dev/mocks"
+	"main/lib/core/mocks"
 )
 
 func TestEventContentWithoutUpgrade(t *testing.T) {

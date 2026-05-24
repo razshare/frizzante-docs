@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"testing"
 
-	"main/lib/dev/mocks"
+	"main/lib/core/mocks"
 )
 
 func TestBasicAuth(t *testing.T) {
