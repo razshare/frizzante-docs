@@ -72,4 +72,6 @@ __debug*
 /.gen
 /main
 /cover.*
+
+# App
 /docs
