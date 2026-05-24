@@ -85,7 +85,7 @@
 
 <div class="navbar">
     <div class="navbar-menu-link" class:hidden={noMenuLink}>
-        <a {...href(base("/full-screen-menu", { prefix }))}>
+        <a {...href(base("/full_screen_menu", { prefix }))}>
             <Icon path={mdiFunction} size="2rem" />
         </a>
     </div>

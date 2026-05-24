@@ -1,9 +1,9 @@
 <style>
     :root {
-        --full-screen-menu-padding: 1rem;
-        --full-screen-menu-content-padding: 1rem;
+        --full_screen_menu-padding: 1rem;
+        --full_screen_menu-content-padding: 1rem;
     }
-    .full-screen-menu {
+    .full_screen_menu {
         position: fixed;
         left: 0;
         top: 0;
@@ -11,18 +11,18 @@
         bottom: 0;
         overflow: hidden;
         display: grid;
-        padding: var(--full-screen-menu-padding);
+        padding: var(--full_screen_menu-padding);
         grid-template-rows: auto 1fr;
         grid-template-areas:
-            "full-screen-menu-navbar"
-            "full-screen-menu-content";
+            "full_screen_menu-navbar"
+            "full_screen_menu-content";
     }
-    .full-screen-menu-navbar {
-        grid-area: full-screen-menu-navbar;
+    .full_screen_menu-navbar {
+        grid-area: full_screen_menu-navbar;
     }
-    .full-screen-menu-content {
-        grid-area: full-screen-menu-content;
-        padding: var(--full-screen-menu-content-padding);
+    .full_screen_menu-content {
+        grid-area: full_screen_menu-content;
+        padding: var(--full_screen_menu-content-padding);
         overflow: auto;
     }
 </style>
@@ -56,11 +56,11 @@
     })
 </script>
 
-<div class="full-screen-menu">
-    <div class="full-screen-menu-content">
+<div class="full_screen_menu">
+    <div class="full_screen_menu-content">
         <LeftSidebar {prefix} />
     </div>
-    <div class="full-screen-menu-navbar">
+    <div class="full_screen_menu-navbar">
         <Navbar bind:search={searchQuery} bind:focused={searchFocused} noMenuLink {prefix} />
     </div>
 </div>

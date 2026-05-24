@@ -15,5 +15,5 @@ export const views = {
     Contributing: () => import("$lib/views/contributing.svelte"),
     Faq: () => import("$lib/views/faq.svelte"),
     Snapshots: () => import("$lib/views/snapshots.svelte"),
-    FullScreenMenu: () => import("$lib/views/full-screen-menu.svelte"),
+    FullScreenMenu: () => import("$lib/views/full_screen_menu.svelte"),
 }
