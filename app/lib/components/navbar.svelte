@@ -8,8 +8,8 @@
         display: grid;
         gap: var(--navbar-gap);
         align-items: center;
-        grid-template-columns: auto 1fr 2fr 2fr auto 0;
-        grid-template-areas: "navbar-logo navbar-title navbar-searchbar empty navbar-links navbar-menu-link";
+        grid-template-columns: 1fr 1fr 3fr 2fr 0;
+        grid-template-areas: "navbar-logo navbar-title navbar-searchbar navbar-links navbar-menu-link";
     }
     .navbar-menu-link {
         grid-area: navbar-menu-link;
@@ -37,7 +37,7 @@
     }
     @media screen and (max-width: 980px) {
         .navbar {
-            grid-template-columns: auto 0 1fr 0 auto 0;
+            grid-template-columns: auto 0 1fr 0 0;
         }
         .navbar-title {
             display: none;
@@ -46,7 +46,7 @@
     @media screen and (max-width: 640px) {
         .navbar {
             gap: 0;
-            grid-template-columns: 0 0 1fr 0 0 auto;
+            grid-template-columns: 0 0 1fr 0 auto;
         }
         .navbar-menu-link:not(.hidden) {
             display: block;
