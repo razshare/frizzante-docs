@@ -26,6 +26,8 @@
         When reporting a bug, make sure to include a link to a repository isolating the issue and the steps to reproduce
         said issue.
     </span>
+    <br />
+    <br />
     <Title text="Requesting a Feature" />
     <span>
         Make sure to read the <a href={base("/get_started", { prefix })}>documentation</a> before submitting a feature request.

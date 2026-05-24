@@ -30,6 +30,8 @@
             </Directory>
         {/snippet}
     </FileTree>
+    <br />
+    <br />
     <Title text="Server Exports" />
     <span>
         Views that are meant to be rendered on the server should be exported by
@@ -46,6 +48,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Client Exports" />
     <span>
         Views that are meant to be rendered on the client should be exported by
@@ -86,6 +90,8 @@
         <br />
         <span>You can render the same component on both the server and the client at the same time.</span>
     </Note>
+    <br />
+    <br />
     <Title text="Send Views" />
     <span>Use <InlineCode source="send.View()" /> to send a view.</span>
     <Code
@@ -109,6 +115,8 @@
         <InlineCode source="app/exports.server.ts" />
         and/or <InlineCode source="app/exports.client.ts" />.
     </span>
+    <br />
+    <br />
     <Title text="Default View" />
     <span>There is no way to specify a "<strong>default view</strong>”.</span>
     <span>
@@ -166,6 +174,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="View Properties" />
     <span>Optionally, you can specify properties for your View with the Props field.</span>
     <Code
@@ -213,6 +223,8 @@
             and thus are reactive by default.
         </span>
     </Note>
+    <br />
+    <br />
     <Title text="Render Modes" />
     <span>
         You can choose how to render views by setting one of 3 values for the

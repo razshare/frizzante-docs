@@ -81,6 +81,8 @@
             <a href="/some-other-page" onclick="onclick(event)"> Go to some other page </a>
         `}
     />
+    <br />
+    <br />
     <Title text="Adaptive Forms" />
     <Code
         lang="svelte"

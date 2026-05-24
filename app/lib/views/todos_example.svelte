@@ -21,6 +21,7 @@
     <br />
     <Image src={header} width="auto" />
     <br />
+    <br />
     <Title text="Main" />
     <span>The server defines a few routes.</span>
     <Code
@@ -40,6 +41,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Fallback" />
     <span>The <InlineCode source="GET /" /> pattern acts as a fallback.</span>
     <br />
@@ -61,6 +64,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Welcome View" />
     <span>
         The <InlineCode source="Welcome" /> view, among other things, renders a hyperlink pointing to "GET /todos".
@@ -113,6 +118,8 @@
             {/snippet}
         `}
     />
+    <br />
+    <br />
     <Title text="Todos View" />
     <span>
         The <InlineCode source="GET /todos" /> pattern is then captured by a Go handler function, which sends back the "Todos"
@@ -178,9 +185,13 @@
             </Layout>
         `}
     />
+    <br />
+    <br />
     <Title text="List Todos" />
-    <span>Items are listed by iterating over the <InlineCode source="items" /> prop (which comes from the server).</span
-    >
+    <span>
+        Items are listed by iterating over the <InlineCode source="items" />
+        prop (which comes from the server).
+    </span>
     <Code
         lang="svelte"
         source={`
@@ -209,6 +220,8 @@
         <br />
         <span>See <a href={base("/type_definitions", { prefix })}>type definitions</a>.</span>
     </Note>
+    <br />
+    <br />
     <Title text="Remove Todos" />
     <span>Items are removed by submitting a form to <InlineCode source="POST /remove" />.</span>
     <Code
@@ -266,6 +279,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Toggle Todos" />
     <span>Items are toggled by submitting a form to <InlineCode source="POST /toggle" />.</span>
     <Code
@@ -328,6 +343,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Add Todos" />
     <span>Items are added by submitting a form to <InlineCode source="POST /add" />.</span>
     <Code
@@ -388,6 +405,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="More Examples" />
     <HyperTable
         hyperlinks={{

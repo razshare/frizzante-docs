@@ -198,12 +198,16 @@
         <Code lang="sh" source="frizzante --bun=bun package" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
+    <br />
+    <br />
     <Title text="Package Watch" />
     <Code lang="sh" source="frizzante package-watch" />
     <span>Runs <InlineCode source="frizzante package" /> in watch mode.</span>
     <Note>
         This will detect changes made only in the <InlineCode source="app" /> directory.
     </Note>
+    <br />
+    <br />
     <Title text="Dev" />
     <Code
         lang="sh"
@@ -231,6 +235,8 @@
         <span>Or even use custom paths for both Air and Bun.</span>
         <Code lang="sh" source="frizzante --air=air --bun=bun dev" />
     </Note>
+    <br />
+    <br />
     <Title text="Build" />
     <Code
         lang="sh"
@@ -253,6 +259,8 @@
             </Directory>
         {/snippet}
     </FileTree>
+    <br />
+    <br />
     <Title text="Check" />
     <Code lang="sh" source="frizzante --check" />
     <span>
@@ -273,6 +281,8 @@
         <Code lang="sh" source="frizzante --bun=bun --check" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
+    <br />
+    <br />
     <Title text="Format" />
     <Code
         lang="sh"
@@ -299,6 +309,8 @@
         <Code lang="sh" source="frizzante --bun=bun format" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
+    <br />
+    <br />
     <Title text="Clean Project" />
     <Code lang="sh" source="frizzante clean-project" />
     <span>
@@ -310,6 +322,8 @@
         <InlineCode source="cover.html" />,
         <InlineCode source="cover.out" />
     </span>
+    <br />
+    <br />
     <Title text="Reset" />
     <Code lang="sh" source="frizzante reset" />
     <span>Deletes frizzante’s global cache.</span>
@@ -322,6 +336,8 @@
             </span>
         </Tip>
     </Note>
+    <br />
+    <br />
     <Title text="Strict" />
     <Code
         lang="sh"
@@ -343,6 +359,8 @@
     <Tip>
         <span>This is useful for ci/cd pipelines, automated scripts, batch operations and so on.</span>
     </Tip>
+    <br />
+    <br />
     <Title text="Version" />
     <Code
         lang="sh"
@@ -353,6 +371,8 @@
         `}
     />
     <span>Displays the version of the binary.</span>
+    <br />
+    <br />
     <Title text="Help" />
     <Code
         lang="sh"
@@ -363,6 +383,8 @@
         `}
     />
     <span>Shows the complete list of available commands (WIP).</span>
+    <br />
+    <br />
     <Title text="Interactive Mode" />
     <Code lang="sh" source="frizzante" />
     <span>

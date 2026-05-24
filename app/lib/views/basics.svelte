@@ -24,6 +24,8 @@
     <Note>
         <span>You are also welcome to <a {...href(base("/issues", { prefix }))}>contribute</a> back if you can.</span>
     </Note>
+    <br />
+    <br />
     <Title text="Server" />
     <span>
         Create a new server with <InlineCode source="servers.New()" />, then followup with
@@ -95,6 +97,8 @@
         />
         <span>This will reduce the minimum size of the final binary from 25MB to 10MB.</span>
     </Tip>
+    <br />
+    <br />
     <Title text="Routes" />
     <span>Each server exposes a slice of Routes which you can freely modify.</span>
     <br />
@@ -130,6 +134,8 @@
             func View(client *clients.Client) {}
         `}
     />
+    <br />
+    <br />
     <Title text="Path Fields" />
     <span>Route patterns can define dynamic path fields using <InlineCode source={"{}"} /> syntax.</span>
     <Code lang="go" source={`routes.Route{Pattern: "GET /{name}", Handler: welcome.View}`} />
@@ -149,6 +155,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Messages" />
     <span>Use <InlineCode source="receive.Message()" /> to retrieve messages sent by the client.</span>
     <Code
@@ -182,6 +190,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Headers" />
     <span>Use <InlineCode source="receive.Header()" /> to retrieve header fields sent by the client.</span>
     <Code
@@ -217,6 +227,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Status" />
     <span>Use <InlineCode source="send.Status()" /> to send the status of the response to the client.</span>
     <Code
@@ -240,6 +252,8 @@
         <br />
         <span>Read <a href="#order-of-operations">below</a>.</span>
     </Caution>
+    <br />
+    <br />
     <Title text="Order of Operations" />
     <span>Order of operations matters when sending data to the client.</span>
     <br />
@@ -294,6 +308,8 @@
         <InlineCode source="status is locked" />, meaning the status code has already been sent to the client and
         there’s nothing you can do about it.
     </span>
+    <br />
+    <br />
     <Title text="Queries" />
     <span>Use <InlineCode source="receive.Query()" /> to retrieve query fields.</span>
     <Code
@@ -313,6 +329,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Forms" />
     <span>
         Use <InlineCode source="receive.Form()" /> to parse incoming content as multipart form or url encoded form when using
@@ -389,6 +407,8 @@
             `}
         />
     </Tip>
+    <br />
+    <br />
     <Title text="Json" />
     <span>
         Use <InlineCode source="receive.Json()" /> to parse incoming content as json when using POST and PUT http verbs and
@@ -424,6 +444,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Cookies" />
     <span>
         Use <InlineCode source="receive.Cookie()" /> to retrieve cookies and <InlineCode source="send.Cookie()" /> to send
@@ -446,6 +468,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Session Id" />
     <span>Use <InlineCode source="receive.SessionId()" /> to retrieve the client’s session id.</span>
     <Code
@@ -476,6 +500,8 @@
             that order of operations matters.
         </span>
     </Caution>
+    <br />
+    <br />
     <Title text="Session" />
     <span>Use <InlineCode source="receive.Session()" /> to retrieve the client’s session.</span>
     <Note>The session is retrieved using <InlineCode source="receive.SessionId()" />.</Note>
@@ -495,6 +521,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Redirect" />
     <span>Use <InlineCode source="send.Redirect()" /> to redirect to a different location.</span>
     <Code
@@ -512,6 +540,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Navigate" />
     <span>Use <InlineCode source="send.Navigate()" /> to redirect to a different location with status 302.</span>
     <Code

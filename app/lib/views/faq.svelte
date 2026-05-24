@@ -63,6 +63,8 @@
         For more details see the
         <a href={base("/guards", { prefix })}>guards page</a>.
     </span>
+    <br />
+    <br />
     <Title type="h5" text="Middleware Implementation" />
     <span> If you really want middleware-like behavior, you can easily implement it in your own project. </span>
     <Code
@@ -115,6 +117,8 @@
         <br />
         <span>This should reduce nesting in your stack trace and keep it a little more readable.</span>
     </Note>
+    <br />
+    <br />
     <Title type="h5" text="Middleware Usage" />
     <Code
         lang="go"
@@ -164,6 +168,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title type="h3" text="Can I use Frizzante with other frontend frameworks?" />
     <span>Yes you can, as long as Vite supports your framework.</span>
     <br />

@@ -15,6 +15,8 @@
         This document describes the full process of setting up a fully working local development environment and
         submitting your first contribution.
     </span>
+    <br />
+    <br />
     <Title text="Clone Repository" />
     <span>Clone the frizzante repository from GitHub.</span>
     <Code source="git clone https://github.com/razshare/frizzante" />
@@ -23,11 +25,17 @@
         <br />
         <span>Then when you’re done with your changes you will need to submit a pull request.</span>
     </Tip>
+    <br />
+    <br />
     <Title text="Create Branch" />
     <span>Create a new branch and give it a name that describes your changes.</span>
     <Code source="git checkout -b feature/some-feature" />
+    <br />
+    <br />
     <Title text="Coding Standards" />
     <span>Submitted code must follow a few rules.</span>
+    <br />
+    <br />
     <Title type="h3" text="Export Everything" />
     <span>Export Everything</span>
     <Code
@@ -44,6 +52,8 @@
             var Name = "World"
         `}
     />
+    <br />
+    <br />
     <Title type="h3" text="Data & Logic" />
     <span>
         Data and logic must be separated, don’t define receiver functions unless you’re forced to by some third party
@@ -74,6 +84,8 @@
             }
         `}
     />
+    <br />
+    <br />
     <Title text="Pull Requests" />
     <span>
         When you’re done with your changes you can submit a pull request in order to implement them into frizzante.

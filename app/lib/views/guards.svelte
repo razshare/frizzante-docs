@@ -49,6 +49,7 @@
     <br />
     <Image src={diagram1} width="auto" />
     <br />
+    <br />
     <Title text="Composition" />
     <span>You can compose multiple guards in order to create more advanced restrictions.</span>
     <Code
