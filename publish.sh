@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-export PREFIX="/frizzante-docs-using-snapshots"
+export PREFIX="/frizzante-docs"
 git checkout main
 make clean configure build
 ./.gen/bin/app & 
