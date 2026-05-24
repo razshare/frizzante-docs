@@ -10,6 +10,5 @@ export function scrollTo(options: ScrollToOptions) {
     if (top < 0) {
         top = 0
     }
-    console.log(options.targetId, top)
     options.container.scrollTo({ top, behavior: "instant" })
 }
