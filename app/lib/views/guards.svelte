@@ -42,7 +42,7 @@
     </span>
     <br />
     <span>
-        In this example, <InlineCode source="GET /api/xml/data" /> the route will decline requests with content type <InlineCode
+        In this example, the route <InlineCode source="GET /api/xml/data" /> will decline requests with content type <InlineCode
             source="application/json"
         />
     </span>
