@@ -72,3 +72,4 @@ __debug*
 /.gen
 /main
 /cover.*
+/docs
