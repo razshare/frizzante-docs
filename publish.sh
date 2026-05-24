@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 export PREFIX="/frizzante-docs"
 git checkout main
-make clean configure build
+DEV=1 make clean configure build
 ./.gen/bin/app & 
 APP_PID=$!
 make snapshot
