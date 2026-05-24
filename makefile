@@ -1,5 +1,8 @@
 configure:
 	frizzante configure
+	
+publish:
+	./publish.sh
 
 test:
 	frizzante test
