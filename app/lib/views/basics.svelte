@@ -555,7 +555,7 @@
     {#snippet footer()}
         <Footer
             previous={{ label: "Get Started", href: base("/get_started", { prefix }) }}
-            next={{ label: "Web Sockets", href: base("/web_sockets", { prefix }) }}
+            next={{ label: "Build Checkpoints", href: base("/build_checkpoints", { prefix }) }}
         />
     {/snippet}
 </Page>
