@@ -58,7 +58,7 @@
     <br />
     <Title text="Post Build Checkpoint" />
     <span>
-        The pre build checkpoint is a program that lives in <InlineCode source="./post/main.go" />
+        The post build checkpoint is a program that lives in <InlineCode source="./post/main.go" />
         and is executed automatically by <InlineCode source="frizzante build" /> right after building your main program.
     </span>
     <FileTree>
