@@ -50,7 +50,7 @@
             socket.send("Hello")                  // Sends message.
         </script>
 
-        <Title  text="Messages"/>
+        <Title text="Messages"/>
         {#each messages as message, id (id)}      <!-- Iterates the list of messages. -->
             <div>{message}</div>                  <!-- Renders message. -->
         {/each}
