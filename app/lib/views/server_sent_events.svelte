@@ -42,21 +42,19 @@
     <Code
         lang="svelte"
         source={`
-        ${"<"}script lang="ts">
-            const messages: string[] = $state([]) // Creates reactive list of messages.
-            const socket = new WebSocket("/ws")   // Connects to handler.
-            socket.addEventListener("message", function listen(event:MessageEvent) {
-                messages.push(event.data)         // Appends incoming messages to the 
-                                                  // reactive list of messages for later use.
-            })
-            socket.send("Hello")                  // Sends message.
-        </script>
+            ${"<"}script lang="ts">
+                import {source} from "$lib/scripts/core/source";
+                const connection = source("/sse")               // Connects to the handler.
+                const channel1 = connection.select("channel-1") // Listens to "channel-1".
+                const channel2 = connection.select("channel-2") // Listens to "channel-2".
+            </script>
 
-        <Title  text="Messages"/>
-        {#each messages as message, id (id)}      <!-- Iterates the list of messages. -->
-            <div>{message}</div>                  <!-- Renders message. -->
-        {/each}
-    `}
+            <h1>Channel 1</h1>
+            <span>{$channel1}</span>                            <!-- Renders most recent value of channel-1. -->
+
+            <h1>Channel 2</h1>
+            <span>{$channel2}</span>                            <!-- Renders most recent value of channel-2. -->
+        `}
     />
     {#snippet rightSidebar({ body })}
         <RightSidebar {body} items={[{ shift: 0, text: "Server Sent Events" }]} />
