@@ -1,15 +1,15 @@
 <style>
     :root {
-        --indexed-section-circle-size: 1rem;
-        --indexed-section-circle-background: rgba(255, 255, 255, 0.3);
-        --indexed-section-link-background: rgba(255, 255, 255, 0.3);
-        --indexed-section-link-width: 0.3rem;
-        --indexed-section-gap: 0.3rem;
-        --indexed-section-badge-key-text: inherit;
+        --keyed-section-circle-size: 1rem;
+        --keyed-section-circle-background: rgba(255, 255, 255, 0.3);
+        --keyed-section-link-background: rgba(255, 255, 255, 0.3);
+        --keyed-section-link-width: 0.3rem;
+        --keyed-section-gap: 0.3rem;
+        --keyed-section-badge-key-text: inherit;
     }
     .keyed-section {
         display: grid;
-        gap: var(--indexed-section-gap);
+        gap: var(--keyed-section-gap);
         grid-template-columns: auto 1fr;
         grid-template-rows: auto 1fr;
         grid-template-areas:
@@ -32,14 +32,14 @@
         right: 0;
         top: 0;
         bottom: 0;
-        color: var(--indexed-section-badge-key-text);
+        color: var(--keyed-section-badge-key-text);
         font-weight: bold;
     }
     .keyed-section-badge > .keyed-section-badge-circle {
         position: relative;
-        background: var(--indexed-section-circle-background);
+        background: var(--keyed-section-circle-background);
         border-radius: 50%;
-        padding: var(--indexed-section-circle-size);
+        padding: var(--keyed-section-circle-size);
     }
     .keyed-section-content {
         grid-area: content;
@@ -57,9 +57,9 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        width: var(--indexed-section-link-width);
-        border-radius: var(--indexed-section-link-width);
-        background: var(--indexed-section-link-background);
+        width: var(--keyed-section-link-width);
+        border-radius: var(--keyed-section-link-width);
+        background: var(--keyed-section-link-background);
     }
     .keyed-section-link.hidden {
         display: none;
