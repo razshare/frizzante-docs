@@ -1,8 +1,8 @@
 <style>
     :root {
         --indexed-section-circle-size: 1rem;
-        --indexed-section-circle-background: rgba(0, 0, 0, 0.3);
-        --indexed-section-link-background: rgba(0, 0, 0, 0.3);
+        --indexed-section-circle-background: rgba(255, 255, 255, 0.3);
+        --indexed-section-link-background: rgba(255, 255, 255, 0.3);
         --indexed-section-link-width: 0.3rem;
         --indexed-section-gap: 0.3rem;
         --indexed-section-badge-key-text: inherit;
