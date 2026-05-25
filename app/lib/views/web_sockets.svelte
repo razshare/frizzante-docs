@@ -45,7 +45,7 @@
                 const socket = new WebSocket("/ws")   // Connects to handler.
                 socket.addEventListener("message", function listen(event:MessageEvent) {
                     messages.push(event.data)         // Appends incoming messages to the 
-                                                    // reactive list of messages for later use.
+                                                      // reactive list of messages for later use.
                 })
                 socket.send("Hello")                  // Sends message.
             </script>
