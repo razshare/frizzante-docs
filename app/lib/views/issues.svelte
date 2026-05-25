@@ -10,6 +10,7 @@
 <Page title="Issues" {prefix}>
     <Title text="Issues" />
     <span>This document is a guide on how to submit bug reports and feature requests.</span>
+    <br />
     <Title text="Reporting a Bug" />
     <span>
         Make sure to read the <a href={base("/get_started", { prefix })}>documentation</a> before submitting a bug report.
