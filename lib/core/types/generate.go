@@ -11,7 +11,8 @@ import (
 	"main/lib/core/files"
 )
 
-func Generate[T any](directoryName string) (err error) {
+func Generate[T any]() (err error) {
+	directoryName := filepath.Join(".gen", "types")
 	var value T
 	type_ := reflect.TypeOf(value)
 	var packages = map[string][]string{}

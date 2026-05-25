@@ -10,7 +10,6 @@ import (
 
 	"main/lib/core/clients"
 	"main/lib/core/stack"
-	"main/lib/core/values"
 	"main/lib/core/views/renders"
 )
 
@@ -77,9 +76,6 @@ func Start(server *Server) (err error) {
 						stack.Trace(),
 					)
 				}
-			}
-			if client.Channels.End != nil {
-				client.Channels.End <- values.None
 			}
 		})
 	}
