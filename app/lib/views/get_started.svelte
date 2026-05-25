@@ -15,6 +15,13 @@
 
 <Page title="Get Started" {prefix}>
     <Title text="Get Started" />
+    <span>
+        Frizzante is an opinionated web server framework written in
+        <a href="https://go.dev/" target="_blank">Go</a>
+        that uses <a href="https://svelte.dev/" target="_blank">Svelte</a> to render web pages.
+    </span>
+    <br />
+    <br />
     <KeyedSection key="1" description="Install frizzante.">
         <Code lang="bash" source="go install github.com/razshare/frizzante@latest" />
         <Note>
