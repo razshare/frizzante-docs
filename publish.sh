@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 export PREFIX="/frizzante-docs"
 git checkout main
 DEV=1 make clean configure build
