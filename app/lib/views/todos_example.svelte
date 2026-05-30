@@ -52,7 +52,7 @@
     <span>
         With that in mind, the fallback handler tries to send back a matching file using
         <InlineCode source="send.RequestedFile()" />
-        or, if it doesn’t exist, the <InlineCode source="Welcome" /> view using
+        or, if it doesn’t exist, the <InlineCode source="Welcome" /> view is sent instead using
         <InlineCode source="welcome.View()" />.
     </span>
     <Code
