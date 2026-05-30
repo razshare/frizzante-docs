@@ -14,7 +14,7 @@
     <span>You don't need docker to deploy your application.</span>
     <br />
     <span>
-        If you <strong>really</strong> want to use docker, the recommended way to do is to statically compile your program
+        If you <strong>really</strong> want to use docker, the recommended way to do so is to statically compile your program
         and start from scratch.
     </span>
     <br />
