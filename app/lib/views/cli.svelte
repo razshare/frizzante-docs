@@ -16,6 +16,8 @@
 <Page title="Cli" {prefix}>
     <Title text="Cli" />
     <span>The cli provides various commands to manage your project lifecycle, from creation to deployment.</span>
+    <br />
+    <br />
     <Title text="Create Project" />
     <Code
         lang="sh"
@@ -36,6 +38,8 @@
             </Directory>
         {/snippet}
     </FileTree>
+    <br />
+    <br />
     <Title text="Generate" />
     <Code
         lang="sh"
@@ -49,6 +53,8 @@
     <Note>
         <span>Many of frizzante’s functionalities come as code and resource generations, not as packages.</span>
     </Note>
+    <br />
+    <br />
     <Title text="Configure" />
     <Code lang="sh" source="frizzante configure" />
     <span>Runs</span>
@@ -72,6 +78,8 @@
             </Directory>
         {/snippet}
     </FileTree>
+    <br />
+    <br />
     <Title text="Install" />
     <Code
         lang="sh"
@@ -108,6 +116,8 @@
         <Code lang="sh" source="frizzante --bun=bun install" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
+    <br />
+    <br />
     <Title text="Update" />
     <Code
         lang="sh"
@@ -143,6 +153,8 @@
         <Code lang="sh" source="frizzante --bun=bun update" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
+    <br />
+    <br />
     <Title text="Package" />
     <Code
         lang="sh"
