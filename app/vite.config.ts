@@ -32,14 +32,14 @@ export default defineConfig({
         },
     },
     build: {
-        copyPublicDir: false,
         sourcemap,
+        copyPublicDir: true,
         rollupOptions: {
             input: {
                 index: "./index.html",
             },
             output: {
-                chunkFileNames: `assets/[name].js`,
+                chunkFileNames: `chunks/[name].js`,
                 assetFileNames: `assets/[name].[ext]`,
             },
         },

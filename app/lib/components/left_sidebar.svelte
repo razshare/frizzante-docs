@@ -36,7 +36,7 @@
     import { base } from "$lib/scripts/strings/base"
     import { getContext } from "svelte"
     type Item = { text: string; viewName: string; href: string }
-    const view = getContext("view") as View<unknown>
+    const view = getContext("view") as View
     let { prefix } = $props()
 </script>
 
