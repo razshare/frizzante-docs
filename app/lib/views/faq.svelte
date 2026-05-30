@@ -13,51 +13,22 @@
 <Page title="Faq" {prefix}>
     <Title text="Faq" />
     <Title type="h3" text="Why doesn’t Frizzante have middleware?" />
-    <span>Frizzante intentionally uses guards instead of middleware.</span>
-    <br />
-    <span>Middleware have some limitations.</span>
+    <span>Frizzante intentionally uses guards instead of middleware because of the following reasons</span>
     <br />
     <ul>
-        <li>All middleware handles must be invoked for each request</li>
-        <li>
-            Some middleware may contain path-checking logic while others may not, which introduces ambiguity and more
-            details to remember as a developer
-        </li>
+        <li>All middleware handlers must be invoked for each request</li>
+        <li>It's difficult to understand which middleware handler checks which route</li>
         <li>Managing middleware execution order across different routes is complex</li>
     </ul>
     <br />
-    <span>While guards have some advantages.</span>
+    <span>Instead, it favours guards because</span>
     <br />
     <ul>
+        <li>Guards are applied only to specific routes, they don't check every single incoming request</li>
         <li>
-            <strong>Efficient</strong>
-            <span>-</span>
-            <span>
-                each route has a defined slice of guards and only those guards will execute each time the route is
-                matched
-            </span>
+            They are more explicit, you can see which guards protect which route just by looking at the route definition
         </li>
-        <li>
-            <strong>Explicit</strong>
-            <span>-</span>
-            <span>
-                since each route explicitly defines its guards, you can see exactly which guards execute for any route
-                just by looking at the slice
-            </span>
-        </li>
-        <li>
-            <strong>Composable</strong>
-            <span>-</span>
-            <span> in order to add a new guard you can just add a guard to the route’s guards slice </span>
-        </li>
-        <li>
-            <strong>Easy to order</strong>
-            <span>-</span>
-            <span>
-                it’s easy to define the order in which guards execute, you can simply move them around in the route’s
-                guards slice
-            </span>
-        </li>
+        <li>It's easy to compose and ensure a specific order of guards execution for each individual route</li>
     </ul>
     <span>
         For more details see the
