@@ -438,7 +438,7 @@
     {#snippet footer()}
         <Footer
             previous={{ label: "Web Standards", href: base("/web_standards", { prefix }) }}
-            next={{ label: "Type Definitions", href: base("/type_definitions", { prefix }) }}
+            next={{ label: "Build Checkpoints", href: base("/build_checkpoints", { prefix }) }}
         />
     {/snippet}
 </Page>

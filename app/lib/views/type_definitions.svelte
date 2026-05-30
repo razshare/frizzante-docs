@@ -139,7 +139,7 @@
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Cli", href: base("/cli", { prefix }) }}
+            previous={{ label: "Build Checkpoints", href: base("/build_checkpoints", { prefix }) }}
             next={{ label: "Snapshots", href: base("/snapshots", { prefix }) }}
         />
     {/snippet}

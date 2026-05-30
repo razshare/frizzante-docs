@@ -99,8 +99,8 @@
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Basics", href: base("/basics", { prefix }) }}
-            next={{ label: "Web Sockets", href: base("/web_sockets", { prefix }) }}
+            previous={{ label: "Cli", href: base("/cli", { prefix }) }}
+            next={{ label: "Type Definitions", href: base("/type_definitions", { prefix }) }}
         />
     {/snippet}
 </Page>
