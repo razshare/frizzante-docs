@@ -37,12 +37,24 @@
     import { getContext } from "svelte"
     type Item = { text: string; viewName: string; href: string }
     const view = getContext("view") as View
+    const pending: Record<string, boolean> = $state({})
     let { prefix } = $props()
 </script>
 
 {#snippet item(item: Item)}
-    <a class="left-sidebar-item" class:active={view.name === item.viewName} {...href(item.href)}>
-        <MenuItem>{item.text}</MenuItem>
+    <a
+        class="left-sidebar-item"
+        class:active={view.name === item.viewName}
+        {...href(item.href, {
+            onpending() {
+                pending[item.viewName] = true
+            },
+            ondone() {
+                pending[item.viewName] = false
+            },
+        })}
+    >
+        <MenuItem loading={pending[item.viewName]}>{item.text}</MenuItem>
     </a>
 {/snippet}
 
