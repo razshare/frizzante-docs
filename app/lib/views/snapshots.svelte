@@ -4,6 +4,7 @@
     import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
+    import Note from "$lib/components/note.svelte"
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
@@ -14,7 +15,10 @@
 
 <Page title="Snapshots" {prefix}>
     <Title text="Snapshots" />
-    <span>You can take a snapshot of a server using the cli and statically generate your website.</span>
+    <span>You can take a snapshot of your server and statically generate its resources.</span>
+    <br />
+    <span>This is achieved by launching and crawling the web server locally using the cli.</span>
+    <br />
     <br />
     <span>
         This technique is also known as
@@ -23,63 +27,26 @@
         </a>.
     </span>
     <br />
+    <Note>
+        <span>
+            Although the comparison to <strong>SSG</strong> makes sense, frizzante snapshots are a bit more powerful.
+        </span>
+        <br />
+        <br />
+        <span>
+            The final snapshot itself contains static content, but the local web server used to generate the snapshot
+            can be seeded with dynamic content, for example, retrieved from a local database or a third party source.
+        </span>
+    </Note>
+    <br />
     <br />
     <KeyedSection key="1" description="List statics">
         <span>
-            Before taking a snapshot of your server, you need to list the static routes you would like to snapshot using
-            a server route.
+            Before taking a snapshot of your server, you need to expose a server route that lists all static routes
+            available for snapshotting.
         </span>
         <br />
-        <span>You can do this by hand</span>
-        <Code
-            lang="go"
-            source={`
-                package main
-
-                import (
-                    "embed"
-                    "log"
-
-                    "main/lib/core/clients"
-                    "main/lib/core/routes"
-                    "main/lib/core/send"
-                    "main/lib/core/servers"
-                    "main/lib/core/ssr"
-                    "main/lib/routes/fallback"
-                    "main/lib/routes/about"
-                    "main/lib/routes/projects"
-                )
-
-                //go:generate frizzante clean
-                //go:generate frizzante configure
-                //go:generate frizzante generate types
-                //go:generate frizzante package
-                //go:embed app/dist
-                var efs embed.FS
-                var server = servers.New()
-
-                func main() {
-                    server.Efs = efs
-                    server.Render = ssr.New(1)
-                    server.Routes = []routes.Route{
-                        {Pattern: "GET /", Handler: fallback.View},
-                        {Pattern: "GET /about", Handler: about.View},
-                        {Pattern: "GET /projects", Handler: projects.View},
-                        {Pattern: "GET /@statics", Handler: func(client *clients.Client) {
-                            send.Json(client, []string{ // <======= Manually listing all routes.
-                                "/",
-                                "/about",
-                                "/projects",
-                            })
-                        }},
-                    }
-                    if err := servers.Start(server); err != nil {
-                        log.Fatal(err)
-                    }
-                }
-            `}
-        />
-        <span>or you can use <InlineCode source="statics.New()" />.</span>
+        <span>You can do this with <InlineCode source="statics.New()" />.</span>
         <br />
         <span>
             It will generate a route using the given <InlineCode source="pattern" />; the resulting route will list all
@@ -111,17 +78,18 @@
                 //go:generate frizzante package
                 //go:embed app/dist
                 var efs embed.FS
-                var server = servers.New()
 
                 func main() {
+                    server := servers.New()
                     server.Efs = efs
                     server.Render = ssr.New(1)
                     server.Routes = []routes.Route{
                         {Pattern: "GET /", Handler: fallback.View},
                         {Pattern: "GET /about", Handler: about.View},
                         {Pattern: "GET /projects", Handler: projects.View},
-                        statics.New("GET /@statics", server), // <========== This will automatically generate a route that 
-                                                              //             lists all static routes of the given server.
+                        {Pattern: "GET /@statics", Handler: statics.NewRouteHandler(server)}, // This will automatically generate a route that
+                                                                                              // lists all static routes of the given server.
+                                                              
                     }
                     if err := servers.Start(server); err != nil {
                         log.Fatal(err)
@@ -167,7 +135,7 @@
                     lang="makefile"
                     source={`
                         snapshot:
-                            frizzante generate snapshot http://127.0.0.1:8080/@statics .gen/snapshot
+                            frizzante generate snapshot http://127.0.0.1:8080/@statics
                     `}
                 />
                 so you could also run
