@@ -144,7 +144,7 @@
             <Code lang="bash" source="frizzante dev" />
         </KeyedSection>
         <KeyedSection key="B" description="Start production server">
-            <Code lang="bash" source="frizzante build && ./gen/bin/app" />
+            <Code lang="bash" source="frizzante build && ./.gen/bin/app" />
         </KeyedSection>
         <KeyedSection key="C" description="Start development server using makefile" noLink>
             <Code lang="bash" source="make dev" />
