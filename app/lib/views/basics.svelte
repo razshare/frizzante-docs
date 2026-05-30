@@ -22,7 +22,9 @@
         you're hitting a performance wall that needs to be solved immediately, a bug comes up and so on.
     </span>
     <Note>
-        <span>You are also welcome to <a {...href(base("/issues", { prefix }))}>contribute</a> back if you can.</span>
+        <span
+            >You are also welcome to <a {...href(base("/contributing", { prefix }))}>contribute</a> back if you can.</span
+        >
     </Note>
     <br />
     <br />
