@@ -15,7 +15,7 @@
     let searchQuery: string = $state("")
     let searchFocused: boolean = $state(false)
     let body: false | HTMLDivElement = $state(false)
-    onMount(async function start() {
+    onMount(function scrollToHash() {
         // There is a very good chance that the URL contains a hash.
         // Since pages are loaded asynchronously, the first render of the dom
         // may not actually contain the contents of the page.
@@ -43,7 +43,7 @@
 
 <Layout {title} bind:body>
     {#snippet navbar()}
-        <Navbar bind:search={searchQuery} bind:focused={searchFocused} {prefix} />
+        <Navbar {body} bind:search={searchQuery} bind:focused={searchFocused} {prefix} />
     {/snippet}
     {#snippet content()}
         {@render children()}

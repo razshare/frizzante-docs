@@ -54,14 +54,28 @@
 
 <script lang="ts">
     import { href } from "$lib/scripts/core/href"
+    import { scrollTo } from "$lib/scripts/scroll_to"
     import type { Suggestion } from "$lib/scripts/searchbar/suggestion"
-    type Props = Suggestion & { prefix: string }
-    let { description, page, section, href: createSuggestionHref, prefix }: Props = $props()
+    type Props = Suggestion & { prefix: string; body: false | HTMLDivElement }
+    let { description, page, section, href: createSuggestionHref, prefix, body }: Props = $props()
     let suggestionHref = $derived(createSuggestionHref(prefix))
     let { onclick } = $derived(href(suggestionHref))
+    async function onmousedown(event: MouseEvent) {
+        event.preventDefault()
+        if (!body) {
+            return
+        }
+        await onclick(event)
+        if (!body) {
+            console.warn("body element not found")
+            return
+        }
+        const id = window.location.hash.substring(1)
+        scrollTo({ container: body, targetId: id })
+    }
 </script>
 
-<button class="suggestion" onmousedown={onclick}>
+<button class="suggestion" {onmousedown}>
     <div class="title">
         <span class="page">{page}</span>
         <span class="section">#{section}</span>

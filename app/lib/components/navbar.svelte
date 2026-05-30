@@ -78,9 +78,10 @@
         search: string
         prefix: string
         focused: boolean
+        body: false | HTMLDivElement
         noMenuLink?: boolean
     }
-    let { search = $bindable(""), focused = $bindable(false), noMenuLink = false, prefix }: Props = $props()
+    let { search = $bindable(""), focused = $bindable(false), noMenuLink = false, prefix, body }: Props = $props()
 </script>
 
 <div class="navbar">
@@ -95,7 +96,7 @@
     <div class="navbar-title"></div>
     <div class="navbar-searchbar">
         {#if IS_BROWSER}
-            <Searchbar bind:query={search} bind:focused placeholder="Start typing to search." {prefix} />
+            <Searchbar {body} bind:query={search} bind:focused placeholder="Start typing to search." {prefix} />
         {/if}
     </div>
     <div class="navbar-links">

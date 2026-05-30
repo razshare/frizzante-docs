@@ -96,9 +96,10 @@
         query: string
         prefix: string
         focused: boolean
+        body: false | HTMLDivElement
         placeholder?: string
     }
-    let { query = $bindable(""), focused = $bindable(false), placeholder = "", prefix }: Props = $props()
+    let { query = $bindable(""), focused = $bindable(false), placeholder = "", prefix, body }: Props = $props()
     let suggestions = $derived(find(query))
     let input: HTMLInputElement | undefined
     function onfocus() {
@@ -174,7 +175,7 @@
     {#if query !== ""}
         <div class="results">
             <div class="searchbar-results">
-                <SearchbarResults {suggestions} {prefix} />
+                <SearchbarResults {body} {suggestions} {prefix} />
             </div>
         </div>
     {/if}

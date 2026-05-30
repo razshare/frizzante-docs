@@ -295,6 +295,7 @@ const suggestions: Suggestion[] = [
         section: "RenderModeFull",
         description: "The view is rendered on both the server and the client",
         href(prefix: string): string {
+            // debugger
             return base(`/views#${textToAnchor(this.section)}`, { prefix })
         },
     },
@@ -303,6 +304,7 @@ const suggestions: Suggestion[] = [
         section: "RenderModeServer",
         description: "The view is rendered only on the server",
         href(prefix: string): string {
+            // debugger
             return base(`/views#${textToAnchor(this.section)}`, { prefix })
         },
     },
@@ -763,7 +765,8 @@ export function find(query: string): Suggestion[] {
     const results = fuse.search(query)
     const suggestions: Suggestion[] = []
     for (const result of results) {
-        suggestions.push(result.item)
+        const suggestion = result.item
+        suggestions.push(suggestion)
     }
     return suggestions
 }
