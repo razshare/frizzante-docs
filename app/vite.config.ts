@@ -39,7 +39,7 @@ export default defineConfig({
                 index: "./index.html",
             },
             output: {
-                chunkFileNames: `chunks/[name].js`,
+                chunkFileNames: `assets/[name].js`,
                 assetFileNames: `assets/[name].[ext]`,
             },
         },
