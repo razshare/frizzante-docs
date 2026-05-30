@@ -121,7 +121,7 @@
                         {Pattern: "GET /about", Handler: about.View},
                         {Pattern: "GET /projects", Handler: projects.View},
                         statics.New("GET /@statics", server), // <========== This will automatically generate a route that 
-                                                              //             lists all static routes of the a given server.
+                                                              //             lists all static routes of the given server.
                     }
                     if err := servers.Start(server); err != nil {
                         log.Fatal(err)
