@@ -6,6 +6,7 @@
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
+    import { href } from "$lib/scripts/core/href"
     import { base } from "$lib/scripts/strings/base"
     let { prefix } = $props()
 </script>
@@ -32,7 +33,7 @@
     </ul>
     <span>
         For more details see the
-        <a href={base("/guards", { prefix })}>guards page</a>.
+        <a {...href(base("/guards", { prefix }))}>guards page</a>.
     </span>
     <br />
     <br />

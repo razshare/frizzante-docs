@@ -3,6 +3,7 @@
     import Page from "$lib/components/page.svelte"
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Title from "$lib/components/title.svelte"
+    import { href } from "$lib/scripts/core/href"
     import { base } from "$lib/scripts/strings/base"
     let { prefix } = $props()
 </script>
@@ -14,7 +15,7 @@
     <br />
     <Title text="Reporting a Bug" />
     <span>
-        Make sure to read the <a href={base("/get_started", { prefix })}>documentation</a> before submitting a bug report.
+        Make sure to read the <a {...href(base("/get_started", { prefix }))}>documentation</a> before submitting a bug report.
     </span>
     <br />
     <span>
@@ -32,7 +33,8 @@
     <br />
     <Title text="Requesting a Feature" />
     <span>
-        Make sure to read the <a href={base("/get_started", { prefix })}>documentation</a> before submitting a feature request.
+        Make sure to read the <a {...href(base("/get_started", { prefix }))}>documentation</a> before submitting a feature
+        request.
     </span>
     <br />
     <span>

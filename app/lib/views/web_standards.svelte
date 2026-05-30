@@ -43,7 +43,8 @@
     <span>
         On the other hand, when JavaScript is enabled, <InlineCode source="<a>" />
         will render to an anchor that overrides the default behavior of the browser. Instead of navigating away immediately,
-        <a href={base("/some-other-page", { prefix })}>fetch</a> is used to retrieve the contents of
+        <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">fetch</a> is used to
+        retrieve the contents of
         <InlineCode source="/some-other-page" /> and update the current state and view based on the server’s response.
     </span>
     <br />
