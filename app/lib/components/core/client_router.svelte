@@ -18,7 +18,7 @@
                 // and swapped views again while the component was loading [...]
                 if (counter != id) {
                     // [...] when that happens we need to bail out,
-                    // because most likely the new request asks for a different component
+                    // because most likely the new request asks for a different component,
                     // and we don't want to present the old component view
                     return
                 }
