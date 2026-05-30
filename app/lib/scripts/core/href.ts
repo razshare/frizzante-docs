@@ -27,7 +27,6 @@ export function href(
     return {
         href: path,
         async onclick(event: MouseEvent) {
-            console.log("navigating to ", href)
             swapping.active = true
             let error: Error | undefined
             const pending = setTimeout(function start() {
