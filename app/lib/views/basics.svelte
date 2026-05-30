@@ -43,20 +43,18 @@
                 "main/lib/core/ssr"
             )
 
-            var server = servers.New() // Creates server.
-            var render = ssr.New(1)    // Creates an SSR function.
-
             func main() {
-                server.Render = render // Assigns render function to the server.
-                servers.Start(server)  // Starts server.
+                server := servers.New()    // Creates server.
+                server.Render = ssr.New(1) // Creates and assigns render function to server.
+                servers.Start(server)      // Starts server.
             }
         `}
     />
     <Note>
         <span>
-            The <InlineCode source="ssr.New()" /> function creates a function that is capable executing JavaScript code on
-            the server. This is what enables Server Side Rendering for your server, as the package name implies.
+            <InlineCode source="ssr.New()" /> creates a function that is capable executing JavaScript code on the server.
         </span>
+        <span>This is what enables Server Side Rendering for your server, as the package name implies.</span>
     </Note>
     <Caution>
         <span>
@@ -87,17 +85,18 @@
                 "main/lib/core/servers"
                 "main/lib/core/csr"
             )
-
-            var server = servers.New() // Creates server.
-            var render = csr.New()     // Creates CSR function.
-
+            
             func main() {
-                server.Render = render // Assigns render function to the server.
-                servers.Start(server)  // Starts server.
+                server := servers.New()   // Creates server.
+                server.Render = csr.New() // Creates and assigns render function to server.
+                servers.Start(server)     // Starts server.
             }
         `}
         />
-        <span>This will reduce the minimum size of the final binary from 25MB to 10MB.</span>
+        <span>
+            This will disable the server side JavaScript runtime, and because of that the minimum size of the final
+            binary will be reduced from 25MB to 10MB.
+        </span>
     </Tip>
     <br />
     <br />
