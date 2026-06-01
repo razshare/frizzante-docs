@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Caution from "$lib/components/caution.svelte"
     import Code from "$lib/components/code.svelte"
     import FileTree from "$lib/components/file_tree.svelte"
     import Footer from "$lib/components/footer.svelte"
@@ -324,21 +323,6 @@
             <span>You can combine any of these render modes with adaptive hyperlinks and forms.</span>
             <br />
             <span>Read more about <a {...href(base("/web_standards", { prefix }))}>web standards</a>.</span>
-        </Tip>
-        <Tip>
-            When using <InlineCode source="RenderModeFull" /> or <InlineCode source="RenderModeServer" />, You can
-            configure how many JavaScript runtimes are executed in parallel by setting the
-            <InlineCode source="FRIZZANTE_JS_RUNTIME_LIMIT" /> environment variable.
-            <Code lang="shell" source="FRIZZANTE_JS_RUNTIME_LIMIT=3 ./app" />
-            <Caution>
-                <span>Settings this limit too high could lead to large memory usage by your JavaScript runtimes.</span>
-                <br />
-                <span>
-                    For most use cases a limit of 1 runtime (the default) is more than enough, after all, the Svelte
-                    compiler is simply concatenating strings together when rendering pages on the server. Modify this
-                    field based on actual performance measurements.
-                </span>
-            </Caution>
         </Tip>
     </KeyedSection>
     {#snippet rightSidebar({ body })}
