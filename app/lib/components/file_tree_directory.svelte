@@ -14,30 +14,31 @@
             "directory-icon directory-name"
             "directory-link directory-content";
     }
-    .icon {
+    .file-tree-directory-icon {
         grid-area: directory-icon;
-        top: 0.2rem;
+        padding: 0;
     }
-    .icon:hover {
+    .file-tree-directory-icon:hover {
         color: var(--file-tree-directory-text-hover);
     }
-    .name {
+    .file-tree-directory-name {
         grid-area: directory-name;
     }
-    .name:hover {
+    .file-tree-directory-name:hover {
         color: var(--file-tree-directory-text-hover);
     }
-    .content {
+    .file-tree-directory-content {
         grid-area: directory-content;
     }
-    .link {
+    .file-tree-directory-link {
+        padding: 0;
         display: grid;
         position: relative;
         grid-area: directory-link;
         justify-items: center;
         align-items: center;
     }
-    .link > .bar {
+    .file-tree-directory-link > .file-tree-directory-link-bar {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -45,7 +46,7 @@
         border-radius: var(--file-tree-directory-link-width);
         background: var(--file-tree-directory-link-background);
     }
-    .link.hidden {
+    .file-tree-directory-link.hidden {
         display: none;
     }
     button {
@@ -77,14 +78,14 @@
 </script>
 
 <div class="file-tree-directory">
-    <button class="name" {onclick}>{name}</button>
-    <button class="icon" {onclick}><Icon path={icon} /></button>
-    <div class="content">
+    <button class="file-tree-directory-name" {onclick}>{name}</button>
+    <button class="file-tree-directory-icon" {onclick}><Icon path={icon} /></button>
+    <div class="file-tree-directory-content">
         {#if expanded && children}
             {@render children()}
         {/if}
     </div>
-    <div class="link" class:hidden={!children}>
-        <div class="bar"></div>
+    <div class="file-tree-directory-link" class:hidden={!children}>
+        <div class="file-tree-directory-link-bar"></div>
     </div>
 </div>

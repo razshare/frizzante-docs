@@ -11,9 +11,7 @@
     .file-icon {
         grid-area: file-icon;
         position: relative;
-        top: 0.3rem;
-        left: 0.3rem;
-        padding-right: 0.3rem;
+        top: 0.15rem;
     }
     .file-name {
         grid-area: file-name;
