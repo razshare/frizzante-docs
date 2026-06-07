@@ -22,9 +22,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante c my_project
-            # or
             frizzante create my_project
+            # or frizzante c my_project
         `}
     />
     <span>Creates a new project in a new directory using the given name.</span>
@@ -44,9 +43,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante g
-            # or
             frizzante generate
+            # or frizzante g
         `}
     />
     <span>This command generates code and/or resources.</span>
@@ -84,9 +82,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante i
-            # or
             frizzante install
+            # or frizzante i
         `}
     />
     <span>
@@ -122,9 +119,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante u
-            # or
             frizzante update
+            # or frizzante u
         `}
     />
     <span>
@@ -159,9 +155,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante p
-            # or
             frizzante package
+            # or frizzante p
         `}
     />
     <span>
@@ -224,9 +219,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante d
-            # or
             frizzante dev
+            # or frizzante d
         `}
     />
     <span>
@@ -253,9 +247,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante b
-            # or
             frizzante build
+            # or frizzante b
         `}
     />
     <span>
@@ -299,9 +292,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante f
-            # or
             frizzante format
+            # or frizzante f
         `}
     />
     <span>
@@ -354,9 +346,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante -s
-            # or
             frizzante --strict
+            # or frizzante -s
         `}
     />
     <span>
@@ -377,9 +368,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante v
-            # or
             frizzante version
+            # or frizzante v
         `}
     />
     <span>Displays the version of the binary.</span>
@@ -389,9 +379,8 @@
     <Code
         lang="sh"
         source={`
-            frizzante h
-            # or
             frizzante help
+            # or frizzante h
         `}
     />
     <span>Shows the complete list of available commands (WIP).</span>

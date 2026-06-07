@@ -1,5 +1,6 @@
 <script lang="ts">
     import Code from "$lib/components/code.svelte"
+    import FileTree from "$lib/components/file_tree.svelte"
     import Footer from "$lib/components/footer.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import KeyedSection from "$lib/components/keyed_section.svelte"
@@ -8,7 +9,6 @@
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
-    import { href } from "$lib/scripts/core/href"
     import { base } from "$lib/scripts/strings/base"
     let { prefix } = $props()
 </script>
@@ -35,25 +35,46 @@
         />
         <Note><span>All <InlineCode source="json" /> tags are optional.</span></Note>
     </KeyedSection>
-    <KeyedSection key="2" description="Generate types." noLink>
+    <KeyedSection key="2" description="Create types program.">
+        <span>
+            Create a new <InlineCode source="types/main.go" /> in your project program and call <InlineCode
+                source="types.Generate[T]()"
+            /> inside it for each type.
+        </span>
+        <FileTree>
+            {#snippet children({ Directory, File })}
+                <Directory name="types" expanded>
+                    <File name="main.go" />
+                </Directory>
+                <File name="main.go" />
+            {/snippet}
+        </FileTree>
         <Code
             lang="go"
             source={`
-                package welcome
+                package main
 
-                import "main/lib/core/types"
+                import (
+                    "main/lib/core/dev/types"
+                    "main/lib/routes/todos"
+                )
 
-                var _ = types.Generate[welcome.Props]() // add this line
-
-                type Props struct {
-                    Message string \`json:"message"\`
-                    Error   string \`json:"error"\`
+                func main() {
+                    _ = types.Generate[todos.Props]()
                 }
             `}
         />
-        <span>All you have to do now is run your main program.</span>
+    </KeyedSection>
+    <KeyedSection key="2" description="Generate types.">
+        <span>Run the program</span>
         <br />
-        <Code lang="shell" source="frizzante dev" />
+        <Code
+            lang="shell"
+            source={`
+                frizzante generate type
+                # or go run ./types
+            `}
+        />
         <br />
         <span>This will generate your type definitions in <InlineCode source=".gen/types" />.</span>
         <Code
@@ -83,49 +104,6 @@
                 `}
             />
         </Tip>
-        <Tip>
-            <span>
-                Instead of calling <InlineCode source="types.Generate[T]()" />
-                in your main program, you can use the
-                <a {...href("/build_checkpoints#pre-build-checkpoint")}>pre build checkpoint</a> to generate types.
-            </span>
-            <Code
-                lang="go"
-                source={`
-                    package main
-
-                    import (
-                        "main/lib/core/types"
-                        "main/lib/routes/todos"
-                    )
-
-                    func main() {
-                        types.Generate[todos.Props](),
-                    }
-
-                `}
-            />
-            <span>Then run the prebuild checkpoint directly.</span>
-            <Code lang="shell" source="frizzante prebuild" />
-            <Note>
-                <span>
-                    You don't have to run <InlineCode source="frizzante prebuild" /> manually every time you make a change
-                    to your type definitions.
-                </span>
-                <br />
-                <span>
-                    The default air configuration specifies a <strong>pre</strong> and a
-                    <strong>post</strong> build scripts, which will handle everything automatically.
-                </span>
-                <Code
-                    lang="toml"
-                    source={`
-                        post_cmd = ["frizzante postbuild"]
-                        pre_cmd = ["frizzante prebuild"]
-                    `}
-                />
-            </Note>
-        </Tip>
     </KeyedSection>
     {#snippet rightSidebar({ body })}
         <RightSidebar
@@ -133,6 +111,7 @@
             items={[
                 { shift: 0, text: "Type Definitions" },
                 { shift: 1, text: "Define your Go types" },
+                { shift: 1, text: "Create types program" },
                 { shift: 1, text: "Generate types" },
             ]}
         />
