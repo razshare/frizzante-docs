@@ -46,7 +46,7 @@
             available for snapshotting.
         </span>
         <br />
-        <span>You can do this with <InlineCode source="statics.New()" />.</span>
+        <span>You can do this with <InlineCode source="statics.NewRouteHandler()" />.</span>
         <br />
         <span>
             It will generate a route using the given <InlineCode source="pattern" />; the resulting route will list all
@@ -89,7 +89,7 @@
                         {Pattern: "GET /projects", Handler: projects.View},
                         {Pattern: "GET /@statics", Handler: statics.NewRouteHandler(server)}, // This will automatically generate a route that
                                                                                               // lists all static routes of the given server.
-                                                              
+
                     }
                     if err := servers.Start(server); err != nil {
                         log.Fatal(err)
