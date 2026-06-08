@@ -55,7 +55,7 @@
                 package main
 
                 import (
-                    "main/lib/core/dev/types"
+                    "main/lib/core/types"
                     "main/lib/routes/todos"
                 )
 
