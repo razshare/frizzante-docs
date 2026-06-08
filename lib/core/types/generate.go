@@ -12,7 +12,7 @@ import (
 )
 
 func Generate[T any]() (err error) {
-	directoryName := filepath.Join(".gen", "types")
+	typesDirectoryName := filepath.Join("app", "lib", "types", "server")
 	var value T
 	type_ := reflect.TypeOf(value)
 	var packages = map[string][]string{}
@@ -20,28 +20,26 @@ func Generate[T any]() (err error) {
 	if _, err = Define(type_, packages, definitions); err != nil {
 		return
 	}
-	if !files.IsDirectory(filepath.Join(directoryName)) {
-		if err = os.MkdirAll(filepath.Join(directoryName), os.ModePerm); err != nil {
+	if !files.IsDirectory(filepath.Join(typesDirectoryName)) {
+		if err = os.MkdirAll(filepath.Join(typesDirectoryName), os.ModePerm); err != nil {
 			return
 		}
 	}
 	befores := []string{
 		"main",
-		"main",
 	}
 	after := "main"
 	packagePath := type_.PkgPath()
-
 	for _, before := range befores {
 		packagePath = strings.ReplaceAll(packagePath, before, after)
 	}
-	dname := filepath.Join(directoryName, strings.ReplaceAll(packagePath, "/", string(filepath.Separator)))
-	if files.IsDirectory(dname) {
-		if err = os.RemoveAll(dname); err != nil {
+	packageDirectoryName := filepath.Join(typesDirectoryName, strings.ReplaceAll(packagePath, "/", string(filepath.Separator)))
+	if files.IsDirectory(packageDirectoryName) {
+		if err = os.RemoveAll(packageDirectoryName); err != nil {
 			return
 		}
 	}
-	if err = os.MkdirAll(dname, os.ModePerm); err != nil {
+	if err = os.MkdirAll(packageDirectoryName, os.ModePerm); err != nil {
 		return
 	}
 	parts := strings.Split(type_.PkgPath(), "/")
@@ -75,8 +73,8 @@ func Generate[T any]() (err error) {
 		}
 		name += strings.ToLower(string(char))
 	}
-	fname := filepath.Join(dname, name+".d.ts")
-	if err = os.WriteFile(fname, []byte(strings.TrimSpace(globalBuilder.String())), os.ModePerm); err != nil {
+	fileName := filepath.Join(packageDirectoryName, name+".d.ts")
+	if err = os.WriteFile(fileName, []byte(strings.TrimSpace(globalBuilder.String())), os.ModePerm); err != nil {
 		return
 	}
 	return

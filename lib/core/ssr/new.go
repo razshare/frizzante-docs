@@ -1,4 +1,4 @@
-//go:build !dev
+//go:build !use_disk
 
 package ssr
 

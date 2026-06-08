@@ -6,6 +6,7 @@ require (
 	github.com/dop251/goja v0.0.0-20260106131823-651366fbe6e3
 	github.com/evanw/esbuild v0.27.2
 	github.com/gorilla/websocket v1.5.3
+	github.com/mattn/go-sqlite3 v1.14.45
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	golang.org/x/crypto v0.48.0
 )

@@ -71,7 +71,7 @@ func Define(type_ reflect.Type, packages map[string][]string, definitions map[st
 		if rootLoc, err = Define(valueType, packages, definitions); err != nil {
 			return
 		}
-		root = fmt.Sprintf("%s[]", rootLoc)
+		root = fmt.Sprintf("null|(%s[])", rootLoc)
 	case
 		reflect.Map:
 		keyType := type_.Key()
@@ -85,7 +85,7 @@ func Define(type_ reflect.Type, packages map[string][]string, definitions map[st
 		if rootLoc, err = Define(valueType, packages, definitions); err != nil {
 			return
 		}
-		root = fmt.Sprintf("Record<%s, %s>", keyTypeName, rootLoc)
+		root = fmt.Sprintf("null|Record<%s, %s>", keyTypeName, rootLoc)
 	case
 		reflect.Chan,
 		reflect.Func,

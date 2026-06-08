@@ -1,4 +1,4 @@
-//go:build dev
+//go:build use_disk
 
 package send
 
@@ -9,6 +9,7 @@ import (
 
 	"main/lib/core/clients"
 	"main/lib/core/files"
+	"main/lib/core/logs"
 	"main/lib/core/mime"
 	"main/lib/core/stack"
 )
@@ -19,11 +20,11 @@ import (
 // or the file was not found.
 func RequestedFile(client *clients.Client) bool {
 	if client.WebSocket != nil {
-		client.Options.ErrorLog.Println("send.RequestedFile() does not support web sockets", stack.Trace())
+		logs.Errorf(client, "send.RequestedFile() does not support web sockets\n%s", stack.Trace())
 		return false
 	}
 	if client.EventName != "" {
-		client.Options.ErrorLog.Println("send.RequestedFile() does not support server sent events", stack.Trace())
+		logs.Errorf(client, "send.RequestedFile() does not support server sent events\n%s", stack.Trace())
 		return false
 	}
 	uri := client.Request.RequestURI

@@ -4,7 +4,7 @@ import { swap } from "$lib/scripts/core/swap"
 import { swapping } from "$lib/scripts/core/swapping.ts"
 import type { View } from "$lib/scripts/core/view"
 import { getContext } from "svelte"
-import type { ActionOptions } from "./action_options"
+import type { ActionOptions } from "$lib/types/core/action_options"
 export function action(
     path = "",
     options: ActionOptions = {},
@@ -34,7 +34,6 @@ export function action(
                     record()
                 })
             } catch (errorLocal) {
-                console.error("swapping failed", errorLocal)
                 error = errorLocal as Error
             }
             clearTimeout(pending)

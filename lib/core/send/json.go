@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"main/lib/core/clients"
+	"main/lib/core/logs"
 	"main/lib/core/stack"
 )
 
@@ -13,7 +14,8 @@ import (
 func Json(client *clients.Client, value any) {
 	data, err := json.Marshal(value)
 	if err != nil {
-		client.Options.ErrorLog.Printf(
+		logs.Errorf(
+			client,
 			"send.Json: failed to marshal value (type=%T) to JSON: %v\n%s",
 			value,
 			err,

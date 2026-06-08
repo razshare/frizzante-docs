@@ -2,6 +2,7 @@ package send
 
 import (
 	"main/lib/core/clients"
+	"main/lib/core/logs"
 	"main/lib/core/stack"
 )
 
@@ -14,7 +15,7 @@ import (
 // All errors are sent to the server notifier.
 func Header(client *clients.Client, key string, value string) {
 	if client.Locked {
-		client.Options.ErrorLog.Println("header is locked", stack.Trace())
+		logs.Errorf(client, "header is locked\n%s", stack.Trace())
 		return
 	}
 	client.Writer.Header().Set(key, value)

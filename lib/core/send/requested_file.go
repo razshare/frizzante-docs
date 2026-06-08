@@ -1,4 +1,4 @@
-//go:build !dev
+//go:build !use_disk
 
 package send
 
@@ -14,6 +14,7 @@ import (
 	"main/lib/core/clients"
 	"main/lib/core/embeds"
 	"main/lib/core/files"
+	"main/lib/core/logs"
 	"main/lib/core/mime"
 	"main/lib/core/stack"
 )
@@ -24,14 +25,16 @@ import (
 // or the file was not found.
 func RequestedFile(client *clients.Client) bool {
 	if client.WebSocket != nil {
-		client.Options.ErrorLog.Printf(
+		logs.Errorf(
+			client,
 			"send.RequestedFile: web sockets are not supported\n%s",
 			stack.Trace(),
 		)
 		return false
 	}
 	if client.EventName != "" {
-		client.Options.ErrorLog.Printf(
+		logs.Errorf(
+			client,
 			"send.RequestedFile: server sent events are not supported\n%s",
 			stack.Trace(),
 		)
@@ -46,7 +49,8 @@ func RequestedFile(client *clients.Client) bool {
 		var file fs.File
 		var err error
 		if file, err = client.Options.Efs.Open(embeddedFileName); err != nil {
-			client.Options.ErrorLog.Printf(
+			logs.Errorf(
+				client,
 				"send.RequestedFile: failed to open embedded file: %v\n%s",
 				err,
 				stack.Trace(),
@@ -55,7 +59,8 @@ func RequestedFile(client *clients.Client) bool {
 		}
 		var info os.FileInfo
 		if info, err = file.Stat(); err != nil {
-			client.Options.ErrorLog.Printf(
+			logs.Errorf(
+				client,
 				"send.RequestedFile: failed to stat embedded file: %v\n%s",
 				err,
 				stack.Trace(),
@@ -70,7 +75,8 @@ func RequestedFile(client *clients.Client) bool {
 		}
 		buf := make([]byte, info.Size())
 		if _, err = file.Read(buf); err != nil {
-			client.Options.ErrorLog.Printf(
+			logs.Errorf(
+				client,
 				"send.RequestedFile: failed to read embedded file: %v\n%s",
 				err,
 				stack.Trace(),

@@ -2,6 +2,7 @@ package send
 
 import (
 	"main/lib/core/clients"
+	"main/lib/core/logs"
 	"main/lib/core/stack"
 )
 
@@ -14,7 +15,8 @@ import (
 // All errors are sent to the server notifier.
 func Status(client *clients.Client, status int) {
 	if client.Locked {
-		client.Options.ErrorLog.Printf(
+		logs.Errorf(
+			client,
 			"send.Status: status is locked, cannot set status\n%s",
 			stack.Trace(),
 		)

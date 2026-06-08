@@ -4,6 +4,7 @@ import (
 	"io"
 
 	"main/lib/core/clients"
+	"main/lib/core/logs"
 	"main/lib/core/stack"
 )
 
@@ -14,7 +15,8 @@ func Message(client *clients.Client) string {
 	if client.WebSocket != nil {
 		_, data, err := client.WebSocket.ReadMessage()
 		if err != nil {
-			client.Options.ErrorLog.Printf(
+			logs.Errorf(
+				client,
 				"receive.Message: failed to read WebSocket message: %v\n%s",
 				err,
 				stack.Trace(),
@@ -25,7 +27,8 @@ func Message(client *clients.Client) string {
 	}
 	data, err := io.ReadAll(client.Request.Body)
 	if err != nil {
-		client.Options.ErrorLog.Printf(
+		logs.Errorf(
+			client,
 			"receive.Message: failed to read request body: %v\n%s",
 			err,
 			stack.Trace(),

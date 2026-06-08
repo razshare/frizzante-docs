@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"main/lib/core/clients"
+	"main/lib/core/logs"
 	"main/lib/core/stack"
 	"main/lib/core/views"
 	"main/lib/core/views/renders"
@@ -31,7 +32,8 @@ func View(client *clients.Client, view views.View) {
 		return
 	}
 	if client.Options.Render == nil {
-		client.Options.ErrorLog.Printf(
+		logs.Errorf(
+			client,
 			"send.View: no render function defined\n%s",
 			stack.Trace(),
 		)
@@ -48,7 +50,8 @@ func View(client *clients.Client, view views.View) {
 		ErrorLog: client.Options.ErrorLog,
 		InfoLog:  client.Options.InfoLog,
 	}); err != nil {
-		client.Options.ErrorLog.Printf(
+		logs.Errorf(
+			client,
 			"send.View: failed to render view: %v\n%s",
 			err,
 			stack.Trace(),

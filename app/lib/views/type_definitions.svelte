@@ -76,7 +76,7 @@
             `}
         />
         <br />
-        <span>This will generate your type definitions in <InlineCode source=".gen/types" />.</span>
+        <span>This will generate your type definitions in <InlineCode source="app/lib/types/server" />.</span>
         <Code
             lang="ts"
             source={`
@@ -91,14 +91,14 @@
         />
         <Tip>
             <span>
-                You can use the default <InlineCode source="$gen" />
-                alias to access the <InlineCode source=".gen" /> directory.
+                You can use the default <InlineCode source="$lib" />
+                alias to access the <InlineCode source="app/lib" /> directory.
             </span>
             <Code
                 lang="ts"
                 source={`
                     ${"<"}script lang="ts">
-                        import type { Props } from "$gen/types/main/lib/routes/welcome/Props"
+                        import type { Props } from "$lib/types/server/main/lib/routes/welcome/Props"
                         let { message, error }:Props = $props()
                     </script>
                 `}

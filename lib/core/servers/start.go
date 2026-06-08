@@ -9,6 +9,7 @@ import (
 	"syscall"
 
 	"main/lib/core/clients"
+	"main/lib/core/logs"
 	"main/lib/core/stack"
 	"main/lib/core/views/renders"
 )
@@ -70,7 +71,8 @@ func Start(server *Server) (err error) {
 			route.Handler(client)
 			if client.WebSocket != nil {
 				if cerr := client.WebSocket.Close(); cerr != nil {
-					client.Options.ErrorLog.Printf(
+					logs.Errorf(
+						client,
 						"send.WsUpgradeWithUpgrader: failed to close WebSocket connection: %v\n%s",
 						cerr,
 						stack.Trace(),
