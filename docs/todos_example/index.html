@@ -117,7 +117,7 @@
     }
 }</pre><!--]--></div><!----><!----></div></div><!----> <span>The <span class="inline-code svelte-nf47ks"><span class="text svelte-nf47ks">Todos</span> <span class="background svelte-nf47ks"></span></span><!----> view is a <a target="_blank" href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a> web ui.</span> <div class="code svelte-1ltxu9w"><!--[0--><pre class="text svelte-1ltxu9w">&lt;script lang="ts">
     //...
-    import type { Props, sessions } from "$gen/types/main/lib/routes/todos/props"
+    import type { Props, sessions } from "$lib/types/server/main/lib/routes/todos/props"
     let { items = [], error }: Props = $props()
     //...
 &lt;/script></pre><!--]--></div><!----> <div class="code svelte-1ltxu9w"><!--[0--><pre class="text svelte-1ltxu9w">&lt;Layout title="Todos">
