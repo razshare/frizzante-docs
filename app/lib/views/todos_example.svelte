@@ -169,7 +169,7 @@
         source={`
             ${"<"}script lang="ts">
                 //...
-                import type { Props, sessions } from "$gen/types/main/lib/routes/todos/props"
+                import type { Props, sessions } from "$lib/types/server/main/lib/routes/todos/props"
                 let { items = [], error }: Props = $props()
                 //...
             </script>
