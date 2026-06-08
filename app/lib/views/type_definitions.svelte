@@ -98,7 +98,7 @@
                 lang="ts"
                 source={`
                     ${"<"}script lang="ts">
-                        import type { Props } from "$lib/types/server/main/lib/routes/welcome/Props"
+                        import type { Props } from "$lib/types/server/main/lib/routes/welcome/props"
                         let { message, error }:Props = $props()
                     </script>
                 `}
