@@ -3,7 +3,6 @@
     import header from "$lib/assets/todos_example_header.png"
     import Code from "$lib/components/code.svelte"
     import Footer from "$lib/components/footer.svelte"
-    import HyperTable from "$lib/components/hyper_table.svelte"
     import Image from "$lib/components/image.svelte"
     import InlineCode from "$lib/components/inline_code.svelte"
     import Note from "$lib/components/note.svelte"
@@ -28,18 +27,22 @@
     <Code
         lang="go"
         source={`
-            func main() {
-                defer servers.Start(server)
-                server.Efs = efs
-                server.Routes = []routes.Route{
-                    {Pattern: "GET /", Handler: fallback.View},
-                    {Pattern: "GET /welcome", Handler: welcome.View},
-                    {Pattern: "GET /todos", Handler: todos.View},
-                    {Pattern: "POST /toggle", Handler: todos.Toggle},
-                    {Pattern: "POST /add", Handler: todos.Add},
-                    {Pattern: "POST /remove", Handler: todos.Remove},
-                }
+          func main() {
+            server := servers.New()
+            server.Efs = efs
+            server.Render = ssr.New(1)
+            server.Routes = []routes.Route{
+              {Pattern: "GET /", Handler: fallback.View},
+              {Pattern: "GET /welcome", Handler: welcome.View},
+              {Pattern: "GET /todos", Handler: todos.View},
+              {Pattern: "POST /toggle", Handler: todos.Toggle},
+              {Pattern: "POST /add", Handler: todos.Add},
+              {Pattern: "POST /remove", Handler: todos.Remove},
             }
+            if err := servers.Start(server); err != nil {
+              log.Fatal(err)
+            }
+          }
         `}
     />
     <br />
@@ -58,11 +61,11 @@
     <Code
         lang="go"
         source={`
-            func View(client *clients.Client) {
-                if !send.RequestedFile(client) {
-                    welcome.View(client)
-                }
+          func View(client *clients.Client) {
+            if !send.RequestedFile(client) {
+              welcome.View(client)
             }
+          }
         `}
     />
     <br />
@@ -74,49 +77,50 @@
     <Code
         lang="go"
         source={`
-            func View(client *clients.Client) {
-                send.View(client, views.View{Name: "Welcome"})
-            }
+          func View(client *clients.Client) {
+            send.View(client, views.View{Name: "Welcome"})
+          }
         `}
     />
     <Code
         lang="svelte"
         source={`
-            ${"<"}script lang="ts">
-                import Icon from "$lib/components/icons/icon.svelte"
-                import Layout from "$lib/components/layout.svelte"
-                import Logo from "$lib/components/logo.svelte"
-                import { href } from "$lib/scripts/core/href.ts"
-                import { mdiArrowRight } from "@mdi/js"
-            </script>
+          ${"<"}script lang="ts">
+            import Icon from "$lib/components/icons/icon.svelte"
+            import Layout from "$lib/components/layout.svelte"
+            import Logo from "$lib/components/logo.svelte"
+            import { href } from "$lib/scripts/core/href.ts"
+            import { mdiArrowRight } from "@mdi/js"
+          </script>
 
-            <Layout title="Welcome">
-                <Logo />
-                {@render Description()}
-                <div>
-                    {@render TodosButton()}
-                    {@render DocumentationButton()}
-                </div>
-            </Layout>
+          <Layout title="Welcome">
+            <Logo />
+            {@render Description()}
+            <div class="pt-6"></div>
+            <div class="flex justify-center gap-2 relative">
+              {@render TodosButton()}
+              {@render DocumentationButton()}
+            </div>
+          </Layout>
 
-            {#snippet Description()}
-                <p>Modern Go + Svelte Framework</p>
-            {/snippet}
+          {#snippet Description()}
+            <p>Modern Go + Svelte Framework</p>
+          {/snippet}
 
-            {#snippet TodosButton()}
-                <a {...href("/todos")}>
-                    <button>
-                        <span>Show Todos</span>
-                        <Icon path={mdiArrowRight} />
-                    </button>
-                </a>
-            {/snippet}
+          {#snippet TodosButton()}
+            <a {...href("/todos")}>
+              <button>
+                <span>Show Todos</span>
+                <Icon path={mdiArrowRight} />
+              </button>
+            </a>
+          {/snippet}
 
-            {#snippet DocumentationButton()}
-                <a href="https://razshare.github.io/frizzante-docs/guides/get-started" target="_blank">
-                    <button>Documentation</button>
-                </a>
-            {/snippet}
+          {#snippet DocumentationButton()}
+            <a href="https://razshare.github.io/frizzante-docs/guides/get-started" target="_blank">
+              <button>Documentation</button>
+            </a>
+          {/snippet}
         `}
     />
     <br />
@@ -129,36 +133,30 @@
     <Code
         lang="go"
         source={`
-            func View(client *clients.Client) {
-                session := sessions.NewDefault()
-                receive.Session(client, &session)
-                defer func() { session.Error = "" }()
-                send.View(client, views.View{Name: "todos", Props: Props{
-                    Error: session.Error,
-                    Items: session.Todos,
-                }})
+          func View(client *clients.Client) {
+            var session schema.Session
+            defer func() {
+              if err := databases.Queries.ModifySessionById(client.Request.Context(), schema.ModifySessionByIdParams{
+                ID: session.ID,
+              }); err != nil {
+                logs.Error(client, err)
+              }
+            }()
+            receive.Session(client, &session)
+            context := client.Request.Context()
+            var err error
+            var todos []schema.Todo
+            if todos, err = databases.Queries.FindTodosBySessionId(context, session.ID); err != nil {
+              session.Error = err.Error()
+              return
             }
+            send.View(client, views.View{Name: "Todos", Props: Props{
+              Error: session.Error,
+              Items: todos,
+            }})
+          }
         `}
     />
-    <Note>
-        <span>The user session is initialized with a few items.</span>
-        <Code
-            lang="go"
-            source={`
-                func NewDefault() *Session {
-                    return &Session{
-                        Todos: []Todo{
-                            {Checked: false, Description: "Pet the cat."},
-                            {Checked: false, Description: "Do laundry"},
-                            {Checked: false, Description: "Pet the cat."},
-                            {Checked: false, Description: "Cook"},
-                            {Checked: false, Description: "Pet the cat."},
-                        },
-                    }
-                }
-            `}
-        />
-    </Note>
     <span>
         The <InlineCode source="Todos" /> view is a
         <a target="_blank" href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>
@@ -169,8 +167,8 @@
         source={`
             ${"<"}script lang="ts">
                 //...
-                import type { Props, sessions } from "$lib/types/server/main/lib/routes/todos/props"
-                let { items = [], error }: Props = $props()
+                import type { Props, schemas } from "$lib/types/server/main/lib/routes/todos/props"
+                let { items, error }: Props = $props()
                 //...
             </script>
         `}
@@ -178,12 +176,12 @@
     <Code
         lang="svelte"
         source={`
-            <Layout title="Todos">
-                {@render Description()}
-                {@render AddTodoForm()}
-                {@render TodoList(items)}
-                {@render BackButton()}
-            </Layout>
+          <Layout title="Todos">
+            {@render Description()}
+            {@render AddTodoForm()}
+            {@render TodoList(items)}
+            {@render BackButton()}
+          </Layout>
         `}
     />
     <br />
@@ -196,23 +194,23 @@
     <Code
         lang="svelte"
         source={`
-            {#snippet TodoList(items: sessions.Todo[])}
-                {#if items.length > 0}
-                    <div class="todo-list">
-                        {#each items as todo, index (index)}
-                            <div transition:slide class="item">
-                                {@render ToggleTodoButton(todo, index)}
-                                {@render RemoveTodoButton(index)}
-                            </div>
-                        {/each}
-                    </div>
-                    {@render CountUncheckedTodos()}
-                {:else}
-                    <div class="todo-list">
-                        {@render NoTodosFound()}
-                    </div>
-                {/if}
-            {/snippet}
+          {#snippet TodoList(items: schema.Todo[])}
+            {#if items.length > 0}
+              <div class="todo-list">
+                {#each items as todo, index (index)}
+                  <div transition:slide class="item">
+                    {@render ToggleTodoButton(todo, index)}
+                    {@render RemoveTodoButton(index)}
+                  </div>
+                {/each}
+              </div>
+              {@render CountUncheckedTodos()}
+            {:else}
+              <div class="todo-list">
+                {@render NoTodosFound()}
+              </div>
+            {/if}
+          {/snippet}
         `}
     />
     <span>Each item has remove and toggle buttons.</span>
@@ -228,15 +226,15 @@
     <Code
         lang="svelte"
         source={`
-            {#snippet RemoveTodoButton(index: number)}
-                <form method="POST" {...action("/remove")}>
-                    <input type="hidden" name="index" value={index} />
-                    <label aria-label="Delete">
-                        <Icon path={mdiClose} />
-                        <button aria-label="remove"></button>
-                    </label>
-                </form>
-            {/snippet}
+          {#snippet RemoveTodoButton(id: string)}
+            <form method="POST" {...action("/remove")}>
+              <input type="hidden" name="id" value={id} />
+              <label aria-label="Delete">
+                <Icon path={mdiClose} />
+                <button aria-label="remove"></button>
+              </label>
+            </form>
+          {/snippet}
         `}
     />
     <span>
@@ -246,38 +244,34 @@
     <Code
         lang="go"
         source={`
-            type RemoveForm struct {
-                Index int \`form:"index"\`
+          func Remove(client *clients.Client) {
+            var session schema.Session
+            defer send.Navigate(client, "/todos")
+            defer func() {
+              if err := databases.Queries.ModifySessionById(client.Request.Context(), schema.ModifySessionByIdParams{
+                ID:    session.ID,
+                Error: session.Error,
+              }); err != nil {
+                logs.Error(client, err)
+              }
+            }()
+            receive.Session(client, &session)
+            var form struct {
+              Id string \`form:"id"\`
             }
-        `}
-    />
-    <Code
-        lang="go"
-        source={`
-            func Remove(client *clients.Client) {
-                session := sessions.NewDefault()
-                receive.Session(client, &session)
-
-                var form RemoveForm
-                if !receive.Form(client, &form) {
-                    session.Error = "could not parse form"
-                    send.Navigate(client, "/todos")
-                    return
-                }
-
-                if count := len(session.Todos); form.Index >= count || form.Index < 0 {
-                    session.Error = "index out of bounds"
-                    send.Navigate(client, "/todos")
-                    return
-                }
-
-                session.Todos = append(
-                    session.Todos[:form.Index],
-                    session.Todos[form.Index+1:]...,
-                )
-
-                send.Navigate(client, "/todos")
+            if !receive.Form(client, &form) {
+              session.Error = "could not parse form"
+              return
             }
+            context := client.Request.Context()
+            if err := databases.Queries.RemoveTodosByIdAndSessionId(context, schema.RemoveTodosByIdAndSessionIdParams{
+              ID:        form.Id,
+              SessionID: session.ID,
+            }); err != nil {
+              session.Error = err.Error()
+              return
+            }
+          }
         `}
     />
     <br />
@@ -287,61 +281,61 @@
     <Code
         lang="svelte"
         source={`
-            {#snippet ToggleTodoButton(todo: sessions.Todo, index: number)}
-                {@const aria = todo.checked ? "Uncheck" : "Check"}
-                {@const value = todo.checked ? "0" : "1"}
-                {@const icon = todo.checked ? mdiCheckCircleOutline : mdiCircleOutline}
-                <form method="POST" {...action("/toggle")}>
-                    <input type="hidden" name="index" value={index} />
-                    <input type="hidden" name="value" {value} />
-                    <label aria-label={aria}>
-                        <Icon path={icon} />
-                        {#if todo.checked}
-                            <strike>
-                                <span>{todo.description}</span>
-                            </strike>
-                        {:else}
-                            <span>{todo.description}</span>
-                        {/if}
-                        <button aria-label="toggle"></button>
-                    </label>
-                </form>
-            {/snippet}
+          {#snippet ToggleTodoButton(todo: schema.Todo, id: string)}
+            {@const aria = todo.checked > 0 ? "Uncheck" : "Check"}
+            {@const nextValue = todo.checked > 0 ? 0 : 1}
+            {@const icon = todo.checked ? mdiCheckCircleOutline : mdiCircleOutline}
+            <form method="POST" {...action("/toggle")}>
+                <input type="hidden" name="id" value={id} />
+                <input type="hidden" name="value" value={nextValue} />
+                <label aria-label={aria}>
+                  <Icon path={icon} />
+                  {#if todo.checked}
+                    <strike>
+                      <span>{todo.description}</span>
+                    </strike>
+                  {:else}
+                    <span>{todo.description}</span>
+                  {/if}
+                  <button aria-label="toggle"></button>
+                </label>
+            </form>
+          {/snippet}
         `}
     />
     <span>The form is then captured by the <InlineCode source="Toggle" /> handler.</span>
     <Code
         lang="go"
         source={`
-            type ToggleForm struct {
-                Index int \`form:"index"\`
-                Value int \`form:"value"\`
+          func Toggle(client *clients.Client) {
+            var session schema.Session
+            defer send.Navigate(client, "/todos")
+            defer func() {
+              if err := databases.Queries.ModifySessionById(client.Request.Context(), schema.ModifySessionByIdParams{
+                ID:    session.ID,
+                Error: session.Error,
+              }); err != nil {
+                logs.Error(client, err)
+              }
+            }()
+            receive.Session(client, &session)
+            var form struct {
+              Id    string \`form:"id"\`
+              Value int64  \`form:"value"\`
             }
-        `}
-    />
-    <Code
-        lang="go"
-        source={`
-            func Toggle(client *clients.Client) {
-                session := sessions.NewDefault()
-                receive.Session(client, &session)
-
-                var form ToggleForm
-                if !receive.Form(client, &form) {
-                    session.Error = "could not parse form"
-                    send.Navigate(client, "/todos")
-                }
-
-                if count := len(session.Todos); form.Index >= count || form.Index < 0 {
-                    session.Error = "index out of bounds"
-                    send.Navigate(client, "/todos")
-                    return
-                }
-
-                session.Todos[form.Index].Checked = form.Value > 0
-
-                send.Navigate(client, "/todos")
+            if !receive.Form(client, &form) {
+              session.Error = "could not parse form"
+              return
             }
+            if err := databases.Queries.ToggleTodosByIdAndSessionId(client.Request.Context(), schema.ToggleTodosByIdAndSessionIdParams{
+              ID:        form.Id,
+              SessionID: session.ID,
+              Checked:   form.Value,
+            }); err != nil {
+              session.Error = err.Error()
+              return
+            }
+          }
         `}
     />
     <br />
@@ -351,70 +345,68 @@
     <Code
         lang="svelte"
         source={`
-            {#snippet AddTodoForm()}
-                <form method="POST" {...action("/add")}>
-                    <input type="text" name="description" placeholder="Add a new task..." />
-                    <br />
-                    <button type="submit">
-                        <Icon path={mdiPlus} />
-                        <span>Add</span>
-                    </button>
-                </form>
-                {#if error}
-                    <div transition:slide>
-                        <span>{error}</span>
-                    </div>
-                {/if}
-            {/snippet}
+          {#snippet AddTodoForm()}
+            <form method="POST" {...action("/add")}>
+              <input type="text" name="description" placeholder="Add a new task..." />
+              <br />
+              <button type="submit">
+                <Icon path={mdiPlus} />
+                <span>Add</span>
+              </button>
+            </form>
+            {#if error}
+              <br />
+              <div transition:slide>
+                <span>{error}</span>
+              </div>
+            {/if}
+          {/snippet}
         `}
     />
     <span>The form is then captured by the <InlineCode source="Add" /> handler.</span>
     <Code
         lang="go"
         source={`
-            type AddForm struct {
-                Description string \`form:"description"\`
+          func Add(client *clients.Client) {
+            var session schema.Session
+            defer send.Navigate(client, "/todos")
+            defer func() {
+              if err := databases.Queries.ModifySessionById(client.Request.Context(), schema.ModifySessionByIdParams{
+                ID:    session.ID,
+                Error: session.Error,
+              }); err != nil {
+                logs.Error(client, err)
+              }
+            }()
+            receive.Session(client, &session)
+            var form struct {
+           	  Description string \`form:"description"\`
             }
-        `}
-    />
-    <Code
-        lang="go"
-        source={`
-            func Add(client *clients.Client) {
-                session := sessions.NewDefault()
-                receive.Session(client, &session)
-
-                var form AddForm
-                if !receive.Form(client, &form) {
-                    session.Error = "could not parse form"
-                    send.Navigate(client, "/todos")
-                    return
-                }
-
-                if form.Description == "" {
-                    session.Error = "description cannot be empty"
-                    send.Navigate(client, "/todos")
-                    return
-                }
-
-                session.Todos = append(session.Todos, sessions.Todo{
-                    Checked:     false,
-                    Description: form.Description,
-                })
-
-                send.Navigate(client, "/todos")
+            if !receive.Form(client, &form) {
+              session.Error = "could not parse form"
+              return
             }
+            if form.Description == "" {
+              session.Error = "description cannot be empty"
+              return
+            }
+            ido, err := uuid.NewV4()
+            if err != nil {
+              session.Error = err.Error()
+              return
+            }
+            id := ido.String()
+            context := client.Request.Context()
+            if err = databases.Queries.AddTodoWithIdAndSessionId(context, schema.AddTodoWithIdAndSessionIdParams{
+              ID:          id,
+              SessionID:   session.ID,
+              Description: form.Description,
+            }); err != nil {
+              session.Error = err.Error()
+              return
+            }
+          }
         `}
-    />
-    <br />
-    <br />
-    <Title text="More Examples" />
-    <HyperTable
-        hyperlinks={{
-            "A live chat application": "https://github.com/razshare/frizzante-example-chat",
-            "A blog application with login and registration forms":
-                "https://github.com/razshare/frizzante-example-blog",
-        }}
     />
     {#snippet rightSidebar({ body })}
         <RightSidebar
@@ -429,7 +421,6 @@
                 { shift: 0, text: "Remove Todos" },
                 { shift: 0, text: "Toggle Todos" },
                 { shift: 0, text: "Add Todos" },
-                { shift: 0, text: "More Examples" },
             ]}
         />
     {/snippet}
