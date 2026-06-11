@@ -114,13 +114,12 @@
                 "main/lib/routes/welcome"
             )
 
-            var server = servers.New()                         // Creates server.
-
             func main() {
-                defer servers.Start(server)                    // Starts server.
+                server := servers.New()                        // Creates server.
                 server.Routes = []routes.Route{                // Overwrites routes.
                     {Pattern: "GET /", Handler: welcome.View}, // Adds route.
                 }
+                _ = servers.Start(server)                      // Starts server.
             }
         `}
     />
@@ -385,8 +384,8 @@
             source={`
                 type Form struct {
                     Name     string               \`form:"name"\`
-                    Comments []string             \`form:"comments"\` // slice of strings
-                    File     multipart.FileHeader \`form:"file"\`     // file handler
+                    Comments []string             \`form:"comments"\` // Slice of strings.
+                    File     multipart.FileHeader \`form:"file"\`     // File handler.
                 }
             `}
         />
