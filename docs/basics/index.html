@@ -81,13 +81,12 @@ import (
     "main/lib/routes/welcome"
 )
 
-var server = servers.New()                         // Creates server.
-
 func main() {
-    defer servers.Start(server)                    // Starts server.
+    server := servers.New()                        // Creates server.
     server.Routes = []routes.Route{                // Overwrites routes.
         {Pattern: "GET /", Handler: welcome.View}, // Adds route.
     }
+    _ = servers.Start(server)                      // Starts server.
 }</pre><!--]--></div><!----> <span>Where <span class="inline-code svelte-nf47ks"><span class="text svelte-nf47ks">welcome.View</span> <span class="background svelte-nf47ks"></span></span><!----> is a function pointer.</span> <div class="code svelte-1ltxu9w"><!--[0--><pre class="text svelte-1ltxu9w">package welcome
 
 import "main/lib/core/clients"
@@ -197,8 +196,8 @@ func View(client *clients.Client) {
     send.Message(client, "Hello " + form.Name) // Sends message.
 }</pre><!--]--></div><!----> <div class="tip svelte-d2tr0e"><div class="tip-icon svelte-d2tr0e"><svg xmlns="http://www.w3.org/2000/svg" style="--size:1.4rem" viewBox="0 0 24 24" stroke="none" fill="currentColor" class="svelte-1g9256p"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 19A2.93 2.93 0 0 0 7.17 20H6A1 1 0 0 1 5 19V18H7M10 19A1 1 0 0 0 11 20H13A1 1 0 0 0 14 19V18H10M4 16A1 1 0 0 0 5 17H7V14.88A6.92 6.92 0 0 1 5 10A6.79 6.79 0 0 1 5.68 7A4 4 0 0 0 4 14.45M17 19A2.93 2.93 0 0 1 16.83 20H18A1 1 0 0 0 19 19V18H17M17 10A5 5 0 0 1 15 14V16A1 1 0 0 1 14 17H10A1 1 0 0 1 9 16V14A5 5 0 1 1 17 10M15 10A3 3 0 1 0 11 12.82V15H13V12.82A3 3 0 0 0 15 10M18.32 7A6.79 6.79 0 0 1 19 10A6.92 6.92 0 0 1 17 14.88V17H19A1 1 0 0 0 20 16V14.45A4 4 0 0 0 18.32 7Z"></path></svg><!----></div> <div class="tip-title svelte-d2tr0e">Tip</div> <div class="tip-content svelte-d2tr0e"><span>You can also use a <span class="inline-code svelte-nf47ks"><span class="text svelte-nf47ks">json</span> <span class="background svelte-nf47ks"></span></span><!----> tag, it will match the field correctly as if it were a <span class="inline-code svelte-nf47ks"><span class="text svelte-nf47ks">form</span> <span class="background svelte-nf47ks"></span></span><!----> tag.</span> <br/> <span>This is so that you can integrate your structs more easily with other libraries that only take into account <span class="inline-code svelte-nf47ks"><span class="text svelte-nf47ks">json</span> <span class="background svelte-nf47ks"></span></span><!----> formats.</span><!----></div></div><!----> <div class="tip svelte-d2tr0e"><div class="tip-icon svelte-d2tr0e"><svg xmlns="http://www.w3.org/2000/svg" style="--size:1.4rem" viewBox="0 0 24 24" stroke="none" fill="currentColor" class="svelte-1g9256p"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 19A2.93 2.93 0 0 0 7.17 20H6A1 1 0 0 1 5 19V18H7M10 19A1 1 0 0 0 11 20H13A1 1 0 0 0 14 19V18H10M4 16A1 1 0 0 0 5 17H7V14.88A6.92 6.92 0 0 1 5 10A6.79 6.79 0 0 1 5.68 7A4 4 0 0 0 4 14.45M17 19A2.93 2.93 0 0 1 16.83 20H18A1 1 0 0 0 19 19V18H17M17 10A5 5 0 0 1 15 14V16A1 1 0 0 1 14 17H10A1 1 0 0 1 9 16V14A5 5 0 1 1 17 10M15 10A3 3 0 1 0 11 12.82V15H13V12.82A3 3 0 0 0 15 10M18.32 7A6.79 6.79 0 0 1 19 10A6.92 6.92 0 0 1 17 14.88V17H19A1 1 0 0 0 20 16V14.45A4 4 0 0 0 18.32 7Z"></path></svg><!----></div> <div class="tip-title svelte-d2tr0e">Tip</div> <div class="tip-content svelte-d2tr0e"><span>Form structs can define slices and files.</span> <div class="code svelte-1ltxu9w"><!--[0--><pre class="text svelte-1ltxu9w">type Form struct {
     Name     string               `form:"name"`
-    Comments []string             `form:"comments"` // slice of strings
-    File     multipart.FileHeader `form:"file"`     // file handler
+    Comments []string             `form:"comments"` // Slice of strings.
+    File     multipart.FileHeader `form:"file"`     // File handler.
 }</pre><!--]--></div><!----> <span>You can open and read the file.</span> <div class="code svelte-1ltxu9w"><!--[0--><pre class="text svelte-1ltxu9w">src, _ := form.File.Open()
 dst, _ := os.Create("my-file.txt")
 io.Copy(src, dst)</pre><!--]--></div><!----> <span>Remember to close your files.</span> <div class="code svelte-1ltxu9w"><!--[0--><pre class="text svelte-1ltxu9w">defer src.Close()
