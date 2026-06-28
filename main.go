@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	"main/lib/core/databases"
 	"main/lib/core/routes"
 	"main/lib/core/routes/statics"
 	"main/lib/core/send"
@@ -24,7 +23,6 @@ var props = map[string]any{"prefix": os.Getenv("PREFIX")}
 
 var errorLog = log.New(os.Stderr, "[error]: ", log.Ldate|log.Ltime)
 var infoLog = log.New(os.Stdout, "[info]: ", log.Ldate|log.Ltime)
-var _, queries, dberr = databases.Connect()
 var render = ssr.New(ssr.Options{
 	Efs:      efs,
 	ErrorLog: errorLog,
@@ -102,7 +100,7 @@ var srverr = servers.Start(servers.StartOptions{
 })
 
 func main() {
-	if err := errors.Join(dberr, srverr); err != nil {
+	if err := errors.Join(srverr); err != nil {
 		log.Fatal(err)
 	}
 }
