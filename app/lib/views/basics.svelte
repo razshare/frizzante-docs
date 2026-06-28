@@ -17,21 +17,17 @@
     <Title text="Basics" />
     <span> All internals of the framework are exposed. </span>
     <br />
-    <span>
-        You can modify these internals, in fact it is intended for you to do so whenever you're in a state of urgency,
-        you're hitting a performance wall that needs to be solved immediately, a bug comes up and so on.
-    </span>
+    <span> You can modify these internals, in fact it is intended for you to do so. </span>
     <Note>
-        <span
-            >You are also welcome to <a {...href(base("/contributing", { prefix }))}>contribute</a> back if you can.</span
-        >
+        <span>
+            You are also welcome to <a {...href(base("/contributing", { prefix }))}>contribute</a> back if you can.
+        </span>
     </Note>
     <br />
     <br />
-    <Title text="Server" />
+    <Title text="Serve" />
     <span>
-        Create a new server with <InlineCode source="servers.New()" />, then followup with
-        <InlineCode source="servers.Start()" /> in order to start the server.
+        You can serve an http application with <InlineCode source="servers.Start()" />.
     </span>
     <Code
         lang="go"
@@ -39,18 +35,20 @@
             package main
 
             import (
+                "main/lib/core/routes"
                 "main/lib/core/servers"
-                "main/lib/core/ssr"
             )
 
-            func main() {
-                server := servers.New()    // Creates server.
-                server.Render = ssr.New(1) // Creates and assigns render function to server.
-                servers.Start(server)      // Starts server.
-            }
+            var _ = servers.Start(servers.StartOptions{ // Starts server.
+                Routes: []routes.Route{
+                    {Pattern: "GET /", Handler: func(request *http.Request, writer http.ResponseWriter) {
+                        // ---> Handle request here. <---
+                    }}
+                },
+            })
         `}
     />
-    <Note>
+    <!-- <Note>
         <span>
             <InlineCode source="ssr.New()" /> creates a function that is capable executing JavaScript code on the server.
         </span>
@@ -70,8 +68,8 @@
         <br />
         <br />
         <span>Modify based on actual performance benchmarks.</span>
-    </Caution>
-    <Tip>
+    </Caution> -->
+    <!-- <Tip>
         <span>
             If you don't plan to use SSR features then create your render function using
             <InlineCode source="csr.New()" /> instead.
@@ -97,235 +95,139 @@
             This will disable the server side JavaScript runtime, and because of that the minimum size of the final
             binary will be reduced from 25MB to 10MB.
         </span>
-    </Tip>
+    </Tip> -->
     <br />
     <br />
-    <Title text="Routes" />
-    <span>Each server exposes a slice of Routes which you can freely modify.</span>
+    <Title text="Path Fields" />
+    <span>Route patterns can define dynamic path fields using <InlineCode source={"{}"} /> syntax.</span>
     <br />
-    <span>You can add a new route by appending to or overwriting <InlineCode source="server.Routes" />.</span>
+    <span>Path fields can then be retrieved with <InlineCode source="receive.Path()" />.</span>
     <Code
         lang="go"
         source={`
             package main
 
             import (
-                "main/lib/core/servers"
-                "main/lib/routes/welcome"
+                "main/lib/core/routes"
+                "net/http"
             )
 
-            func main() {
-                server := servers.New()                        // Creates server.
-                server.Routes = []routes.Route{                // Overwrites routes.
-                    {Pattern: "GET /", Handler: welcome.View}, // Adds route.
-                }
-                _ = servers.Start(server)                      // Starts server.
-            }
-        `}
-    />
-    <span>Where <InlineCode source="welcome.View" /> is a function pointer.</span>
-    <Code
-        lang="go"
-        source={`
-            package welcome
-
-            import "main/lib/core/clients"
-
-            func View(client *clients.Client) {}
-        `}
-    />
-    <br />
-    <br />
-    <Title text="Path Fields" />
-    <span>Route patterns can define dynamic path fields using <InlineCode source={"{}"} /> syntax.</span>
-    <Code lang="go" source={`routes.Route{Pattern: "GET /{name}", Handler: welcome.View}`} />
-    <span>Path fields can then be retrieved with <InlineCode source="receive.Path()" />.</span>
-    <Code
-        lang="go"
-        source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/receive"
-            )
-
-            func View(client *clients.Client) {
-                _ = receive.Path(client, "name") // Retrieves field "name".
+            var _ = routes.Route{
+                Pattern: "GET /{name}",
+                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                    _ = request.PathValue("name") // Receives path field "name".
+                },
             }
         `}
     />
     <br />
     <br />
     <Title text="Messages" />
-    <span>Use <InlineCode source="receive.Message()" /> to retrieve messages sent by the client.</span>
+    <span>Use <InlineCode source="io.ReadAll()" /> to retrieve messages sent by the client.</span>
     <Code
         lang="go"
         source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
-                "main/lib/core/receive"
+                "io"
+                "main/lib/core/routes"
+                "net/http"
             )
 
-            func View(client *clients.Client) {
-                _ = receive.Message(client) // Retrieves message.
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                    _, _ = io.ReadAll(request.Body) // Receives message.
+                },
             }
         `}
     />
-    <span>Use <InlineCode source="send.Message()" /> to send a message to the client.</span>
+    <span>Use <InlineCode source="writer.Write()" /> to send a message to the client.</span>
     <Code
         lang="go"
         source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
+                "main/lib/core/routes"
+                "net/http"
             )
 
-            func View(client *clients.Client) {
-                send.Message(client, "Hello.") // Sends message.
-            }
-        `}
-    />
-    <br />
-    <br />
-    <Title text="Headers" />
-    <span>Use <InlineCode source="receive.Header()" /> to retrieve header fields sent by the client.</span>
-    <Code
-        lang="go"
-        source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/receive"
-            )
-
-            func View(client *clients.Client) {
-                _ = receive.Header(client, "Accept") // Retrieves field "Accept".
-            }
-        `}
-    />
-    <span>Use <InlineCode source="send.Header()" /> to send header fields to the client.</span>
-    <Code
-        lang="go"
-        source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/receive"
-                "main/lib/core/send"
-            )
-
-            func View(client *clients.Client) {
-                accept := receive.Header(client, "Accept")  // Retrieves field "Accept".
-                send.Header(client, "Content-Type", accept) // Sends it back.
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(_ *http.Request, writer http.ResponseWriter) {
+                    _, _ = writer.Write([]byte("hello")) // Sends message "hello".
+                },
             }
         `}
     />
     <br />
     <br />
-    <Title text="Status" />
-    <span>Use <InlineCode source="send.Status()" /> to send the status of the response to the client.</span>
+    <Title text="Headers Fields & Status" />
+    <span>Use <InlineCode source="request.Header.Get()" /> to retrieve header fields sent by the client.</span>
     <Code
         lang="go"
         source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
+                "main/lib/core/routes"
+                "net/http"
             )
 
-            func View(client *clients.Client) {
-                send.Status(client, 404)           // Sends status 404.
-                send.Message(client, "Not found.") // Sends message.
-            }
-        `}
-    />
-    <Caution>
-        <span>Sending header fields or status after sending out content is not allowed.</span>
-        <br />
-        <span>Read <a href="#order-of-operations">below</a>.</span>
-    </Caution>
-    <br />
-    <br />
-    <Title text="Order of Operations" />
-    <span>Order of operations matters when sending data to the client.</span>
-    <br />
-    <span>
-        For example, sending the status code with <InlineCode source="send.Status()" />
-        after you’ve already sent content with <InlineCode source="send.Message()" />
-        is not allowed.
-    </span>
-    <Code
-        lang="go"
-        source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
-            )
-
-            func View(client *clients.Client) {
-                send.Message(client, "Hello.") // Sends message (Succeeds).
-                send.Status(client, 404)       // Sends status (Fails).
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                    _ = request.Header.Get("Accept") // Retrieves header field "Accept".
+                },
             }
         `}
     />
     <span>
-        <InlineCode source="send.Status(client, 404)" /> will fail and the client will receive status 200 instead of 404.
+        Use <InlineCode source="writer.Header().Set()" /> and
+        <InlineCode source="writer.WriteHeader()" /> to send header fields to the client.
     </span>
     <Code
-        lang="http"
+        lang="go"
         source={`
-            HTTP/1.1 200 OK
-            Date: Sun, 25 May 2025 02:00:37 GMT
-            Content-Length: 6
-            Content-Type: text/plain; charset=utf-8
+            package main
 
-            Hello.
+            import (
+                "main/lib/core/routes"
+                "net/http"
+            )
+
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(_ *http.Request, writer http.ResponseWriter) {
+                    writer.Header().Set("Content-Type", "text/html") // Sets header field "Content-Type" 
+                                                                    // with value "text/html".
+                    writer.WriteHeader(200)                          // Sends status 200 and 
+                                                                    // header fields to the client.
+                },
+            }
         `}
     />
-    <span>The failure is logged to the server’s error logger.</span>
-    <br />
-    <span>
-        Assuming you’re using the default error logger, you’ll see an error of sorts in your <strong>console</strong>
-    </span>
-    <Code
-        lang="log"
-        source={`
-            listening for requests at http://127.0.0.1:8080
-            status is locked
-        `}
-    />
-    <span>
-        <InlineCode source="status is locked" />, meaning the status code has already been sent to the client and
-        there’s nothing you can do about it.
-    </span>
     <br />
     <br />
     <Title text="Queries" />
-    <span>Use <InlineCode source="receive.Query()" /> to retrieve query fields.</span>
+    <span>Use <InlineCode source="request.URL.Query().Get()" /> to retrieve query fields.</span>
     <Code
         lang="go"
         source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
-                "main/lib/core/receive"
-                "main/lib/core/send"
+                "main/lib/core/routes"
+                "net/http"
             )
 
-            func View(client *clients.Client) {
-                name := receive.Query(client, "name") // Retrieves field "name".
-                send.Message(client, "Hello " + name) // Sends message.
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                    _ = request.URL.Query().Get("name") // Retrieves query field "name".
+                },
             }
         `}
     />
@@ -339,31 +241,27 @@
     <Code
         lang="go"
         source={`
-            routes.Route{Pattern: "POST /", Handler: welcome.View}
-            // or
-            routes.Route{Pattern: "GET /", Handler: welcome.View}
-        `}
-    />
-    <Code
-        lang="go"
-        source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
                 "main/lib/core/receive"
-                "main/lib/core/send"
+                "main/lib/core/routes"
+                "net/http"
             )
 
-            type Form struct {                             // Defines a struct in which to
-                Name string \`form:"name"\`                  // store the form content.
+            // Defines a struct in which to store the form content.
+            type Form struct {
+                Name string \`form:"name"\`
             }
 
-            func View(client *clients.Client) {
-                var form Form
-                receive.Form(client, &form)                // Retrieves form.
-                send.Message(client, "Hello " + form.Name) // Sends message.
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                    var form Form                    // Zero initialize the form content.
+                    _ = receive.Form(request, &form) // Retrieves form by reference.
+                },
             }
+
         `}
     />
     <Tip>
@@ -382,10 +280,27 @@
         <Code
             lang="go"
             source={`
+                package main
+
+                import (
+                    "main/lib/core/receive"
+                    "main/lib/core/routes"
+                    "mime/multipart"
+                    "net/http"
+                )
+
                 type Form struct {
                     Name     string               \`form:"name"\`
                     Comments []string             \`form:"comments"\` // Slice of strings.
                     File     multipart.FileHeader \`form:"file"\`     // File handler.
+                }
+
+                var _ = routes.Route{
+                    Pattern: "GET /",
+                    Handler: func(request *http.Request, _ http.ResponseWriter) {
+                        var form Form                    // Zero initialize the form content.
+                        _ = receive.Form(request, &form) // Retrieves form by reference.
+                    },
                 }
             `}
         />
@@ -411,37 +326,36 @@
     <br />
     <Title text="Json" />
     <span>
-        Use <InlineCode source="receive.Json()" /> to parse incoming content as json when using POST and PUT http verbs and
+        Use <InlineCode source="receive.Json()" />
+        to parse incoming content as json when using <InlineCode source="POST" />
+        and <InlineCode source="PUT" /> http verbs and
         <InlineCode source="send.Json()" /> to send json content.
     </span>
     <Code
         lang="go"
         source={`
-            routes.Route{Pattern: "POST /", Handler: welcome.View}
-            // or
-            routes.Route{Pattern: "PUT /", Handler: welcome.View}
-        `}
-    />
-    <Code
-        lang="go"
-        source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
                 "main/lib/core/receive"
+                "main/lib/core/routes"
                 "main/lib/core/send"
+                "net/http"
             )
 
-            type GreetingDetails struct {      // Defines a struct in which to
-                Name string \`json:"name"\`      // store the json content.
+            type GreetingDetails struct { // Defines a struct in which to
+                Name string \`json:"name"\` // store the json content.
             }
 
-            func View(client *clients.Client) {
-                var details GreetingDetails    // Creates a zero value.
-                receive.Json(client, &details) // Unmarshals the content into details.
-                send.Json(client, details)     // Sends content back as json.
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(request *http.Request, writer http.ResponseWriter) {
+                    var details GreetingDetails         // Creates a zero value.
+                    _ = receive.Json(request, &details) // Unmarshals the content into details.
+                    _ = send.Json(writer, details)      // Sends content back as json.
+                },
             }
+
         `}
     />
     <br />
@@ -454,131 +368,86 @@
     <Code
         lang="go"
         source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
                 "main/lib/core/receive"
+                "main/lib/core/routes"
                 "main/lib/core/send"
+                "net/http"
             )
 
-            func View(client *clients.Client) {
-                nickname := receive.Cookie(client, "nickname") // Retrieves cookie.
-                send.Cookie(client, "nickname", nickname)      // Sends it back.
+            type GreetingDetails struct { // Defines a struct in which to
+                Name string \`json:"name"\` // store the json content.
             }
+
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(request *http.Request, writer http.ResponseWriter) {
+                    nickname, _ := receive.Cookie(request, "nickname") // Retrieves cookie "nickname".
+                    send.Cookie(writer, "nickname", nickname)          // Sends it back.
+                },
+            }
+
         `}
     />
     <br />
     <br />
     <Title text="Session Id" />
-    <span>Use <InlineCode source="receive.SessionId()" /> to retrieve the client’s session id.</span>
+    <span>
+        Use <InlineCode source="negotiate.SessionId()" /> to negotiate a session session id with the client.
+    </span>
     <Code
         lang="go"
         source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
-                "main/lib/core/receive"
+                "main/lib/core/negotiate"
+                "main/lib/core/routes"
+                "net/http"
             )
 
-            func View(client *clients.Client) {
-                _ = receive.SessionId(client) // Retrieves session id.
+            type GreetingDetails struct { // Defines a struct in which to
+                Name string \`json:"name"\` // store the json content.
+            }
+
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(request *http.Request, writer http.ResponseWriter) {
+                    _, _ = negotiate.SessionId(writer, request) // Negotiates session id and returns it.
+                },
             }
         `}
     />
     <Note>
-        <span>The session id is retrieved from the client’s session-id cookie.</span>
+        <span>The session id is retrieved from the client’s <InlineCode source="session-id" /> cookie.</span>
+        <br />
         <span>
-            If the client doesn’t provide such cookie, <InlineCode source="receive.SessionId()" />
+            If the client doesn’t provide such cookie, <InlineCode source="negotiate.SessionId()" />
             creates a new session id and sends the cookie to the client.
         </span>
+        <Caution>
+            <span>
+                Session id must always be negotiated before invoking
+                <InlineCode source="writer.WriteHeader()" />.
+            </span>
+        </Caution>
     </Note>
-    <Caution>
-        <span>
-            Since <InlineCode source="receive.SessionId()" /> might send a cookie to the client, it is important to remember
-            that order of operations matters.
-        </span>
-    </Caution>
-    <br />
-    <br />
-    <Title text="Session" />
-    <span>Use <InlineCode source="receive.Session()" /> to retrieve the client’s session.</span>
-    <Note>The session is retrieved using <InlineCode source="receive.SessionId()" />.</Note>
-    <Code
-        lang="go"
-        source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/receive"
-            )
-
-            func View(client *clients.Client) {
-                var session *sessions.Session         // Creates a zero value.
-                _ = receive.Session(client, &session) // Unmarshals the content into session.
-            }
-        `}
-    />
-    <br />
-    <br />
-    <Title text="Redirect" />
-    <span>Use <InlineCode source="send.Redirect()" /> to redirect to a different location.</span>
-    <Code
-        lang="go"
-        source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
-            )
-
-            func View(client *clients.Client) {
-                send.Redirect(client, "/login", 307) // Redirects to /login.
-            }
-        `}
-    />
-    <br />
-    <br />
-    <Title text="Navigate" />
-    <span>Use <InlineCode source="send.Navigate()" /> to redirect to a different location with status 302.</span>
-    <Code
-        lang="go"
-        source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
-            )
-
-            func View(client *clients.Client) {
-                send.Navigate(client, "/login") // Redirects to /login with status 302.
-            }
-        `}
-    />
     {#snippet rightSidebar({ body })}
         <RightSidebar
             {body}
             items={[
                 { shift: 0, text: "Basics" },
-                { shift: 0, text: "Server" },
-                { shift: 0, text: "Routes" },
+                { shift: 0, text: "Serve" },
                 { shift: 0, text: "Path Fields" },
                 { shift: 0, text: "Messages" },
-                { shift: 0, text: "Headers" },
-                { shift: 0, text: "Status" },
-                { shift: 0, text: "Order of Operations" },
+                { shift: 0, text: "Headers Fields & Status" },
                 { shift: 0, text: "Queries" },
                 { shift: 0, text: "Forms" },
                 { shift: 0, text: "Json" },
                 { shift: 0, text: "Cookies" },
                 { shift: 0, text: "Session Id" },
-                { shift: 0, text: "Session" },
-                { shift: 0, text: "Redirect" },
-                { shift: 0, text: "Navigate" },
             ]}
         />
     {/snippet}

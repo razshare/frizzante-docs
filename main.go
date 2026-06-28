@@ -19,8 +19,6 @@ import (
 //go:generate frizzante configure
 //go:embed app/dist
 var efs embed.FS
-var props = map[string]any{"prefix": os.Getenv("PREFIX")}
-
 var errorLog = log.New(os.Stderr, "[error]: ", log.Ldate|log.Ltime)
 var infoLog = log.New(os.Stdout, "[info]: ", log.Ldate|log.Ltime)
 var render = ssr.New(ssr.Options{
@@ -29,9 +27,10 @@ var render = ssr.New(ssr.Options{
 	InfoLog:  infoLog,
 	Limit:    1,
 })
+var props = map[string]any{"prefix": os.Getenv("PREFIX")}
 var appRoutes = []routes.Route{
 	{Pattern: "GET /", Handler: func(request *http.Request, writer http.ResponseWriter) {
-		if found, err := send.RequestedFile(writer, request, efs); err != nil || !found {
+		if found, err := send.RequestedFile(writer, request, efs, "/"); err != nil || !found {
 			send.View(writer, request, render, views.View{Name: "GetStarted", Props: props})
 		}
 	}},

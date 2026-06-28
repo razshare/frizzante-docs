@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
+	"os"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -22,6 +24,12 @@ func New(options Options) renders.Render {
 	limit := options.Limit
 	errorLog := options.ErrorLog
 	infoLog := options.InfoLog
+	if errorLog == nil {
+		errorLog = log.New(os.Stderr, "[error]: ", log.Ldate|log.Ltime)
+	}
+	if infoLog == nil {
+		infoLog = log.New(os.Stdout, "[info]: ", log.Ldate|log.Ltime)
+	}
 	if limit < 0 {
 		infoLog.Printf("ssr limit is set to %d, which is not allowed; defaulting to 1", limit)
 		limit = 1
@@ -108,7 +116,7 @@ func New(options Options) renders.Render {
 				return
 			}
 			document = strings.Replace(document, "<!--app-body-->", fmt.Sprintf(renders.BodyFormat, ""), 1)
-			document = strings.Replace(document, "<!--app-head-->", fmt.Sprintf(renders.HeadFormat, view.Title), 1)
+			document = strings.Replace(document, "<!--app-head-->", fmt.Sprintf(renders.HeadFormat, ""), 1)
 			document = strings.Replace(document, "<!--app-data-->", fmt.Sprintf(renders.DataFormat, data), 1)
 			return
 		}

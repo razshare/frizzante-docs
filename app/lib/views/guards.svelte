@@ -20,17 +20,20 @@
     <Code
         lang="go"
         source={`
-            server.Routes = []routes.Route{
+            var routes = []routes.Route{
                 {
                     Pattern: "GET /api/xml/data",
                     Handler: data.Get,
                     Guards: []guards.Guards{
-                        {Name: "jsonless", Handler: func(client *clients.Client, allow func()) {
-                            if receive.ContentType(client) == "application/json" {
-                                return
-                            }
-                            allow()
-                        }},
+                        {
+                            Name: "jsonless", 
+                            Handler: func(request *http.Request, _ http.ResponseWriter, allow func()) {
+                                if request.Header.Get("Content-Type") == "application/json" {
+                                    return
+                                }
+                                allow()
+                            },
+                        },
                     },
                 },
             }
@@ -55,35 +58,43 @@
     <Code
         lang="go"
         source={`
-            var authenticate = guards.Guard{Name: "authenticate", Handler: func(client *clients.Client, allow func()) {
-                session := sessions.Start(receive.SessionId(client))
-                if session.Verified && time.Since(session.LastActivity) <= 30*time.Minute {
-                    allow()
-                    return
-                }
-                send.Status(client, 401)
-                send.Message(client, "not authenticated")
-            }}
+            var authenticate = guards.Guard{
+                Name: "authenticate", 
+                Handler: func(request *http.Request, _ http.ResponseWriter, allow func()) {
+                    var session schema.Session
+                    _ := sessions.Start(writer, request, &session)
+                    if session.Verified && time.Since(session.LastActivity) <= 30*time.Minute {
+                        allow()
+                        return
+                    }
+                    writer.WriteHeader(401)
+                    writer.Write([]byte("not authenticated"))
+                },
+            }
         `}
     />
     <Code
         lang="go"
         source={`
-            var authorize = guards.Guard{Name: "authorize", Handler: func(client *clients.Client, allow func()) {
-                session := sessions.Start(receive.SessionId(client))
-                if session.UserId == receive.path("user_id") {
-                    allow()
-                    return
-                }
-                send.Status(client, 403)
-                send.Message(client, "missing permissions")
-            }}
+            var authorize = guards.Guard{
+                Name: "authorize", 
+                Handler: func(request *http.Request, _ http.ResponseWriter, allow func()) {
+                    var session schema.Session
+                    _ := sessions.Start(writer, request, &session)
+                    if request.PathValue("user_id") == session.UserId {
+                        allow()
+                        return
+                    }
+                    writer.WriteHeader(403)
+                    writer.Write([]byte("missing permissions"))
+                },
+            }
         `}
     />
     <Code
         lang="go"
         source={`
-            server.Routes = []routes.Route{
+            var routes = []routes.Route{
                 {Pattern: "GET /public", Handler: public.Get},
                 {Pattern: "GET /dashboard", Handler: dashboard.Get, Guards: []guards.Guard{authenticate}},
                 {Pattern: "GET /user/{user_id}/settings", Handler: settings.Get, Guards: []guards.Guard{authenticate, authorize}},

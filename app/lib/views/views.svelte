@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Caution from "$lib/components/caution.svelte"
     import Code from "$lib/components/code.svelte"
     import FileTree from "$lib/components/file_tree.svelte"
     import Footer from "$lib/components/footer.svelte"
@@ -92,23 +93,28 @@
     <br />
     <br />
     <Title text="Send Views" />
-    <span>Use <InlineCode source="send.View()" /> to send a view.</span>
+    <span>
+        In order to send a view you need to create a new
+        <InlineCode source="render" /> function using either
+        <InlineCode source="ssr.New()" /> or
+        <InlineCode source="csr.New()" /> then pass that render function to
+        <InlineCode source="send.View()" /> along with your embedded file system.
+    </span>
     <Code
         lang="go"
         source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
-                "main/lib/core/views"
-            )
-
-            func View(client *clients.Client) {
-                send.View(client, views.View{Name: "Welcome"}) // Sends view "Welcome".
+            //go:embed app/dist
+            var efs embed.FS
+            var render = ssr.New(ssr.Options{Efs:efs, Limit: 1})
+            func View(request *http.Request, writer http.ResponseWriter) {
+                send.View(writer, request, render, views.View{Name: "Welcome"}) // Sends view "Welcome".
             }
         `}
     />
+    <Note>
+        The embedded file system (<InlineCode source="efs" />) must point to the
+        <InlineCode source="app/dist" /> directory.
+    </Note>
     <span>
         The Name of the view will be used to lookup the view component exported by
         <InlineCode source="app/exports.server.ts" />
@@ -125,54 +131,21 @@
     <Code
         lang="go"
         source={`
-            package welcome
-            
-            import (
-                "os"
-
-                "main/lib/core/clients"
-                "main/lib/core/send"
-                "main/lib/core/views"
-                "main/lib/routes/welcome"
-            )
-
-            func View(client *clients.Client) {
-                if !send.RequestedFile(client) { // Tries to send the requested file, or else...
-                    welcome.View(client)         // ...sends the welcome view.
+            func View(request *http.Request, writer http.ResponseWriter) {
+                // Tries to send the requested file, or else...
+                if found, err := send.RequestedFile(writer, request, efs, "/"); err != nil || !found {
+                    // ...sends the "Default" view.
+                    send.View(writer, request, render, views.View{Name: "Default"})
                 }
             }
         `}
     />
-    <span>
-        Usually you would map this handler to the default <InlineCode source="GET /" />
-        pattern, which automatically captures all unmatched requests.
-    </span>
-    <Code
-        lang="go"
-        source={`
-            package main
-
-            import (
-                "embed"
-                "main/lib/core/clients"
-                "main/lib/core/servers"
-                "main/lib/routes/welcome"
-            )
-
-            //go:embed app/dist
-            var efs embed.FS
-            var server = servers.New()                              // Creates server.
-
-            func main() {
-                defer servers.Start(server)                         // Starts server.
-                server.Efs = efs                                    // Sets embedded file system.
-                server.Routes = append(server.Routes, routes.Route{ // Adds route to the server.
-                    Pattern: "GET /",
-                    Handler: welcome.View,
-                })
-            }
-        `}
-    />
+    <Tip>
+        <span>
+            Usually you would map this handler to the default <InlineCode source="GET /" />
+            pattern, which automatically captures all unmatched requests.
+        </span>
+    </Tip>
     <br />
     <br />
     <Title text="View Properties" />
@@ -180,19 +153,11 @@
     <Code
         lang="go"
         source={`
-            package welcome
-            
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
-                "main/lib/core/views"
-            )
-
-            func View(client *clients.Client) {
-                send.View(client, views.View{ // Sends view.
-                    Name: "Welcome",          // Sets view name.
-                    Props: map[string]string{ // Sets view props, which will be injected into the svelte component.
-                        "name": "world",      // Adds property "name" with value "world".
+            func View(request *http.Request, writer http.ResponseWriter) {
+                send.View(writer, request, render, views.View{
+                    Name: "Welcome",
+                    Props: map[string]string{
+                        "name": "world", // ---> Props go here <---
                     },
                 })
             }
@@ -231,35 +196,30 @@
     </span>
     <br />
     <br />
-    <KeyedSection key="1" description="RenderModeFull">
+    <KeyedSection key="1" description="views.RenderModeFull">
         <span>
-            Using <InlineCode source="RenderModeFull" />, the view is rendered on both the server and the client.
+            Using <InlineCode source="views.RenderModeFull" />, the view is rendered on both the server and the client.
         </span>
         <br />
         <span>This is the <strong>default</strong> mode.</span>
         <Code
             lang="go"
             source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
-                "main/lib/core/views"
-            )
-
-            func View(client *clients.Client) {
-                send.View(client, views.View{        // Sends view.
-                    Name: "Welcome",                 // Sets view name.
-                    RenderMode: view.RenderModeFull, // Renders view on server and client.
-                })
-            }
-        `}
+                //go:embed app/dist
+                var efs embed.FS
+                var render = ssr.New(ssr.Options{Efs:efs, Limit: 1})
+                func View(request *http.Request, writer http.ResponseWriter) {
+                    send.View(writer, request, render, views.View{
+                        Name: "Welcome",
+                        RenderMode: views.RenderModeFull, // ---> Configures render mode to "both server and client". <---
+                    })
+                }
+            `}
         />
     </KeyedSection>
-    <KeyedSection key="2" description="RenderModeServer">
+    <KeyedSection key="2" description="views.RenderModeServer">
         <span>
-            Using <InlineCode source="RenderModeServer" />, the view is rendered only on the server.
+            Using <InlineCode source="views.RenderModeServer" />, the view is rendered only on the server.
         </span>
         <br />
         <span>
@@ -274,50 +234,62 @@
         <Code
             lang="go"
             source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
-                "main/lib/core/views"
-            )
-
-            func View(client *clients.Client) {
-                send.View(client, views.View{          // Sends view.
-                    Name: "Welcome",                   // Sets view name.
-                    RenderMode: view.RenderModeServer, // Renders view only on server.
-                })
-            }
-        `}
+                //go:embed app/dist
+                var efs embed.FS
+                var render = ssr.New(ssr.Options{Efs:efs, Limit: 1})
+                func View(request *http.Request, writer http.ResponseWriter) {
+                    send.View(writer, request, render, views.View{
+                        Name: "Welcome",
+                        RenderMode: views.RenderModeServer, // ---> Configures render mode to "server only". <---
+                    })
+                }
+            `}
         />
         <Tip>
-            While using <InlineCode source="RenderModeServer" /> the view won’t serve a JavaScript bundle, but you can still
-            use the <InlineCode source="<svelte:head>" /> special tag in order to load scripts dynamically.
+            While using <InlineCode source="views.RenderModeServer" /> the view won’t serve a JavaScript bundle, but you
+            can still use the <InlineCode source="<svelte:head>" /> special tag in order to load scripts dynamically.
         </Tip>
+        <Caution>
+            A <InlineCode source="csr" /> function will always render blank page when the view is configured to use
+            <InlineCode source="views.RenderModeServer" />.
+            <Code
+                lang="go"
+                source={`
+                    //go:embed app/dist
+                    var efs embed.FS
+                    var render = csr.New(csr.Options{Efs:efs}) // Using csr function.
+                    func View(request *http.Request, writer http.ResponseWriter) {
+                        send.View(writer, request, render, views.View{
+                            Name: "Welcome",
+                            RenderMode: views.RenderModeServer, // Because this mode attempts to 
+                                                                // render exclusively on the server,
+                                                                // and the csr function cannot render on the 
+                                                                // server, this handler will send an 
+                                                                // empty response to the client.
+                        })
+                    }
+                `}
+            />
+        </Caution>
     </KeyedSection>
-    <KeyedSection key="3" description="RenderModeClient" noLink>
+    <KeyedSection key="3" description="views.RenderModeClient">
         <span>
-            Using <InlineCode source="RenderModeClient" />, the view is rendered only on the client by loading a
+            Using <InlineCode source="views.RenderModeClient" />, the view is rendered only on the client by loading a
             JavaScript bundle asynchronously.
         </span>
         <Code
             lang="go"
             source={`
-            package welcome
-
-            import (
-                "main/lib/core/clients"
-                "main/lib/core/send"
-                "main/lib/core/views"
-            )
-
-            func View(client *clients.Client) {
-                send.View(client, views.View{          // Sends view.
-                    Name: "Welcome",                   // Sets view name.
-                    RenderMode: view.RenderModeClient, // Renders view only on client.
-                })
-            }
-        `}
+                //go:embed app/dist
+                var efs embed.FS
+                var render = ssr.New(ssr.Options{Efs:efs, Limit: 1})
+                func View(request *http.Request, writer http.ResponseWriter) {
+                    send.View(writer, request, render, views.View{
+                        Name: "Welcome",
+                        RenderMode: views.RenderModeClient, // ---> Configures render mode to "client only". <---
+                    })
+                }
+            `}
         />
         <Tip>
             <span>You can combine any of these render modes with adaptive hyperlinks and forms.</span>
@@ -336,9 +308,9 @@
                 { shift: 0, text: "Default View" },
                 { shift: 0, text: "View Properties" },
                 { shift: 0, text: "Render Modes" },
-                { shift: 1, text: "RenderModeFull" },
-                { shift: 1, text: "RenderModeServer" },
-                { shift: 1, text: "RenderModeClient" },
+                { shift: 1, text: "views.RenderModeFull" },
+                { shift: 1, text: "views.RenderModeServer" },
+                { shift: 1, text: "views.RenderModeClient" },
             ]}
         />
     {/snippet}

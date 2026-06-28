@@ -11,28 +11,32 @@
 
 <Page title="Web Sockets" {prefix}>
     <Title text="Web Sockets" />
-    <span>Use <InlineCode source="send.WsUpgrade()" /> to upgrade the connection to web sockets.</span>
-    <Code lang="go" source={`routes.Route{Pattern: "GET /ws", Handler: welcome.View}`} />
+    <span>Use <InlineCode source="negotiate.WsUpgrade()" /> to upgrade the connection to web sockets.</span>
     <Code
         lang="go"
         source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
-                "main/lib/core/receive"
-                "main/lib/core/send"
+                "io"
+                "main/lib/core/negotiate"
+                "main/lib/core/routes"
+                "net/http"
                 "time"
             )
 
-            func View(client *clients.Client) {
-                alive := receive.IsAlive(client)          // Tracks request status.
-                send.WsUpgrade(client)                    // Sends ws upgrade.
-                for *alive {                              // Loops until cancellation.
-                    name := receive.Message(client)       // Receives message.
-                    send.Message(client, "Hello " + name) // Sends message.
-                    time.Sleep(time.Second)               // Sleeps for 1 second.
-                }
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(request *http.Request, writer http.ResponseWriter) {
+                    negotiate.WsUpgrade(&writer, request) // Negotiates ws upgrade with the client
+                                                          // and replaces writer and request with 
+                                                          // ws compliant ones.
+                    for {
+                        _, _ = io.ReadAll(request.Body)      // Receives message.
+                        _, _ = writer.Write([]byte("hello")) // Sends message.
+                        time.Sleep(time.Second)              // Sleeps for 1 second.
+                    }
+                },
             }
         `}
     />

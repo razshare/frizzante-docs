@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -22,6 +23,12 @@ import (
 func New(options Options) renders.Render {
 	errorLog := options.ErrorLog
 	infoLog := options.InfoLog
+	if errorLog == nil {
+		errorLog = log.New(os.Stderr, "[error]: ", log.Ldate|log.Ltime)
+	}
+	if infoLog == nil {
+		infoLog = log.New(os.Stdout, "[info]: ", log.Ldate|log.Ltime)
+	}
 	var server = filepath.Join("app", "dist", "server", "app.server.js")
 	var index = filepath.Join("app", "dist", "client", "index.html")
 	server = strings.ReplaceAll(server, "/", string(filepath.Separator))
@@ -108,7 +115,7 @@ func New(options Options) renders.Render {
 				return
 			}
 			document = strings.Replace(document, "<!--app-body-->", fmt.Sprintf(renders.BodyFormat, ""), 1)
-			document = strings.Replace(document, "<!--app-head-->", fmt.Sprintf(renders.HeadFormat, view.Title), 1)
+			document = strings.Replace(document, "<!--app-head-->", fmt.Sprintf(renders.HeadFormat, ""), 1)
 			document = strings.Replace(document, "<!--app-data-->", fmt.Sprintf(renders.DataFormat, data), 1)
 			return
 		}

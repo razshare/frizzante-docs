@@ -37,7 +37,7 @@
     <KeyedSection key="3" description="Build the image.">
         <Code lang="sh" source="docker build -t my-web-server ." />
     </KeyedSection>
-    <KeyedSection key="4" description="Run." noLink>
+    <KeyedSection key="4" description="Run.">
         <Code lang="sh" source="docker run -p 8080:8080 my-web-server" />
     </KeyedSection>
     {#snippet rightSidebar({ body })}

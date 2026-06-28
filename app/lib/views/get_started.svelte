@@ -38,7 +38,7 @@
     <KeyedSection key="4" description="Start development.">
         <Code lang="bash" source="frizzante dev" />
     </KeyedSection>
-    <KeyedSection key="5" description="Build." noLink>
+    <KeyedSection key="5" description="Build.">
         <Code lang="bash" source="frizzante build" />
         <span>This will create two executables,</span>
         <InlineCode source=".gen/bin/migrate" />

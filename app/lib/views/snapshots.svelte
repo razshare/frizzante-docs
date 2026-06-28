@@ -61,41 +61,49 @@
 
                 import (
                     "embed"
+                    "errors"
                     "log"
+                    "os"
 
                     "main/lib/core/routes"
                     "main/lib/core/routes/statics"
                     "main/lib/core/servers"
                     "main/lib/core/ssr"
-                    "main/lib/routes/about"
-                    "main/lib/routes/fallback"
-                    "main/lib/routes/projects"
                 )
 
                 //go:generate frizzante clean
                 //go:generate frizzante configure
-                //go:generate frizzante generate types
-                //go:generate frizzante package
                 //go:embed app/dist
                 var efs embed.FS
+                var errorLog = log.New(os.Stderr, "[error]: ", log.Ldate|log.Ltime)
+                var infoLog = log.New(os.Stdout, "[info]: ", log.Ldate|log.Ltime)
+                var render = ssr.New(ssr.Options{
+                    Efs:      efs,
+                    ErrorLog: errorLog,
+                    InfoLog:  infoLog,
+                    Limit:    1,
+                })
+                var props = map[string]any{"prefix": os.Getenv("PREFIX")}
+                var appRoutes = []routes.Route{
+                    // ---> Routes go here. <---
+                }
+                var srverr = servers.Start(servers.StartOptions{
+                    ErrorLog: errorLog,
+                    InfoLog:  infoLog,
+                    Routes: append(
+                        appRoutes,
+                        routes.Route{
+                            Pattern: "GET /@statics",
+                            Handler: statics.NewRouteHandler(appRoutes), // ---> Adds the statics handler. <---
+                        },
+                    ),
+                })
 
                 func main() {
-                    server := servers.New()
-                    server.Efs = efs
-                    server.Render = ssr.New(1)
-                    server.Routes = []routes.Route{
-                        {Pattern: "GET /", Handler: fallback.View},
-                        {Pattern: "GET /about", Handler: about.View},
-                        {Pattern: "GET /projects", Handler: projects.View},
-                        {Pattern: "GET /@statics", Handler: statics.NewRouteHandler(server)}, // This will automatically generate a route that
-                                                                                              // lists all static routes of the given server.
-
-                    }
-                    if err := servers.Start(server); err != nil {
+                    if err := errors.Join(srverr); err != nil {
                         log.Fatal(err)
                     }
                 }
-
             `}
         />
     </KeyedSection>
@@ -118,7 +126,7 @@
             <Code lang="bash" source="make dev" />
         </KeyedSection>
     </KeyedSection>
-    <KeyedSection key="3" description="Snapshot" noLink>
+    <KeyedSection key="3" description="Snapshot">
         <span>
             Run the frizzante cli and point it to the <InlineCode source="GET /@statics" /> route.
         </span>

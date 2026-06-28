@@ -12,29 +12,32 @@
 <Page title="Server Sent Events" {prefix}>
     <Title text="Server Sent Events" />
     <span>Use <InlineCode source="send.SseUpgrade()" /> to upgrade the connection to server sent events.</span>
-    <Code lang="go" source={`routes.Route{Pattern: "GET /sse", Handler: welcome.View}`} />
     <Code
         lang="go"
         source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
-                "main/lib/core/receive"
+                "main/lib/core/routes"
                 "main/lib/core/send"
+                "net/http"
                 "time"
             )
 
-            func View(client *clients.Client) {
-                alive := receive.IsAlive(client)    // Tracks request status.
-                event := send.SseUpgrade(client)    // Sends sse upgrade.
-                for *alive {                        // Loops until cancellation.
-                    event("channel-1")              // Switches to "channel-1".
-                    send.Message(client, "Hello 1") // Sends message.
-                    event("channel-2")              // Switches to "channel-2".
-                    send.Message(client, "Hello 2") // Sends message.
-                    time.Sleep(time.Second)         // Sleeps for 1 second.
-                }
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(request *http.Request, writer http.ResponseWriter) {
+                    event := send.SseUpgrade(&writer) // Sends sse upgrade to the client
+                                                      // and replaces writer with one 
+                                                      // that is sse compliant.
+                    for {
+                        event("channel-1")                     // Switches to "channel-1".
+                        _, _ = writer.Write([]byte("hello 1")) // Sends message.
+                        event("channel-2")                     // Switches to "channel-2".
+                        _, _ = writer.Write([]byte("hello 2")) // Sends message.
+                        time.Sleep(time.Second)                // Sleeps for 1 second.
+                    }
+                },
             }
         `}
     />

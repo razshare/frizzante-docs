@@ -71,7 +71,7 @@
         <Code
             lang="shell"
             source={`
-                frizzante generate type
+                frizzante generate types
                 # or go run ./types
             `}
         />
