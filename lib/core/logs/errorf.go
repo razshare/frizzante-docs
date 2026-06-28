@@ -3,9 +3,9 @@ package logs
 import (
 	"fmt"
 
-	"main/lib/core/clients"
+	"main/lib/core/scopes"
 )
 
-func Errorf(client *clients.Client, format string, args ...any) {
-	Error(client, fmt.Sprintf(format, args...))
+func Errorf(http *scopes.Http, format string, args ...any) {
+	Error(http, fmt.Sprintf(format, args...))
 }

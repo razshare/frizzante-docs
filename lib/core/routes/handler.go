@@ -1,5 +1,7 @@
 package routes
 
-import "main/lib/core/clients"
+import (
+	"net/http"
+)
 
-type Handler = func(client *clients.Client)
+type Handler = func(request *http.Request, writer http.ResponseWriter)

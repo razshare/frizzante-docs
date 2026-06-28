@@ -3,41 +3,33 @@
 package send
 
 import (
+	"embed"
 	"net/http"
 	"path/filepath"
 	"strings"
 
-	"main/lib/core/clients"
 	"main/lib/core/files"
-	"main/lib/core/logs"
 	"main/lib/core/mime"
-	"main/lib/core/stack"
 )
 
-// RequestedFile sends the file requested by the client.
+// RequestedFile sends the file requested by the http.
 //
 // Returns false if connection is web sockets, server sent events
 // or the file was not found.
-func RequestedFile(client *clients.Client) bool {
-	if client.WebSocket != nil {
-		logs.Errorf(client, "send.RequestedFile() does not support web sockets\n%s", stack.Trace())
-		return false
-	}
-	if client.EventName != "" {
-		logs.Errorf(client, "send.RequestedFile() does not support server sent events\n%s", stack.Trace())
-		return false
-	}
-	uri := client.Request.RequestURI
+func RequestedFile(writer http.ResponseWriter, request *http.Request, _ embed.FS) (found bool, err error) {
+	uri := request.RequestURI
 	if strings.HasPrefix(uri, "/") {
 		uri = uri[1:]
 	}
 	fileName := filepath.Join("app", "dist", "client", strings.ReplaceAll(uri, "/", string(filepath.Separator)))
 	if files.IsFile(fileName) {
-		if client.Writer.Header().Get("Content-Type") == "" {
-			Header(client, "Content-Type", mime.Parse(fileName))
+		found = true
+		header := writer.Header()
+		if header.Get("Content-Type") == "" {
+			header.Set("Content-Type", mime.Parse(fileName))
 		}
-		http.ServeFile(client.Writer, &client.Request, fileName)
-		return true
+		http.ServeFile(writer, request, fileName)
+		return
 	}
-	return false
+	return
 }

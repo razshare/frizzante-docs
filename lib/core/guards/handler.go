@@ -1,5 +1,7 @@
 package guards
 
-import "main/lib/core/clients"
+import (
+	"net/http"
+)
 
-type Handler = func(client *clients.Client, allow func())
+type Handler = func(request *http.Request, writer http.ResponseWriter, allow func())

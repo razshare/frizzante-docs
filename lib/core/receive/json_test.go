@@ -10,11 +10,13 @@ func TestJson(t *testing.T) {
 	type Payload struct {
 		Key string `json:"key"`
 	}
-	client := mocks.NewClient()
-	body := client.Request.Body.(*mocks.RequestBody)
+	request, _ := mocks.NewExchange()
+	body := request.Body.(*mocks.RequestBody)
 	body.MockBuffer = []byte(`{"key":"value"}`)
 	var payload Payload
-	Json(client, &payload)
+	if err := Json(request, &payload); err != nil {
+		t.Fatal("json parsing should succeed")
+	}
 	if payload.Key != "value" {
 		t.Fatal("key should be value")
 	}

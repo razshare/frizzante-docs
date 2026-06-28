@@ -7,9 +7,10 @@ import (
 )
 
 func TestMessage(t *testing.T) {
-	client := mocks.NewClient()
-	Message(client, "hello")
-	writer := client.Writer.(*mocks.ResponseWriter)
+	_, writer := mocks.NewExchange()
+	if err := Message(writer, "hello"); err != nil {
+		t.Fatal("sending message should succeed")
+	}
 	if string(writer.MockBytes) != "hello" {
 		t.Fatal("content should be hello")
 	}

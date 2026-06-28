@@ -1,28 +1,28 @@
 package statics
 
 import (
+	"fmt"
+	"net/http"
 	"strings"
 
-	"main/lib/core/clients"
-	"main/lib/core/receive"
 	"main/lib/core/routes"
 	"main/lib/core/send"
-	"main/lib/core/servers"
 )
 
 // NewRouteHandler creates a route handler that lists all static routes of a given server.
-func NewRouteHandler(server *servers.Server) routes.Handler {
-	return func(client *clients.Client) {
-		if accepts := receive.Accept(client); accepts != "" && accepts != "application/json" {
-			send.BadRequestf(client, "only application/json can be produced; requested %s", accepts)
+func NewRouteHandler(appRoutes []routes.Route) routes.Handler {
+	return func(request *http.Request, writer http.ResponseWriter) {
+		if accepts := request.Header.Get("Accept"); accepts != "" && accepts != "application/json" {
+			writer.WriteHeader(http.StatusBadRequest)
+			_ = send.Message(writer, fmt.Sprintf("only application/json can be produced; requested %s", accepts))
 			return
 		}
 		statics := make([]string, 0)
-		for _, route := range server.Routes {
+		for _, route := range appRoutes {
 			if parts := strings.SplitN(route.Pattern, " ", 2); len(parts) >= 2 && parts[0] == "GET" {
 				statics = append(statics, parts[1])
 			}
 		}
-		send.Json(client, statics)
+		_ = send.Json(writer, statics)
 	}
 }

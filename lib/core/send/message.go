@@ -1,10 +1,13 @@
 package send
 
-import "main/lib/core/clients"
+import (
+	"net/http"
+)
 
 // Message sends utf-8 safe content.
 //
 // Compatible with web sockets and server sent events.
-func Message(client *clients.Client, message string) {
-	Content(client, []byte(message))
+func Message(writer http.ResponseWriter, message string) (err error) {
+	_, err = writer.Write([]byte(message))
+	return
 }

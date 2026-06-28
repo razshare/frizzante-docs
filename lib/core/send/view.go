@@ -1,64 +1,53 @@
 package send
 
 import (
+	"net/http"
 	"strings"
 
-	"main/lib/core/clients"
-	"main/lib/core/logs"
-	"main/lib/core/stack"
 	"main/lib/core/views"
 	"main/lib/core/views/renders"
 )
 
 // View sends a view.
-func View(client *clients.Client, view views.View) {
-	header := client.Writer.Header()
+func View(
+	writer http.ResponseWriter,
+	request *http.Request,
+	render renders.Render,
+	view views.View,
+) (err error) {
+	header := writer.Header()
 	if header.Get("Location") != "" {
 		return
 	}
-	if strings.Contains(client.Request.Header.Get("Accept"), "application/json") {
+	if strings.Contains(request.Header.Get("Accept"), "application/json") {
 		if header.Get("Cache-Control") == "" {
-			Header(client, "Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+			header.Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
 		}
 		if header.Get("Pragma") == "" {
-			Header(client, "Pragma", "no-cache")
+			header.Set("Pragma", "no-cache")
 		}
 		if view.Props == nil {
 			view.Props = map[string]string{}
 		}
 		data := views.NewData(view)
-		data.Type = client.Request.Header.Get("X-FrizzanteViewType")
-		Json(client, data)
-		return
-	}
-	if client.Options.Render == nil {
-		logs.Errorf(
-			client,
-			"send.View: no render function defined\n%s",
-			stack.Trace(),
-		)
+		data.Type = request.Header.Get("X-FrizzanteViewType")
+		if err = Json(writer, data); err != nil {
+			return
+		}
 		return
 	}
 	data := views.NewData(view)
-	data.Type = client.Request.Header.Get("X-FrizzanteViewType")
+	data.Type = request.Header.Get("X-FrizzanteViewType")
 	var html string
-	var err error
-	if html, err = client.Options.Render(renders.RenderOptions{
-		Efs:      client.Options.Efs,
-		View:     view,
-		Data:     data,
-		ErrorLog: client.Options.ErrorLog,
-		InfoLog:  client.Options.InfoLog,
+	if html, err = render(renders.Options{
+		View: view,
+		Data: data,
 	}); err != nil {
-		logs.Errorf(
-			client,
-			"send.View: failed to render view: %v\n%s",
-			err,
-			stack.Trace(),
-		)
+		return
 	}
-	if client.Writer.Header().Get("Content-Type") == "" {
-		Header(client, "Content-Type", "text/html")
+	if header.Get("Content-Type") == "" {
+		header.Set("Content-Type", "text/html")
 	}
-	Message(client, html)
+	err = Message(writer, html)
+	return
 }

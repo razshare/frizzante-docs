@@ -3,12 +3,10 @@ package mocks
 import (
 	"io"
 	"net/http"
-
-	"main/lib/core/clients"
-	"main/lib/core/servers"
 )
 
 type ResponseWriter struct {
+	http.ResponseWriter
 	MockHeader     http.Header
 	MockStatusCode int
 	MockBytes      []byte
@@ -51,29 +49,16 @@ func (body *RequestBody) Close() error {
 	return nil
 }
 
-func NewClient() *clients.Client {
-	server := servers.New()
-	// server.Render = ssr.New(1)
-	options := clients.Options{
-		ErrorLog: server.ErrorLog,
-		InfoLog:  server.InfoLog,
-		Efs:      server.Efs,
-	}
-	writer := &ResponseWriter{
-		MockHeader: map[string][]string{},
-		MockBytes:  make([]byte, 0),
-	}
-	request := http.Request{
+func NewExchange() (request *http.Request, writer *ResponseWriter) {
+	request = &http.Request{
 		Header: map[string][]string{},
 		Body: &RequestBody{
 			MockBuffer: make([]byte, 1024),
 		},
 	}
-	return &clients.Client{
-		Writer:  writer,
-		Request: request,
-		Options: options,
-		EventId: 1,
-		Status:  200,
+	writer = &ResponseWriter{
+		MockHeader: map[string][]string{},
+		MockBytes:  make([]byte, 0),
 	}
+	return
 }

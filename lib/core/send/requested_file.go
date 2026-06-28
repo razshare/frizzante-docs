@@ -4,6 +4,7 @@ package send
 
 import (
 	"bytes"
+	"embed"
 	"fmt"
 	"io/fs"
 	"net/http"
@@ -11,88 +12,54 @@ import (
 	"path/filepath"
 	"strings"
 
-	"main/lib/core/clients"
 	"main/lib/core/embeds"
 	"main/lib/core/files"
-	"main/lib/core/logs"
 	"main/lib/core/mime"
-	"main/lib/core/stack"
 )
 
-// RequestedFile sends the file requested by the client.
+// RequestedFile sends the file requested by the http.
 //
 // Returns false if connection is web sockets, server sent events
 // or the file was not found.
-func RequestedFile(client *clients.Client) bool {
-	if client.WebSocket != nil {
-		logs.Errorf(
-			client,
-			"send.RequestedFile: web sockets are not supported\n%s",
-			stack.Trace(),
-		)
-		return false
-	}
-	if client.EventName != "" {
-		logs.Errorf(
-			client,
-			"send.RequestedFile: server sent events are not supported\n%s",
-			stack.Trace(),
-		)
-		return false
-	}
-	uri := client.Request.RequestURI
+func RequestedFile(writer http.ResponseWriter, request *http.Request, efs embed.FS) (found bool, err error) {
+	uri := request.RequestURI
 	if strings.HasPrefix(uri, "/") {
 		uri = uri[1:]
 	}
 	embeddedFileName := strings.Join([]string{"app", "dist", "client", uri}, "/")
-	if embeds.IsFile(client.Options.Efs, embeddedFileName) {
+	if embeds.IsFile(efs, embeddedFileName) {
 		var file fs.File
-		var err error
-		if file, err = client.Options.Efs.Open(embeddedFileName); err != nil {
-			logs.Errorf(
-				client,
-				"send.RequestedFile: failed to open embedded file: %v\n%s",
-				err,
-				stack.Trace(),
-			)
-			return false
+		if file, err = efs.Open(embeddedFileName); err != nil {
+			return
 		}
 		var info os.FileInfo
 		if info, err = file.Stat(); err != nil {
-			logs.Errorf(
-				client,
-				"send.RequestedFile: failed to stat embedded file: %v\n%s",
-				err,
-				stack.Trace(),
-			)
-			return false
+			return
 		}
-		if client.Writer.Header().Get("Content-Type") == "" {
-			Header(client, "Content-Type", mime.Parse(embeddedFileName))
+		header := writer.Header()
+		if header.Get("Content-Type") == "" {
+			header.Set("Content-Type", mime.Parse(embeddedFileName))
 		}
-		if client.Writer.Header().Get("Content-Length") == "" {
-			Header(client, "Content-Length", fmt.Sprintf("%d", info.Size()))
+		if writer.Header().Get("Content-Length") == "" {
+			header.Set("Content-Length", fmt.Sprintf("%d", info.Size()))
 		}
 		buf := make([]byte, info.Size())
 		if _, err = file.Read(buf); err != nil {
-			logs.Errorf(
-				client,
-				"send.RequestedFile: failed to read embedded file: %v\n%s",
-				err,
-				stack.Trace(),
-			)
-			return false
+			return
 		}
-		http.ServeContent(client.Writer, &client.Request, embeddedFileName, info.ModTime(), bytes.NewReader(buf))
-		return true
+		http.ServeContent(writer, request, embeddedFileName, info.ModTime(), bytes.NewReader(buf))
+		found = true
+		return
 	}
 	fileName := filepath.Join("app", "dist", "client", strings.ReplaceAll(uri, "/", string(filepath.Separator)))
 	if files.IsFile(fileName) {
-		if client.Writer.Header().Get("Content-Type") == "" {
-			Header(client, "Content-Type", mime.Parse(fileName))
+		header := writer.Header()
+		if writer.Header().Get("Content-Type") == "" {
+			header.Set("Content-Type", mime.Parse(fileName))
 		}
-		http.ServeFile(client.Writer, &client.Request, fileName)
-		return true
+		http.ServeFile(writer, request, fileName)
+		found = true
+		return
 	}
-	return false
+	return
 }

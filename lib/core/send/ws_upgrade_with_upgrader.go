@@ -1,24 +1,32 @@
 package send
 
 import (
+	"net/http"
+
 	"github.com/gorilla/websocket"
-	"main/lib/core/clients"
-	"main/lib/core/logs"
-	"main/lib/core/stack"
 )
 
 // WsUpgradeWithUpgrader upgrades to web sockets.
-func WsUpgradeWithUpgrader(client *clients.Client, upgrader websocket.Upgrader) {
-	conn, err := upgrader.Upgrade(client.Writer, &client.Request, nil)
-	if err != nil {
-		logs.Errorf(
-			client,
-			"send.WsUpgradeWithUpgrader: failed to upgrade to WebSocket: %v\n%s",
-			err,
-			stack.Trace(),
-		)
+func WsUpgradeWithUpgrader(
+	writer *http.ResponseWriter,
+	request *http.Request,
+	upgrader websocket.Upgrader,
+) (err error) {
+	var webSocketConnection *websocket.Conn
+	if webSocketConnection, err = upgrader.Upgrade(*writer, request, nil); err != nil {
 		return
 	}
-	client.WebSocket = conn
-	client.Locked = true
+	converted := &WsUpgradeResponseWriter{
+		ResponseWriter:      *writer,
+		WebSocketConnection: webSocketConnection,
+	}
+	request.Body = &WsUpgradeBodyReaderCloser{
+		WebSocketConnection: webSocketConnection,
+	}
+	*writer = converted
+	go func() {
+		<-request.Context().Done()
+		_ = webSocketConnection.Close()
+	}()
+	return
 }

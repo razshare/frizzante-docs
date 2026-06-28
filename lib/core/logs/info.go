@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"strings"
 
-	"main/lib/core/clients"
+	"main/lib/core/scopes"
 )
 
-func Info(client *clients.Client, args ...any) {
+func Info(http *scopes.Http, args ...any) {
 	length := len(args)
 	entries := make([]string, len(args))
 	for i := 0; i < length; i++ {
 		entries[i] = fmt.Sprintf("%s", args[i])
 	}
-	client.Options.InfoLog.Println(strings.Join(entries, ""))
+	http.InfoLog.Println(strings.Join(entries, ""))
 }
