@@ -192,7 +192,7 @@
     {#snippet footer()}
         <Footer
             previous={{ label: "Type Definitions", href: base("/type_definitions", { prefix }) }}
-            next={{ label: "Todos Example", href: base("/todos_example", { prefix }) }}
+            next={{ label: "Docker", href: base("/docker", { prefix }) }}
         />
     {/snippet}
 </Page>

@@ -10,7 +10,6 @@ import Guards from "$lib/views/guards.svelte"
 import Issues from "$lib/views/issues.svelte"
 import ServerSentEvents from "$lib/views/server_sent_events.svelte"
 import Snapshots from "$lib/views/snapshots.svelte"
-import TodosExample from "$lib/views/todos_example.svelte"
 import TypeDefinitions from "$lib/views/type_definitions.svelte"
 import Views from "$lib/views/views.svelte"
 import WebSockets from "$lib/views/web_sockets.svelte"
@@ -26,7 +25,6 @@ export const views = {
     Views,
     WebStandards,
     TypeDefinitions,
-    TodosExample,
     Cli,
     Docker,
     Issues,

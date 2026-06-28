@@ -55,7 +55,7 @@
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Todos Example", href: base("/todos_example", { prefix }) }}
+            previous={{ label: "Snapshots", href: base("/snapshots", { prefix }) }}
             next={{ label: "Issues", href: base("/issues", { prefix }) }}
         />
     {/snippet}

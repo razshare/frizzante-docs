@@ -40,16 +40,24 @@
     </KeyedSection>
     <KeyedSection key="5" description="Build." noLink>
         <Code lang="bash" source="frizzante build" />
-        <span>This will create a</span>
-        <InlineCode source=".gen/bin/app" />
-        <span>standalone executable.</span>
+        <span>This will create two executables,</span>
+        <InlineCode source=".gen/bin/migrate" />
+        <span>and</span>
+        <InlineCode source=".gen/bin/serve" />
+        <span>.</span>
         <br />
+        <span>Use</span>
+        <InlineCode source=".gen/bin/migrate" />
+        <span>to migrate your database and </span>
+        <InlineCode source=".gen/bin/serve" />
+        <span>to serve the application.</span>
         <br />
         <FileTree>
             {#snippet children({ Directory, File })}
                 <Directory name=".gen" expanded>
                     <Directory name="bin" expanded>
-                        <File name="app" icon={mdiPackage}></File>
+                        <File name="migrate" icon={mdiPackage}></File>
+                        <File name="serve" icon={mdiPackage}></File>
                     </Directory>
                 </Directory>
             {/snippet}

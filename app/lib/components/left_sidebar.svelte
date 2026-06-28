@@ -82,7 +82,6 @@
         href: base("/type_definitions", { prefix }),
     })}
     {@render item({ text: "Snapshots", viewName: "Snapshots", href: base("/snapshots", { prefix }) })}
-    {@render item({ text: "Todos Example", viewName: "TodosExample", href: base("/todos_example", { prefix }) })}
     {@render item({ text: "Docker", viewName: "Docker", href: base("/docker", { prefix }) })}
     {@render item({ text: "Issues", viewName: "Issues", href: base("/issues", { prefix }) })}
     {@render item({ text: "Contributing", viewName: "Contributing", href: base("/contributing", { prefix }) })}
