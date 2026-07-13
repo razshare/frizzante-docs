@@ -12,6 +12,8 @@ type Session struct {
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
+	Roles     string    `json:"roles"`
+	UserID    string    `json:"userId"`
 	Error     string    `json:"error"`
 }
 

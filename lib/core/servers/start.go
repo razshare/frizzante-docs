@@ -10,13 +10,14 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"main/lib/core/routes"
 )
 
 // Start starts a server.
 func Start(options StartOptions) (err error) {
 	cors := options.Cors
-	routes := options.Routes
-	guards := options.Guards
+	serverRoutes := options.Routes
 	errorLog := options.ErrorLog
 	certificate := options.Certificate
 	key := options.Key
@@ -27,8 +28,11 @@ func Start(options StartOptions) (err error) {
 	if infoLog == nil {
 		infoLog = log.New(os.Stdout, "[info]: ", log.Ldate|log.Ltime)
 	}
+	if options.Address == "" {
+		options.Address = "0.0.0.0:8080"
+	}
 	server := &http.Server{
-		Addr:           "0.0.0.0:8080",
+		Addr:           options.Address,
 		Handler:        http.NewServeMux(),
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
@@ -49,7 +53,8 @@ func Start(options StartOptions) (err error) {
 		}
 	}()
 	handler := server.Handler.(*http.ServeMux)
-	for _, route := range routes {
+	for _, route := range serverRoutes {
+		scope := routes.Scope{}
 		handler.HandleFunc(route.Pattern, func(writer http.ResponseWriter, request *http.Request) {
 			if errLocal := cors.Check(request); errLocal != nil {
 				server.ErrorLog.Printf(
@@ -58,9 +63,9 @@ func Start(options StartOptions) (err error) {
 				)
 				return
 			}
-			for _, guard := range guards {
+			for _, guard := range route.Guards {
 				var allow bool
-				if guard.Handler(request, writer, func() { allow = true }); !allow {
+				if guard.Handler(scope, request, writer, func() { allow = true }); !allow {
 					if guard.Name == "" {
 						infoLog.Printf("an unnamed guard blocked the request on route %s", route.Pattern)
 					} else {
@@ -69,7 +74,7 @@ func Start(options StartOptions) (err error) {
 					return
 				}
 			}
-			route.Handler(request, writer)
+			route.Handler(scope, request, writer)
 		})
 	}
 	if certificate != "" && key != "" {

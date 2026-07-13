@@ -103,10 +103,22 @@
     <Code
         lang="go"
         source={`
+            package main
+
+            import (
+                "embed"
+                "main/lib/core/routes"
+                "main/lib/core/send"
+                "main/lib/core/ssr"
+                "main/lib/core/views"
+                "net/http"
+            )
+
             //go:embed app/dist
             var efs embed.FS
-            var render = ssr.New(ssr.Options{Efs:efs, Limit: 1})
-            func View(request *http.Request, writer http.ResponseWriter) {
+            var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
+
+            func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                 send.View(writer, request, render, views.View{Name: "Welcome"}) // Sends view "Welcome".
             }
         `}
@@ -131,7 +143,22 @@
     <Code
         lang="go"
         source={`
-            func View(request *http.Request, writer http.ResponseWriter) {
+            package main
+
+            import (
+                "embed"
+                "main/lib/core/routes"
+                "main/lib/core/send"
+                "main/lib/core/ssr"
+                "main/lib/core/views"
+                "net/http"
+            )
+
+            //go:embed app/dist
+            var efs embed.FS
+            var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
+
+            func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                 // Tries to send the requested file, or else...
                 if found, err := send.RequestedFile(writer, request, efs, "/"); err != nil || !found {
                     // ...sends the "Default" view.
@@ -153,11 +180,26 @@
     <Code
         lang="go"
         source={`
-            func View(request *http.Request, writer http.ResponseWriter) {
+            package main
+
+            import (
+                "embed"
+                "main/lib/core/routes"
+                "main/lib/core/send"
+                "main/lib/core/ssr"
+                "main/lib/core/views"
+                "net/http"
+            )
+
+            //go:embed app/dist
+            var efs embed.FS
+            var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
+
+            func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                 send.View(writer, request, render, views.View{
                     Name: "Welcome",
                     Props: map[string]string{
-                        "name": "world", // ---> Props go here <---
+                        "name": "world", // ---> Props go here. <---
                     },
                 })
             }
@@ -205,13 +247,26 @@
         <Code
             lang="go"
             source={`
+                package main
+
+                import (
+                    "embed"
+                    "main/lib/core/routes"
+                    "main/lib/core/send"
+                    "main/lib/core/ssr"
+                    "main/lib/core/views"
+                    "net/http"
+                )
+
                 //go:embed app/dist
                 var efs embed.FS
-                var render = ssr.New(ssr.Options{Efs:efs, Limit: 1})
-                func View(request *http.Request, writer http.ResponseWriter) {
+                var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
+
+                func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                     send.View(writer, request, render, views.View{
-                        Name: "Welcome",
-                        RenderMode: views.RenderModeFull, // ---> Configures render mode to "both server and client". <---
+                        Name:       "Welcome",
+                        RenderMode: views.RenderModeFull, // Configures render mode
+                                                          // to "both server and client".
                     })
                 }
             `}
@@ -234,13 +289,26 @@
         <Code
             lang="go"
             source={`
+                package main
+
+                import (
+                    "embed"
+                    "main/lib/core/routes"
+                    "main/lib/core/send"
+                    "main/lib/core/ssr"
+                    "main/lib/core/views"
+                    "net/http"
+                )
+
                 //go:embed app/dist
                 var efs embed.FS
-                var render = ssr.New(ssr.Options{Efs:efs, Limit: 1})
-                func View(request *http.Request, writer http.ResponseWriter) {
+                var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
+
+                func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                     send.View(writer, request, render, views.View{
-                        Name: "Welcome",
-                        RenderMode: views.RenderModeServer, // ---> Configures render mode to "server only". <---
+                        Name:       "Welcome",
+                        RenderMode: views.RenderModeServer, // Configures render mode
+                                                            // to "server only".
                     })
                 }
             `}
@@ -255,16 +323,28 @@
             <Code
                 lang="go"
                 source={`
+                    package main
+
+                    import (
+                        "embed"
+                        "main/lib/core/csr"
+                        "main/lib/core/routes"
+                        "main/lib/core/send"
+                        "main/lib/core/views"
+                        "net/http"
+                    )
+
                     //go:embed app/dist
                     var efs embed.FS
-                    var render = csr.New(csr.Options{Efs:efs}) // Using csr function.
-                    func View(request *http.Request, writer http.ResponseWriter) {
+                    var render = csr.New(csr.Options{Efs: efs}) // Using csr function.
+
+                    func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                         send.View(writer, request, render, views.View{
-                            Name: "Welcome",
-                            RenderMode: views.RenderModeServer, // Because this mode attempts to 
+                            Name:       "Welcome",
+                            RenderMode: views.RenderModeServer, // Because this mode attempts to
                                                                 // render exclusively on the server,
-                                                                // and the csr function cannot render on the 
-                                                                // server, this handler will send an 
+                                                                // and the csr function cannot render on the
+                                                                // server, this handler will send an
                                                                 // empty response to the client.
                         })
                     }
@@ -280,13 +360,26 @@
         <Code
             lang="go"
             source={`
+                package main
+
+                import (
+                    "embed"
+                    "main/lib/core/routes"
+                    "main/lib/core/send"
+                    "main/lib/core/ssr"
+                    "main/lib/core/views"
+                    "net/http"
+                )
+
                 //go:embed app/dist
                 var efs embed.FS
-                var render = ssr.New(ssr.Options{Efs:efs, Limit: 1})
-                func View(request *http.Request, writer http.ResponseWriter) {
+                var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
+
+                func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                     send.View(writer, request, render, views.View{
-                        Name: "Welcome",
-                        RenderMode: views.RenderModeClient, // ---> Configures render mode to "client only". <---
+                        Name:       "Welcome",
+                        RenderMode: views.RenderModeClient, // Configures render mode
+                                                            // to "client only".
                     })
                 }
             `}

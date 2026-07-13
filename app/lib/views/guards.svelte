@@ -16,19 +16,29 @@
     <Title text="Guards" />
     <span>A guard is an object that is composed of an optional name and a required handler.</span>
     <br />
-    <span>You can add guards to your routes in order to protect them.</span>
+    <span>You can add guards to your routes in order to protect them or modify their scope.</span>
     <Code
         lang="go"
         source={`
-            var routes = []routes.Route{
+            package main
+
+            import (
+                "main/lib/core/guards"
+                "main/lib/core/routes"
+                "main/lib/routes/data"
+                "net/http"
+            )
+
+            var _ = []routes.Route{
                 {
                     Pattern: "GET /api/xml/data",
                     Handler: data.Get,
-                    Guards: []guards.Guards{
+                    Guards: []guards.Guard{
                         {
-                            Name: "jsonless", 
-                            Handler: func(request *http.Request, _ http.ResponseWriter, allow func()) {
+                            Name: "jsonless",
+                            Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter, allow func()) {
                                 if request.Header.Get("Content-Type") == "application/json" {
+                                    writer.WriteHeader(http.StatusBadRequest)
                                     return
                                 }
                                 allow()
@@ -58,47 +68,56 @@
     <Code
         lang="go"
         source={`
+            package main
+
+            import (
+                "main/lib/core/databases"
+                "main/lib/core/databases/schema"
+                "main/lib/core/guards"
+                "main/lib/core/negotiate"
+                "main/lib/core/routes"
+                "main/lib/routes/dashboard"
+                "main/lib/routes/public"
+                "main/lib/routes/settings"
+                "main/lib/routes/users"
+                "net/http"
+            )
+
+            var _, queries, _ = databases.Connect()
+
             var authenticate = guards.Guard{
-                Name: "authenticate", 
-                Handler: func(request *http.Request, _ http.ResponseWriter, allow func()) {
-                    var session schema.Session
-                    _ := sessions.Start(writer, request, &session)
-                    if session.Verified && time.Since(session.LastActivity) <= 30*time.Minute {
-                        allow()
+                Name: "authenticate",
+                Handler: func(scope routes.Scope, request *http.Request, writer http.ResponseWriter, allow func()) {
+                    sessionId, _ := negotiate.SessionId(writer, request)
+                    session, _ := queries.FindSessionById(request.Context(), sessionId)
+                    if session.ID == "" {
+                        writer.WriteHeader(401)
+                        writer.Write([]byte("not authenticated"))
                         return
                     }
-                    writer.WriteHeader(401)
-                    writer.Write([]byte("not authenticated"))
+                    scope["session"] = session
+                    allow()
                 },
             }
-        `}
-    />
-    <Code
-        lang="go"
-        source={`
+
             var authorize = guards.Guard{
-                Name: "authorize", 
-                Handler: func(request *http.Request, _ http.ResponseWriter, allow func()) {
-                    var session schema.Session
-                    _ := sessions.Start(writer, request, &session)
-                    if request.PathValue("user_id") == session.UserId {
-                        allow()
+                Name: "authorize",
+                Handler: func(scope routes.Scope, request *http.Request, writer http.ResponseWriter, allow func()) {
+                    session, _ := scope["session"].(schema.Session)
+                    if request.PathValue("user_id") != session.UserID {
+                        writer.WriteHeader(403)
+                        writer.Write([]byte("missing permissions"))
                         return
                     }
-                    writer.WriteHeader(403)
-                    writer.Write([]byte("missing permissions"))
+                    allow()
                 },
             }
-        `}
-    />
-    <Code
-        lang="go"
-        source={`
-            var routes = []routes.Route{
+
+            var server_routes = []routes.Route{
                 {Pattern: "GET /public", Handler: public.Get},
                 {Pattern: "GET /dashboard", Handler: dashboard.Get, Guards: []guards.Guard{authenticate}},
-                {Pattern: "GET /user/{user_id}/settings", Handler: settings.Get, Guards: []guards.Guard{authenticate, authorize}},
-                {Pattern: "DELETE /user/{user_id}", Handler: user.Delete, Guards: []guards.Guard{authenticate, authorize}},
+                {Pattern: "GET /users/{user_id}/settings", Handler: settings.Get, Guards: []guards.Guard{authenticate, authorize}},
+                {Pattern: "DELETE /users/{user_id}", Handler: users.Delete, Guards: []guards.Guard{authenticate, authorize}},
             }
         `}
     />

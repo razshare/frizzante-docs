@@ -94,7 +94,8 @@
                         appRoutes,
                         routes.Route{
                             Pattern: "GET /@statics",
-                            Handler: statics.NewRouteHandler(appRoutes), // ---> Adds the statics handler. <---
+                            // Adds the statics route handler.
+                            Handler: statics.NewRouteHandler(appRoutes),
                         },
                     ),
                 })

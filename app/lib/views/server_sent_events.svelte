@@ -26,7 +26,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(request *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                     event := send.SseUpgrade(&writer) // Sends sse upgrade to the client
                                                       // and replaces writer with one 
                                                       // that is sse compliant.

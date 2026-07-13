@@ -52,18 +52,24 @@
     <Code
         lang="go"
         source={`
-            package welcome
-            
+            package main
+
             import (
-                "main/lib/core/clients"
+                "embed"
                 "main/lib/core/send"
+                "main/lib/core/ssr"
                 "main/lib/core/views"
+                "net/http"
             )
 
-            func View(client *clients.Client)  {
-                send.View(client, views.View{          // Sends view.
-                    Name: "Welcome",                   // Sets name of the view.
-                    RenderMode: view.RenderModeServer, // Renders view only on the server.
+            //go:embed app/dist
+            var efs embed.FS
+            var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
+
+            func View(request *http.Request, writer http.ResponseWriter) {
+                send.View(writer, request, render, views.View{ // Sends view.
+                    Name:       "Welcome",                     // Sets name of the view.
+                    RenderMode: views.RenderModeServer,        // Renders view only on the server.
                 })
             }
         `}
@@ -122,18 +128,24 @@
     <Code
         lang="go"
         source={`
-            package welcome
+            package main
 
             import (
-                "main/lib/core/clients"
+                "embed"
                 "main/lib/core/send"
+                "main/lib/core/ssr"
                 "main/lib/core/views"
+                "net/http"
             )
 
-            func View(client *clients.Client)  {
-                send.View(client, views.View{          // Sends view.
-                    Name: "Welcome",                   // Sets name of the view.
-                    RenderMode: view.RenderModeServer, // Renders view only on the server.
+            //go:embed app/dist
+            var efs embed.FS
+            var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
+
+            func View(request *http.Request, writer http.ResponseWriter) {
+                send.View(writer, request, render, views.View{ // Sends view.
+                    Name:       "Welcome",                     // Sets name of the view.
+                    RenderMode: views.RenderModeServer,        // Renders view only on the server.
                 })
             }
         `}

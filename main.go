@@ -29,64 +29,64 @@ var render = ssr.New(ssr.Options{
 })
 var props = map[string]any{"prefix": os.Getenv("PREFIX")}
 var appRoutes = []routes.Route{
-	{Pattern: "GET /", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		if found, err := send.RequestedFile(writer, request, efs, "/"); err != nil || !found {
 			send.View(writer, request, render, views.View{Name: "GetStarted", Props: props})
 		}
 	}},
-	{Pattern: "GET /get_started", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /get_started", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "GetStarted", Props: props})
 	}},
-	{Pattern: "GET /basics", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /basics", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Basics", Props: props})
 	}},
-	{Pattern: "GET /build_checkpoints", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /build_checkpoints", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "BuildCheckpoints", Props: props})
 	}},
-	{Pattern: "GET /web_sockets", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /web_sockets", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "WebSockets", Props: props})
 	}},
-	{Pattern: "GET /server_sent_events", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /server_sent_events", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "ServerSentEvents", Props: props})
 	}},
-	{Pattern: "GET /guards", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /guards", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Guards", Props: props})
 	}},
-	{Pattern: "GET /views", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /views", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Views", Props: props})
 	}},
-	{Pattern: "GET /web_standards", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /web_standards", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "WebStandards", Props: props})
 	}},
-	{Pattern: "GET /type_definitions", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /type_definitions", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "TypeDefinitions", Props: props})
 	}},
-	{Pattern: "GET /todos_example", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /todos_example", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "TodosExample", Props: props})
 	}},
-	{Pattern: "GET /cli", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /cli", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Cli", Props: props})
 	}},
-	{Pattern: "GET /snapshots", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /snapshots", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Snapshots", Props: props})
 	}},
-	{Pattern: "GET /docker", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /docker", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Docker", Props: props})
 	}},
-	{Pattern: "GET /issues", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /issues", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Issues", Props: props})
 	}},
-	{Pattern: "GET /contributing", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /contributing", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Contributing", Props: props})
 	}},
-	{Pattern: "GET /faq", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /faq", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Faq", Props: props})
 	}},
-	{Pattern: "GET /full_screen_menu", Handler: func(request *http.Request, writer http.ResponseWriter) {
+	{Pattern: "GET /full_screen_menu", Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "FullScreenMenu", Props: props})
 	}},
 }
-var srverr = servers.Start(servers.StartOptions{
+var startError = servers.Start(servers.StartOptions{
 	ErrorLog: errorLog,
 	InfoLog:  infoLog,
 	Routes: append(
@@ -99,7 +99,7 @@ var srverr = servers.Start(servers.StartOptions{
 })
 
 func main() {
-	if err := errors.Join(srverr); err != nil {
+	if err := errors.Join(startError); err != nil {
 		log.Fatal(err)
 	}
 }

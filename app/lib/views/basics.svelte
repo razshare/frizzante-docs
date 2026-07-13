@@ -37,65 +37,21 @@
             import (
                 "main/lib/core/routes"
                 "main/lib/core/servers"
+                "net/http"
             )
 
             var _ = servers.Start(servers.StartOptions{ // Starts server.
                 Routes: []routes.Route{
-                    {Pattern: "GET /", Handler: func(request *http.Request, writer http.ResponseWriter) {
-                        // ---> Handle request here. <---
-                    }}
+                    {
+                        Pattern: "GET /", 
+                        Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                            // ---> Handle request here. <---
+                        },
+                    },
                 },
             })
         `}
     />
-    <!-- <Note>
-        <span>
-            <InlineCode source="ssr.New()" /> creates a function that is capable executing JavaScript code on the server.
-        </span>
-        <span>This is what enables Server Side Rendering for your server, as the package name implies.</span>
-    </Note>
-    <Caution>
-        <span>
-            The first parameter of <InlineCode source="ssr.New()" /> indicates how many runtimes should be created and executed
-            in parallel when rendering views.
-        </span>
-        <br />
-        <span>
-            Setting this value too high could lead to unnecessary large memory usage by your JavaScript runtimes.
-        </span>
-        <br />
-        <span>For most use cases a limit of 1 runtime is more than enough. </span>
-        <br />
-        <br />
-        <span>Modify based on actual performance benchmarks.</span>
-    </Caution> -->
-    <!-- <Tip>
-        <span>
-            If you don't plan to use SSR features then create your render function using
-            <InlineCode source="csr.New()" /> instead.
-        </span>
-        <Code
-            lang="go"
-            source={`
-            package main
-
-            import (
-                "main/lib/core/servers"
-                "main/lib/core/csr"
-            )
-            
-            func main() {
-                server := servers.New()   // Creates server.
-                server.Render = csr.New() // Creates and assigns render function to server.
-                servers.Start(server)     // Starts server.
-            }
-        `}
-        />
-        <span>
-            This will disable the server side JavaScript runtime, and because of that the minimum size of the final
-            binary will be reduced from 25MB to 10MB.
-        </span>
-    </Tip> -->
     <br />
     <br />
     <Title text="Path Fields" />
@@ -114,7 +70,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /{name}",
-                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
                     _ = request.PathValue("name") // Receives path field "name".
                 },
             }
@@ -137,7 +93,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
                     _, _ = io.ReadAll(request.Body) // Receives message.
                 },
             }
@@ -156,7 +112,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ routes.Scope, _ *http.Request, writer http.ResponseWriter) {
                     _, _ = writer.Write([]byte("hello")) // Sends message "hello".
                 },
             }
@@ -178,7 +134,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
                     _ = request.Header.Get("Accept") // Retrieves header field "Accept".
                 },
             }
@@ -200,7 +156,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ routes.Scope, _ *http.Request, writer http.ResponseWriter) {
                     writer.Header().Set("Content-Type", "text/html") // Sets header field "Content-Type" 
                                                                     // with value "text/html".
                     writer.WriteHeader(200)                          // Sends status 200 and 
@@ -225,7 +181,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
                     _ = request.URL.Query().Get("name") // Retrieves query field "name".
                 },
             }
@@ -235,7 +191,7 @@
     <br />
     <Title text="Forms" />
     <span>
-        Use <InlineCode source="receive.Form()" /> to parse incoming content as multipart form or url encoded form when using
+        Use <InlineCode source="receive.Form()" /> to receive content as multipart form or url encoded form when using
         <InlineCode source="POST" /> and <InlineCode source="GET" /> http verbs.
     </span>
     <Code
@@ -256,12 +212,11 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
                     var form Form                    // Zero initialize the form content.
                     _ = receive.Form(request, &form) // Retrieves form by reference.
                 },
             }
-
         `}
     />
     <Tip>
@@ -297,7 +252,7 @@
 
                 var _ = routes.Route{
                     Pattern: "GET /",
-                    Handler: func(request *http.Request, _ http.ResponseWriter) {
+                    Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
                         var form Form                    // Zero initialize the form content.
                         _ = receive.Form(request, &form) // Retrieves form by reference.
                     },
@@ -327,7 +282,7 @@
     <Title text="Json" />
     <span>
         Use <InlineCode source="receive.Json()" />
-        to parse incoming content as json when using <InlineCode source="POST" />
+        to receive content as json when using <InlineCode source="POST" />
         and <InlineCode source="PUT" /> http verbs and
         <InlineCode source="send.Json()" /> to send json content.
     </span>
@@ -349,13 +304,12 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(request *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                     var details GreetingDetails         // Creates a zero value.
                     _ = receive.Json(request, &details) // Unmarshals the content into details.
                     _ = send.Json(writer, details)      // Sends content back as json.
                 },
             }
-
         `}
     />
     <br />
@@ -383,12 +337,11 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(request *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                     nickname, _ := receive.Cookie(request, "nickname") // Retrieves cookie "nickname".
                     send.Cookie(writer, "nickname", nickname)          // Sends it back.
                 },
             }
-
         `}
     />
     <br />
@@ -414,7 +367,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(request *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
                     _, _ = negotiate.SessionId(writer, request) // Negotiates session id and returns it.
                 },
             }

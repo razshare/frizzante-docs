@@ -11,10 +11,10 @@ import (
 
 // NewRouteHandler creates a route handler that lists all static routes of a given server.
 func NewRouteHandler(appRoutes []routes.Route) routes.Handler {
-	return func(request *http.Request, writer http.ResponseWriter) {
-		if accepts := request.Header.Get("Accept"); accepts != "" && accepts != "application/json" {
+	return func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+		if accepts := request.Header.Get("Accept"); accepts != "application/json" {
 			writer.WriteHeader(http.StatusBadRequest)
-			_, _ = writer.Write([]byte(fmt.Sprintf("only application/json can be produced; requested %s", accepts)))
+			_, _ = fmt.Fprintf(writer, "only application/json can be produced; requested %s", accepts)
 			return
 		}
 		statics := make([]string, 0)
