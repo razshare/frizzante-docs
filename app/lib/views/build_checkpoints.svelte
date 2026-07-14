@@ -99,7 +99,7 @@
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Cli", href: base("/cli", { prefix }) }}
+            previous={{ label: "Migrate", href: base("/migrate", { prefix }) }}
             next={{ label: "Type Definitions", href: base("/type_definitions", { prefix }) }}
         />
     {/snippet}

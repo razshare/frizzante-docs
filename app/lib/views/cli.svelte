@@ -8,6 +8,7 @@
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
+    import { href } from "$lib/scripts/core/href"
     import { base } from "$lib/scripts/strings/base"
     import { mdiApplication, mdiCodeBraces, mdiFolder } from "@mdi/js"
     let { prefix } = $props()
@@ -60,6 +61,7 @@
         <li><InlineCode source="frizzante generate air,bun" /></li>
         <li><InlineCode source="frizzante install" /></li>
         <li><InlineCode source="frizzante package" /></li>
+        <li><InlineCode source="frizzante migrate" /></li>
     </ol>
     <span>
         This will generate Air and Bun binaries in <InlineCode source={".gen/{air,bun}"} />.
@@ -243,6 +245,16 @@
     </Note>
     <br />
     <br />
+    <Title text="Migrate" />
+    <Code lang="sh" source="frizzante migrate" />
+    <span>Runs the</span>
+    <InlineCode source="./migrate" />
+    <span>program.</span>
+    <Note>
+        <span>Fore more details on migrations see the <a {...href("/migrate")}>migrate</a> guide.</span>
+    </Note>
+    <br />
+    <br />
     <Title text="Build" />
     <Code
         lang="sh"
@@ -252,18 +264,24 @@
         `}
     />
     <span>
-        Runs <InlineCode source="frizzante package" /> and then builds the Go program in
-        <InlineCode source=".gen/bin/app" />.
+        Runs <InlineCode source="frizzante package" /> and then builds the <InlineCode source="./migrate" /> program and
+        the main Go program in
+        <InlineCode source=".gen/bin/migrate" /> and
+        <InlineCode source=".gen/bin/serve" />.
     </span>
     <FileTree>
         {#snippet children({ Directory, File })}
             <Directory name=".gen" expanded>
                 <Directory name="bin" expanded>
-                    <File name="app" icon={mdiApplication} />
+                    <File name="migrate" icon={mdiApplication} />
+                    <File name="serve" icon={mdiApplication} />
                 </Directory>
             </Directory>
         {/snippet}
     </FileTree>
+    <Note>
+        <span>Fore more details on migrations see the <a {...href("/migrate")}>migrate</a> guide.</span>
+    </Note>
     <br />
     <br />
     <Title text="Check" />
@@ -412,6 +430,7 @@
                 { shift: 0, text: "Update" },
                 { shift: 0, text: "Package" },
                 { shift: 0, text: "Package Watch" },
+                { shift: 0, text: "Migrate" },
                 { shift: 0, text: "Build" },
                 { shift: 0, text: "Check" },
                 { shift: 0, text: "Touch" },
@@ -427,7 +446,7 @@
     {#snippet footer()}
         <Footer
             previous={{ label: "Web Standards", href: base("/web_standards", { prefix }) }}
-            next={{ label: "Build Checkpoints", href: base("/build_checkpoints", { prefix }) }}
+            next={{ label: "Migrate", href: base("/migrate", { prefix }) }}
         />
     {/snippet}
 </Page>
