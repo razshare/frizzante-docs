@@ -48,7 +48,9 @@
         <br />
         <span>Use</span>
         <InlineCode source=".gen/bin/migrate" />
-        <span>to migrate your database and </span>
+        <span>to create your </span>
+        <InlineCode source="source.sqlite" />
+        <span>database file or migrate it and use</span>
         <InlineCode source=".gen/bin/serve" />
         <span>to serve the application.</span>
         <br />
