@@ -61,6 +61,6 @@
         <LeftSidebar {prefix} />
     </div>
     <div class="full_screen_menu-navbar">
-        <Navbar bind:search={searchQuery} bind:focused={searchFocused} noMenuLink {prefix} />
+        <Navbar bind:search={searchQuery} bind:focused={searchFocused} noMenuLink {prefix} body={false} />
     </div>
 </div>

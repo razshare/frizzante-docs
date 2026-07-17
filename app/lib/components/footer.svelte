@@ -118,7 +118,7 @@
 </style>
 
 <script lang="ts">
-    import { href } from "$lib/scripts/core/href"
+    import { href } from "$lib/scripts/core/href.svelte"
     import { mdiArrowLeft, mdiArrowRight } from "@mdi/js"
     import Icon from "./icons/icon.svelte"
     type Props = {

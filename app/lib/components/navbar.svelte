@@ -70,7 +70,7 @@
     import Icon from "$lib/components/icons/icon.svelte"
     import Image from "$lib/components/image.svelte"
     import Searchbar from "$lib/components/searchbar.svelte"
-    import { href } from "$lib/scripts/core/href"
+    import { href } from "$lib/scripts/core/href.svelte"
     import { IS_BROWSER } from "$lib/scripts/core/is_browser"
     import { base } from "$lib/scripts/strings/base"
     import { mdiFunction, mdiGithub } from "@mdi/js"

@@ -1,12 +1,23 @@
 <script lang="ts">
     import { views } from "$exports.server"
-    import type { View } from "$lib/scripts/core/view.d.ts"
-    import { setContext, type Component } from "svelte"
-    let { name, props, render, align, type }: View = $props()
-    // svelte-ignore state_referenced_locally
-    setContext("view", { name, props, render, align, type })
-    // svelte-ignore state_referenced_locally
-    const ServerComponent = views[name] as unknown as Component
+    import { navigate } from "$lib/scripts/core/navigate"
+    import { root } from "$lib/scripts/core/root.svelte"
+    import type { ServerRouterProps } from "$lib/types/core/server_router_props"
+    import { type Component } from "svelte"
+    let { name = $bindable(), props = $bindable(), type = $bindable() }: ServerRouterProps = $props()
+    navigate()
+    root.type = type
+    root.view = {
+        name,
+        ondone() {
+            return props
+        },
+    }
 </script>
 
-<ServerComponent {...props} />
+{#if root.view.name !== ""}
+    {const View = views[root.view.name] as Component<Record<string, unknown>>}
+    {#if View}
+        <View {...root.view.ondone()} />
+    {/if}
+{/if}

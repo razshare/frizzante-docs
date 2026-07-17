@@ -1,7 +1,7 @@
 import ClientRouter from "$lib/components/core/client_router.svelte"
-import type { View } from "$lib/scripts/core/view.d.ts"
-import { mount } from "svelte"
-export function render(target: HTMLElement, args: View) {
+import type { ServerRouterProps } from "$lib/types/core/server_router_props"
+import { hydrate } from "svelte"
+export function render(target: HTMLElement, props: ServerRouterProps) {
     target.innerText = ""
-    mount(ClientRouter, { target, props: args })
+    hydrate(ClientRouter, { target, props })
 }

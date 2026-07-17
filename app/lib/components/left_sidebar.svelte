@@ -31,12 +31,10 @@
 
 <script lang="ts">
     import MenuItem from "$lib/components/menu_item.svelte"
-    import { href } from "$lib/scripts/core/href"
-    import type { View } from "$lib/scripts/core/view"
+    import { href } from "$lib/scripts/core/href.svelte"
+    import { root } from "$lib/scripts/core/root.svelte"
     import { base } from "$lib/scripts/strings/base"
-    import { getContext } from "svelte"
     type Item = { text: string; viewName: string; href: string }
-    const view = getContext("view") as View
     const pending: Record<string, boolean> = $state({})
     let { prefix } = $props()
 </script>
@@ -44,7 +42,7 @@
 {#snippet item(item: Item)}
     <a
         class="left-sidebar-item"
-        class:active={view.name === item.viewName}
+        class:active={root.view.name === item.viewName}
         {...href(item.href, {
             onpending() {
                 pending[item.viewName] = true

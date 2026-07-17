@@ -1,5 +1,6 @@
 <script lang="ts">
     import frizzanteGenerateMigrationPng from "$lib/assets/frizzante-generate-migration.png"
+    import Caution from "$lib/components/caution.svelte"
     import Code from "$lib/components/code.svelte"
     import FileTree from "$lib/components/file_tree.svelte"
     import Footer from "$lib/components/footer.svelte"
@@ -23,18 +24,14 @@
     <br />
     <Title text="Create Migration Files" />
     <span>Migration files usually live under</span>
-    <InlineCode source="lib/core/databases/migrations" />
+    <InlineCode source="migrate/migrations" />
     <span>.</span>
     <FileTree>
         {#snippet children({ Directory, File })}
-            <Directory name="lib" expanded>
-                <Directory name="core" expanded>
-                    <Directory name="databases" expanded>
-                        <Directory name="migrations" expanded>
-                            <File name="2025_00_01T09_16_00+02_00.sql" />
-                            <File name="2026_07_13T09_19_16+02_00.sql" />
-                        </Directory>
-                    </Directory>
+            <Directory name="migrate" expanded>
+                <Directory name="migrations" expanded>
+                    <File name="2025_00_01T09_16_00+02_00.sql" />
+                    <File name="2026_07_17T09_54_35+02_00.sql" />
                 </Directory>
             </Directory>
         {/snippet}
@@ -88,6 +85,10 @@
     <FileTree>
         {#snippet children({ Directory, File })}
             <Directory name="migrate" expanded>
+                <Directory name="migrations" expanded>
+                    <File name="2025_00_01T09_16_00+02_00.sql" />
+                    <File name="2026_07_17T09_54_35+02_00.sql" />
+                </Directory>
                 <File name="main.go" />
             </Directory>
         {/snippet}
@@ -99,9 +100,13 @@
 
             import (
                 "database/sql"
+                "embed"
                 "log"
-                "main/lib/core/databases"
+                "main/lib/databases"
             )
+
+            //go:embed migrations
+            var efs embed.FS
 
             func main() {
                 // no need to close database connection,
@@ -111,7 +116,12 @@
                 if database, _, err = databases.Connect(); err != nil {
                     log.Fatal(err)
                 }
-                if err = databases.Migrate(database, "first", "last"); err != nil {
+                if err = databases.Migrate(databases.MigrateOptions{
+                    Efs:      efs,
+                    Database: database,
+                    Offset:   "first",
+                    Target:   "last",
+                }); err != nil {
                     log.Fatal(err)
                 }
             }
@@ -145,9 +155,13 @@
 
             import (
                 "database/sql"
+                "embed"
                 "log"
-                "main/lib/core/databases"
+                "main/lib/databases"
             )
+
+            //go:embed migrations
+            var efs embed.FS
 
             func main() {
                 // no need to close database connection,
@@ -157,16 +171,29 @@
                 if database, _, err = databases.Connect(); err != nil {
                     log.Fatal(err)
                 }
-                if err = databases.Migrate(
-                    database,
-                    "2025_01_01T09_16_00+02_00",
-                    "2026_07_13T09_19_16+02_00",
-                ); err != nil {
+                if err = databases.Migrate(databases.MigrateOptions{
+                    Efs:      efs,
+                    Database: database,
+                    Offset:   "2025_01_01T09_16_00+02_00",
+                    Target:   "2026_07_17T09_54_35+02_00",
+                }); err != nil {
                     log.Fatal(err)
                 }
             }
         `}
     />
+    <Caution>
+        <span>File extension and parent directory path must be excluded.</span>
+        <br />
+        <br />
+        <span>This means that the following</span>
+        <ul>
+            <li><InlineCode source="2025_01_01T09_16_00+02_00.sql" /></li>
+            <li><InlineCode source="migrate/migrations/2025_01_01T09_16_00+02_00" /></li>
+            <li><InlineCode source="migrate/migrations/2025_01_01T09_16_00+02_00.sql" /></li>
+        </ul>
+        <span>are not valid migration names.</span>
+    </Caution>
     {#snippet rightSidebar({ body })}
         <RightSidebar {body} items={[]} />
     {/snippet}

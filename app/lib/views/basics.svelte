@@ -8,7 +8,7 @@
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
-    import { href } from "$lib/scripts/core/href"
+    import { href } from "$lib/scripts/core/href.svelte"
     import { base } from "$lib/scripts/strings/base"
     let { prefix } = $props()
 </script>
@@ -158,9 +158,9 @@
                 Pattern: "GET /",
                 Handler: func(_ routes.Scope, _ *http.Request, writer http.ResponseWriter) {
                     writer.Header().Set("Content-Type", "text/html") // Sets header field "Content-Type" 
-                                                                    // with value "text/html".
+                                                                     // with value "text/html".
                     writer.WriteHeader(200)                          // Sends status 200 and 
-                                                                    // header fields to the client.
+                                                                     // header fields to the client.
                 },
             }
         `}
@@ -205,31 +205,17 @@
                 "net/http"
             )
 
-            // Defines a struct in which to store the form content.
-            type Form struct {
-                Name string \`form:"name"\`
-            }
-
             var _ = routes.Route{
                 Pattern: "GET /",
                 Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
-                    var form Form                    // Zero initialize the form content.
-                    _ = receive.Form(request, &form) // Retrieves form by reference.
+                    var form struct {                // Creates a zero initialized form.
+                        Name string \`form:"name"\`
+                    }
+                    _ = receive.Form(request, &form) // Receives data into form.
                 },
             }
         `}
     />
-    <Tip>
-        <span>
-            You can also use a <InlineCode source="json" /> tag, it will match the field correctly as if it were a
-            <InlineCode source="form" /> tag.
-        </span>
-        <br />
-        <span>
-            This is so that you can integrate your structs more easily with other libraries that only take into account
-            <InlineCode source="json" /> formats.
-        </span>
-    </Tip>
     <Tip>
         <span>Form structs can define slices and files.</span>
         <Code
@@ -244,17 +230,15 @@
                     "net/http"
                 )
 
-                type Form struct {
-                    Name     string               \`form:"name"\`
-                    Comments []string             \`form:"comments"\` // Slice of strings.
-                    File     multipart.FileHeader \`form:"file"\`     // File handler.
-                }
-
                 var _ = routes.Route{
                     Pattern: "GET /",
                     Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
-                        var form Form                    // Zero initialize the form content.
-                        _ = receive.Form(request, &form) // Retrieves form by reference.
+                        var form struct {
+                            Name     string               \`form:"name"\`
+                            Comments []string             \`form:"comments"\` // Slice of strings.
+                            File     multipart.FileHeader \`form:"file"\`     // File handler.
+                        }
+                        _ = receive.Form(request, &form) // Receives data into form.
                     },
                 }
             `}
@@ -298,7 +282,7 @@
                 "net/http"
             )
 
-            type GreetingDetails struct { // Defines a struct in which to
+            type GreetingDetails struct {   // Defines a struct in which to
                 Name string \`json:"name"\` // store the json content.
             }
 
@@ -331,10 +315,6 @@
                 "net/http"
             )
 
-            type GreetingDetails struct { // Defines a struct in which to
-                Name string \`json:"name"\` // store the json content.
-            }
-
             var _ = routes.Route{
                 Pattern: "GET /",
                 Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
@@ -360,10 +340,6 @@
                 "main/lib/core/routes"
                 "net/http"
             )
-
-            type GreetingDetails struct { // Defines a struct in which to
-                Name string \`json:"name"\` // store the json content.
-            }
 
             var _ = routes.Route{
                 Pattern: "GET /",

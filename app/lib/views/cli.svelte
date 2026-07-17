@@ -8,7 +8,7 @@
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
-    import { href } from "$lib/scripts/core/href"
+    import { href } from "$lib/scripts/core/href.svelte"
     import { base } from "$lib/scripts/strings/base"
     import { mdiApplication, mdiCodeBraces, mdiFolder } from "@mdi/js"
     let { prefix } = $props()
@@ -264,8 +264,8 @@
         `}
     />
     <span>
-        Runs <InlineCode source="frizzante package" /> and then builds the <InlineCode source="./migrate" /> program and
-        the main Go program in
+        Runs <InlineCode source="frizzante package" /> and then builds the <InlineCode source="./migrate" /> program and the
+        main Go program in
         <InlineCode source=".gen/bin/migrate" /> and
         <InlineCode source=".gen/bin/serve" />.
     </span>

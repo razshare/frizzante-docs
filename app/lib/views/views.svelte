@@ -10,7 +10,7 @@
     import RightSidebar from "$lib/components/right_sidebar.svelte"
     import Tip from "$lib/components/tip.svelte"
     import Title from "$lib/components/title.svelte"
-    import { href } from "$lib/scripts/core/href"
+    import { href } from "$lib/scripts/core/href.svelte"
     import { base } from "$lib/scripts/strings/base"
     import { mdiCodeBraces } from "@mdi/js"
     let { prefix } = $props()
@@ -314,8 +314,8 @@
             `}
         />
         <Tip>
-            While using <InlineCode source="views.RenderModeServer" /> the view won’t serve a JavaScript bundle, but you
-            can still use the <InlineCode source="<svelte:head>" /> special tag in order to load scripts dynamically.
+            While using <InlineCode source="views.RenderModeServer" /> the view won’t serve a JavaScript bundle, but you can
+            still use the <InlineCode source="<svelte:head>" /> special tag in order to load scripts dynamically.
         </Tip>
         <Caution>
             A <InlineCode source="csr" /> function will always render blank page when the view is configured to use

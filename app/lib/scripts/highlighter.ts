@@ -1,8 +1,8 @@
-import theme from "@shikijs/themes/vitesse-dark"
 import { createHighlighterCore, createOnigurumaEngine, type HighlighterCore } from "shiki"
 let singleton: HighlighterCore | undefined
 export async function highlighter() {
     if (!singleton) {
+        const theme = import("@shikijs/themes/vitesse-dark")
         singleton = await createHighlighterCore({
             themes: [theme],
             langs: [
@@ -22,7 +22,7 @@ export async function highlighter() {
             ],
             engine: createOnigurumaEngine(import("shiki/wasm")),
         })
-        await singleton.loadTheme(import("@shikijs/themes/vitesse-dark"))
+        await singleton.loadTheme(theme)
     }
     return singleton
 }

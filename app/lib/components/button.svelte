@@ -38,7 +38,7 @@
 </style>
 
 <script lang="ts">
-    import { href } from "$lib/scripts/core/href"
+    import { href } from "$lib/scripts/core/href.svelte"
     import type { Snippet } from "svelte"
     type Props = {
         start?: Snippet

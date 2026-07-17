@@ -53,7 +53,7 @@
 </style>
 
 <script lang="ts">
-    import { href } from "$lib/scripts/core/href"
+    import { href } from "$lib/scripts/core/href.svelte"
     import { scrollTo } from "$lib/scripts/scroll_to"
     import type { Suggestion } from "$lib/scripts/searchbar/suggestion"
     type Props = Suggestion & { prefix: string; body: false | HTMLDivElement }
