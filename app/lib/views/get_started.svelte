@@ -35,10 +35,13 @@
     <KeyedSection key="3" description="Configure project.">
         <Code lang="bash" source="frizzante configure" />
     </KeyedSection>
-    <KeyedSection key="4" description="Start development.">
+    <KeyedSection key="4" description="Migrate database.">
+        <Code lang="bash" source="frizzante migrate" />
+    </KeyedSection>
+    <KeyedSection key="5" description="Start development.">
         <Code lang="bash" source="frizzante dev" />
     </KeyedSection>
-    <KeyedSection key="5" description="Build.">
+    <KeyedSection key="6" description="Build.">
         <Code lang="bash" source="frizzante build" />
         <span>This will create two executables,</span>
         <InlineCode source=".gen/bin/migrate" />
@@ -72,6 +75,7 @@
                 { shift: 0, text: "Get Started" },
                 { shift: 1, text: "Install frizzante" },
                 { shift: 1, text: "Create project" },
+                { shift: 1, text: "Migrate database" },
                 { shift: 1, text: "Configure project" },
                 { shift: 1, text: "Start development" },
                 { shift: 1, text: "Build" },

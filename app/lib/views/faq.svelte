@@ -145,11 +145,13 @@
     <Title type="h3" text="Can I use Frizzante with other frontend frameworks?" />
     <span>Yes you can, as long as Vite supports your framework.</span>
     <br />
-    <span>
-        All you need to do is configure your
-        <InlineCode source="app/app.client.ts" /> and
-        <InlineCode source="app/app.server.ts" /> to render your framework.
-    </span>
+    <br />
+    <span>All you need to do is configure your</span>
+    <InlineCode source="app/lib/scripts/core/client.ts" />
+    <span>and</span>
+    <InlineCode source="app/lib/scripts/core/server.ts" />
+    <span>to render your framework.</span>
+    <br />
     <br />
     <span>
         You can find an old Vue3 example
