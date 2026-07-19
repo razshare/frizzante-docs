@@ -41,7 +41,7 @@
     <KeyedSection key="5" description="Start development.">
         <Code lang="bash" source="frizzante dev" />
     </KeyedSection>
-    <KeyedSection key="6" description="Build.">
+    <KeyedSection key="6" description="Build production.">
         <Code lang="bash" source="frizzante build" />
         <span>This will create two executables,</span>
         <InlineCode source=".gen/bin/migrate" />
@@ -63,7 +63,7 @@
     <KeyedSection key="7" description="Migrate production.">
         <Code lang="bash" source=".gen/bin/migrate" />
     </KeyedSection>
-    <KeyedSection key="8" description="Serve.">
+    <KeyedSection key="8" description="Serve production.">
         <Code lang="bash" source=".gen/bin/serve" />
     </KeyedSection>
     {#snippet rightSidebar({ body })}
@@ -76,9 +76,9 @@
                 { shift: 1, text: "Migrate development" },
                 { shift: 1, text: "Configure project" },
                 { shift: 1, text: "Start development" },
-                { shift: 1, text: "Build" },
+                { shift: 1, text: "Build production" },
                 { shift: 1, text: "Migrate production" },
-                { shift: 1, text: "Serve" },
+                { shift: 1, text: "Serve production" },
             ]}
         />
     {/snippet}
