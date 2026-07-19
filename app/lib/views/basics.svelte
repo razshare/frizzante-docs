@@ -27,7 +27,7 @@
     <br />
     <Title text="Serve" />
     <span>
-        You can serve an http application with <InlineCode source="servers.Start()" />.
+        You can start an http server with <InlineCode source="servers.Start()" />.
     </span>
     <Code
         lang="go"
@@ -57,7 +57,7 @@
     <Title text="Path Fields" />
     <span>Route patterns can define dynamic path fields using <InlineCode source={"{}"} /> syntax.</span>
     <br />
-    <span>Path fields can then be retrieved with <InlineCode source="receive.Path()" />.</span>
+    <span>Path fields can then be retrieved with <InlineCode source="request.PathValue()" />.</span>
     <Code
         lang="go"
         source={`
