@@ -35,7 +35,7 @@
     <KeyedSection key="3" description="Configure project.">
         <Code lang="bash" source="frizzante configure" />
     </KeyedSection>
-    <KeyedSection key="4" description="Migrate database.">
+    <KeyedSection key="4" description="Migrate development.">
         <Code lang="bash" source="frizzante migrate" />
     </KeyedSection>
     <KeyedSection key="5" description="Start development.">
@@ -49,14 +49,6 @@
         <InlineCode source=".gen/bin/serve" />
         <span>.</span>
         <br />
-        <span>Use</span>
-        <InlineCode source=".gen/bin/migrate" />
-        <span>to create your </span>
-        <InlineCode source="source.sqlite" />
-        <span>database file or migrate it and use</span>
-        <InlineCode source=".gen/bin/serve" />
-        <span>to serve the application.</span>
-        <br />
         <FileTree>
             {#snippet children({ Directory, File })}
                 <Directory name=".gen" expanded>
@@ -68,6 +60,12 @@
             {/snippet}
         </FileTree>
     </KeyedSection>
+    <KeyedSection key="7" description="Migrate production.">
+        <Code lang="bash" source=".gen/bin/migrate" />
+    </KeyedSection>
+    <KeyedSection key="8" description="Serve.">
+        <Code lang="bash" source=".gen/bin/serve" />
+    </KeyedSection>
     {#snippet rightSidebar({ body })}
         <RightSidebar
             {body}
@@ -75,10 +73,12 @@
                 { shift: 0, text: "Get Started" },
                 { shift: 1, text: "Install frizzante" },
                 { shift: 1, text: "Create project" },
-                { shift: 1, text: "Migrate database" },
+                { shift: 1, text: "Migrate development" },
                 { shift: 1, text: "Configure project" },
                 { shift: 1, text: "Start development" },
                 { shift: 1, text: "Build" },
+                { shift: 1, text: "Migrate production" },
+                { shift: 1, text: "Serve" },
             ]}
         />
     {/snippet}
