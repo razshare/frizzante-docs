@@ -19,6 +19,7 @@
 
             import (
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/core/send"
                 "net/http"
                 "time"
@@ -26,7 +27,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                     event := send.SseUpgrade(&writer) // Sends sse upgrade to the client
                                                       // and replaces writer with one 
                                                       // that is sse compliant.

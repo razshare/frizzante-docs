@@ -25,6 +25,7 @@
             import (
                 "main/lib/core/guards"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/routes/data"
                 "net/http"
             )
@@ -36,7 +37,7 @@
                     Guards: []guards.Guard{
                         {
                             Name: "jsonless",
-                            Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter, allow func()) {
+                            Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter, allow func()) {
                                 if request.Header.Get("Content-Type") == "application/json" {
                                     writer.WriteHeader(http.StatusBadRequest)
                                     return
@@ -76,6 +77,7 @@
                 "main/lib/core/guards"
                 "main/lib/core/negotiate"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/routes/dashboard"
                 "main/lib/routes/public"
                 "main/lib/routes/settings"
@@ -87,7 +89,7 @@
 
             var authenticate = guards.Guard{
                 Name: "authenticate",
-                Handler: func(scope routes.Scope, request *http.Request, writer http.ResponseWriter, allow func()) {
+                Handler: func(scope scopes.Scope, request *http.Request, writer http.ResponseWriter, allow func()) {
                     sessionId, _ := negotiate.SessionId(writer, request)
                     session, _ := queries.FindSessionById(request.Context(), sessionId)
                     if session.ID == "" {
@@ -102,7 +104,7 @@
 
             var authorize = guards.Guard{
                 Name: "authorize",
-                Handler: func(scope routes.Scope, request *http.Request, writer http.ResponseWriter, allow func()) {
+                Handler: func(scope scopes.Scope, request *http.Request, writer http.ResponseWriter, allow func()) {
                     session, _ := scope["session"].(schema.Session)
                     if request.PathValue("user_id") != session.UserID {
                         writer.WriteHeader(403)

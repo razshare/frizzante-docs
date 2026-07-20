@@ -391,33 +391,6 @@
         `}
     />
     <span>Displays the version of the binary.</span>
-    <br />
-    <br />
-    <Title text="Help" />
-    <Code
-        lang="sh"
-        source={`
-            frizzante help
-            # or frizzante h
-        `}
-    />
-    <span>Shows the complete list of available commands (WIP).</span>
-    <br />
-    <br />
-    <Title text="Interactive Mode" />
-    <Code lang="sh" source="frizzante" />
-    <span>
-        Running <InlineCode source="frizzante" /> without any parameters or flags starts an interactive menu where you can
-        select commands using arrow keys.
-    </span>
-    <Note>
-        <span>This is useful if</span>
-        <ul>
-            <li>you’re learning the available commands</li>
-            <li>you’re not sure which command to use</li>
-            <li>you prefer a guided interface</li>
-        </ul>
-    </Note>
     {#snippet rightSidebar({ body })}
         <RightSidebar
             {body}
@@ -438,15 +411,13 @@
                 { shift: 0, text: "Reset" },
                 { shift: 0, text: "Strict" },
                 { shift: 0, text: "Version" },
-                { shift: 0, text: "Help" },
-                { shift: 0, text: "Interactive Mode" },
             ]}
         />
     {/snippet}
     {#snippet footer()}
         <Footer
             previous={{ label: "Web Standards", href: base("/web_standards", { prefix }) }}
-            next={{ label: "Migrate", href: base("/migrate", { prefix }) }}
+            next={{ label: "Schema", href: base("/schema", { prefix }) }}
         />
     {/snippet}
 </Page>

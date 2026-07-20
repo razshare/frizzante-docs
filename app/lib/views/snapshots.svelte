@@ -66,6 +66,7 @@
                     "os"
 
                     "main/lib/core/routes"
+                    "main/lib/core/scopes"
                     "main/lib/core/routes/statics"
                     "main/lib/core/servers"
                     "main/lib/core/ssr"

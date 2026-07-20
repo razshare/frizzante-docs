@@ -36,6 +36,7 @@
 
             import (
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/core/servers"
                 "net/http"
             )
@@ -44,7 +45,7 @@
                 Routes: []routes.Route{
                     {
                         Pattern: "GET /", 
-                        Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                        Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                             // ---> Handle request here. <---
                         },
                     },
@@ -65,12 +66,13 @@
 
             import (
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "net/http"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /{name}",
-                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, _ http.ResponseWriter) {
                     _ = request.PathValue("name") // Receives path field "name".
                 },
             }
@@ -88,12 +90,13 @@
             import (
                 "io"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "net/http"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, _ http.ResponseWriter) {
                     _, _ = io.ReadAll(request.Body) // Receives message.
                 },
             }
@@ -107,12 +110,13 @@
 
             import (
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "net/http"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, _ *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, _ *http.Request, writer http.ResponseWriter) {
                     _, _ = writer.Write([]byte("hello")) // Sends message "hello".
                 },
             }
@@ -129,12 +133,13 @@
 
             import (
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "net/http"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, _ http.ResponseWriter) {
                     _ = request.Header.Get("Accept") // Retrieves header field "Accept".
                 },
             }
@@ -151,12 +156,13 @@
 
             import (
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "net/http"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, _ *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, _ *http.Request, writer http.ResponseWriter) {
                     writer.Header().Set("Content-Type", "text/html") // Sets header field "Content-Type" 
                                                                      // with value "text/html".
                     writer.WriteHeader(200)                          // Sends status 200 and 
@@ -176,12 +182,13 @@
 
             import (
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "net/http"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, _ http.ResponseWriter) {
                     _ = request.URL.Query().Get("name") // Retrieves query field "name".
                 },
             }
@@ -202,12 +209,13 @@
             import (
                 "main/lib/core/receive"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "net/http"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, _ http.ResponseWriter) {
                     var form struct {                // Creates a zero initialized form.
                         Name string \`form:"name"\`
                     }
@@ -226,13 +234,14 @@
                 import (
                     "main/lib/core/receive"
                     "main/lib/core/routes"
+                    "main/lib/core/scopes"
                     "mime/multipart"
                     "net/http"
                 )
 
                 var _ = routes.Route{
                     Pattern: "GET /",
-                    Handler: func(_ routes.Scope, request *http.Request, _ http.ResponseWriter) {
+                    Handler: func(_ scopes.Scope, request *http.Request, _ http.ResponseWriter) {
                         var form struct {
                             Name     string               \`form:"name"\`
                             Comments []string             \`form:"comments"\` // Slice of strings.
@@ -278,6 +287,7 @@
             import (
                 "main/lib/core/receive"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/core/send"
                 "net/http"
             )
@@ -288,7 +298,7 @@
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                     var details GreetingDetails         // Creates a zero value.
                     _ = receive.Json(request, &details) // Unmarshals the content into details.
                     _ = send.Json(writer, details)      // Sends content back as json.
@@ -311,13 +321,14 @@
             import (
                 "main/lib/core/receive"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/core/send"
                 "net/http"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                     nickname, _ := receive.Cookie(request, "nickname") // Retrieves cookie "nickname".
                     send.Cookie(writer, "nickname", nickname)          // Sends it back.
                 },
@@ -338,12 +349,13 @@
             import (
                 "main/lib/core/negotiate"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "net/http"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                     _, _ = negotiate.SessionId(writer, request) // Negotiates session id and returns it.
                 },
             }
@@ -363,6 +375,31 @@
             </span>
         </Caution>
     </Note>
+    <br />
+    <br />
+    <Title text="Redirect" />
+    <span>Use <InlineCode source="send.ToLocation()" /> to redirect to another page.</span>
+
+    <Code
+        lang="go"
+        source={`
+            package main
+
+            import (
+                "main/lib/core/routes"
+                "main/lib/core/scopes"
+                "main/lib/core/send"
+                "net/http"
+            )
+
+            var _ = routes.Route{
+                Pattern: "GET /",
+                Handler: func(_ scopes.Scope, _ *http.Request, writer http.ResponseWriter) {
+                    send.ToLocation(writer, "/some-other-page") // Sends client to some-other-page.
+                },
+            }
+        `}
+    />
     {#snippet rightSidebar({ body })}
         <RightSidebar
             {body}
@@ -377,6 +414,7 @@
                 { shift: 0, text: "Json" },
                 { shift: 0, text: "Cookies" },
                 { shift: 0, text: "Session Id" },
+                { shift: 0, text: "Redirect" },
             ]}
         />
     {/snippet}

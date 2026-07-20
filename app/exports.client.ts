@@ -9,6 +9,7 @@ export const views = {
     WebStandards: () => import("$lib/views/web_standards.svelte"),
     TypeDefinitions: () => import("$lib/views/type_definitions.svelte"),
     Cli: () => import("$lib/views/cli.svelte"),
+    Schema: () => import("$lib/views/schema.svelte"),
     Migrate: () => import("$lib/views/migrate.svelte"),
     Docker: () => import("$lib/views/docker.svelte"),
     Issues: () => import("$lib/views/issues.svelte"),

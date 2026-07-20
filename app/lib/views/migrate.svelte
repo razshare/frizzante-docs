@@ -78,7 +78,8 @@
     />
     <Note>The order in which these sections are defined is irrelevant.</Note>
     <br />
-    <Title text="Executing Migration Files" />
+    <Title text="Create Migrate Program" />
+
     <span>You can automate initialization and migration of your database by defining a</span>
     <InlineCode source="./migrate" />
     <span>program at the root of your project.</span>
@@ -140,6 +141,9 @@
             only with sqlite.
         </span>
     </Note>
+    <Note>
+        <span>Note that this program embeds the migration files.</span>
+    </Note>
     <span>This will run all migrations from the</span>
     <InlineCode source="first" />
     <span>one to the</span>
@@ -194,13 +198,38 @@
         </ul>
         <span>are not valid migration names.</span>
     </Caution>
+    <br />
+    <br />
+    <Title text="Execute Migration Files" />
+    <span>Run the program</span>
+    <Code
+        lang="sh"
+        source={`
+            frizzante migrate
+            # or go run ./migrate
+        `}
+    />
+    <Note>
+        <span>
+            Since the migrate program from above embeds the migration files, it's a portable binary that can single
+            handedly create and migrate your database.
+        </span>
+    </Note>
     {#snippet rightSidebar({ body })}
-        <RightSidebar {body} items={[]} />
+        <RightSidebar
+            {body}
+            items={[
+                { shift: 0, text: "Migrate" },
+                { shift: 0, text: "Create Migration Files" },
+                { shift: 0, text: "Create Migrate Program" },
+                { shift: 0, text: "Execute Migration Files" },
+            ]}
+        />
     {/snippet}
     {#snippet footer()}
         <Footer
-            previous={{ label: "Cli", href: base("/cli", { prefix }) }}
-            next={{ label: "Build Checkpoints", href: base("/build_checkpoints", { prefix }) }}
+            previous={{ label: "Schema", href: base("/schema", { prefix }) }}
+            next={{ label: "Build Checkpoints", href: base("/schema", { prefix }) }}
         />
     {/snippet}
 </Page>

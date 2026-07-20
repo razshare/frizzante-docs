@@ -21,13 +21,14 @@
                 "io"
                 "main/lib/core/negotiate"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "net/http"
                 "time"
             )
 
             var _ = routes.Route{
                 Pattern: "GET /",
-                Handler: func(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                     negotiate.WsUpgrade(&writer, request) // Negotiates ws upgrade with the client
                                                           // and replaces writer and request with 
                                                           // ws compliant ones.

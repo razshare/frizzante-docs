@@ -5,6 +5,7 @@
         --right-sidebar-item-roundness: 0;
         --right-sidebar-text: #cecdc3;
         --right-sidebar-text-active: #d24317;
+        --right-sidebar-item-shift: 0;
     }
     .right-sidebar {
         display: grid;
@@ -17,6 +18,7 @@
         color: var(--right-sidebar-text);
         text-decoration: none;
         opacity: 0.5;
+        padding-left: var(--right-sidebar-item-shift);
     }
     .right-sidebar-item:hover {
         text-decoration: none;
@@ -38,7 +40,7 @@
     <a
         href="#{id}"
         class="right-sidebar-item"
-        style:--right-sidebar-item-shift={item.shift}
+        style:--right-sidebar-item-shift="{item.shift}rem"
         onclick={function onclick(event) {
             event.preventDefault()
             if (!body) {

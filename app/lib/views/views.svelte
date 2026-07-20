@@ -108,6 +108,7 @@
             import (
                 "embed"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/core/send"
                 "main/lib/core/ssr"
                 "main/lib/core/views"
@@ -118,7 +119,7 @@
             var efs embed.FS
             var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
 
-            func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+            func View(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                 send.View(writer, request, render, views.View{Name: "Welcome"}) // Sends view "Welcome".
             }
         `}
@@ -148,6 +149,7 @@
             import (
                 "embed"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/core/send"
                 "main/lib/core/ssr"
                 "main/lib/core/views"
@@ -158,7 +160,7 @@
             var efs embed.FS
             var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
 
-            func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+            func View(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                 // Tries to send the requested file, or else...
                 if found, err := send.RequestedFile(writer, request, efs, "/"); err != nil || !found {
                     // ...sends the "Default" view.
@@ -185,6 +187,7 @@
             import (
                 "embed"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/core/send"
                 "main/lib/core/ssr"
                 "main/lib/core/views"
@@ -195,7 +198,7 @@
             var efs embed.FS
             var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
 
-            func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+            func View(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                 send.View(writer, request, render, views.View{
                     Name: "Welcome",
                     Props: map[string]string{
@@ -252,6 +255,7 @@
                 import (
                     "embed"
                     "main/lib/core/routes"
+                    "main/lib/core/scopes"
                     "main/lib/core/send"
                     "main/lib/core/ssr"
                     "main/lib/core/views"
@@ -262,7 +266,7 @@
                 var efs embed.FS
                 var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
 
-                func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                func View(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                     send.View(writer, request, render, views.View{
                         Name:       "Welcome",
                         RenderMode: views.RenderModeFull, // Configures render mode
@@ -294,6 +298,7 @@
                 import (
                     "embed"
                     "main/lib/core/routes"
+                    "main/lib/core/scopes"
                     "main/lib/core/send"
                     "main/lib/core/ssr"
                     "main/lib/core/views"
@@ -304,7 +309,7 @@
                 var efs embed.FS
                 var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
 
-                func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                func View(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                     send.View(writer, request, render, views.View{
                         Name:       "Welcome",
                         RenderMode: views.RenderModeServer, // Configures render mode
@@ -329,6 +334,7 @@
                         "embed"
                         "main/lib/core/csr"
                         "main/lib/core/routes"
+                        "main/lib/core/scopes"
                         "main/lib/core/send"
                         "main/lib/core/views"
                         "net/http"
@@ -338,7 +344,7 @@
                     var efs embed.FS
                     var render = csr.New(csr.Options{Efs: efs}) // Using csr function.
 
-                    func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                    func View(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                         send.View(writer, request, render, views.View{
                             Name:       "Welcome",
                             RenderMode: views.RenderModeServer, // Because this mode attempts to
@@ -365,6 +371,7 @@
                 import (
                     "embed"
                     "main/lib/core/routes"
+                    "main/lib/core/scopes"
                     "main/lib/core/send"
                     "main/lib/core/ssr"
                     "main/lib/core/views"
@@ -375,7 +382,7 @@
                 var efs embed.FS
                 var render = ssr.New(ssr.Options{Efs: efs, Limit: 1})
 
-                func View(_ routes.Scope, request *http.Request, writer http.ResponseWriter) {
+                func View(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
                     send.View(writer, request, render, views.View{
                         Name:       "Welcome",
                         RenderMode: views.RenderModeClient, // Configures render mode

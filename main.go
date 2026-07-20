@@ -68,6 +68,9 @@ var appRoutes = []routes.Route{
 	{Pattern: "GET /cli", Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Cli", Props: props})
 	}},
+	{Pattern: "GET /schema", Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
+		send.View(writer, request, render, views.View{Name: "Schema", Props: props})
+	}},
 	{Pattern: "GET /migrate", Handler: func(_ scopes.Scope, request *http.Request, writer http.ResponseWriter) {
 		send.View(writer, request, render, views.View{Name: "Migrate", Props: props})
 	}},

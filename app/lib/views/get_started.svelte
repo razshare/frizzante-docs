@@ -73,6 +73,7 @@
                 { shift: 0, text: "Get Started" },
                 { shift: 1, text: "Install frizzante" },
                 { shift: 1, text: "Create project" },
+                { shift: 1, text: "Configure project" },
                 { shift: 1, text: "Migrate development" },
                 { shift: 1, text: "Configure project" },
                 { shift: 1, text: "Start development" },

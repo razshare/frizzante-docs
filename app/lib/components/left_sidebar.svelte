@@ -69,6 +69,7 @@
     {@render item({ text: "Views", viewName: "Views", href: base("/views", { prefix }) })}
     {@render item({ text: "Web Standards", viewName: "WebStandards", href: base("/web_standards", { prefix }) })}
     {@render item({ text: "Cli", viewName: "Cli", href: base("/cli", { prefix }) })}
+    {@render item({ text: "Schema", viewName: "Schema", href: base("/schema", { prefix }) })}
     {@render item({ text: "Migrate", viewName: "Migrate", href: base("/migrate", { prefix }) })}
     {@render item({
         text: "Build Checkpoints",

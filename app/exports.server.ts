@@ -9,6 +9,7 @@ import GetStarted from "$lib/views/get_started.svelte"
 import Guards from "$lib/views/guards.svelte"
 import Issues from "$lib/views/issues.svelte"
 import Migrate from "$lib/views/migrate.svelte"
+import Schema from "$lib/views/schema.svelte"
 import ServerSentEvents from "$lib/views/server_sent_events.svelte"
 import Snapshots from "$lib/views/snapshots.svelte"
 import TypeDefinitions from "$lib/views/type_definitions.svelte"
@@ -27,6 +28,7 @@ export const views = {
     WebStandards,
     TypeDefinitions,
     Cli,
+    Schema,
     Migrate,
     Docker,
     Issues,

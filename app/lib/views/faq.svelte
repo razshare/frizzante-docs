@@ -61,6 +61,7 @@
             import (
                 "main/lib/core/clients"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
             )
 
             func Apply(middleware *Middleware, routes []routes.Route) {
@@ -101,6 +102,7 @@
                 "embed"
                 "main/lib/core/clients"
                 "main/lib/core/routes"
+                "main/lib/core/scopes"
                 "main/lib/core/servers"
                 "main/lib/core/view/ssr"
                 "main/lib/middlewares"
