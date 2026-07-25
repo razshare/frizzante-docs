@@ -7,20 +7,8 @@ test:
 build:
 	frizzante build
 
-prebuild:
-	frizzante prebuild
-
-postbuild:
-	frizzante postbuild
-
 dev:
 	frizzante dev
-
-package:
-	frizzante package
-
-package-watch:
-	frizzante package-watch
 
 check:
 	frizzante check
@@ -37,20 +25,34 @@ install:
 update:
 	frizzante update
 
-lock-packages:
-	frizzante lock-packages
+migrate:
+	frizzante migrate
 
-type_definitions:
+migration:
+	frizzante generate migration
+
+types:
 	frizzante generate types
-
-queries:
-	frizzante generate queries
 
 snapshot:
 	frizzante generate snapshot http://127.0.0.1:8080/@statics
 
-generate:
-	frizzante generate
+schema:
+	frizzante generate schema
 
 publish:
 	./publish.sh
+
+.PHONY: migrate
+.PHONY: migration
+.PHONY: configure
+.PHONY: test
+.PHONY: build
+.PHONY: dev
+.PHONY: check
+.PHONY: clean
+.PHONY: format
+.PHONY: install
+.PHONY: update
+.PHONY: types
+.PHONY: schema
