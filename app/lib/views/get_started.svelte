@@ -65,6 +65,10 @@
     </KeyedSection>
     <KeyedSection key="8" description="Serve production.">
         <Code lang="bash" source=".gen/bin/serve" />
+        <Note>
+            <InlineCode source=".gen/bin/serve" />
+            <span>is a standalone binary, it contains all html, css and javascript bundles.</span>
+        </Note>
     </KeyedSection>
     {#snippet rightSidebar({ body })}
         <RightSidebar
