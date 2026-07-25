@@ -49,7 +49,7 @@
     <InlineCode source="-- migrate: up" />
     <span>and a</span>
     <InlineCode source="-- migrate: down" />
-    <span>sections, which are executed respectively when when a migration runs forwards and backwards.</span>
+    <span>sections, which are executed respectively when a migration runs forwards and backwards.</span>
     <br />
     <Code
         lang="sql"
