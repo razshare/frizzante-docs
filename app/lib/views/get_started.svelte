@@ -23,7 +23,7 @@
     <br />
     <br />
     <KeyedSection key="1" description="Install frizzante.">
-        <Code lang="bash" source="go install github.com/razshare/frizzante@latest" />
+        <Code lang="bash" source="go install github.com/razshare/frizzante/v2@latest" />
         <Note>
             <span>Remember to add Go binaries to your path.</span>
             <Code lang="bash" source={["export GOPATH=$HOME/go", "export PATH=$PATH:$GOPATH/bin"].join("\n")} />
