@@ -2,7 +2,7 @@
 export PREFIX="/frizzante-docs"
 git checkout main
 DEV=1 make clean configure build
-./.gen/bin/app & 
+./.gen/bin/serve & 
 APP_PID=$!
 make snapshot
 echo "killing $APP_PID"
