@@ -310,7 +310,7 @@
     <br />
     <br />
     <Title text="Check" />
-    <Code lang="sh" source="frizzante --check" />
+    <Code lang="sh" source="frizzante check" />
     <span>
         Runs <InlineCode source="eslint" /> and <InlineCode source="svelte-check" /> in your
         <InlineCode source="app" /> directory in order to detect code syntax and style errors.
@@ -324,9 +324,9 @@
             For example, the following will check your app using a
             <InlineCode source="~/.bun/bun" /> binary.
         </span>
-        <Code lang="sh" source="frizzante --bun=~/.bun/bun --check" />
+        <Code lang="sh" source="frizzante --bun=~/.bun/bun check" />
         <span>Alternatively you can also use a global binary.</span>
-        <Code lang="sh" source="frizzante --bun=bun --check" />
+        <Code lang="sh" source="frizzante --bun=bun check" />
         <span>This will force the cli to use the binary present in your path.</span>
     </Note>
     <br />
