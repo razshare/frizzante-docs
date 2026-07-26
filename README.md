@@ -1,25 +1,19 @@
-# What is this?
-
-This is a todo list application
-
 # Get Started
 
 Configure project.
 
 ```sh
-frizzante --configure
+make configure
 ```
 
 Start development mode.
 
 ```sh
-frizzante --dev
+frizzmakeante dev
 ```
 
-Build.
+Publish to GitHub Pages.
 
 ```sh
-frizzante --build
+make publish
 ```
-
-This will create a `.gen/bin/app` standalone executable.
