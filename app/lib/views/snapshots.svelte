@@ -122,7 +122,7 @@
             <Code lang="bash" source="frizzante dev" />
         </KeyedSection>
         <KeyedSection key="B" description="Start production server">
-            <Code lang="bash" source="frizzante build && ./.gen/bin/app" />
+            <Code lang="bash" source="frizzante build && .gen/bin/app" />
         </KeyedSection>
         <KeyedSection key="C" description="Start development server using makefile" noLink>
             <Code lang="bash" source="make dev" />
@@ -136,7 +136,7 @@
         <span>
             This will retrieve the list of static routes from
             <InlineCode source="http://127.0.0.1:8080/@statics" /> and generate the output in
-            <InlineCode source="./.gen/snapshot" />.
+            <InlineCode source=".gen/snapshot" />.
         </span>
         <Tip>
             <span>
