@@ -229,7 +229,7 @@
     {#snippet footer()}
         <Footer
             previous={{ label: "Schema", href: base("/schema", { prefix }) }}
-            next={{ label: "Build Checkpoints", href: base("/schema", { prefix }) }}
+            next={{ label: "Build Checkpoints", href: base("/build_checkpoints", { prefix }) }}
         />
     {/snippet}
 </Page>
