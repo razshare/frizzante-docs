@@ -1,5 +1,5 @@
-import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P as s,R as c,W as l,q as u,u as ee,z as d}from"./index-Bb2b0DQE.js";import{c as te,o as f}from"./navbar.js";import{t as ne}from"./caution.js";import{i as p,n as m,r as h,t as g}from"./title.js";import{t as _}from"./inline_code.js";import{t as re}from"./note.js";import{t as ie}from"./tip.js";var ae=o(`<span>You are also welcome to <a>contribute</a> back if you can.</span>`),oe=o(`<span>Form structs can define slices and files.</span> <!> <span>You can open and read the file.</span> <!> <span>Remember to close your files.</span> <!>`,1),se=o(`<span>Session id must always be negotiated before invoking <!>.</span>`),ce=o(`<span>The session id is retrieved from the client’s <!> cookie.</span> <br/> <span>If the client doesn’t provide such cookie, <!> creates a new session id and sends the cookie to the client.</span> <!>`,1),le=o(`<!> <span>All internals of the framework are exposed.</span> <br/> <span>You can modify these internals, in fact it is intended for you to do so.</span> <!> <br/> <br/> <!> <span>You can start an http server with <!>.</span> <!> <br/> <br/> <!> <span>Route patterns can define dynamic path fields using <!> syntax.</span> <br/> <span>Path fields can then be retrieved with <!>.</span> <!> <br/> <br/> <!> <span>Use <!> to retrieve messages sent by the client.</span> <!> <span>Use <!> to send a message to the client.</span> <!> <br/> <br/> <!> <span>Use <!> to retrieve header fields sent by the client.</span> <!> <span>Use <!> and <!> to send header fields to the client.</span> <!> <br/> <br/> <!> <span>Use <!> to retrieve query fields.</span> <!> <br/> <br/> <!> <span>Use <!> to receive content as multipart form or url encoded form when using <!> and <!> http verbs.</span> <!> <!> <br/> <br/> <!> <span>Use <!> to receive content as json when using <!> and <!> http verbs and <!> to send json content.</span> <!> <br/> <br/> <!> <span>Use <!> to retrieve cookies and <!> to send
-        them.</span> <!> <br/> <br/> <!> <span>Use <!> to negotiate a session session id with the client.</span> <!> <!> <br/> <br/> <!> <span>Use <!> to redirect to another page.</span> <!>`,1);function v(o,v){a(v,!0),h(o,{title:`Basics`,get prefix(){return v.prefix},rightSidebar:(e,t)=>{let n=()=>(t?.()).body;m(e,{get body(){return n()},items:[{shift:0,text:`Basics`},{shift:0,text:`Serve`},{shift:0,text:`Path Fields`},{shift:0,text:`Messages`},{shift:0,text:`Headers Fields & Status`},{shift:0,text:`Queries`},{shift:0,text:`Forms`},{shift:0,text:`Json`},{shift:0,text:`Cookies`},{shift:0,text:`Session Id`},{shift:0,text:`Redirect`}]})},footer:e=>{{let t=l(()=>({label:`Get Started`,href:f(`/get_started`,{prefix:v.prefix})})),n=l(()=>({label:`Web Sockets`,href:f(`/web_sockets`,{prefix:v.prefix})}));p(e,{get previous(){return s(t)},get next(){return s(n)}})}},children:(r,a)=>{var o=le(),s=d(o);g(s,{text:`Basics`});var l=t(s,8);re(l,{children:(e,r)=>{var a=ae();ee(t(c(a)),e=>({...e}),[()=>te(f(`/contributing`,{prefix:v.prefix}))]),u(),i(a),n(e,a)},$$slots:{default:!0}});var p=t(l,6);g(p,{text:`Serve`});var m=t(p,2);_(t(c(m)),{source:`servers.Start()`}),u(),i(m);var h=t(m,2);e(h,{lang:`go`,source:`
+import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P as s,R as c,W as l,Y as u,u as ee,z as d}from"./index-BpsDYWKC.js";import{a as f,s as te}from"./navbar.js";import{t as ne}from"./caution.js";import{i as p,n as m,r as h,t as g}from"./title.js";import{t as _}from"./inline_code.js";import{t as re}from"./note.js";import{t as ie}from"./tip.js";var ae=o(`<span>You are also welcome to <a>contribute</a> back if you can.</span>`),oe=o(`<span>Form structs can define slices and files.</span> <!> <span>You can open and read the file.</span> <!> <span>Remember to close your files.</span> <!>`,1),se=o(`<span>Session id must always be negotiated before invoking <!>.</span>`),ce=o(`<span>The session id is retrieved from the client’s <!> cookie.</span> <br/> <span>If the client doesn’t provide such cookie, <!> creates a new session id and sends the cookie to the client.</span> <!>`,1),le=o(`<!> <span>All internals of the framework are exposed.</span> <br/> <span>You can modify these internals, in fact it is intended for you to do so.</span> <!> <br/> <br/> <!> <span>You can start an http server with <!>.</span> <!> <br/> <br/> <!> <span>Route patterns can define dynamic path fields using <!> syntax.</span> <br/> <span>Path fields can then be retrieved with <!>.</span> <!> <br/> <br/> <!> <span>Use <!> to retrieve messages sent by the client.</span> <!> <span>Use <!> to send a message to the client.</span> <!> <br/> <br/> <!> <span>Use <!> to retrieve header fields sent by the client.</span> <!> <span>Use <!> and <!> to send header fields to the client.</span> <!> <br/> <br/> <!> <span>Use <!> to retrieve query fields.</span> <!> <br/> <br/> <!> <span>Use <!> to receive content as multipart form or url encoded form when using <!> and <!> http verbs.</span> <!> <!> <br/> <br/> <!> <span>Use <!> to receive content as json when using <!> and <!> http verbs and <!> to send json content.</span> <!> <br/> <br/> <!> <span>Use <!> to retrieve cookies and <!> to send
+        them.</span> <!> <br/> <br/> <!> <span>Use <!> to negotiate a session session id with the client.</span> <!> <!> <br/> <br/> <!> <span>Use <!> to redirect to another page.</span> <!>`,1);function v(o,v){a(v,!0),h(o,{title:`Basics`,get prefix(){return v.prefix},rightSidebar:(e,t)=>{let n=()=>(t?.()).body;m(e,{get body(){return n()},items:[{shift:0,text:`Basics`},{shift:0,text:`Serve`},{shift:0,text:`Path Fields`},{shift:0,text:`Messages`},{shift:0,text:`Headers Fields & Status`},{shift:0,text:`Queries`},{shift:0,text:`Forms`},{shift:0,text:`Json`},{shift:0,text:`Cookies`},{shift:0,text:`Session Id`},{shift:0,text:`Redirect`}]})},footer:e=>{{let t=l(()=>({label:`Get Started`,href:f(`/get_started`,{prefix:v.prefix})})),n=l(()=>({label:`Web Sockets`,href:f(`/web_sockets`,{prefix:v.prefix})}));p(e,{get previous(){return s(t)},get next(){return s(n)}})}},children:(r,a)=>{var o=le(),s=d(o);g(s,{text:`Basics`});var l=t(s,8);re(l,{children:(e,r)=>{var a=ae();ee(t(c(a)),e=>({...e}),[()=>te(f(`/contributing`,{prefix:v.prefix}))]),i(),u(a),n(e,a)},$$slots:{default:!0}});var p=t(l,6);g(p,{text:`Serve`});var m=t(p,2);_(t(c(m)),{source:`servers.Start()`}),i(),u(m);var h=t(m,2);e(h,{lang:`go`,source:`
             package main
 
             import (
@@ -19,7 +19,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                     },
                 },
             })
-        `});var y=t(h,6);g(y,{text:`Path Fields`});var b=t(y,2);_(t(c(b)),{source:`{}`}),u(),i(b);var x=t(b,4);_(t(c(x)),{source:`request.PathValue()`}),u(),i(x);var ue=t(x,2);e(ue,{lang:`go`,source:`
+        `});var y=t(h,6);g(y,{text:`Path Fields`});var b=t(y,2);_(t(c(b)),{source:`{}`}),i(),u(b);var x=t(b,4);_(t(c(x)),{source:`request.PathValue()`}),i(),u(x);var ue=t(x,2);e(ue,{lang:`go`,source:`
             package main
 
             import (
@@ -34,7 +34,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                     _ = request.PathValue("name") // Receives path field "name".
                 },
             }
-        `});var S=t(ue,6);g(S,{text:`Messages`});var C=t(S,2);_(t(c(C)),{source:`io.ReadAll()`}),u(),i(C);var w=t(C,2);e(w,{lang:`go`,source:`
+        `});var S=t(ue,6);g(S,{text:`Messages`});var C=t(S,2);_(t(c(C)),{source:`io.ReadAll()`}),i(),u(C);var w=t(C,2);e(w,{lang:`go`,source:`
             package main
 
             import (
@@ -50,7 +50,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                     _, _ = io.ReadAll(request.Body) // Receives message.
                 },
             }
-        `});var T=t(w,2);_(t(c(T)),{source:`writer.Write()`}),u(),i(T);var E=t(T,2);e(E,{lang:`go`,source:`
+        `});var T=t(w,2);_(t(c(T)),{source:`writer.Write()`}),i(),u(T);var E=t(T,2);e(E,{lang:`go`,source:`
             package main
 
             import (
@@ -65,7 +65,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                     _, _ = writer.Write([]byte("hello")) // Sends message "hello".
                 },
             }
-        `});var D=t(E,6);g(D,{text:`Headers Fields & Status`});var O=t(D,2);_(t(c(O)),{source:`request.Header.Get()`}),u(),i(O);var k=t(O,2);e(k,{lang:`go`,source:`
+        `});var D=t(E,6);g(D,{text:`Headers Fields & Status`});var O=t(D,2);_(t(c(O)),{source:`request.Header.Get()`}),i(),u(O);var k=t(O,2);e(k,{lang:`go`,source:`
             package main
 
             import (
@@ -80,7 +80,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                     _ = request.Header.Get("Accept") // Retrieves header field "Accept".
                 },
             }
-        `});var A=t(k,2),j=t(c(A));_(j,{source:`writer.Header().Set()`}),_(t(j,2),{source:`writer.WriteHeader()`}),u(),i(A);var M=t(A,2);e(M,{lang:`go`,source:`
+        `});var A=t(k,2),j=t(c(A));_(j,{source:`writer.Header().Set()`}),_(t(j,2),{source:`writer.WriteHeader()`}),i(),u(A);var M=t(A,2);e(M,{lang:`go`,source:`
             package main
 
             import (
@@ -98,7 +98,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                                                                      // header fields to the client.
                 },
             }
-        `});var N=t(M,6);g(N,{text:`Queries`});var P=t(N,2);_(t(c(P)),{source:`request.URL.Query().Get()`}),u(),i(P);var F=t(P,2);e(F,{lang:`go`,source:`
+        `});var N=t(M,6);g(N,{text:`Queries`});var P=t(N,2);_(t(c(P)),{source:`request.URL.Query().Get()`}),i(),u(P);var F=t(P,2);e(F,{lang:`go`,source:`
             package main
 
             import (
@@ -113,7 +113,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                     _ = request.URL.Query().Get("name") // Retrieves query field "name".
                 },
             }
-        `});var I=t(F,6);g(I,{text:`Forms`});var L=t(I,2),R=t(c(L));_(R,{source:`receive.Form()`});var z=t(R,2);_(z,{source:`POST`}),_(t(z,2),{source:`GET`}),u(),i(L);var B=t(L,2);e(B,{lang:`go`,source:`
+        `});var I=t(F,6);g(I,{text:`Forms`});var L=t(I,2),R=t(c(L));_(R,{source:`receive.Form()`});var z=t(R,2);_(z,{source:`POST`}),_(t(z,2),{source:`GET`}),i(),u(L);var B=t(L,2);e(B,{lang:`go`,source:`
             package main
 
             import (
@@ -161,7 +161,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
             `}),e(t(s,4),{lang:`go`,source:`
                 defer src.Close()
                 defer dst.Close()
-            `}),n(r,a)},$$slots:{default:!0}});var H=t(V,6);g(H,{text:`Json`});var U=t(H,2),W=t(c(U));_(W,{source:`receive.Json()`});var G=t(W,2);_(G,{source:`POST`});var K=t(G,2);_(K,{source:`PUT`}),_(t(K,2),{source:`send.Json()`}),u(),i(U);var q=t(U,2);e(q,{lang:`go`,source:`
+            `}),n(r,a)},$$slots:{default:!0}});var H=t(V,6);g(H,{text:`Json`});var U=t(H,2),W=t(c(U));_(W,{source:`receive.Json()`});var G=t(W,2);_(G,{source:`POST`});var K=t(G,2);_(K,{source:`PUT`}),_(t(K,2),{source:`send.Json()`}),i(),u(U);var q=t(U,2);e(q,{lang:`go`,source:`
             package main
 
             import (
@@ -184,7 +184,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                     _ = send.Json(writer, details)      // Sends content back as json.
                 },
             }
-        `});var J=t(q,6);g(J,{text:`Cookies`});var Y=t(J,2),X=t(c(Y));_(X,{source:`receive.Cookie()`}),_(t(X,2),{source:`send.Cookie()`}),u(),i(Y);var Z=t(Y,2);e(Z,{lang:`go`,source:`
+        `});var J=t(q,6);g(J,{text:`Cookies`});var Y=t(J,2),X=t(c(Y));_(X,{source:`receive.Cookie()`}),_(t(X,2),{source:`send.Cookie()`}),i(),u(Y);var Z=t(Y,2);e(Z,{lang:`go`,source:`
             package main
 
             import (
@@ -202,7 +202,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                     send.Cookie(writer, "nickname", nickname)          // Sends it back.
                 },
             }
-        `});var de=t(Z,6);g(de,{text:`Session Id`});var Q=t(de,2);_(t(c(Q)),{source:`negotiate.SessionId()`}),u(),i(Q);var fe=t(Q,2);e(fe,{lang:`go`,source:`
+        `});var de=t(Z,6);g(de,{text:`Session Id`});var Q=t(de,2);_(t(c(Q)),{source:`negotiate.SessionId()`}),i(),u(Q);var fe=t(Q,2);e(fe,{lang:`go`,source:`
             package main
 
             import (
@@ -218,7 +218,7 @@ import{t as e}from"./code.js";import{B as t,E as n,G as r,J as i,K as a,O as o,P
                     _, _ = negotiate.SessionId(writer, request) // Negotiates session id and returns it.
                 },
             }
-        `});var pe=t(fe,2);re(pe,{children:(e,r)=>{var a=ce(),o=d(a);_(t(c(o)),{source:`session-id`}),u(),i(o);var s=t(o,4);_(t(c(s)),{source:`negotiate.SessionId()`}),u(),i(s),ne(t(s,2),{children:(e,r)=>{var a=se();_(t(c(a)),{source:`writer.WriteHeader()`}),u(),i(a),n(e,a)},$$slots:{default:!0}}),n(e,a)},$$slots:{default:!0}});var me=t(pe,6);g(me,{text:`Redirect`});var $=t(me,2);_(t(c($)),{source:`send.ToLocation()`}),u(),i($),e(t($,2),{lang:`go`,source:`
+        `});var pe=t(fe,2);re(pe,{children:(e,r)=>{var a=ce(),o=d(a);_(t(c(o)),{source:`session-id`}),i(),u(o);var s=t(o,4);_(t(c(s)),{source:`negotiate.SessionId()`}),i(),u(s),ne(t(s,2),{children:(e,r)=>{var a=se();_(t(c(a)),{source:`writer.WriteHeader()`}),i(),u(a),n(e,a)},$$slots:{default:!0}}),n(e,a)},$$slots:{default:!0}});var me=t(pe,6);g(me,{text:`Redirect`});var $=t(me,2);_(t(c($)),{source:`send.ToLocation()`}),i(),u($),e(t($,2),{lang:`go`,source:`
             package main
 
             import (
