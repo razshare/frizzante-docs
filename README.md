@@ -9,7 +9,7 @@ make configure
 Start development mode.
 
 ```sh
-frizzmakeante dev
+make dev
 ```
 
 Publish to GitHub Pages.
