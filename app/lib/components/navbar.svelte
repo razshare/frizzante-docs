@@ -66,9 +66,8 @@
 </style>
 
 <script lang="ts">
-    import logo from "$lib/assets/logo.png"
     import Icon from "$lib/components/icons/icon.svelte"
-    import Image from "$lib/components/image.svelte"
+    import Logo from "$lib/components/logo.svelte"
     import Searchbar from "$lib/components/searchbar.svelte"
     import { href } from "$lib/scripts/core/href.svelte"
     import { IS_BROWSER } from "$lib/scripts/core/is_browser"
@@ -91,7 +90,8 @@
         </a>
     </div>
     <div class="navbar-logo">
-        <Image src={logo} height="3rem" alt="logo" />
+        <!-- <Image src={logo} height="3rem" alt="logo" /> -->
+        <Logo />
     </div>
     <div class="navbar-title"></div>
     <div class="navbar-searchbar">
