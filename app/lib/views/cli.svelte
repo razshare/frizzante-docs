@@ -358,8 +358,8 @@
     </Note>
     <br />
     <br />
-    <Title text="Clean Project" />
-    <Code lang="sh" source="frizzante clean-project" />
+    <Title text="Clean" />
+    <Code lang="sh" source="frizzante clean" />
     <span>
         Removes
         <InlineCode source=".gen" />,
@@ -432,7 +432,7 @@
                 { shift: 0, text: "Build" },
                 { shift: 0, text: "Check" },
                 { shift: 0, text: "Touch" },
-                { shift: 0, text: "Clean Project" },
+                { shift: 0, text: "Clean" },
                 { shift: 0, text: "Reset" },
                 { shift: 0, text: "Strict" },
                 { shift: 0, text: "Version" },
