@@ -280,8 +280,33 @@
         {/snippet}
     </FileTree>
     <Note>
-        <span>Fore more details on migrations see the <a {...href("/migrate")}>migrate</a> guide.</span>
+        <span>You can specify the output directory of the build process with <InlineCode source="--output" /></span>
     </Note>
+    <Tip>
+        <span>You can pass</span>
+        <InlineCode source="no-package" />
+        <span>as an argument in order to omit packaging the frontend bundles.</span>
+        <br />
+        <br />
+        <span>This is useful when you want to build your native binary for multiple platforms at once, for example</span
+        >
+        <Code
+            lang="sh"
+            source={`
+            #!/usr/bin/env bash
+            frizzante package
+            GOOS=windows GOARCH=amd64 frizzante build --output=".gen/bin/windows-amd64" no-package &\\
+            GOOS=linux GOARCH=amd64 frizzante build --output=".gen/bin/linux-amd64" no-package &\\
+            GOOS=linux GOARCH=arm64 frizzante build --output=".gen/bin/linux-arm64" no-package &\\
+            GOOS=darwin GOARCH=amd64 frizzante build --output=".gen/bin/darwin-amd64" no-package &\\
+            GOOS=darwin GOARCH=arm64 frizzante build --output=".gen/bin/darwin-arm64" no-package &\\
+            wait
+        `}
+        />
+        <span>
+            This script will build your web bundles once and then build the native binary for each platform in parallel.
+        </span>
+    </Tip>
     <br />
     <br />
     <Title text="Check" />
