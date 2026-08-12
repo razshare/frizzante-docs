@@ -48,6 +48,9 @@
             }
         `}
     />
+    <Note>
+        The  <InlineCode source="$lib" /> path is an alias for <InlineCode source="app/lib/" />
+    </Note>
     <br />
     <br />
     <Title text="Client Exports" />
@@ -64,6 +67,9 @@
             }
         `}
     />
+    <Note>
+        The  <InlineCode source="$lib" /> path is an alias for <InlineCode source="app/lib/" />
+    </Note>
     <Note>
         <span>
             These views are being imported asynchronously in order to split them in different bundles, however you can
