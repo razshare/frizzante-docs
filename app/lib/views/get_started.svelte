@@ -46,7 +46,7 @@
         <span>This will create two executables,</span>
         <InlineCode source=".gen/bin/migrate" />
         <span>and</span>
-        <InlineCode source=".gen/bin/serve" />
+        <InlineCode source=".gen/bin/start" />
         <span>.</span>
         <br />
         <FileTree>
@@ -54,7 +54,7 @@
                 <Directory name=".gen" expanded>
                     <Directory name="bin" expanded>
                         <File name="migrate" icon={mdiPackage}></File>
-                        <File name="serve" icon={mdiPackage}></File>
+                        <File name="start" icon={mdiPackage}></File>
                     </Directory>
                 </Directory>
             {/snippet}
@@ -63,10 +63,10 @@
     <KeyedSection key="7" description="Migrate production.">
         <Code lang="bash" source=".gen/bin/migrate" />
     </KeyedSection>
-    <KeyedSection key="8" description="Serve production.">
-        <Code lang="bash" source=".gen/bin/serve" />
+    <KeyedSection key="8" description="Start application.">
+        <Code lang="bash" source=".gen/bin/start" />
         <Note>
-            <InlineCode source=".gen/bin/serve" />
+            <InlineCode source=".gen/bin/start" />
             <span>is a standalone binary, it contains all html, css and javascript bundles.</span>
         </Note>
     </KeyedSection>
@@ -81,9 +81,9 @@
                 { shift: 1, text: "Migrate development" },
                 { shift: 1, text: "Configure project" },
                 { shift: 1, text: "Start development" },
-                { shift: 1, text: "Build production" },
+                { shift: 1, text: "Build application" },
                 { shift: 1, text: "Migrate production" },
-                { shift: 1, text: "Serve production" },
+                { shift: 1, text: "Start application" },
             ]}
         />
     {/snippet}

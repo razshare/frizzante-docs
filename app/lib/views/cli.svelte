@@ -267,14 +267,14 @@
         Runs <InlineCode source="frizzante package" /> and then builds the <InlineCode source="./migrate" /> program and the
         main Go program in
         <InlineCode source=".gen/bin/migrate" /> and
-        <InlineCode source=".gen/bin/serve" />.
+        <InlineCode source=".gen/bin/start" />.
     </span>
     <FileTree>
         {#snippet children({ Directory, File })}
             <Directory name=".gen" expanded>
                 <Directory name="bin" expanded>
                     <File name="migrate" icon={mdiApplication} />
-                    <File name="serve" icon={mdiApplication} />
+                    <File name="start" icon={mdiApplication} />
                 </Directory>
             </Directory>
         {/snippet}

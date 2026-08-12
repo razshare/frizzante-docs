@@ -37,9 +37,9 @@
             source={`
                 FROM scratch
                 COPY .gen/bin/source.sqlite /source.sqlite
-                COPY .gen/bin/serve /serve
+                COPY .gen/bin/start /start
                 EXPOSE 8080
-                ENTRYPOINT ["/serve"]
+                ENTRYPOINT ["/start"]
             `}
         />
     </KeyedSection>
