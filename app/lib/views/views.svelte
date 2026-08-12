@@ -49,7 +49,7 @@
         `}
     />
     <Note>
-        The  <InlineCode source="$lib" /> path is an alias for <InlineCode source="app/lib/" />
+        The  <InlineCode source="$lib/" /> path is an alias for <InlineCode source="app/lib/" />
     </Note>
     <br />
     <br />
@@ -68,7 +68,7 @@
         `}
     />
     <Note>
-        The  <InlineCode source="$lib" /> path is an alias for <InlineCode source="app/lib/" />
+        The  <InlineCode source="$lib/" /> path is an alias for <InlineCode source="app/lib/" />
     </Note>
     <Note>
         <span>
