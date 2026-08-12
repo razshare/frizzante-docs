@@ -1,6 +1,7 @@
 {
     "devDependencies": {
         "@eslint/compat": "1.4.0",
+        "@eslint/js": "^10.0.1",
         "@mdi/js": "7.4.47",
         "@sveltejs/vite-plugin-svelte": "7.2.0",
         "@tailwindcss/vite": "4.3.3",
