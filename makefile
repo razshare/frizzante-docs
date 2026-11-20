@@ -28,8 +28,17 @@ update:
 migrate:
 	frizzante migrate
 
-migration:
+migrate/up:
+	frizzante migrate
+
+migrate/down:
+	frizzante migrate down
+
+new/migration:
 	frizzante generate migration
+
+list/migrations:
+	frizzante migrate list
 
 types:
 	frizzante generate types
@@ -43,8 +52,6 @@ schema:
 publish:
 	./publish.sh
 
-.PHONY: migrate
-.PHONY: migration
 .PHONY: configure
 .PHONY: test
 .PHONY: build
@@ -54,5 +61,12 @@ publish:
 .PHONY: format
 .PHONY: install
 .PHONY: update
+.PHONY: migrate
+.PHONY: migrate/up
+.PHONY: migrate/down
+.PHONY: new/migration
+.PHONY: list/migrations
 .PHONY: types
+.PHONY: snapshot
 .PHONY: schema
+.PHONY: publish
