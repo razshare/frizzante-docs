@@ -30,7 +30,7 @@
         {#snippet children({ Directory, File })}
             <Directory name="migrate" expanded>
                 <Directory name="migrations" expanded>
-                    <File name="2025_00_01T09_16_00+02_00.sql" />
+                    <File name="2025_01_01T09_16_00+02_00.sql" />
                     <File name="2026_07_17T09_54_35+02_00.sql" />
                 </Directory>
             </Directory>
@@ -87,7 +87,7 @@
         {#snippet children({ Directory, File })}
             <Directory name="migrate" expanded>
                 <Directory name="migrations" expanded>
-                    <File name="2025_00_01T09_16_00+02_00.sql" />
+                    <File name="2025_01_01T09_16_00+02_00.sql" />
                     <File name="2026_07_17T09_54_35+02_00.sql" />
                 </Directory>
                 <File name="main.go" />
