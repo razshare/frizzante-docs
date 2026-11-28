@@ -36,6 +36,7 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement): Promise
         if (root.type === "snapshot") {
             requestUrl = requestUrl.replace(/\/+$/, "") + "/data.json"
         }
+        method = form.method.toUpperCase() as "GET" | "POST"
         form.reset()
         for (const key of data.keys()) {
             const value = data.get(key)
@@ -45,8 +46,6 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement): Promise
             body[key] = `${value}`
             params.append(key, `${value}`)
         }
-
-        method = form.method.toUpperCase() as "GET" | "POST"
         if (method === "GET") {
             const query = `?${params.toString()}`
             response = await fetch(`${requestUrl}${query}`, {
@@ -79,12 +78,15 @@ export async function swap(target: HTMLAnchorElement | HTMLFormElement): Promise
         render: number
         props: Record<string, unknown>
     }
-    root.view = {
-        name: remote.name,
-        ondone() {
-            return remote.props
-        },
-    }
+    await new Promise(function start(resolve) {
+        root.view = {
+            name: remote.name,
+            ondone() {
+                resolve(1)
+                return remote.props
+            },
+        }
+    })
     let fixedResponseUrl = response.url
     if (root.type === "snapshot") {
         fixedResponseUrl = fixedResponseUrl.replace(/\/data\.json$/, "")
