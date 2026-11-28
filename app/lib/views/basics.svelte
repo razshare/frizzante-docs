@@ -339,7 +339,7 @@
     <br />
     <Title text="Session Id" />
     <span>
-        Use <InlineCode source="negotiate.SessionId()" /> to negotiate a session session id with the client.
+        Use <InlineCode source="negotiate.SessionId()" /> to negotiate a session id with the client.
     </span>
     <Code
         lang="go"
